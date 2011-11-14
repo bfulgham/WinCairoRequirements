@@ -59,8 +59,6 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>
       </ExceptionHandling>
-      <PrecompiledHeaderOutputFile>$(IntDir)stubdata.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <PreLinkEvent>
@@ -87,8 +85,6 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeaderOutputFile>$(IntDir)stubdata.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <PreLinkEvent>

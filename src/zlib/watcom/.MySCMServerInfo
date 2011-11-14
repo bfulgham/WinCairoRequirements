@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/zlib/watcom
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1069
-watcom_f.mak;1230854233;1;1266108074;
-watcom_l.mak;373383375;1;1266108012;

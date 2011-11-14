@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/doc/HOWTO
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=969
-certificates.txt;938846201;1;1049409183;
-keys.txt;3540538967;1;1113580895;
-proxy_certificates.txt;3201809007;1;1113062831;

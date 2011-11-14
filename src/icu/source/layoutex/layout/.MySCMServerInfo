@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/layoutex/layout
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=806
-ParagraphLayout.h;3214301709;1;1123802470;
-RunArrays.h;1769672508;1;1215802413;
-playout.h;2933537491;1;1207088265;
-plruns.h;997837346;1;1215802413;

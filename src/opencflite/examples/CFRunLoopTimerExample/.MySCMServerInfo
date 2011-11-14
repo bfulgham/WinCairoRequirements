@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/opencflite/examples/CFRunLoopTimerExample
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=875
-CFRunLoopTimerExample.c;1397847271;1;1307983118;
-CFRunLoopTimerExample.vcproj;232379563;1;1307983118;
-Makefile.am;3275814643;1;1307983118;
-Makefile.in;919492443;1;1307983118;
-CFRunLoopTimerExample_vs2005.vcproj;519164781;1;1308252303;

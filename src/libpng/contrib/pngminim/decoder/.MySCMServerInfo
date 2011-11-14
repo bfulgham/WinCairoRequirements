@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libpng/contrib/pngminim/decoder
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=868
-README;3670697154;1;1258670890;
-gather.sh;3961846980;1;1258670890;
-makefile;2107315491;1;1258670890;
-pngusr.h;1993579720;1;1258670890;

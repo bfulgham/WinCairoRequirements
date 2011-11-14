@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/tools/gendraft
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=851
-Makefile;614968247;1;1215802421;
-exclude.txt;1045655063;1;1157065540;
-genheaders.pl;3643819547;1;1157065540;

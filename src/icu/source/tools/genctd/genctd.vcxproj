@@ -40,23 +40,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\$(Configuration)</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\$(Configuration)</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <TypeLibraryName>.\Release/genctd.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release/genctd.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -69,19 +61,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <TypeLibraryName>.\Debug/genctd.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug/genctd.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

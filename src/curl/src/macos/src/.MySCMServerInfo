@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/curl/src/macos/src
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=784
-curl_GUSIConfig.cpp;2307285300;1;1307989942;
-macos_main.cpp;4117911987;1;1307989942;

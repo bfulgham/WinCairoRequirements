@@ -40,8 +40,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\$(Configuration)</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\$(Configuration)</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -50,8 +48,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\tools\ctestfw;..\..\common;..\..\i18n;..\..\tools\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug/cintltst.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -70,8 +66,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\tools\ctestfw;..\..\common;..\..\i18n;..\..\tools\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release/cintltst.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

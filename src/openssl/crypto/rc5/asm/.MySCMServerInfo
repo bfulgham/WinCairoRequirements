@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/crypto/rc5/asm
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1041
-r5_win32.asm;4264959330;1;1307987850;
-rc5-586.pl;2887673628;1;914237745;

@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libiconv/tools
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=427
-8bit_tab_to_h.c;2133460603;1;1307034586;
-cjk_tab_to_h.c;644029096;1;1307034586;
-cjk_variants.c;3049217092;1;1307034586;
-JISX0213.TXT;3699922845;1;1307034586;
-Makefile;3805174762;1;1307034586;

@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/tools/gencmn
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=848
-Makefile.in;2541230715;1;1215802421;
-gencmn.8.in;3429914175;1;1044480725;
-gencmn.c;2574656734;1;1157065540;
-gencmn.vcproj;1877938704;1;1307144128;
-gencmn.vcproj.8.00.old;1458973488;1;1215802421;

@@ -115,4 +115,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\..\masmx86\inffas32.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="..\..\masmx86\match686.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+  </ItemGroup>
 </Project>

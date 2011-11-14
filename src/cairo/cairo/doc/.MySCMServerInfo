@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/cairo/cairo/doc
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=680
-Makefile.am;2310595050;1;1227196351;
-Makefile.in;3883111324;1;1293286971;

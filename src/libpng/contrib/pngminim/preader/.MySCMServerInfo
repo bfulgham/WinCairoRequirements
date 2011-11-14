@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libpng/contrib/pngminim/preader
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=870
-README;2648692875;1;1258670890;
-gather.sh;102143239;1;1258670890;
-makefile;2090308590;1;1258670890;
-pngusr.h;4045214930;1;1258670890;

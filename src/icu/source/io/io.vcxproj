@@ -56,8 +56,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_IO_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release/icuio.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -81,8 +79,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_IO_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug/icuio.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

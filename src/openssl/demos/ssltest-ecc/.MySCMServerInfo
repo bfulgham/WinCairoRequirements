@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/demos/ssltest-ecc
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=963
-ECC-RSAcertgen.sh;1629891175;1;1031643412;
-ECCcertgen.sh;3486403901;1;1031643412;
-README;2633986438;1;1058877260;
-RSAcertgen.sh;783846863;1;1031643412;
-ssltest.sh;3683890602;1;1134459705;

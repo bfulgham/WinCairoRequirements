@@ -41,20 +41,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\$(Configuration)</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\$(Configuration)</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>Release/icupkg.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -66,17 +58,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>Debug/icupkg.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

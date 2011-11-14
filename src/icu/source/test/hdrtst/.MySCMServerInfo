@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/hdrtst
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=833
-Makefile.in;55786651;1;1215802416;
-cxxfiles.txt;2057552307;1;1215802416;
-dfiles.txt;2398876632;1;1057256030;
-pfiles.txt;3778596501;1;1101322514;

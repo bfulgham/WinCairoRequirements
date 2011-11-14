@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/sqlite
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=757
-shell.c;2819563487;1;1308020847;
-sqlite3ext.h;1711128005;1;1308020847;
-sqlite3.c;2402604085;2;1317659299;
-sqlite3.h;2172962436;2;1317659195;

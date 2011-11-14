@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/perf/collationperf
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1005
-CollPerf.pl;3475010738;1;1215802419;
-Makefile.in;3388221451;1;1215802419;
-collperf.cpp;2183743959;1;1215802419;
-readme.html;2885309384;1;1215802419;

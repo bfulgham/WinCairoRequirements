@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/opencflite/examples/CFTest
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=876
-Chiquitita.xml;2711335223;1;1307983118;
-Makefile.am;792681330;1;1307983118;
-Makefile.in;3650144395;1;1307983118;
-test.xml;6891366;1;1307983118;

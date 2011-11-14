@@ -69,14 +69,13 @@ xcopy /Y /R "$(ProjectDir)..\include\*.h" "$(SolutionDir)include\"
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\CoreFoundation\GNUCompatibility;$(ProjectDir);$(SolutionDir)include\unicode;$(SolutionDir)include\objc4;$(SolutionDir)include\pthreads;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG;WIN32_LEAN_AND_MEAN;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <PreLinkEvent>
       <Command>
       </Command>
     </PreLinkEvent>
     <Link>
-      <AdditionalDependencies>netapi32.lib;ole32.lib;ws2_32.lib;kernel32.lib;rpcrt4.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>netapi32.lib;ole32.lib;ws2_32.lib;kernel32.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)_$(Configuration).dll</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -139,14 +138,13 @@ xcopy /Y /R "$(ProjectDir)..\include\*.h" "$(SolutionDir)include\"
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\CoreFoundation\GNUCompatibility;$(ProjectDir)..;$(SolutionDir)include\objc4;$(SolutionDir)include\pthreads;$(SolutionDir)include\unicode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;U_DISABLE_RENAMING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <PreLinkEvent>
       <Command>
       </Command>
     </PreLinkEvent>
     <Link>
-      <AdditionalDependencies>netapi32.lib;ole32.lib;ws2_32.lib;kernel32.lib;rpcrt4.lib;pthread.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>netapi32.lib;ole32.lib;ws2_32.lib;kernel32.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <SubSystem>Windows</SubSystem>
@@ -346,6 +344,7 @@ xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(SolutionDir)bin\CFLite.resources\"
     </ClCompile>
     <ClCompile Include="..\CFRunLoop.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
     </ClCompile>
     <ClCompile Include="..\CFRuntime.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>

@@ -45,7 +45,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -54,7 +53,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

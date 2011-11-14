@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/fips/sha
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=979
-Makefile;3464260570;1;1255616075;
-fips_sha1_selftest.c;436220125;1;1249833084;
-fips_shatest.c;1890451937;1;1225910217;
-fips_standalone_sha1.c;937629174;1;1232022894;

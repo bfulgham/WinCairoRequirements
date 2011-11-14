@@ -16,7 +16,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -41,24 +40,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\$(Configuration)</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\$(Configuration)</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>$(ProjectDir)..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <TypeLibraryName>.\Release/uconv.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;UCONVMSG_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release/uconv.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -66,26 +56,19 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>uconvmsg.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>$(ProjectDir)..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <TypeLibraryName>.\Debug/uconv.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;UCONVMSG_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug/uconv.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -93,7 +76,6 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>uconvmsg.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -110,12 +92,12 @@
     <None Include="resources\fr.txt" />
     <None Include="resources\root.txt" />
     <CustomBuild Include="makedata.mak">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Debug
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Debug DISTOUT="$(SolutionDir)\"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug/uconvmsg.lib;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Release
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)Lib\uconvmsg.lib;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Release DISTOUT="$(SolutionDir)\" 
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release/uconvmsg.lib;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Lib\uconvmsg.lib;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="resfiles.mk" />
   </ItemGroup>

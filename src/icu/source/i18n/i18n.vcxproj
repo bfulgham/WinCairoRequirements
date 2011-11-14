@@ -57,8 +57,6 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;$(ProjectDir)..\common;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_I18N_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <PrecompiledHeaderOutputFile>$(IntDir)i18n.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -87,8 +85,6 @@ xcopy /Y /R "$(ProjectDir)unicode\*.h" "$(SolutionDir)include\unicode\"</Command
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;$(ProjectDir)..\common;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_I18N_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <PrecompiledHeaderOutputFile>$(IntDir)i18n.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

@@ -63,7 +63,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILDING_LIBCURL;USE_WINDOWS_SSPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <Link>
@@ -91,7 +90,6 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILDING_LIBCURL;USE_WINDOWS_SSPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <Link>

@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libxml2/xstc
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=231
-Makefile.am;2119997353;1;1307034609;
-Makefile.in;2565157934;1;1307034609;
-xstc-to-python.xsl;3514191012;1;1307034609;
-xstc.py;996113333;1;1307034609;

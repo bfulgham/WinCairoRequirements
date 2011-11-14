@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/demos/bio
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=953
-Makefile;2440398129;1;927849100;
-README;446547520;1;914237567;
-saccept.c;2735031879;1;1037272911;
-sconnect.c;1081845422;1;1037272911;
-server.pem;2214146480;1;914237567;

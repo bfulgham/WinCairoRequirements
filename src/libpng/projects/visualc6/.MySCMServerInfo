@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libpng/projects/visualc6
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=720
-README.txt;3717287996;1;1258670890;
-libpng.dsp;4142039818;1;1258670890;
-libpng.dsw;3474095398;1;1258670890;
-pngtest.dsp;2531506481;1;1258670890;

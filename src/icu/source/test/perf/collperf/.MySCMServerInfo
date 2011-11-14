@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/perf/collperf
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1006
-CollPerf.pl;2596476208;1;1215802419;
-CollPerf_r.pl;327420193;1;1215802419;
-Makefile.in;225541075;1;1207088274;
-collperf.cpp;4097981332;1;1207088274;
-collperf.vcproj;2418668457;1;1207088274;

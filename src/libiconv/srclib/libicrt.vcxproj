@@ -46,7 +46,6 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(ProjectDir)..\windows;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H=1;DEPENDS_ON_LIBICONV=1;DEPENDS_ON_LIBINTL=1;_WIN32_;EXEEXT=".exe";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -57,7 +56,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(ProjectDir)..\windows;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H=1;DEPENDS_ON_LIBICONV=1;DEPENDS_ON_LIBINTL=1;_WIN32_;EXEEXT=".exe";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>

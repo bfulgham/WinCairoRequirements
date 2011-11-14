@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/zlib/old
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=373
-descrip.mms;3838020674;1;1307034723;
-Makefile.riscos;4030406758;1;1307034723;
-README;224298432;1;1307034723;
-visual-basic.txt;64719780;1;1307034723;
-zlib.html;784902771;1;1307034723;

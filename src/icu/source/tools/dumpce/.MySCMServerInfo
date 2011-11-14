@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/tools/dumpce
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=843
-Makefile.in;2399160630;1;1207088279;
-dumpce.cpp;3652420049;1;1157065538;
-dumpce.dsp;769416829;1;1044480725;
-dumpce.dsw;331072917;1;1044480725;

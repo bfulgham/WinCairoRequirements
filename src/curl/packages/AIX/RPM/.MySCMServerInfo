@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/curl/packages/AIX/RPM
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=778
-Makefile.am;1555859398;1;1307989951;
-Makefile.in;3809849507;1;1307989951;
-README;1441339700;1;1307989951;
-curl.spec.in;1075980014;1;1307989951;

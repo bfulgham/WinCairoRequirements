@@ -55,7 +55,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CAIRO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -81,8 +80,6 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CAIRO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>

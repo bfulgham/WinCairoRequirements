@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libxslt/doc/tutorial2
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=240
-libxslt_pipes.c;3804336146;1;1307034617;
-libxslt_pipes.html;3555012347;1;1307034617;
-libxslt_pipes.xml;1215012068;1;1307034617;

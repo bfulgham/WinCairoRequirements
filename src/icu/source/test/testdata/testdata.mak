@@ -77,83 +77,83 @@ $(TEST_RES_FILES:.res =.res
 # The -q option is there on purpose, so we don't see it normally.
 {$(TESTDATA)}.txt.res:: 
 	@echo Making Test Resource Bundle files $<
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
+	@"$(ICUPBIN)\genrb" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
 
 "$(TESTDATABLD)\iscii.res": "$(TESTDATA)\iscii.bin"
 	@echo Making Test Resource Bundle file with encoding ISCII,version=0
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s"$(TESTDATA)" -eISCII,version=0 -d"$(TESTDATABLD)" iscii.bin
+	@"$(ICUPBIN)\genrb" -s"$(TESTDATA)" -eISCII,version=0 -d"$(TESTDATABLD)" iscii.bin
 
 "$(TESTDATABLD)\idna_rules.res": "$(TESTDATA)\idna_rules.txt"
 	@echo Making Test Resource Bundle file for IDNA reference implementation
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s"$(TESTDATA)" -d"$(TESTDATABLD)" idna_rules.txt
+	@"$(ICUPBIN)\genrb" -s"$(TESTDATA)" -d"$(TESTDATABLD)" idna_rules.txt
 
 
-"$(TESTDATABLD)\test.icu" : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
-	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATABLD)"
+"$(TESTDATABLD)\test.icu" : {"$(ICUPBIN)"}gentest.exe
+	"$(ICUPBIN)\gentest" -d"$(TESTDATABLD)"
 
 # testtable32 resource file
-"$(TESTDATABLD)\testtable32.txt" : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
-	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -r -d"$(TESTDATABLD)"
+"$(TESTDATABLD)\testtable32.txt" : {"$(ICUPBIN)"}gentest.exe
+	"$(ICUPBIN)\gentest" -r -d"$(TESTDATABLD)"
 
 "$(TESTDATABLD)\testtable32.res": "$(TESTDATABLD)\testtable32.txt"
-	"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s"$(TESTDATABLD)" -d"$(TESTDATABLD)" testtable32.txt
+	"$(ICUPBIN)\genrb" -s"$(TESTDATABLD)" -d"$(TESTDATABLD)" testtable32.txt
 
 # Targets for nfscsi.spp
-"$(TESTDATABLD)\nfscsi.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_ci.txt"
+"$(TESTDATABLD)\nfscsi.spp" : {"$(ICUPBIN)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_ci.txt"
 	@echo Building $@
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscsi -u 3.2.0 nfs4_cs_prep_ci.txt
+	@"$(ICUPBIN)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscsi -u 3.2.0 nfs4_cs_prep_ci.txt
 
 # Targets for nfscss.spp
-"$(TESTDATABLD)\nfscss.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_cs.txt"
+"$(TESTDATABLD)\nfscss.spp" : {"$(ICUPBIN)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_cs.txt"
 	@echo Building $@
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscss -u 3.2.0 nfs4_cs_prep_cs.txt
+	@"$(ICUPBIN)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscss -u 3.2.0 nfs4_cs_prep_cs.txt
 
 # Targets for nfscis.spp
-"$(TESTDATABLD)\nfscis.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cis_prep.txt"
+"$(TESTDATABLD)\nfscis.spp" : {"$(ICUPBIN)"}gensprep.exe "$(TESTDATA)\nfs4_cis_prep.txt"
 	@echo Building $@
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscis -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_cis_prep.txt
+	@"$(ICUPBIN)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscis -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_cis_prep.txt
 
 # Targets for nfsmxs.spp
-"$(TESTDATABLD)\nfsmxs.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_s.txt"
+"$(TESTDATABLD)\nfsmxs.spp" : {"$(ICUPBIN)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_s.txt"
 	@echo Building $@
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxs -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_s.txt
+	@"$(ICUPBIN)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxs -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_s.txt
 
 # Targets for nfsmxp.spp
-"$(TESTDATABLD)\nfsmxp.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_p.txt"
+"$(TESTDATABLD)\nfsmxp.spp" : {"$(ICUPBIN)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_p.txt"
 	@echo Building $@
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxp -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_p.txt
+	@"$(ICUPBIN)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxp -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_p.txt
 
 
 # Targets for test converter data
 "$(TESTDATABLD)\test1.cnv": "$(TESTDATA)\test1.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
+	@"$(ICUPBIN)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test1bmp.cnv": "$(TESTDATA)\test1bmp.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
+	@"$(ICUPBIN)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test3.cnv": "$(TESTDATA)\test3.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
+	@"$(ICUPBIN)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test4.cnv": "$(TESTDATA)\test4.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
+	@"$(ICUPBIN)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test4x.cnv": "$(TESTDATA)\test4x.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
+	@"$(ICUPBIN)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test5.cnv": "$(TESTDATA)\test5.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
+	@"$(ICUPBIN)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\ibm9027.cnv": "$(TESTDATA)\ibm9027.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
+	@"$(ICUPBIN)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 # Target for test normalization data
 "$(TESTDATABLD)\testnorm.nrm": "$(TESTDATA)\testnorm.txt"
 	@echo Building $@
-	@"$(ICUTOOLS)\gennorm2\$(CFG)\gennorm2" -s "$(TESTDATA)" testnorm.txt -o $@
+	@"$(ICUPBIN)\gennorm2" -s "$(TESTDATA)" testnorm.txt -o $@

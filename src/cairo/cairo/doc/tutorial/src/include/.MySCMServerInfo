@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/cairo/cairo/doc/tutorial/src/include
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1075
-cairo-tutorial-gtk.h;268341207;1;1254507728;
-cairo-tutorial-pdf.h;2339645624;1;1254507728;
-cairo-tutorial-png.h;2607543705;1;1254507728;
-cairo-tutorial-xlib.h;1793720498;1;1254507728;
-cairo-tutorial.h;1044476852;1;1254507728;

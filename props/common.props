@@ -18,8 +18,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_BIND_TO_CURRENT_VCLIBS_VERSION;_MT;SS_NO_CONVERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Async</ExceptionHandling>
       <OpenMPSupport>true</OpenMPSupport>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>

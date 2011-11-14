@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/crypto/pqueue
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=936
-Makefile;1179442832;1;1221601492;
-pq_compat.h;1356031930;1;1224506420;
-pq_test.c;2363181160;1;1114531356;
-pqueue.c;2668501473;1;1276348734;
-pqueue.h;1894543860;1;1242490724;

@@ -57,8 +57,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug/png.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0809</Culture>
@@ -75,17 +73,12 @@ xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
     <ClCompile>
       <AdditionalIncludeDirectories>..\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release/png.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0809</Culture>
     </ResourceCompile>
     <Lib />
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release/png.bsc</OutputFile>
-    </Bscmake>
+    <Bscmake />
     <PostBuildEvent>
       <Command>xcopy /Y /R "$(ProjectDir)png.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"

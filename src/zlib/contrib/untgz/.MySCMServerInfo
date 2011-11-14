@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/zlib/contrib/untgz
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=406
-Makefile;3276460212;1;1307034722;
-Makefile.msc;1989973585;1;1307034722;
-untgz.c;3818977666;1;1307034722;

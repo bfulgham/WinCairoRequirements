@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/zlib/contrib/puff
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=404
-Makefile;4129594680;1;1307034722;
-README;1244253597;1;1307034722;
-zeros.raw;2251660594;1;1307034722;
-puff.c;2628354011;2;1270405438;
-puff.h;3255628629;2;1270404748;

@@ -83,9 +83,8 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
 </Command>
     </PreBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\runtime;$(SolutionDir)\include;$(SolutionDir)\dist\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)runtime;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <StringPooling>true</StringPooling>
     </ClCompile>
     <Link>
@@ -117,10 +116,8 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
 </Command>
     </PreBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\runtime;$(SolutionDir)\include;$(SolutionDir)\dist\include;..\..\include;..\..\include\c99;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)runtime;$(SolutionDir)include;..\..\include;..\..\include\c99;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalOptions>/dynamicbase %(AdditionalOptions)</AdditionalOptions>
@@ -149,9 +146,8 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
 </Command>
     </PreBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\runtime;$(SolutionDir)\include;$(SolutionDir)\dist\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)runtime;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalOptions>/dynamicbase %(AdditionalOptions)</AdditionalOptions>

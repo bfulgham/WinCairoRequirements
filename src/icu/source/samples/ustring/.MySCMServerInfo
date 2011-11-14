@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/samples/ustring
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=830
-Makefile;3948730274;1;1044480708;
-readme.txt;169016458;1;1123802478;
-ustring.cpp;3182112193;1;1044480708;
-ustring.sln;3623849931;1;1207088266;
-ustring.vcproj;1191019117;1;1207088266;

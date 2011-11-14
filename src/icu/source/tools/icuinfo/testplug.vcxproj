@@ -44,19 +44,13 @@
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <TypeLibraryName>.\Release/testplug.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\common;..\..\i18n;..\toolutil;..\ctestfw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release/testplug.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -71,19 +65,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <TypeLibraryName>.\Debug/testplug.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\common;..\..\i18n;..\toolutil;..\ctestfw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug/testplug.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/fips/aes
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=972
-Makefile;2390143539;1;1234953790;
-fips_aes_selftest.c;521527541;1;1221559932;
-fips_aesavs.c;3076247588;1;1264599150;

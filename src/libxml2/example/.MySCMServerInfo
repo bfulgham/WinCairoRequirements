@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libxml2/example
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=220
-gjobread.c;3389490804;1;1307034604;
-gjobs.xml;2884529293;1;1307034604;
-Makefile.am;4053187590;1;1307034604;
-Makefile.in;2121501188;1;1307034604;

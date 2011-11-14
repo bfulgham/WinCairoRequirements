@@ -40,15 +40,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\$(Configuration)</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\$(Configuration)</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -59,8 +53,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\derb_Win32_Release/derb.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -73,11 +65,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" ..\..\..\bin
-</Command>
-      <Outputs>..\..\..\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -88,8 +76,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\derb_Win32_Debug/derb.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

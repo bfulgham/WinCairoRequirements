@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/tools/icupkg
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=861
-Makefile.in;4233995886;1;1207088281;
-icupkg.8.in;3766390216;1;1157065545;
-icupkg.cpp;1772461061;1;1207088281;
-icupkg.vcproj;3480778148;1;1307144128;
-icupkg.vcproj.8.00.old;3339008150;1;1215802421;

@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/perf
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=837
-Makefile.in;186582597;1;1215802418;
-README;967122356;1;1215802418;
-perf.sln;2182792045;1;1215802418;

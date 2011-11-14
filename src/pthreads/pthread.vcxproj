@@ -65,9 +65,7 @@
       <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>__CLEANUP_C;PTW32_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FunctionLevelLinking>false</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\./pthread.pch</PrecompiledHeaderOutputFile>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;PTW32_RC_MSC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -107,8 +105,6 @@ xcopy /Y /R "$(ProjectDir)semaphore.h" "$(SolutionDir)include\pthreads"</Command
     <ClCompile>
       <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>__CLEANUP_C;PTW32_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\./pthread.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;PTW32_RC_MSC;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libxslt/tests/exslt
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=283
-Makefile.am;4054307769;1;1307034658;
-Makefile.in;1150136272;1;1307034658;

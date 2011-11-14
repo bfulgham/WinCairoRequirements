@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/crypto/ripemd/asm
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1042
-rips.cpp;824477242;1;935845670;
-rm_win32.asm;1273634557;1;1307987850;
-rm_win32.obj;627194130;1;1307988628;
-rmd-586.pl;2726582293;1;1194788047;

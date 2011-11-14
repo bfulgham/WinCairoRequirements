@@ -51,7 +51,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;DEPLOYMENT_TARGET_WIN32;_WIN32_WINNT=0x0501;WINVER=0x0501;WINDOWS_LEAN_AND_MEAN=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -66,7 +65,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CONSOLE;DEPLOYMENT_TARGET_WIN32;_WIN32_WINNT=0x0501;WINVER=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>

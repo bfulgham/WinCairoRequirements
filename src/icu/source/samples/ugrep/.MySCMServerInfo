@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/samples/ugrep
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=828
-Makefile;4019262452;1;1057256027;
-readme.txt;3365486484;1;1123802476;
-ugrep.cpp;893428346;1;1057256027;
-ugrep.sln;916290650;1;1207088266;
-ugrep.vcproj;2099170846;1;1207088266;

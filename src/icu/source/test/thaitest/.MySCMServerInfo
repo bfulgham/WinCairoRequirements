@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/thaitest
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=840
-Makefile.in;2776509605;1;1207088279;
-space.txt;2393597098;1;1157065537;
-thaitest.cpp;489364822;1;1157065537;
-thaitest.dsp;511326563;1;1044480724;

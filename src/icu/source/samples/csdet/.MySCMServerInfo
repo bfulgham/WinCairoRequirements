@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/samples/csdet
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=813
-Makefile;3029134718;1;1207088265;
-csdet.c;3414277450;1;1157065516;
-csdet.vcproj;3502007851;1;1207088265;

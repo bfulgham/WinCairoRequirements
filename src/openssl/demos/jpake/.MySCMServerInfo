@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/demos/jpake
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=957
-Makefile;2059378490;1;1224430412;
-jpakedemo.c;3023072049;1;1225035451;

@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/samples/strsrch
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=822
-Makefile;1802163178;1;1044480707;
-readme.txt;1826249237;1;1123802473;
-strsrch.cpp;3543870215;1;1157065518;
-strsrch.sln;999078461;1;1207088266;
-strsrch.vcproj;587943602;1;1207088266;

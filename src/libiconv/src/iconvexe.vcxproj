@@ -56,7 +56,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>_CONSOLE;INSTALLPREFIX="$(SolutionDir)";INSTALLDIR="$(SolutionDir)Bin";LOCALEDIR="$(SolutionDir)\locale";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\srclib;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -66,7 +65,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>_CONSOLE;INSTALLPREFIX="$(SolutionDir)";INSTALLDIR="$(SolutionDir)Bin";LOCALEDIR="$(SolutionDir)\locale";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\srclib;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/samples/datefmt/answers
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1000
-main_0.cpp;1457570218;1;1057256026;
-main_1.cpp;976429054;1;1044480705;
-main_2.cpp;2624023827;1;1044480705;
-main_3.cpp;320052102;1;1044480705;

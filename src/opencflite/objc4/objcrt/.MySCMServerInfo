@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/opencflite/objc4/objcrt
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=890
-objcrt.vcproj;3460201412;1;1307983144;
-vc90.pdb;656724058;1;1307984095;
-objcrt_vs2005.vcproj;1703842997;1;1308252342;

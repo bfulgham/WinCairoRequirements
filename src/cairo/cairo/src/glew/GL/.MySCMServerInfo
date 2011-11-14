@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/cairo/cairo/src/glew/GL
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=990
-glew.h;3067888063;2;1254507732;
-glxew.h;4116260597;2;1254507732;

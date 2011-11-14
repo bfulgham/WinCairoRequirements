@@ -4,7 +4,7 @@
 #**********************************************************************
 # nmake file for creating data files on win32
 # invoke with
-# nmake /f makedata.mak icup=<path_to_icu_instalation> [Debug|Release]
+# nmake /f makedata.mak icup=<path_to_icu_instalation> distout=<path_to_binaries> [Debug|Release]
 #
 #	12/10/1999	weiv	Created
 
@@ -41,20 +41,21 @@ RESDIR=resources
 RESFILES=resfiles.mk
 ICUDATA=$(ICUP)\data
 
-DLL_OUTPUT=.\$(CFG)
+#  DISTOUT
+#    Our final output location.
+!if "$(DISTOUT)"==""
+!ERROR Can't find DISTOUT (should point to final output location)!
+!ENDIF
+!MESSAGE DISTOUT path is $(DISTOUT)
+
 # set the following to 'static' or 'dll' depending
 PKGMODE=static
 
 ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
 
-!IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
-ICUTOOLS=$(ICUP)\bin64
-PATH = $(ICUP)\bin64;$(PATH)
-!ELSE
-ICUTOOLS=$(ICUP)\bin
-PATH = $(ICUP)\bin;$(PATH)
-!ENDIF
+ICUTOOLS=$(DISTOUT)Bin
+PATH = $(DISTOUT)Bin;$(PATH)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
@@ -73,8 +74,10 @@ RESOURCESDIR=
 
 # This target should build all the data files
 !IF "$(PKGMODE)" == "dll"
+DLL_OUTPUT=$(DISTOUT)Bin
 OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).dll"
 !ELSE
+DLL_OUTPUT=$(DISTOUT)Lib
 OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).lib"
 !ENDIF
 

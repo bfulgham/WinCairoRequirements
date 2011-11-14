@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/perf/perldriver
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1009
-Common.pl;2713409778;1;1215802419;
-Dataset.pm;4013209284;1;1044480723;
-Format.pm;3400613145;1;1044480723;
-Output.pm;658328594;1;1044480723;
-PerfFramework.pm;755920446;1;1215802419;

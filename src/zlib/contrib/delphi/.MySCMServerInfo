@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/zlib/contrib/delphi
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=392
-readme.txt;4178052617;1;1307034719;
-ZLibConst.pas;3347126473;1;1307034719;
-ZLib.pas;2863405512;2;1271736741;
-zlibd32.mak;2785129268;2;1266107742;

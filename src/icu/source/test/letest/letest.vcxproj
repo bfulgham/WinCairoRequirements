@@ -40,30 +40,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\$(Configuration)</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\$(Configuration)</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
       <TypeLibraryName>.\Release/letest.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\include\layout;..\..\..\include;..\..\common;..\..\tools\ctestfw;..\..\tools\toolutil;..\..\layout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderOutputFile>.\Release/letest.pch</PrecompiledHeaderOutputFile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>../../../lib/icule.lib;../../../lib/libicuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -76,8 +66,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include\layout;..\..\..\include;..\..\common;..\..\tools\ctestfw;..\..\tools\toolutil;..\..\layout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderOutputFile>.\Debug/letest.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

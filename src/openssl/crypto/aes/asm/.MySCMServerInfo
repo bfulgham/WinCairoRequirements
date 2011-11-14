@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/crypto/aes/asm
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1030
-a_win32.asm;1504427053;1;1307987849;
-a_win32.obj;3594820624;1;1307988632;
-aes-586.pl;3073167441;1;1229523291;
-aes-ia64.S;101874915;1;1185560524;
-aes-x86_64.pl;2195240252;1;1275256923;

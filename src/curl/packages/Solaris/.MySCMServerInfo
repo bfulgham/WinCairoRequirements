@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/curl/packages/Solaris
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=704
-Makefile.am;993275256;1;1307989951;
-Makefile.in;1989663480;1;1307989951;

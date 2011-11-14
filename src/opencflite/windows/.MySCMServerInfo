@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/opencflite/windows
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=734
-CFLiteLib.vcproj;2590221173;1;1307983115;
-CFLiteLib_vs2005.vcproj;2882666442;1;1308250583;

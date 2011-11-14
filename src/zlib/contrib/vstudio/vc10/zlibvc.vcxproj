@@ -41,6 +41,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -101,15 +102,12 @@
       <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ASMV;ASMINF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
-      <PrecompiledHeaderOutputFile>$(IntDir)zlibvc.pch</PrecompiledHeaderOutputFile>
       <BrowseInformation>
       </BrowseInformation>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\masmx86\match686.obj;..\..\masmx86\inffas32.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\zlibvc.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
       <DataExecutionPrevention>
@@ -137,16 +135,13 @@ xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include"</Command>
       <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ASMV;ASMINF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
-      <PrecompiledHeaderOutputFile>$(IntDir)zlibvc.pch</PrecompiledHeaderOutputFile>
       <AssemblerOutput>All</AssemblerOutput>
       <BrowseInformation>
       </BrowseInformation>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\masmx86\match686.obj;..\..\masmx86\inffas32.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <ModuleDefinitionFile>.\zlibvc.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
@@ -290,6 +285,12 @@ xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include"</Command>
     <ResourceCompile Include="zlib.rc" />
   </ItemGroup>
   <ItemGroup>
+    <MASM Include="..\..\masmx86\inffas32.asm">
+      <FileType>Document</FileType>
+    </MASM>
+    <MASM Include="..\..\masmx86\match686.asm">
+      <FileType>Document</FileType>
+    </MASM>
     <None Include="zlibvc.def" />
   </ItemGroup>
   <ItemGroup>
@@ -305,5 +306,6 @@ xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include"</Command>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>

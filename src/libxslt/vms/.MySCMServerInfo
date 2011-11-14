@@ -1,7 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libxslt/vms
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=306
-build_xslt.com;1151037086;1;1307034704;
-diffs.vms;981645707;1;1307034704;
-readme.vms;2731084314;1;1307034704;

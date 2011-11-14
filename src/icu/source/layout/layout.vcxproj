@@ -56,9 +56,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_LAYOUT_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug/layout.pch</PrecompiledHeaderOutputFile>
       <BrowseInformation>true</BrowseInformation>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -86,8 +84,6 @@ xcopy /Y /R "$(ProjectDir)*.h" "$(SolutionDir)include\unicode\"</Command>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_LAYOUT_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release/layout.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

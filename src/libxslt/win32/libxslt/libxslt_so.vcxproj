@@ -51,8 +51,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LIBXSLT_SO_EXPORTS</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Debug\libxslt_so.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
@@ -79,8 +77,6 @@ xcopy /Y /R "$(ProjectDir)..\..\libxslt\*.h" "$(SolutionDir)include\libxslt"</Co
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LIBXSLT_SO_EXPORTS</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>.\Release\libxslt_so.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>

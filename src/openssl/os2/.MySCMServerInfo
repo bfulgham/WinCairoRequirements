@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/openssl/os2
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=748
-OS2-EMX.cmd;670541098;1;1070031090;
-backwardify.pl;2656404372;1;1070031090;

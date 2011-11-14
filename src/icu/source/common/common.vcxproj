@@ -56,8 +56,6 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_COMMON_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>$(IntDir)common.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <Link>
@@ -86,9 +84,7 @@ xcopy /Y /R "$(ProjectDir)unicode\*.h" "$(SolutionDir)include\unicode\"</Command
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_COMMON_IMPLEMENTATION;RBBI_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>$(IntDir)common.pch</PrecompiledHeaderOutputFile>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile />
     <Link>

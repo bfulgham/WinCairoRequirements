@@ -1,9 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/zlib/contrib/dotzlib
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=393
-DotZLib.chm;4081687573;1;1307034719;
-DotZLib.sln;2684021896;1;1307034719;
-LICENSE_1_0.txt;48125940;1;1307034719;
-DotZLib.build;2399793689;2;1095545970;
-readme.txt;3683798473;2;1095550356;

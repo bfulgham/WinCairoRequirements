@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/opencflite/tests
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=733
-Make_win32.bat;2534696126;1;1307983116;
-Makefile.am;3121648459;1;1307983116;
-Makefile.in;3286161331;1;1307983116;
-date_test.c;1602641194;1;1307983116;

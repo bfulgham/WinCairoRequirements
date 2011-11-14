@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/opencflite/examples/CFMessagePort
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=874
-Makefile.am;2380308049;1;1307983117;
-Makefile.in;349117658;1;1307983117;
-client.c;227549600;1;1307983117;
-server.c;1528853870;1;1307983117;

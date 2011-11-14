@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/compat
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=832
-Makefile.in;2293356037;1;1207088269;
-readme.txt;1851715792;1;1207088269;
-tzdate.c;2133418778;1;1207088269;
-tzone.pl;963328651;1;1207088269;

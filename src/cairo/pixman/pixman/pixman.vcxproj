@@ -51,7 +51,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>-w14710 -w14714 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -63,7 +62,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>-w14710 -w14714 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

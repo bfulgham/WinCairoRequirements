@@ -1,6 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/libiconv/libcharset/windows
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=438
-charset.rc;2498848153;1;1307034575;
-dllexport.h;1421627462;1;1307034575;

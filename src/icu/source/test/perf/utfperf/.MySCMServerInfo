@@ -1,8 +1,0 @@
-SCMBranch=External Dependencies
-SCMRepository=External Dependencies/src/icu/source/test/perf/utfperf
-SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
-SCMBranchRepositoryID=1016
-Makefile.in;3779231487;1;1207088275;
-UtfPerf.pl;395095477;1;1215802419;
-utfperf.cpp;2997281454;1;1207088275;
-utfperf.vcproj;2726194446;1;1207088275;
