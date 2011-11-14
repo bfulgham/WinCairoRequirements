@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cairo-analysis-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-arc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-array.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-atomic.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-base64-stream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-base85-stream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-bentley-ottmann-rectangular.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-bentley-ottmann-rectilinear.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-bentley-ottmann.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-cache.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-cff-subset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-clip.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-color.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-debug.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-deflate-stream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-fixed.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-font-face-twin-data.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-font-face-twin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-font-face.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-font-options.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-freelist.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-gstate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-hash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-hull.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-image-info.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-image-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-lzw.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-matrix.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-meta-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-misc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-mutex.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-output-stream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-paginated-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-path-bounds.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-path-fill.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-path-fixed.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-path-in-fill.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-path-stroke.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-path.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-pattern.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-pdf-operators.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-pdf-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-pen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-png.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-polygon.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-ps-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-rectangle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-region.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-rtree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-scaled-font-subsets.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-scaled-font.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-slope.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-spans.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-spline.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-stroke-style.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-surface-clipper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-surface-fallback.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-surface-wrapper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-svg-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-system.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-tee-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-tor-scan-converter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-toy-font-face.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-traps.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-truetype-subset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-type1-fallback.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-type1-subset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-type3-glyph-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-unicode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-user-font.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-version.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-wideint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-win32-font.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-win32-printing-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-win32-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo-xml-surface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cairo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cairo-analysis-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-arc-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-atomic-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-cache-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-clip-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-combsort-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-compiler-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-deprecated.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-drm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-features.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-fixed-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-fixed-type-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-freelist-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-gstate-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-hash-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-image-info-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-list-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-malloc-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-meta-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-mutex-impl-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-mutex-list-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-mutex-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-mutex-type-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-output-stream-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-paginated-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-paginated-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-path-fixed-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-path-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-pdf-operators-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-pdf-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-pdf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-ps-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-ps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-reference-count-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-region-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-rtree-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-scaled-font-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-scaled-font-subsets-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-slope-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-spans-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-surface-clipper-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-surface-fallback-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-surface-wrapper-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-svg-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-svg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-tee-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-truetype-subset-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-type1-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-type3-glyph-surface-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-types-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-user-font-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-wideint-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-wideint-type-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-win32-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-xcb-xrender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-xml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cairoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

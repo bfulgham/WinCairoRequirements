@@ -1,0 +1,6 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/amiga
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=368
+Makefile.pup;1144863529;2;1266106951;
+Makefile.sas;2929111899;2;1266106938;

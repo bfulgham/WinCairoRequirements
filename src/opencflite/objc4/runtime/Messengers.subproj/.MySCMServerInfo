@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/objc4/runtime/Messengers.subproj
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1026
+objc-msg-arm.s;1856911566;1;1307983144;
+objc-msg-i386.s;939526003;1;1307983144;
+objc-msg-ppc.s;593524816;1;1307983144;
+objc-msg-win32.m;3706994702;1;1307983144;
+objc-msg-x86_64.s;1558522730;1;1307983144;

@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/fips/rand
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=977
+Makefile;3881359860;1;1221671468;
+fips_rand.c;2589773175;1;1249833770;
+fips_rand.h;3241495009;1;1221559938;
+fips_rand_selftest.c;3230080596;1;1221559938;
+fips_randtest.c;3568066548;1;1221559938;
+fips_rngvs.c;4247857687;1;1264599151;

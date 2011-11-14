@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/examples/WritePListExample
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=882
+Makefile.am;3381775300;1;1307983117;
+Makefile.in;2292769505;1;1307983117;
+WritePListExample.cpp;3803900197;1;1307983117;
+WritePListExample.vcproj;333202699;1;1307983117;
+schema.xml;1470904277;1;1307984297;
+WritePListExample_vs2005.vcproj;3774888064;1;1308252337;

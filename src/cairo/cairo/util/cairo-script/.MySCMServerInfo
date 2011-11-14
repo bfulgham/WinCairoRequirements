@@ -1,0 +1,20 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/cairo/cairo/util/cairo-script
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=774
+COPYING;3254924203;1;1227695382;
+Makefile.am;4014725322;1;1276861647;
+Makefile.in;3286651270;1;1293286975;
+csi-bind.c;1896904645;1;1276861647;
+cairo-script-file.c;4292715734;2;1254507752;
+cairo-script-hash.c;2269432754;2;1254507752;
+cairo-script-interpreter.c;118048870;2;1254507752;
+cairo-script-interpreter.h;3989725561;2;1254507752;
+cairo-script-objects.c;1057864778;2;1254507752;
+cairo-script-operators.c;2402630602;2;1254507752;
+cairo-script-private.h;2628861098;2;1254507752;
+cairo-script-scanner.c;3891743882;2;1254507752;
+cairo-script-stack.c;412717581;2;1254507752;
+csi-exec.c;2484540676;2;1254507752;
+csi-replay.c;3234651141;2;1254507752;
+csi-trace.c;1024583009;2;1254507752;

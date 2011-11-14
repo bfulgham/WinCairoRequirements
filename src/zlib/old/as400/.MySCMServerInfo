@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/old/as400
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1065
+bndsrc;1667511465;1;1068619647;
+compile.clp;2038083267;1;1121654433;
+readme.txt;1002146140;1;1121654505;
+zlib.inc;2991870045;1;1266105956;

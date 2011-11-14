@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/ecdh
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=916
+Makefile;4048090797;1;1221671459;
+ecdh.h;2598410324;1;1116238260;
+ecdhtest.c;2574361265;1;1183553792;
+ech_err.c;439897435;1;1164140081;
+ech_key.c;1558545525;1;1114790165;
+ech_lib.c;1970559790;1;1276348730;
+ech_locl.h;278155490;1;1116238260;
+ech_ossl.c;2664291067;1;1116238260;

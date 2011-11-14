@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{32029CE6-EA72-437D-810D-E1A51A498C9B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libxml2</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\debug.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)\..\..\libxml2;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)\libxml2\include;$(SolutionDir)\libiconv\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\libxml"
+xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxml"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\libxml"
+xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxml"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\c14n.c" />
+    <ClCompile Include="..\..\catalog.c" />
+    <ClCompile Include="..\..\chvalid.c" />
+    <ClCompile Include="..\..\debugXML.c" />
+    <ClCompile Include="..\..\dict.c" />
+    <ClCompile Include="..\..\DOCBparser.c" />
+    <ClCompile Include="..\..\encoding.c" />
+    <ClCompile Include="..\..\entities.c" />
+    <ClCompile Include="..\..\error.c" />
+    <ClCompile Include="..\..\globals.c" />
+    <ClCompile Include="..\..\hash.c" />
+    <ClCompile Include="..\..\HTMLparser.c" />
+    <ClCompile Include="..\..\HTMLtree.c" />
+    <ClCompile Include="..\..\legacy.c" />
+    <ClCompile Include="..\..\list.c" />
+    <ClCompile Include="..\..\nanoftp.c" />
+    <ClCompile Include="..\..\nanohttp.c" />
+    <ClCompile Include="..\..\parser.c" />
+    <ClCompile Include="..\..\parserInternals.c" />
+    <ClCompile Include="..\..\pattern.c" />
+    <ClCompile Include="..\..\relaxng.c" />
+    <ClCompile Include="..\..\SAX.c" />
+    <ClCompile Include="..\..\SAX2.c" />
+    <ClCompile Include="..\..\schematron.c" />
+    <ClCompile Include="..\..\threads.c" />
+    <ClCompile Include="..\..\tree.c" />
+    <ClCompile Include="..\..\uri.c" />
+    <ClCompile Include="..\..\valid.c" />
+    <ClCompile Include="..\..\xinclude.c" />
+    <ClCompile Include="..\..\xlink.c" />
+    <ClCompile Include="..\..\xmlIO.c" />
+    <ClCompile Include="..\..\xmlmemory.c" />
+    <ClCompile Include="..\..\xmlmodule.c" />
+    <ClCompile Include="..\..\xmlreader.c" />
+    <ClCompile Include="..\..\xmlregexp.c" />
+    <ClCompile Include="..\..\xmlsave.c" />
+    <ClCompile Include="..\..\xmlschemas.c" />
+    <ClCompile Include="..\..\xmlschemastypes.c" />
+    <ClCompile Include="..\..\xmlstring.c" />
+    <ClCompile Include="..\..\xmlunicode.c" />
+    <ClCompile Include="..\..\xmlwriter.c" />
+    <ClCompile Include="..\..\xpath.c" />
+    <ClCompile Include="..\..\xpointer.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\config.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libiconv\libiconv.vcxproj">
+      <Project>{754ab981-be9d-418a-adb5-274e6c62e757}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\zlib\contrib\vstudio\vc10\zlibvc.vcxproj">
+      <Project>{8fd826f8-3739-44e6-8cc8-997122e53b8d}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

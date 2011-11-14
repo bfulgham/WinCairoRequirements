@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/tests/exslt/dynamic
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=286
+dynmap.out;807476595;1;1307034662;
+dynmap.xml;462783497;1;1307034663;
+dynmap.xsl;3737779077;1;1307034663;
+Makefile.am;930352195;1;1307034663;
+Makefile.in;1718352211;1;1307034663;

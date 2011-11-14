@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/demos/eay
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=955
+Makefile;2115760371;1;927849101;
+base64.c;1162455792;1;924905586;
+conn.c;1162378016;1;927849101;
+loadrsa.c;3170279764;1;924905586;

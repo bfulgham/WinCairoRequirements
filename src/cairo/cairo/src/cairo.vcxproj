@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A02A055B-7676-4A0F-A81E-573030C69571}</ProjectGuid>
+    <RootNamespace>cairo</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>CAIRO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)..\cairo-version.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-deprecated.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-features.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-pdf.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-ps.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-win32.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>CAIRO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)..\cairo-version.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-deprecated.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-features.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-pdf.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-ps.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-win32.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="cairo-analysis-surface.c" />
+    <ClCompile Include="cairo-arc.c" />
+    <ClCompile Include="cairo-array.c" />
+    <ClCompile Include="cairo-atomic.c" />
+    <ClCompile Include="cairo-base64-stream.c" />
+    <ClCompile Include="cairo-base85-stream.c" />
+    <ClCompile Include="cairo-bentley-ottmann-rectangular.c" />
+    <ClCompile Include="cairo-bentley-ottmann-rectilinear.c" />
+    <ClCompile Include="cairo-bentley-ottmann.c" />
+    <ClCompile Include="cairo-cache.c" />
+    <ClCompile Include="cairo-cff-subset.c" />
+    <ClCompile Include="cairo-clip.c" />
+    <ClCompile Include="cairo-color.c" />
+    <ClCompile Include="cairo-debug.c" />
+    <ClCompile Include="cairo-deflate-stream.c" />
+    <ClCompile Include="cairo-fixed.c" />
+    <ClCompile Include="cairo-font-face-twin-data.c" />
+    <ClCompile Include="cairo-font-face-twin.c" />
+    <ClCompile Include="cairo-font-face.c" />
+    <ClCompile Include="cairo-font-options.c" />
+    <ClCompile Include="cairo-freelist.c" />
+    <ClCompile Include="cairo-gstate.c" />
+    <ClCompile Include="cairo-hash.c" />
+    <ClCompile Include="cairo-hull.c" />
+    <ClCompile Include="cairo-image-info.c" />
+    <ClCompile Include="cairo-image-surface.c" />
+    <ClCompile Include="cairo-lzw.c" />
+    <ClCompile Include="cairo-matrix.c" />
+    <ClCompile Include="cairo-meta-surface.c" />
+    <ClCompile Include="cairo-misc.c" />
+    <ClCompile Include="cairo-mutex.c" />
+    <ClCompile Include="cairo-output-stream.c" />
+    <ClCompile Include="cairo-paginated-surface.c" />
+    <ClCompile Include="cairo-path-bounds.c" />
+    <ClCompile Include="cairo-path-fill.c" />
+    <ClCompile Include="cairo-path-fixed.c" />
+    <ClCompile Include="cairo-path-in-fill.c" />
+    <ClCompile Include="cairo-path-stroke.c" />
+    <ClCompile Include="cairo-path.c" />
+    <ClCompile Include="cairo-pattern.c" />
+    <ClCompile Include="cairo-pdf-operators.c" />
+    <ClCompile Include="cairo-pdf-surface.c" />
+    <ClCompile Include="cairo-pen.c" />
+    <ClCompile Include="cairo-png.c" />
+    <ClCompile Include="cairo-polygon.c" />
+    <ClCompile Include="cairo-ps-surface.c" />
+    <ClCompile Include="cairo-rectangle.c" />
+    <ClCompile Include="cairo-region.c" />
+    <ClCompile Include="cairo-rtree.c" />
+    <ClCompile Include="cairo-scaled-font-subsets.c" />
+    <ClCompile Include="cairo-scaled-font.c" />
+    <ClCompile Include="cairo-slope.c" />
+    <ClCompile Include="cairo-spans.c" />
+    <ClCompile Include="cairo-spline.c" />
+    <ClCompile Include="cairo-stroke-style.c" />
+    <ClCompile Include="cairo-surface-clipper.c" />
+    <ClCompile Include="cairo-surface-fallback.c" />
+    <ClCompile Include="cairo-surface-wrapper.c" />
+    <ClCompile Include="cairo-surface.c" />
+    <ClCompile Include="cairo-svg-surface.c" />
+    <ClCompile Include="cairo-system.c" />
+    <ClCompile Include="cairo-tee-surface.c" />
+    <ClCompile Include="cairo-tor-scan-converter.c" />
+    <ClCompile Include="cairo-toy-font-face.c" />
+    <ClCompile Include="cairo-traps.c" />
+    <ClCompile Include="cairo-truetype-subset.c" />
+    <ClCompile Include="cairo-type1-fallback.c" />
+    <ClCompile Include="cairo-type1-subset.c" />
+    <ClCompile Include="cairo-type3-glyph-surface.c" />
+    <ClCompile Include="cairo-unicode.c" />
+    <ClCompile Include="cairo-user-font.c" />
+    <ClCompile Include="cairo-version.c" />
+    <ClCompile Include="cairo-wideint.c" />
+    <ClCompile Include="cairo-win32-font.c" />
+    <ClCompile Include="cairo-win32-printing-surface.c" />
+    <ClCompile Include="cairo-win32-surface.c" />
+    <ClCompile Include="cairo-xml-surface.c" />
+    <ClCompile Include="cairo.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cairo-analysis-surface-private.h" />
+    <ClInclude Include="cairo-arc-private.h" />
+    <ClInclude Include="cairo-atomic-private.h" />
+    <ClInclude Include="cairo-cache-private.h" />
+    <ClInclude Include="cairo-clip-private.h" />
+    <ClInclude Include="cairo-combsort-private.h" />
+    <ClInclude Include="cairo-compiler-private.h" />
+    <ClInclude Include="cairo-deprecated.h" />
+    <ClInclude Include="cairo-drm.h" />
+    <ClInclude Include="cairo-features.h" />
+    <ClInclude Include="cairo-fixed-private.h" />
+    <ClInclude Include="cairo-fixed-type-private.h" />
+    <ClInclude Include="cairo-freelist-private.h" />
+    <ClInclude Include="cairo-gstate-private.h" />
+    <ClInclude Include="cairo-hash-private.h" />
+    <ClInclude Include="cairo-image-info-private.h" />
+    <ClInclude Include="cairo-list-private.h" />
+    <ClInclude Include="cairo-malloc-private.h" />
+    <ClInclude Include="cairo-meta-surface-private.h" />
+    <ClInclude Include="cairo-mutex-impl-private.h" />
+    <ClInclude Include="cairo-mutex-list-private.h" />
+    <ClInclude Include="cairo-mutex-private.h" />
+    <ClInclude Include="cairo-mutex-type-private.h" />
+    <ClInclude Include="cairo-output-stream-private.h" />
+    <ClInclude Include="cairo-paginated-private.h" />
+    <ClInclude Include="cairo-paginated-surface-private.h" />
+    <ClInclude Include="cairo-path-fixed-private.h" />
+    <ClInclude Include="cairo-path-private.h" />
+    <ClInclude Include="cairo-pdf-operators-private.h" />
+    <ClInclude Include="cairo-pdf-surface-private.h" />
+    <ClInclude Include="cairo-pdf.h" />
+    <ClInclude Include="cairo-private.h" />
+    <ClInclude Include="cairo-ps-surface-private.h" />
+    <ClInclude Include="cairo-ps.h" />
+    <ClInclude Include="cairo-reference-count-private.h" />
+    <ClInclude Include="cairo-region-private.h" />
+    <ClInclude Include="cairo-rtree-private.h" />
+    <ClInclude Include="cairo-scaled-font-private.h" />
+    <ClInclude Include="cairo-scaled-font-subsets-private.h" />
+    <ClInclude Include="cairo-slope-private.h" />
+    <ClInclude Include="cairo-spans-private.h" />
+    <ClInclude Include="cairo-surface-clipper-private.h" />
+    <ClInclude Include="cairo-surface-fallback-private.h" />
+    <ClInclude Include="cairo-surface-private.h" />
+    <ClInclude Include="cairo-surface-wrapper-private.h" />
+    <ClInclude Include="cairo-svg-surface-private.h" />
+    <ClInclude Include="cairo-svg.h" />
+    <ClInclude Include="cairo-tee-surface-private.h" />
+    <ClInclude Include="cairo-truetype-subset-private.h" />
+    <ClInclude Include="cairo-type1-private.h" />
+    <ClInclude Include="cairo-type3-glyph-surface-private.h" />
+    <ClInclude Include="cairo-types-private.h" />
+    <ClInclude Include="cairo-user-font-private.h" />
+    <ClInclude Include="cairo-version.h" />
+    <ClInclude Include="cairo-wideint-private.h" />
+    <ClInclude Include="cairo-wideint-type-private.h" />
+    <ClInclude Include="cairo-win32-private.h" />
+    <ClInclude Include="cairo-win32.h" />
+    <ClInclude Include="cairo-xcb-xrender.h" />
+    <ClInclude Include="cairo-xml.h" />
+    <ClInclude Include="cairo.h" />
+    <ClInclude Include="cairoint.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libpng\png.vcxproj">
+      <Project>{fd42917e-c1f2-4c77-8cfe-e26572bd909d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\zlib\contrib\vstudio\vc10\zlibvc.vcxproj">
+      <Project>{8fd826f8-3739-44e6-8cc8-997122e53b8d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pixman\pixman\pixman.vcxproj">
+      <Project>{afef050f-f435-41d5-b78b-54cd41af36ba}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

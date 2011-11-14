@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/extra/uconv/resources
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=997
+fr.res;3482159449;1;1307145930;
+fr.txt;3557967384;1;1088210971;
+root.res;1252689936;1;1307145930;
+root.txt;758723324;1;1088210971;

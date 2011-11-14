@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libiconv/libcharset/djgpp
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=433
+config.bat;939071119;1;1307034573;
+config.sed;270438490;1;1307034573;
+config.site;2958153076;1;1307034573;
+fnchange.in;3138228561;1;1307034573;
+fnchange.lst;4075518920;1;1307034573;
+Makefile.maint;2679877461;1;1307034573;
+README;3070917523;1;1307034573;
+README.in;1164564643;1;1307034573;

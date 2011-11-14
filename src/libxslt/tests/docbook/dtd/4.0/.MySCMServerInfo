@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/tests/docbook/dtd/4.0
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=257
+40chg.txt;1994044976;1;1307034625;
+calstblx.dtd;3072290529;1;1307034625;
+dbcentx.mod;3642421994;1;1307034625;
+dbgenent.ent;180145907;1;1307034625;
+dbhierx.mod;897039391;1;1307034625;
+dbnotnx.mod;3583934348;1;1307034625;
+dbpoolx.mod;3606310219;1;1307034625;
+docbookx.dtd;1230227261;1;1307034625;
+readme.txt;285371954;1;1307034625;
+soextblx.dtd;846006798;1;1307034625;

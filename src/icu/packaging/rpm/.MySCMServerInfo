@@ -1,0 +1,5 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/packaging/rpm
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=654
+icu.spec;506148231;1;1307652943;

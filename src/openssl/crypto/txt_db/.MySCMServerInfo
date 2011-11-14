@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/txt_db
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=948
+Makefile;1548699564;1;1221601495;
+txt_db.c;154269479;1;1169385404;
+txt_db.h;4126164846;1;1112261195;

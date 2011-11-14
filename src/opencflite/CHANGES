@@ -1,0 +1,47 @@
+                      Changes and What's New in OpenCFLite
+                      ------------------------------------
+
+2009-06-02 v476.18.0
+
+  * Synchronized against Apple's CoreFoundation-478.18.
+
+  * Added CFFileDescriptor and CFNotificationCenter support from Stuart Crook
+    <stuart@echus.demon.co.uk>.
+
+2009-03-11 v476.17.2
+
+  * Fixed run loop timer support for Linux.
+
+  * Updated pre-compiled ICU to v4.0 for Windows builds.
+
+  * Minor updates to CFRunLoopTimerExample and StringExample examples.
+
+  * Merged in David Cotter's <me@davecotter.com> CF-Lite project,
+    including his additional CFTest example.
+
+  * Fixed support for writing binary property lists with patch from Stuart
+    Crook <stuart@echus.demon.co.uk>.
+
+2007-02-11 v476.17.1
+
+  * Basic, development-level run loop support for Windows and Linux.
+
+  * Ensure private globals are marked as such on non-Apple GCC
+    compilers.
+
+  * Added DisplayURL, DNSServiceMetaQuery, CFLocalServer and
+    CFRunLoopTimer examples.
+
+  * Added appropriate preprocessor checks for __powerpc__ to handle
+    PowerPC compilers that emit that rather than __ppc__.
+
+  * Windows and Mac OS X build clean-ups.
+
+  * Improved Linux build configuration by respecting '--with' options
+    in preference to the presence of <foo>-config and, in general,
+    improved behavior in cross-compilation scenarios and in error
+    cases.
+
+2007-02-06 v476.17.0
+
+  * Initial release for Windows and Linux

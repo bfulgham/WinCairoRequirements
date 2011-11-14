@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/curl/packages/vms
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=707
+Makefile.am;352189716;1;1307989950;
+Makefile.in;1475162389;1;1307989950;
+build_vms.com;3270556151;1;1307989950;
+curlmsg.h;3775689503;1;1307989950;
+curlmsg.msg;682885346;1;1307989950;
+curlmsg.sdl;2583447349;1;1307989950;
+curlmsg_vms.h;4143052096;1;1307989950;
+readme;346194688;1;1307989950;

@@ -1,0 +1,13 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/python/tests
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=245
+basic.py;970572777;1;1307034619;
+exslt.py;2624132888;1;1307034619;
+extelem.py;4081105824;1;1307034619;
+extfunc.py;1483940071;1;1307034619;
+Makefile.am;1873488378;1;1307034619;
+Makefile.in;3038441762;1;1307034619;
+pyxsltproc.py;1315765973;1;1307034619;
+test.xml;3718447745;1;1307034619;
+test.xsl;1675916543;1;1307034619;

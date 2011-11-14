@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/tests/docbook/dtd/simple/3.1.7.1/ent
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=263
+ChangeLog;288889039;1;1307034629;
+iso-lat1.ent;3862569743;1;1307034629;
+iso-num.ent;1973183416;1;1307034629;
+iso-pub.ent;3495511620;1;1307034629;

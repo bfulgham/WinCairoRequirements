@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="bidi">
+      <UniqueIdentifier>{cecbf142-6bdf-4dbf-b3b9-85fe52bb65d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="break iteration">
+      <UniqueIdentifier>{25692163-1935-4615-8071-9a268c11cacc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="collation">
+      <UniqueIdentifier>{46537d5e-cd28-4f9e-a180-7700f4709709}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="collections">
+      <UniqueIdentifier>{e3af00fb-ca81-4f8e-a863-e443de99a8d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="conversion">
+      <UniqueIdentifier>{415eca92-0e71-4b8e-9cde-f6d6d161c55b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data &amp; memory">
+      <UniqueIdentifier>{dcd4ca57-a95b-4757-b1a8-a26900465cd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="formatting">
+      <UniqueIdentifier>{33d12c70-b8af-47c9-bff5-0da75d918adf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="locales &amp; resources">
+      <UniqueIdentifier>{775f54c1-8cce-4bfd-a258-b8b8e88e9714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{0ac19b62-1e08-451f-a423-68671dc5bb0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normalization">
+      <UniqueIdentifier>{ee6f2fa6-ddf0-4e8b-9102-96f8936582be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="properties &amp; sets">
+      <UniqueIdentifier>{86a507c7-f43b-4fc1-9a5d-a081c7f46f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="strings">
+      <UniqueIdentifier>{9fd1ee39-6c03-458f-88a0-2354a4fa9e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="transforms">
+      <UniqueIdentifier>{6ca913a0-e3cd-47c8-b19d-414c05d57b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="regex">
+      <UniqueIdentifier>{46e2ea93-d6cb-4702-b02c-5463e6db3d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprep &amp; idna">
+      <UniqueIdentifier>{91b33aa9-ee8c-4ce7-ae3c-227a52ad8c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spoof">
+      <UniqueIdentifier>{8b59637b-c237-4432-ba19-434cb6c6d2e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cbididat.c">
+      <Filter>bidi</Filter>
+    </ClCompile>
+    <ClCompile Include="cbiditst.c">
+      <Filter>bidi</Filter>
+    </ClCompile>
+    <ClCompile Include="cbiapts.c">
+      <Filter>break iteration</Filter>
+    </ClCompile>
+    <ClCompile Include="cbkittst.c">
+      <Filter>break iteration</Filter>
+    </ClCompile>
+    <ClCompile Include="callcoll.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="capitst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="ccolltst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="ccurrtst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cdetst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cestst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cfintst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cfrtst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cg7coll.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="citertst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cjaptst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cmsccoll.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="colutil.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="cturtst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="encoll.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="usrchdat.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="usrchtst.c">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="chashtst.c">
+      <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="sorttest.c">
+      <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="trie2test.c">
+      <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="trietest.c">
+      <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="uenumtst.c">
+      <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="bocu1tst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="ccapitst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="cconvtst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="cctest.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="eurocreg.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="nccbtst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="ncnvfbts.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="ncnvtst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="nucnvtst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="stdnmtst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="ucnvseltst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="ucsdetst.c">
+      <Filter>conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="udatatst.c">
+      <Filter>data &amp; memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ccaltst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cdattst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cdtdptst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cdtrgtst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cformtst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cmsgtst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cnmdptst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cnumtst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="currtest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="udatpg_test.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="utmstest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="cldrtest.c">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
+    <ClCompile Include="cloctst.c">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
+    <ClCompile Include="cposxtst.c">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
+    <ClCompile Include="crestst.c">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
+    <ClCompile Include="creststn.c">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
+    <ClCompile Include="calltest.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="cintltst.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="cutiltst.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="hpmufn.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="putiltst.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="tracetst.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="cnormtst.c">
+      <Filter>normalization</Filter>
+    </ClCompile>
+    <ClCompile Include="cucdapi.c">
+      <Filter>properties &amp; sets</Filter>
+    </ClCompile>
+    <ClCompile Include="cucdtst.c">
+      <Filter>properties &amp; sets</Filter>
+    </ClCompile>
+    <ClCompile Include="usettest.c">
+      <Filter>properties &amp; sets</Filter>
+    </ClCompile>
+    <ClCompile Include="cstrcase.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="cstrtest.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="custrtrn.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="custrtst.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="utexttst.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="utf16tst.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="utf8tst.c">
+      <Filter>strings</Filter>
+    </ClCompile>
+    <ClCompile Include="utransts.c">
+      <Filter>transforms</Filter>
+    </ClCompile>
+    <ClCompile Include="reapits.c">
+      <Filter>regex</Filter>
+    </ClCompile>
+    <ClCompile Include="idnatest.c">
+      <Filter>sprep &amp; idna</Filter>
+    </ClCompile>
+    <ClCompile Include="nfsprep.c">
+      <Filter>sprep &amp; idna</Filter>
+    </ClCompile>
+    <ClCompile Include="spreptst.c">
+      <Filter>sprep &amp; idna</Filter>
+    </ClCompile>
+    <ClCompile Include="sprpdata.c">
+      <Filter>sprep &amp; idna</Filter>
+    </ClCompile>
+    <ClCompile Include="spooftest.c">
+      <Filter>spoof</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cbiditst.h">
+      <Filter>bidi</Filter>
+    </ClInclude>
+    <ClInclude Include="cbiapts.h">
+      <Filter>break iteration</Filter>
+    </ClInclude>
+    <ClInclude Include="callcoll.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="capitst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="ccolltst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="ccurrtst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="cdetst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="cestst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="cfintst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="cfrtst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="cg7coll.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="citertst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="cjaptst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="cturtst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="encoll.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="ccapitst.h">
+      <Filter>conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="nccbtst.h">
+      <Filter>conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="ncnvfbts.h">
+      <Filter>conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="nucnvtst.h">
+      <Filter>conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="ucnvseltst.h">
+      <Filter>conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="ccaltst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cdattst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cdtdptst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cdtrgtst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cformtst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cmsgtst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cnmdptst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cnumtst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="cloctst.h">
+      <Filter>locales &amp; resources</Filter>
+    </ClInclude>
+    <ClInclude Include="crestst.h">
+      <Filter>locales &amp; resources</Filter>
+    </ClInclude>
+    <ClInclude Include="creststn.h">
+      <Filter>locales &amp; resources</Filter>
+    </ClInclude>
+    <ClInclude Include="cintltst.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="cnormtst.h">
+      <Filter>normalization</Filter>
+    </ClInclude>
+    <ClInclude Include="cucdapi.h">
+      <Filter>properties &amp; sets</Filter>
+    </ClInclude>
+    <ClInclude Include="nfsprep.h">
+      <Filter>sprep &amp; idna</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

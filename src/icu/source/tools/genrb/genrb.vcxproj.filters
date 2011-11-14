@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{08ae31dd-0f8f-4ea5-adad-9b95e4cca9bc}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{2ee9968c-ee73-4dde-a8ec-825f1b674bad}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{01b191e3-6a6f-4437-b59b-f61b23d9a5d2}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="errmsg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="genrb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parse.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="prscmnts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rbutil.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="reslist.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ustr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wrtjava.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wrtxml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="errmsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="genrb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="prscmnts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rbutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="reslist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ustr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

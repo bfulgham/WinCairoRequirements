@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/hmac
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=921
+Makefile;1852933581;1;1221671461;
+hmac.c;3958463329;1;1276348731;
+hmac.h;2372424817;1;1213635400;
+hmactest.c;91034819;1;1039053347;

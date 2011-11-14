@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/genren
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=857
+Makefile;2144257972;1;1215802421;
+README;1825736240;1;1044480726;
+genren.pl;2377301904;1;1215802421;

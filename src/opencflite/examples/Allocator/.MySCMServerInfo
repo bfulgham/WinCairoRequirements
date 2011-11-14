@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/examples/Allocator
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=872
+Allocator.vcproj;4197509505;1;1307983117;
+AllocatorExample.c;3142068343;1;1307983117;
+Makefile.am;2686414517;1;1307983117;
+Makefile.in;1368427534;1;1307983117;
+Allocator_vs2005.vcproj;1277185044;1;1308252273;

@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/des/times
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1036
+486-50.sol;3221598593;1;914237550;
+586-100.lnx;3945998452;1;914237550;
+686-200.fre;602856591;1;914237550;
+aix.cc;973174963;1;914237550;
+alpha.cc;4288666021;1;914237550;
+hpux.cc;1611210826;1;914237550;
+sparc.gcc;218947458;1;914237550;
+usparc.cc;321770249;1;1234648211;

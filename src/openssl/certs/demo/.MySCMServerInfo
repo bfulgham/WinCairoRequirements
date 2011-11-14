@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/certs/demo
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=898
+ca-cert.pem;419006872;1;1102276081;
+dsa-ca.pem;3798792192;1;1102276081;
+dsa-pca.pem;1061649666;1;1102276081;
+pca-cert.pem;1454912066;1;1102276081;

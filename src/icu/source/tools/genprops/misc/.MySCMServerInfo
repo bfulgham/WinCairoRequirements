@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/genprops/misc
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1019
+ucdmerge.c;3798705010;1;1057256034;
+ucdstrip.c;2102613291;1;1057256034;
+ucdstrip.pl;3359777663;1;1057256034;

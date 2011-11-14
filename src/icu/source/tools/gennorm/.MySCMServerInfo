@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/gennorm
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=853
+Makefile.in;3568771415;1;1207088280;
+gennorm.c;3024834581;1;1123802526;
+gennorm.h;2016406618;1;1123802526;
+gennorm.vcproj;482969221;1;1307144128;
+gennorm.vcproj.8.00.old;2069558615;1;1215802421;
+store.c;624043403;1;1215802421;

@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/objc4/runtime/Auto.subproj
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1025
+objc-auto-i386.s;3629637539;1;1307983145;
+objc-auto-ppc.s;2680787658;1;1307983145;
+objc-auto-ppc64.s;1433346451;1;1307983145;
+objc-auto-x86_64.s;1545195059;1;1307983145;

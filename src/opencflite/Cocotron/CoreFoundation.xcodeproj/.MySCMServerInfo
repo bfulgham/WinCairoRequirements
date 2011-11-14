@@ -1,0 +1,5 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/Cocotron/CoreFoundation.xcodeproj
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=871
+project.pbxproj;75065647;1;1307983116;

@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/fips/dh
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=974
+Makefile;659231283;1;1225046523;
+dh_gen.c;1720013585;1;1221559934;
+fips_dh_check.c;1615813102;1;1221559934;
+fips_dh_gen.c;439166248;1;1221559934;
+fips_dh_key.c;689465910;1;1221559934;
+fips_dh_lib.c;256064777;1;1225910215;

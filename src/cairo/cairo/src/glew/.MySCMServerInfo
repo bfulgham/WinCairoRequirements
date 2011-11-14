@@ -1,0 +1,6 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/cairo/cairo/src/glew
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=770
+LICENSE.txt;906152969;1;1254507732;
+glew.c;3860886584;2;1254507732;

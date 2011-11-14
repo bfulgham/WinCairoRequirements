@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/tests/docbook/xhtml
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=280
+ChangeLog;117864195;1;1307034643;
+chunk.xsl;2187004214;1;1307034643;
+docbook.xsl;4166213330;1;1307034643;
+LostLog;1867093590;1;1307034643;
+xtchunk.xsl;857941278;1;1307034643;

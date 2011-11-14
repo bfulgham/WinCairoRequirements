@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>City of Birth</key>
+	<string>Springfield</string>
+	<key>Kids Names</key>
+	<array>
+		<string>John</string>
+		<string>Kyra</string>
+	</array>
+	<key>Name</key>
+	<string>John Doe</string>
+	<key>Pets Names</key>
+	<array/>
+	<key>Picture</key>
+	<data>
+	PEKBpYGlmYFCPA==
+	</data>
+	<key>Year Of Birth</key>
+	<integer>1965</integer>
+</dict>
+</plist>

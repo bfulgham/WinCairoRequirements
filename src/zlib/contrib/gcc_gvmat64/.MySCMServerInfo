@@ -1,0 +1,5 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/gcc_gvmat64
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1071
+gvmat64.S;343456964;1;1268365620;

@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/samples/coll
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=812
+Makefile;1225177022;1;1044480705;
+coll.cpp;1248962218;1;1157065515;
+coll.sln;4002785437;1;1207088265;
+coll.vcproj;493521553;1;1207088265;
+readme.txt;522772744;1;1123802471;

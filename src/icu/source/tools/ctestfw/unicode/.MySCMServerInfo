@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/ctestfw/unicode
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1018
+ctest.h;2249329446;1;1215802421;
+datamap.h;1829976234;1;1207088279;
+dbgutil.h;215879863;1;1207088279;
+testdata.h;1660428855;1;1207088279;
+testlog.h;1754932415;1;1215802421;
+testtype.h;984299419;1;1207088279;
+tstdtmod.h;747686862;1;1123802524;
+udbgutil.h;1529837808;1;1207088279;
+uperf.h;1269131510;1;1207088279;
+utimer.h;364383629;1;1157065538;

@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/cairo/cairo/util/cairo-sphinx
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=775
+Makefile.in;675690865;1;1293286975;
+fdr.c;587899786;2;1254507752;
+Makefile.am;2145816016;2;1254507752;
+sphinx.c;4294674301;2;1254507752;

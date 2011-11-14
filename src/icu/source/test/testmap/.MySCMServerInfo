@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/testmap
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=839
+Makefile.in;3970317222;1;1207088279;
+testmap.c;2438378597;1;1057256033;
+testmap.dsp;4119332710;1;1044480724;

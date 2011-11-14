@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/data/xml/brkitr
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=994
+en.xml;1717115239;1;1157065481;
+en_US.xml;1638096237;1;1157065481;
+en_US_POSIX.xml;452738990;1;1157065481;
+ja.xml;2730621845;1;1157065481;
+root.xml;3924374164;1;1207088257;

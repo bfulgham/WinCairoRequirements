@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/genbrk
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=845
+Makefile.in;333289742;1;1207088279;
+genbrk.1.in;1847917844;1;1207088279;
+genbrk.cpp;1100177479;1;1207088279;
+genbrk.vcproj;1750065235;1;1307144128;
+genbrk.vcproj.8.00.old;1196878920;1;1215802421;

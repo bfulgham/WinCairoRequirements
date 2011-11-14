@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/demos/easy_tls
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=954
+Makefile;116288493;1;1000804540;
+README;4116512776;1;1000804540;
+cacerts.pem;3846792491;1;1000753617;
+cert.pem;1561850923;1;1000753617;
+easy-tls.c;3286091346;1;1015319236;
+easy-tls.h;2796759545;1;1000753619;
+test.c;3381713901;1;1000753619;
+test.h;2830152747;1;1000753620;

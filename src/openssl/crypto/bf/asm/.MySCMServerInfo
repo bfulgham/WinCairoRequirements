@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/bf/asm
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1031
+b_win32.asm;2729562299;1;1307987850;
+b_win32.obj;71505149;1;1307988631;
+bf-586.pl;3879209341;1;922883902;
+bf-686.pl;1376169002;1;928277260;
+readme;4106085532;1;914237680;

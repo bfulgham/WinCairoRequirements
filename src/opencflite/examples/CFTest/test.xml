@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Application Version</key>
+	<string>1.0d49r27</string>
+	<key>Current Venue</key>
+	<string>Singers</string>
+	<key>Library Search Paths</key>
+	<dict>
+		<key>array</key>
+		<array/>
+	</dict>
+	<key>Major Version</key>
+	<integer>1</integer>
+	<key>Minor Version</key>
+	<integer>7</integer>
+	<key>Next item ID (don't change this!!)</key>
+	<integer>8302</integer>
+	<key>Playlists</key>
+	<array>
+		<dict>
+			<key>Artist</key>
+			<string></string>
+			<key>Ascending</key>
+			<integer>1</integer>
+			<key>Category</key>
+			<string></string>
+			<key>Columns</key>
+			<dict>
+				<key>COLUMNS</key>
+				<array>
+					<integer>1346978632</integer>
+					<integer>1936673092</integer>
+					<integer>1851878757</integer>
+					<integer>1634890867</integer>
+					<integer>1634493037</integer>
+					<integer>1685222510</integer>
+				</array>
+				<key>COLWIDS</key>
+				<array>
+					<integer>80</integer>
+					<integer>66</integer>
+					<integer>246</integer>
+					<integer>167</integer>
+					<integer>167</integer>
+					<integer>80</integer>
+				</array>
+				<key>SORTCOL</key>
+				<integer>1936673092</integer>
+				<key>SORTDIR</key>
+				<array>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+				</array>
+			</dict>
+			<key>Current Playlist Item ID</key>
+			<integer>1</integer>
+			<key>FreeDB Revision</key>
+			<integer>0</integer>
+			<key>FreeDB extended data</key>
+			<string></string>
+			<key>Genre</key>
+			<string></string>
+			<key>Is Category Locked</key>
+			<false/>
+			<key>Name</key>
+			<string>Library</string>
+			<key>Playlist ID</key>
+			<integer>1</integer>
+			<key>Playlist Type</key>
+			<integer>1</integer>
+			<key>Sort By</key>
+			<integer>1936673092</integer>
+			<key>Year</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+</dict>
+</plist>

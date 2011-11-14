@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/XCode_Configs
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=735
+ConfigDebug.xcconfig;247221754;1;1307983117;
+ConfigRelease.xcconfig;1521009635;1;1307983117;
+Config_Master.xcconfig;2358911433;1;1307983117;

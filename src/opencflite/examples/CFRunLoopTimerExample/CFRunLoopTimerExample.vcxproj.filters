@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="My Inspector Results">
+      <UniqueIdentifier>{97c3ce2b-3f6b-4c8e-bb43-4a7e99e69f7c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Inspector Results\r000mi4\r000mi4.insp">
+      <Filter>My Inspector Results</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CFRunLoopTimerExample.c" />
+  </ItemGroup>
+</Project>

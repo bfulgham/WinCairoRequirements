@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libpng/projects/beos
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=718
+x86-shared.proj;3900667411;1;1258670890;
+x86-shared.txt;620113864;1;1258670890;
+x86-static.proj;3077871630;1;1258670890;
+x86-static.txt;3524504025;1;1258670890;

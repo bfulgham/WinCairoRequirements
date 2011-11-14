@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/fips/hmac
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=976
+Makefile;3778107295;1;1225046524;
+fips_hmac.c;3813475404;1;1249833769;
+fips_hmac_selftest.c;2149257468;1;1249833769;
+fips_hmactest.c;2855207886;1;1225910216;

@@ -1,0 +1,6 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/demos/state_machine
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=964
+Makefile;703917745;1;967659268;
+state_machine.c;3251313968;1;981465211;

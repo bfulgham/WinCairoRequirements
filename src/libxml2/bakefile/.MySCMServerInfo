@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxml2/bakefile
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=212
+Bakefiles.bkgen;2341344770;1;1307034595;
+libxml2.bkl;2354392264;1;1307034596;
+Readme.txt;3758801989;1;1307034596;

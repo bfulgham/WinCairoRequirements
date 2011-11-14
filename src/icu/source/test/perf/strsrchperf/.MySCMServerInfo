@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/perf/strsrchperf
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1011
+Makefile.in;2832818640;1;1215802419;
+StrSrchPerf_r.pl;4031027644;1;1215802419;
+strsrchperf.cpp;2937464044;1;1215802419;
+strsrchperf.h;3717262972;1;1215802419;
+strsrchperf.vcproj;983661660;1;1215802419;

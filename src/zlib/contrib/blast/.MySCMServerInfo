@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/blast
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=391
+blast.c;210784200;1;1307034719;
+blast.h;3649056420;1;1307034719;
+Makefile;1025395254;1;1307034719;
+README;613556742;1;1307034719;
+test.pk;1894264890;1;1307034719;
+test.txt;1349224080;1;1307034719;

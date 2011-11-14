@@ -1,0 +1,235 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 44;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		755536490ED0DDEC00036E92 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755536480ED0DDEC00036E92 /* ApplicationServices.framework */; };
+		755E31490E1810450069CB0E /* SuperString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 755E31460E1810450069CB0E /* SuperString.cpp */; };
+		755E31640E1813310069CB0E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 755E31630E1813310069CB0E /* main.cpp */; };
+		75CFC3AB0E181B2900F15957 /* CFTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75CFC3AA0E181B2900F15957 /* CFTest.cpp */; };
+		8494DA3E0F52764C000BEFD8 /* CFLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8494DA3D0F52764C000BEFD8 /* CFLite.framework */; };
+		84F45E710F4BD7D600859B35 /* CFUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84F45E6F0F4BD7D600859B35 /* CFUtils.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8DD76F7B0486A8DE00D96B5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		755535B50ED0DA3D00036E92 /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stdafx.h; path = ../source/main/stdafx.h; sourceTree = "<group>"; };
+		755536480ED0DDEC00036E92 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = ../../../../../../System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<group>"; };
+		755E31450E1810450069CB0E /* CFTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CFTest.h; path = ../source/main/CFTest.h; sourceTree = "<group>"; };
+		755E31460E1810450069CB0E /* SuperString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = SuperString.cpp; path = ../source/shared/SuperString.cpp; sourceTree = "<group>"; };
+		755E31470E1810450069CB0E /* SuperString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SuperString.h; path = ../source/shared/SuperString.h; sourceTree = "<group>"; };
+		755E31630E1813310069CB0E /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = main.cpp; path = ../source/main/main.cpp; sourceTree = "<group>"; };
+		75CFC3AA0E181B2900F15957 /* CFTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CFTest.cpp; path = ../source/main/CFTest.cpp; sourceTree = "<group>"; };
+		8494DA3D0F52764C000BEFD8 /* CFLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFLite.framework; path = ../../../macosx/build/Debug/CFLite.framework; sourceTree = SOURCE_ROOT; };
+		84F45E6F0F4BD7D600859B35 /* CFUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CFUtils.cpp; path = ../source/shared/CFUtils.cpp; sourceTree = SOURCE_ROOT; };
+		84F45E700F4BD7D600859B35 /* CFUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFUtils.h; path = ../source/shared/CFUtils.h; sourceTree = SOURCE_ROOT; };
+		8DD76F7E0486A8DE00D96B5E /* CFTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CFTest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DD76F780486A8DE00D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				755536490ED0DDEC00036E92 /* ApplicationServices.framework in Frameworks */,
+				8494DA3E0F52764C000BEFD8 /* CFLite.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* CFTest */ = {
+			isa = PBXGroup;
+			children = (
+				8494DA3D0F52764C000BEFD8 /* CFLite.framework */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
+				19C28FBDFE9D53C911CA2CBB /* Products */,
+			);
+			name = CFTest;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				755535B50ED0DA3D00036E92 /* stdafx.h */,
+				84F45E6F0F4BD7D600859B35 /* CFUtils.cpp */,
+				84F45E700F4BD7D600859B35 /* CFUtils.h */,
+				755E31470E1810450069CB0E /* SuperString.h */,
+				755E31460E1810450069CB0E /* SuperString.cpp */,
+				755E31450E1810450069CB0E /* CFTest.h */,
+				75CFC3AA0E181B2900F15957 /* CFTest.cpp */,
+				755E31630E1813310069CB0E /* main.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				755536480ED0DDEC00036E92 /* ApplicationServices.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		19C28FBDFE9D53C911CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76F7E0486A8DE00D96B5E /* CFTest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DD76F740486A8DE00D96B5E /* CFTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB924708733DCA0010E9CD /* Build configuration list for PBXNativeTarget "CFTest" */;
+			buildPhases = (
+				8DD76F760486A8DE00D96B5E /* Sources */,
+				8DD76F780486A8DE00D96B5E /* Frameworks */,
+				8DD76F7B0486A8DE00D96B5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CFTest;
+			productInstallPath = "$(HOME)/bin";
+			productName = CFTest;
+			productReference = 8DD76F7E0486A8DE00D96B5E /* CFTest */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "CFTest" */;
+			compatibilityVersion = "Xcode 3.0";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* CFTest */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DD76F740486A8DE00D96B5E /* CFTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DD76F760486A8DE00D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				755E31490E1810450069CB0E /* SuperString.cpp in Sources */,
+				755E31640E1813310069CB0E /* main.cpp in Sources */,
+				75CFC3AB0E181B2900F15957 /* CFTest.cpp in Sources */,
+				84F45E710F4BD7D600859B35 /* CFUtils.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB924808733DCA0010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/A/Frameworks\"",
+					"\"$(SRCROOT)/../../../macosx/build/Debug\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = CFTest;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB924908733DCA0010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Versions/A/Frameworks\"",
+					"\"$(SRCROOT)/../../../macosx/build/Debug\"",
+				);
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = CFTest;
+			};
+			name = Release;
+		};
+		1DEB924C08733DCA0010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = _CFTEST_;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Debug;
+		};
+		1DEB924D08733DCA0010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB924708733DCA0010E9CD /* Build configuration list for PBXNativeTarget "CFTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB924808733DCA0010E9CD /* Debug */,
+				1DEB924908733DCA0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "CFTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB924C08733DCA0010E9CD /* Debug */,
+				1DEB924D08733DCA0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

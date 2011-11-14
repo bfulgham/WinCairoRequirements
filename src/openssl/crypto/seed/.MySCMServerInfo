@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/seed
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=943
+Makefile;266044705;1;1221601494;
+seed.c;1719122261;1;1177372210;
+seed.h;439996758;1;1177375608;
+seed_cbc.c;2411125004;1;1177372210;
+seed_cfb.c;752014149;1;1177372210;
+seed_ecb.c;4130466193;1;1177372210;
+seed_locl.h;3101177011;1;1177372211;
+seed_ofb.c;820437276;1;1177372211;

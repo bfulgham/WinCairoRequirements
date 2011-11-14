@@ -1,0 +1,15 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+datarootdir=@datarootdir@
+datadir=@datadir@
+includedir=@includedir@
+
+Name: @PACKAGE_NAME@
+Version: @PACKAGE_VERSION@
+Description: A portable version of Apple's Mac OS X CoreFoundation library.
+URL: http://opencflite.sourceforge.net/
+Requires: icu >= 3.6, uuid
+Cflags: -I${includedir}
+Libs: -L${libdir} -lCoreFoundation
+Libs.private: @LIBS@

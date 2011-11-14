@@ -1,0 +1,16 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/cairo/cairo/src/drm
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=769
+cairo-drm-ioctl-private.h;1298415333;1;1254507732;
+cairo-drm-bo.c;2800854872;2;1254507732;
+cairo-drm-gallium-surface.c;3059131774;2;1254507732;
+cairo-drm-intel-private.h;1598661933;2;1254507732;
+cairo-drm-intel-surface.c;1149134491;2;1254507732;
+cairo-drm-intel.c;2499131599;2;1254507732;
+cairo-drm-private.h;1818487296;2;1254507732;
+cairo-drm-radeon-private.h;4209761315;2;1254507732;
+cairo-drm-radeon-surface.c;3296190061;2;1254507732;
+cairo-drm-radeon.c;548602969;2;1254507732;
+cairo-drm-surface.c;1394550606;2;1254507732;
+cairo-drm.c;3300887540;2;1254507732;

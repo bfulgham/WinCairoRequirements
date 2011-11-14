@@ -1,0 +1,5 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/macosx/CFLite.xcodeproj
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=888
+project.pbxproj;960449862;1;1307983116;

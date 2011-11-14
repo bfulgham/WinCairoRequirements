@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/icuswap
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=862
+Makefile.in;877859875;1;1207088281;
+icuswap.cpp;2662410147;1;1207088281;
+icuswap.vcproj;1062504503;1;1307144128;
+icuswap.vcproj.8.00.old;2162548154;1;1215802421;

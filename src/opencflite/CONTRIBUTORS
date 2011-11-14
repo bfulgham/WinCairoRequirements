@@ -1,0 +1,40 @@
+Contributors
+------------
+March 2000: partial port to Linux by Pedro Ivo Tavares (ptavares@iname.com).
+	This was mostly integrated by ckane@apple.com by CoreFoundation-5,
+	but the style was changed, and the hand-crafted Makefile, which is
+	new since this port, tries to take care of some of the things that
+	are needed for Linux (and build a libCoreFoundation.a instead of a
+	CoreFoundation.framework), but ckane does not have a Linux box and
+	can't finish that and test building.
+
+December 2000: port to FreeBSD by Sarwat Khan (sarwat@sarwat.net).
+	Port to FreeBSD, except for RunLoop.subproj items.  Integrated by
+	ckane@apple.com into CoreFoundation-8.  ckane also marginally
+	improved the Linux port in that version.
+
+March 2001: CoreFoundation-9, corresponding to CoreFoundation-197 in
+	Mac OS X, synchronizes Darwin CF with Mac OS X's released CF.
+
+May 2001: CoreFoundation-10, corresponding to CoreFoundation-206.5
+	synchronizes Darwin CF with TOT CoreFoundation.
+
+June 2001: Linux port maintenance by Robert Thompson <rothomp3@mac.com>.
+
+July 2001: Integrated addition of headerdoc for CFBinaryHeap.h from
+	Kevin Van Vechten <kevinvv@uclink4.berkeley.edu>.
+
+Sept 2001: CoreFoundation-14, sync with Mac OS X 10.1
+
+Oct 2001: More header doc (e.g., CFSet.h) and some CFTree implementation
+        from Kevin Van Vechten <kevinvv@uclink4.berkeley.edu>.
+
+Jan 2002: Windows(TM) port changes from Kevin Van Vechten <kevinvv@uclink4.berkeley.edu>.
+
+Feb 2002: Some Windows(TM) port changes from Aleskey Dukhnyakov, Andrew Dzubandovsky,
+	Roman Mukhin, and Sergey Zubarev; Orc Software<daa@orcsoftware.spb.ru>
+
+... years of work ...
+
+JAN 2009: Windows(TM) port changes from Brent Fulgham.  Linux port changes
+	from Grant Erickson.

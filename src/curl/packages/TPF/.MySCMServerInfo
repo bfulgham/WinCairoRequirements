@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/curl/packages/TPF
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=706
+curl.mak;3901784792;1;1307989950;
+maketpf.env_curl;584818118;1;1307989950;
+maketpf.env_curllib;925217680;1;1307989950;

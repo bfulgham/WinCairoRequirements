@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxml2/macos/src
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=224
+config-mac.h;2912986948;1;1307034607;
+libxml2_GUSIConfig.cp;700980395;1;1307034607;
+macos_main.c;3210110414;1;1307034607;
+XMLTestPrefix.h;3797580423;1;1307034607;
+XMLTestPrefix2.h;602164746;1;1307034607;

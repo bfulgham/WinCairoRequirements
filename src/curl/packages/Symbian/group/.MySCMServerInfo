@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/curl/packages/Symbian/group
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=782
+bld.inf;2195697608;1;1307989950;
+curl.iby;1563643391;1;1307989950;
+curl.mmp;2933640882;1;1307989950;
+curl.pkg;3604933185;1;1307989950;
+libcurl.iby;3029920268;1;1307989950;
+libcurl.mmp;3142784427;1;1307989950;
+libcurl.pkg;2038125298;1;1307989950;

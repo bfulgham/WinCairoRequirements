@@ -1,0 +1,13 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/data/misc
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=795
+CurrencyData.txt;4055248601;1;1231980734;
+NamePrepProfile.txt;1819507855;1;1101322470;
+icudata.rc;2724652656;1;1215802406;
+likelySubtags.txt;892319816;1;1215802406;
+metazoneInfo.txt;134733506;1;1270189119;
+miscfiles.mk;1784553057;1;1215802406;
+plurals.txt;2207940417;1;1215802406;
+supplementalData.txt;1233348240;1;1270192272;
+zoneinfo.txt;914607029;1;1270192845;

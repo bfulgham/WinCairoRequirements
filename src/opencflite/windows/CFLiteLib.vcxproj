@@ -1,0 +1,587 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>CFLite</ProjectName>
+    <ProjectGuid>{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}</ProjectGuid>
+    <RootNamespace>CFLiteLib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\props\common.props" />
+    <Import Project="..\..\..\props\dll.props" />
+    <Import Project="..\..\..\props\release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\props\common.props" />
+    <Import Project="..\..\..\props\dll.props" />
+    <Import Project="..\..\..\props\debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <PreBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</PreLinkEventUseInBuild>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)_$(Configuration)</TargetName>
+    <PreBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\CoreFoundation"
+mkdir "$(SolutionDir)include\CoreFoundation\GNUCompatibility\"
+
+xcopy /Y /R "$(ProjectDir)..\*.h" "$(SolutionDir)include\CoreFoundation\"
+xcopy /Y /R "$(ProjectDir)..\include\c99\*.h" "$(SolutionDir)include\"
+xcopy /Y /R "$(ProjectDir)..\include\*.h" "$(SolutionDir)include\"
+</Command>
+      <Message>Prepare includes folder</Message>
+    </PreBuildEvent>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\CoreFoundation\GNUCompatibility;$(ProjectDir);$(SolutionDir)include\unicode;$(SolutionDir)include\objc4;$(SolutionDir)include\pthreads;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DEBUG;WIN32_LEAN_AND_MEAN;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>netapi32.lib;ole32.lib;ws2_32.lib;kernel32.lib;rpcrt4.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)_$(Configuration).dll</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <OptimizeReferences>false</OptimizeReferences>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <Bscmake />
+    <PostBuildEvent>
+      <Command>del /F "$(SolutionDir)include\CoreFoundation\CFBundlePriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFBundle_BinaryTypes.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFBundle_Internal.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFCharacterSetPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFError_Private.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFInternal.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFPlugIn_Factory.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFRuntime.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStorage.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStreamAbstract.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStreamPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStreamInternal.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringDefaultEncoding.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringEncodingConverter.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterExt.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUniChar.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUniCharPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUnicodeDecomposition.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUnicodePrecomposition.h"
+del /F "$(SolutionDir)include\CoreFoundation\ForFoundationOnly.h"
+
+mkdir "$(SolutionDir)bin/CFlite.resources"
+
+xcopy /Y /R "$(ProjectDir)..\CFCharacterSetBitmaps.bitmap" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUniCharPropertyDatabase.data" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-B.mapping" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-L.mapping" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(SolutionDir)bin\CFLite.resources\"
+</Command>
+      <Message>Clean up includes</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Message>Prepare includes folder</Message>
+      <Command>mkdir "$(SolutionDir)include\CoreFoundation"
+mkdir "$(SolutionDir)include\CoreFoundation\GNUCompatibility\"
+
+xcopy /Y /R "$(ProjectDir)..\*.h" "$(SolutionDir)include\CoreFoundation\"
+xcopy /Y /R "$(ProjectDir)..\include\c99\*.h" "$(SolutionDir)include\"
+xcopy /Y /R "$(ProjectDir)..\include\*.h" "$(SolutionDir)include\"
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\CoreFoundation\GNUCompatibility;$(ProjectDir)..;$(SolutionDir)include\objc4;$(SolutionDir)include\pthreads;$(SolutionDir)include\unicode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;U_DISABLE_RENAMING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>netapi32.lib;ole32.lib;ws2_32.lib;kernel32.lib;rpcrt4.lib;pthread.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>false</OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <Bscmake />
+    <PostBuildEvent>
+      <Command>del /F "$(SolutionDir)include\CoreFoundation\CFBundlePriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFBundle_BinaryTypes.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFBundle_Internal.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFCharacterSetPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFError_Private.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFInternal.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFPlugIn_Factory.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFRuntime.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStorage.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStreamAbstract.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStreamPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStreamInternal.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringDefaultEncoding.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringEncodingConverter.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterExt.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUniChar.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUniCharPriv.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUnicodeDecomposition.h"
+del /F "$(SolutionDir)include\CoreFoundation\CFUnicodePrecomposition.h"
+del /F "$(SolutionDir)include\CoreFoundation\ForFoundationOnly.h"
+
+mkdir "$(SolutionDir)bin/CFlite.resources"
+
+xcopy /Y /R "$(ProjectDir)..\CFCharacterSetBitmaps.bitmap" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUniCharPropertyDatabase.data" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-B.mapping" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-L.mapping" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(SolutionDir)bin\CFLite.resources\"
+</Command>
+      <Message>Clean up includes</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CFApplicationPreferences.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFArray.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBag.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBase.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBinaryHeap.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBinaryPList.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBitVector.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBuiltinConverters.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBundle.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFBundle_Resources.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFCalendar.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFCharacterSet.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFConcreteStreams.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFData.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFDate.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFDateFormatter.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFDictionary.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFError.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFFileDescriptor.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFFileUtilities.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFICUConverters.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFLocale.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFLocaleIdentifier.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFLocaleKeys.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFMachPort.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFMessagePort.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFNotificationCenter.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFNumber.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFNumberFormatter.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPlatform.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPlatformConverters.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPlugIn.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPlugIn_Factory.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPlugIn_Instance.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPlugIn_PlugIn.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPreferences.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFPropertyList.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFRunLoop.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFRuntime.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFSet.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFSocket.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFSocketStream.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFSortFunctions.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFStorage.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFStream.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFString.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFStringEncodingConverter.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFStringEncodingDatabase.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFStringEncodings.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFStringScanner.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFStringUtilities.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFSystemDirectories.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFTimeZone.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFTree.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFUniChar.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFUnicodeDecomposition.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFUnicodePrecomposition.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFURL.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFURLAccess.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFUserNotification.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFUtilities.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFUUID.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFVersion.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFWindowsMessageQueue.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFXMLInputStream.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFXMLNode.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFXMLParser.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFXMLPreferencesDomain.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\CFXMLTree.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\compat\dirent.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\compat\gettimeofday.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\compat\strlcat.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\compat\strlcpy.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CFBasicHash.m">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <None Include="..\CFLocaleKeys.m" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\compat\dirent.h" />
+    <ClInclude Include="..\auto_stubs.h" />
+    <ClInclude Include="..\CFArray.h" />
+    <ClInclude Include="..\CFBag.h" />
+    <ClInclude Include="..\CFBase.h" />
+    <ClInclude Include="..\CFBasicHash.h" />
+    <ClInclude Include="..\CFBinaryHeap.h" />
+    <ClInclude Include="..\CFBitVector.h" />
+    <ClInclude Include="..\CFBundle.h" />
+    <ClInclude Include="..\CFBundle_BinaryTypes.h" />
+    <ClInclude Include="..\CFBundle_Internal.h" />
+    <ClInclude Include="..\CFBundlePriv.h" />
+    <ClInclude Include="..\CFByteOrder.h" />
+    <ClInclude Include="..\CFCalendar.h" />
+    <ClInclude Include="..\CFCharacterSet.h" />
+    <ClInclude Include="..\CFCharacterSetPriv.h" />
+    <ClInclude Include="..\CFData.h" />
+    <ClInclude Include="..\CFDate.h" />
+    <ClInclude Include="..\CFDateFormatter.h" />
+    <ClInclude Include="..\CFDictionary.h" />
+    <ClInclude Include="..\CFError.h" />
+    <ClInclude Include="..\CFError_Private.h" />
+    <ClInclude Include="..\CFFileDescriptor.h" />
+    <ClInclude Include="..\CFICUConverters.h" />
+    <ClInclude Include="..\CFInternal.h" />
+    <ClInclude Include="..\CFLocale.h" />
+    <ClInclude Include="..\CFLogUtilities.h" />
+    <ClInclude Include="..\CFMachPort.h" />
+    <ClInclude Include="..\CFMessagePort.h" />
+    <ClInclude Include="..\CFNotificationCenter.h" />
+    <ClInclude Include="..\CFNumber.h" />
+    <ClInclude Include="..\CFNumberFormatter.h" />
+    <ClInclude Include="..\CFPlugIn.h" />
+    <ClInclude Include="..\CFPlugIn_Factory.h" />
+    <ClInclude Include="..\CFPlugInCOM.h" />
+    <ClInclude Include="..\CFPreferences.h" />
+    <ClInclude Include="..\CFPriv.h" />
+    <ClInclude Include="..\CFPropertyList.h" />
+    <ClInclude Include="..\CFRunLoop.h" />
+    <ClInclude Include="..\CFRunLoopPriv.h" />
+    <ClInclude Include="..\CFRuntime.h" />
+    <ClInclude Include="..\CFSet.h" />
+    <ClInclude Include="..\CFSocket.h" />
+    <ClInclude Include="..\CFStorage.h" />
+    <ClInclude Include="..\CFStream.h" />
+    <ClInclude Include="..\CFStreamAbstract.h" />
+    <ClInclude Include="..\CFStreamInternal.h" />
+    <ClInclude Include="..\CFStreamPriv.h" />
+    <ClInclude Include="..\CFString.h" />
+    <ClInclude Include="..\CFStringDefaultEncoding.h" />
+    <ClInclude Include="..\CFStringEncodingConverter.h" />
+    <ClInclude Include="..\CFStringEncodingConverterExt.h" />
+    <ClInclude Include="..\CFStringEncodingConverterPriv.h" />
+    <ClInclude Include="..\CFStringEncodingDatabase.h" />
+    <ClInclude Include="..\CFStringEncodingExt.h" />
+    <ClInclude Include="..\CFTimeZone.h" />
+    <ClInclude Include="..\CFTree.h" />
+    <ClInclude Include="..\CFUniChar.h" />
+    <ClInclude Include="..\CFUniCharPriv.h" />
+    <ClInclude Include="..\CFUnicodeDecomposition.h" />
+    <ClInclude Include="..\CFUnicodePrecomposition.h" />
+    <ClInclude Include="..\CFURL.h" />
+    <ClInclude Include="..\CFURLAccess.h" />
+    <ClInclude Include="..\CFUserNotification.h" />
+    <ClInclude Include="..\CFUUID.h" />
+    <ClInclude Include="..\CFWindowsMessageQueue.h" />
+    <ClInclude Include="..\CFXMLInputStream.h" />
+    <ClInclude Include="..\CFXMLNode.h" />
+    <ClInclude Include="..\CFXMLParser.h" />
+    <ClInclude Include="..\CoreFoundation.h" />
+    <ClInclude Include="..\CoreFoundation_Prefix.h" />
+    <ClInclude Include="..\ForFoundationOnly.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\icu\source\common\common.vcxproj">
+      <Project>{73c0a65b-d1f2-4de1-b3a6-15dad2c23f3d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\icu\source\i18n\i18n.vcxproj">
+      <Project>{0178b127-6269-407d-b112-93877bb62776}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pthreads\pthread.vcxproj">
+      <Project>{1c577933-7fc6-477f-9971-fb9405875d17}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

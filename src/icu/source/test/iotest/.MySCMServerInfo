@@ -1,0 +1,13 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/iotest
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=835
+Makefile.in;3978664171;1;1215802418;
+filetst.c;2453906761;1;1215802418;
+iotest.cpp;2693722086;1;1215802418;
+iotest.h;3229533045;1;1215802418;
+iotest.vcproj;4088966904;1;1307144128;
+iotest.vcproj.8.00.old;168052625;1;1207088273;
+stream.cpp;1652032529;1;1207088273;
+strtst.c;3010393043;1;1215802418;
+trnstst.c;3436914000;1;1123802514;

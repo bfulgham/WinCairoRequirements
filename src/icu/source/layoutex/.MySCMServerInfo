@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/layoutex
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=663
+LXUtilities.cpp;1406787168;1;1057256026;
+LXUtilities.h;1481718675;1;1057256026;
+Makefile.in;2171450926;1;1215802413;
+ParagraphLayout.cpp;4279826119;1;1215802413;
+RunArrays.cpp;791851029;1;1076022278;
+layoutex.rc;2640897325;1;1215802413;
+layoutex.vcproj;1210227487;1;1307144128;
+layoutex.vcproj.8.00.old;1564376489;1;1215802413;
+playout.cpp;3414090482;1;1207088264;
+plruns.cpp;4189268275;1;1215802413;

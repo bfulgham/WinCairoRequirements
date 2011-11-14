@@ -1,0 +1,15 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/python
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=244
+generator.py;1178219025;1;1307034619;
+libxml_wrap.h;1111689343;1;1307034619;
+libxsl.py;1603625657;1;1307034619;
+libxslt-py.c;438907301;1;1307034619;
+libxslt-python-api.xml;3378813398;1;1307034619;
+libxslt.c;3218064850;1;1307034619;
+libxslt_wrap.h;115690852;1;1307034619;
+Makefile.am;790255690;1;1307034619;
+Makefile.in;1886503920;1;1307034619;
+TODO;0;1;1307034619;
+types.c;2574840990;1;1307034619;

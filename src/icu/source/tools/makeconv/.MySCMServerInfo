@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/makeconv
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=863
+Makefile.in;1584162947;1;1207088281;
+gencnvex.c;3833933254;1;1215802421;
+genmbcs.c;3558282812;1;1215802421;
+genmbcs.h;3100685046;1;1215802421;
+makeconv.1.in;959115330;1;1044480727;
+makeconv.c;3811546253;1;1215802421;
+makeconv.h;956491804;1;1215802421;
+makeconv.vcproj;3545049824;1;1307144128;
+makeconv.vcproj.8.00.old;2586879331;1;1215802421;
+ucnvstat.c;1966223734;1;1157065546;

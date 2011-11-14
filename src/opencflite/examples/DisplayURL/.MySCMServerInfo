@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/examples/DisplayURL
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=877
+DisplayURL.c;2965921283;1;1307983118;
+DisplayURL.vcproj;1595448540;1;1307983118;
+Makefile.am;351666633;1;1307983118;
+Makefile.in;3551772997;1;1307983118;
+README.txt;346914033;1;1307983118;
+DisplayURL_vs2005.vcproj;487020517;1;1308252315;

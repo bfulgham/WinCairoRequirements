@@ -1,0 +1,48 @@
+
+/*	Rename these files as appropriate (MyMFCHeaders.h must match!) */
+#ifndef _MFC_PCH
+	#ifdef _DLL
+		#ifdef _DEBUG
+			#define _MFC_PCH	"MyMFCDLLDHeaders.mch"
+		#else
+			#define _MFC_PCH	"MyMFCDLLHeaders.mch"
+		#endif
+	#else
+		#ifdef _DEBUG
+			#define _MFC_PCH	"MyMFCDHeaders.mch"
+		#else
+			#define _MFC_PCH	"MyMFCHeaders.mch"
+		#endif
+	#endif
+#endif
+
+#pragma precompile_target _MFC_PCH
+
+/*	Don't include MSL libs before MFC libs */
+#if defined _MSL_USE_DEFAULT_LIBS && !_MSL_USE_DEFAULT_LIBS
+#define _MSL_USER_USE_DEFAULT_LIBS 0
+#else
+#define _MSL_USER_USE_DEFAULT_LIBS 1
+#endif
+#undef _MSL_USE_DEFAULT_LIBS
+#define _MSL_USE_DEFAULT_LIBS	0
+
+/*	Force generic x86 / __cdecl library */
+#define _MSL_CALLINGCONV	_MSL_CALLINGCONV_CDECL
+#define _MSL_CDECL			__cdecl
+
+#include <ansi_prefix.win32.h>
+
+#define _MW_BUILDING_MFC_PCH
+#define _AFX_MONOLITHIC
+#define _AFX_PORTABLE
+#define _AFX_NO_DEBUG_CRT
+
+/* 	There are no longer 3DNow! builds of MFC.  
+	This #pragma ensures you can call the x86 MFC DLL from 3DNow! code. */
+#pragma mmcalls off
+
+#include "stdafx.h"
+
+#pragma mmcalls reset
+

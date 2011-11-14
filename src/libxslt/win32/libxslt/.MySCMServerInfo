@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/win32/libxslt
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=308
+libxslt.def;2311799180;1;1307034705;
+libxslt.dsw;401095150;1;1307034705;
+libxslt_so.dsp;91212688;1;1307034705;
+xsltproc.dsp;4063414981;1;1307034705;

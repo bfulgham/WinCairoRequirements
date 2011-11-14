@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxml2/VxWorks
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=228
+build.sh;607892566;1;1307034608;
+Makefile;1118859766;1;1307034608;
+README;438914517;1;1307034608;

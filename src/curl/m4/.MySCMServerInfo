@@ -1,0 +1,15 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/curl/m4
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=690
+curl-compilers.m4;2465870157;1;1307989951;
+curl-confopts.m4;631911741;1;1307989951;
+curl-functions.m4;3581896944;1;1307989951;
+curl-override.m4;3870821567;1;1307989951;
+curl-reentrant.m4;2592024446;1;1307989951;
+curl-system.m4;875225818;1;1307989951;
+libtool.m4;52261695;1;1307989951;
+ltoptions.m4;977605886;1;1307989951;
+ltsugar.m4;2315052578;1;1307989951;
+ltversion.m4;2361461862;1;1307989951;
+lt~obsolete.m4;733863655;1;1307989951;

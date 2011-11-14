@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libiconv/build-aux
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=414
+config.guess;1046969365;1;1307034565;
+config.libpath;4270269792;1;1307034565;
+config.rpath;3951459575;1;1307034565;
+config.sub;2885595544;1;1307034565;
+install-reloc;47112300;1;1307034565;
+install-sh;2352739309;1;1307034565;
+ltmain.sh;2375439566;1;1307034565;
+missing;4254135959;1;1307034565;
+mkinstalldirs;3501082813;1;1307034565;
+reloc-ldflags;4269676254;1;1307034565;

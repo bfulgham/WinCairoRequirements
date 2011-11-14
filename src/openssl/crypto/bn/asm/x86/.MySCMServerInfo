@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/bn/asm/x86
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1055
+add.pl;191746516;1;914237945;
+comba.pl;1197891986;1;914237945;
+div.pl;252827329;1;914237945;
+f;1544911628;1;914237945;
+mul.pl;1832328185;1;914237945;
+mul_add.pl;3479041344;1;914237945;
+sqr.pl;483066400;1;914237945;
+sub.pl;2752211646;1;914237945;

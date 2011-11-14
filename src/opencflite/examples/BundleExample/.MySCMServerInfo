@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/examples/StringExample
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=881
+Makefile.am;1890428603;1;1307983117;
+Makefile.in;3203264638;1;1307983117;
+StringExample.c;484993327;1;1307983117;
+StringExample.vcproj;1479149847;1;1307983117;
+StringExample_vs2005.vcproj;889382399;1;1308252333;

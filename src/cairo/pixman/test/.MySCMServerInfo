@@ -1,0 +1,27 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/cairo/pixman/test
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=677
+Makefile.am;213161239;1;1303892595;
+Makefile.in;673290336;1;1304327151;
+a1-trap-test.c;3986438400;1;1297141773;
+affine-test.c;3494982047;1;1303824564;
+alpha-loop.c;2239615609;1;1303824564;
+alphamap.c;3224408830;1;1303824564;
+blitters-test.c;315336516;1;1303824610;
+composite-traps-test.c;2515141456;1;1304257101;
+composite.c;1077867017;1;1303824610;
+fetch-test.c;831186577;1;1303824610;
+gradient-crash-test.c;3498297456;1;1303824564;
+lowlevel-blt-bench.c;2013489585;1;1303824564;
+oob-test.c;2584814831;1;1297141773;
+pdf-op-test.c;147851757;1;1303824564;
+region-test.c;318238222;1;1297141773;
+region-translate-test.c;3844388384;1;1303824564;
+scaling-crash-test.c;2852624054;1;1303824564;
+scaling-helpers-test.c;335210729;1;1303824588;
+scaling-test.c;3531072415;1;1303824564;
+stress-test.c;814739000;1;1303892595;
+trap-crasher.c;2858890005;1;1303824564;
+utils.c;1392959239;1;1303892595;
+utils.h;85137510;1;1303892595;

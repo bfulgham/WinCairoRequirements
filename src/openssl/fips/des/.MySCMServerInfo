@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/fips/des
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=973
+Makefile;482762973;1;1225046523;
+fips_des_selftest.c;3098701574;1;1221559933;
+fips_desmovs.c;775294282;1;1264599150;

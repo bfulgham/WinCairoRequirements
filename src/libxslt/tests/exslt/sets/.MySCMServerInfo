@@ -1,0 +1,21 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/tests/exslt/sets
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=289
+difference.1.out;115916991;1;1307034664;
+difference.1.xml;1693967469;1;1307034664;
+difference.1.xsl;223196445;1;1307034664;
+distinct.1.out;1844494469;1;1307034664;
+distinct.1.xml;1693967469;1;1307034664;
+distinct.1.xsl;2966931507;1;1307034664;
+has-same-node.1.out;1023057448;1;1307034664;
+has-same-node.1.xml;1826934839;1;1307034664;
+has-same-node.1.xsl;1765425014;1;1307034664;
+leading.1.out;2806554066;1;1307034664;
+leading.1.xml;25536589;1;1307034664;
+leading.1.xsl;862274644;1;1307034664;
+Makefile.am;4081169095;1;1307034664;
+Makefile.in;3323762079;1;1307034664;
+trailing.1.out;1654313185;1;1307034664;
+trailing.1.xml;25536589;1;1307034664;
+trailing.1.xsl;2228623410;1;1307034665;

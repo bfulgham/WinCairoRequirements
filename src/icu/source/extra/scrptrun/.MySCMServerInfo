@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/extra/scrptrun
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=801
+Makefile.in;40427639;1;1207088259;
+readme.html;1806146104;1;1044480696;
+scrptrun.cpp;1915668386;1;1044480696;
+scrptrun.h;3751809829;1;1076022273;
+srtest.cpp;2847442041;1;1044480696;
+srtest.dsp;2305382230;1;1044480696;
+srtest.dsw;3279577966;1;1044480696;

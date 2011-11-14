@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/md2
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=926
+Makefile;3750659236;1;1221671461;
+md2.c;2131096182;1;925144918;
+md2.h;3043753819;1;1221562044;
+md2_dgst.c;3137985686;1;1221562044;
+md2_one.c;2343497794;1;1113519522;
+md2test.c;3527428783;1;1123099428;

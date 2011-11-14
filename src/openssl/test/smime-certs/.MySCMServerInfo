@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/test/smime-certs
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=982
+smdsa1.pem;875834047;1;1207264190;
+smdsa2.pem;2528616245;1;1207264190;
+smdsa3.pem;1061192029;1;1207264190;
+smdsap.pem;1000247716;1;1207264190;
+smroot.pem;4241532448;1;1207264190;
+smrsa1.pem;3775576259;1;1207264190;
+smrsa2.pem;2466641200;1;1207264190;
+smrsa3.pem;136930725;1;1207264190;

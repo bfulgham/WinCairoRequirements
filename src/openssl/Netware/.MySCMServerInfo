@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/Netware
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=747
+build.bat;3707022714;1;1199400782;
+cpy_tests.bat;3006458232;1;1199400782;
+do_tests.pl;3746207132;1;1199400782;
+globals.txt;2263218516;1;1070025057;
+readme.txt;1592885298;1;1070025057;
+set_env.bat;606374560;1;1199400782;

@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/perf/ubrkperf
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1012
+Makefile.in;1832246865;1;1207088275;
+UBrkPerf.pl;481609037;1;1215802419;
+UBrkPerf_r.pl;1807841460;1;1215802419;
+ubrkperf.cpp;2428351411;1;1215802419;
+ubrkperf.dsp;2671019783;1;1101322525;
+ubrkperf.h;4244891082;1;1123802517;
+ubrkperf.vcproj;2283566248;1;1207088275;
+ubrkperf20.dsp;1587433276;1;1101322525;
+ubrkperfold.cpp;787250286;1;1123802517;
+ubrkperfold.dsp;1838072984;1;1101322525;

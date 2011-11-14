@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/tests/docbook/htmlhelp
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=267
+ChangeLog;2542680332;1;1307034633;
+htmlhelp-common.xsl;99176471;1;1307034633;
+htmlhelp.xsl;194837044;1;1307034633;
+langcodes.xml;609047655;1;1307034633;
+xthtmlhelp.xsl;2265352387;1;1307034633;

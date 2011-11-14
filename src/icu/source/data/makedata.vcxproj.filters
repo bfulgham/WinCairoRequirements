@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{ddc1b71c-570c-484f-a66c-ab38d71dede0}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Make Files">
+      <UniqueIdentifier>{33d0bb63-0fa9-4406-8775-cc7a094192f1}</UniqueIdentifier>
+      <Extensions>mak;mk</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="brkitr\brkfiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="coll\colfiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="makedata.mak">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="misc\miscfiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="rbnf\rbnffiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="locales\resfiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="..\test\testdata\testdata.mak">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="translit\trnsfiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="..\test\testdata\tstfiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="mappings\ucmcore.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="mappings\ucmebcdic.mk">
+      <Filter>Make Files</Filter>
+    </None>
+    <None Include="mappings\ucmfiles.mk">
+      <Filter>Make Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/engines/vendor_defns
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=971
+aep.h;2217716642;1;1112261197;
+atalla.h;2835926403;1;1034356258;
+cswift.h;2482036972;1;1034356258;
+hw_4758_cca.h;384713925;1;1034356258;
+hw_ubsec.h;2146618528;1;1034356259;
+hwcryptohook.h;2335039796;1;1034356259;
+sureware.h;1537795449;1;1112261197;

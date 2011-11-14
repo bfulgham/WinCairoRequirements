@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/demos/sign
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=961
+Makefile;4138719958;1;927849151;
+cert.pem;1496537996;1;914237567;
+key.pem;1292036376;1;914237567;
+sig.txt;1644537073;1;914237567;
+sign.c;3355170451;1;1001638056;
+sign.txt;2088270241;1;914237567;

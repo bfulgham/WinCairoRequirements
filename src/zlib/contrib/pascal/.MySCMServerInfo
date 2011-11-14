@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/pascal
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=403
+example.pas;2278509776;1;1307034722;
+readme.txt;3338540849;1;1307034722;
+zlibd32.mak;2785129268;2;1266107713;
+zlibpas.pas;4265032430;2;1271736741;

@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/pkcs7/p7
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1038
+a1;4279785200;1;914237732;
+a2;2041674078;1;914237732;
+cert.p7c;3098602201;1;914237732;
+smime.p7m;1581045526;1;914237732;
+smime.p7s;2680845889;1;914237732;

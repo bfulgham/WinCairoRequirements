@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/curl/packages
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=691
+Makefile.am;3030869850;1;1307989950;
+Makefile.in;4198902333;1;1307989950;
+README;3120960685;1;1307989950;

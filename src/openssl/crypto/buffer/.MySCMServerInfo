@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/buffer
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=905
+Makefile;372627923;1;1221671457;
+buf_err.c;2664962577;1;1164140078;
+buf_str.c;539908233;1;1221508570;
+buffer.c;1062577036;1;1221508570;
+buffer.h;847475485;1;1114541594;

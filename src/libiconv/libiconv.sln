@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libiconv", "libiconv.vcxproj", "{754AB981-BE9D-418A-ADB5-274E6C62E757}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{754AB981-BE9D-418A-ADB5-274E6C62E757}.Debug|Win32.ActiveCfg = Debug|Win32
+		{754AB981-BE9D-418A-ADB5-274E6C62E757}.Debug|Win32.Build.0 = Debug|Win32
+		{754AB981-BE9D-418A-ADB5-274E6C62E757}.Release|Win32.ActiveCfg = Release|Win32
+		{754AB981-BE9D-418A-ADB5-274E6C62E757}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

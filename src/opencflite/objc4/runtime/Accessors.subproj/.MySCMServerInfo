@@ -1,0 +1,6 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/objc4/runtime/Accessors.subproj
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1024
+objc-accessors.h;2763943958;1;1307983145;
+objc-accessors.m;3525732137;1;1307983145;

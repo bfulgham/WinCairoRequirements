@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libpng/projects/visualc71
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=721
+PRJ0041.mak;2508296839;1;1258670890;
+README.txt;3190189556;1;1258670890;
+README_zlib.txt;457489923;1;1258670890;
+UpgradeLog.XML;3850088053;1;1258670954;
+libpng.sln;946819369;1;1258670954;
+pngtest.vcproj;3998774900;1;1258670954;
+zlib.vcproj;485802612;1;1258670954;
+libpng.vcproj;2010498799;2;1308085766;

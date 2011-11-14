@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/md5/asm
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1037
+m5_win32.asm;3632650891;1;1307987850;
+m5_win32.obj;704011720;1;1307988626;
+md5-586.pl;4185998534;1;1194788046;
+md5-x86_64.pl;381489433;1;1258121686;

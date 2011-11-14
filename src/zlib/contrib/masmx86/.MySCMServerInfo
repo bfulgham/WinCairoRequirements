@@ -1,0 +1,13 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/masmx86
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=401
+gvmat32.asm;3297454344;1;1307034720;
+gvmat32.obj;4281106765;1;1307034721;
+gvmat32c.c;2975369371;1;1307034721;
+inffas32.obj;1672904483;1;1307034721;
+mkasm.bat;2961797225;1;1307034721;
+match686.asm;3804677617;1;1267556150;
+inffas32.asm;3881179993;1;1132067973;
+bld_ml32.bat;613841775;2;1267553706;
+readme.txt;2027585590;2;1269808091;

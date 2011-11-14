@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/perf/charperf
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1004
+CharPerf.pl;3180904063;1;1215802419;
+CharPerf_r.pl;3726269300;1;1215802419;
+Makefile.in;739989152;1;1207088274;
+charperf.cpp;2467054085;1;1157065532;
+charperf.h;1602898051;1;1157065532;
+charperf.vcproj;43921750;1;1207088274;

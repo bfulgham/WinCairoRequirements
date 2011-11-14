@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/iostream3
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=398
+README;3181504547;1;1307034720;
+test.cc;1716265850;1;1307034720;
+TODO;237501829;1;1307034720;
+zfstream.cc;4164493772;1;1307034720;
+zfstream.h;3109602263;1;1307034720;

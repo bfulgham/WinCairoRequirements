@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libiconv/include
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=417
+export.h;231925273;1;1307034566;
+iconv.h.build.in;170883455;1;1307034566;
+iconv.h.in;3814595171;1;1307034566;
+iconv.h.msvc-shared;2972414448;1;1307034566;
+iconv.h.msvc-static;4248742040;1;1307034566;
+iconv.h_vms;3550102274;1;1307034566;
+iconv.h;4248742040;1;1307034566;

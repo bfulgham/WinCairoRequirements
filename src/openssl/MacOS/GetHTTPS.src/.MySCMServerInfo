@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/MacOS/GetHTTPS.src
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=981
+CPStringUtils.cpp;2128006040;1;1072535174;
+CPStringUtils.hpp;3494545229;1;945620259;
+ErrorHandling.cpp;2221011337;1;1072535174;
+ErrorHandling.hpp;509101221;1;1234648210;
+GetHTTPS.cpp;406816973;1;981428248;
+MacSocket.cpp;682738599;1;1037231251;
+MacSocket.h;2605499833;1;1037231251;

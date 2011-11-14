@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/doc/tutorial
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=239
+libxslt_tutorial.c;2274254560;1;1307034617;
+libxslttutorial.html;2272860804;1;1307034617;
+libxslttutorial.xml;3032959895;1;1307034617;

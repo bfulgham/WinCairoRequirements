@@ -1,0 +1,16 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/ada
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=388
+buffer_demo.adb;2080951957;1;1307034718;
+mtest.adb;1761295401;1;1307034718;
+read.adb;3395081172;1;1307034718;
+readme.txt;1411920960;1;1307034718;
+test.adb;164796758;1;1307034718;
+zlib-streams.adb;3009029626;1;1307034718;
+zlib-streams.ads;2933222931;1;1307034718;
+zlib-thin.adb;2533556403;1;1307034718;
+zlib-thin.ads;1883453821;1;1307034719;
+zlib.adb;2934598425;1;1307034719;
+zlib.ads;3965948543;1;1307034719;
+zlib.gpr;3736504557;1;1307034719;

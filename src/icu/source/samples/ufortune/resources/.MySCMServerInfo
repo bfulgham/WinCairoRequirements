@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/samples/ufortune/resources
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1003
+Makefile;3650208889;1;1157065519;
+es.txt;2124869357;1;1157065519;
+fortune_resources.mak;2987174073;1;1157065519;
+res-file-list.txt;2072352283;1;1123802476;
+root.txt;2770688455;1;1057256027;

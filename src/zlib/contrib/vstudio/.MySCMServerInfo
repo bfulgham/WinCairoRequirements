@@ -1,0 +1,5 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/vstudio
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=407
+readme.txt;2359641147;2;1267798710;

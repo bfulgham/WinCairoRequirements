@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libpng/projects/cbuilder5
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=719
+libpng.bpf;828594308;1;1258670890;
+libpng.bpg;1001194722;1;1258670890;
+libpng.bpr;4274933430;1;1258670890;
+libpng.cpp;1447107861;1;1258670890;
+libpng.readme.txt;1239866855;1;1258670890;
+libpngstat.bpf;924622979;1;1258670890;
+libpngstat.bpr;3201767675;1;1258670890;
+zlib.readme.txt;1186003213;1;1258670890;

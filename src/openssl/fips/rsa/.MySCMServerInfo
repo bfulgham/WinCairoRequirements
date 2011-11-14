@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/fips/rsa
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=978
+Makefile;2744283537;1;1225046525;
+fips_rsa_eay.c;2376768177;1;1221559941;
+fips_rsa_gen.c;2438141732;1;1249836175;
+fips_rsa_lib.c;735567621;1;1225910216;
+fips_rsa_selftest.c;2133947223;1;1221997236;
+fips_rsa_sign.c;3263638093;1;1225910216;
+fips_rsa_x931g.c;2992228243;1;1221559942;
+fips_rsagtest.c;2737387143;1;1265119387;
+fips_rsastest.c;2387198959;1;1265119387;
+fips_rsavtest.c;2932401147;1;1265119387;

@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/samples/uciter8
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=824
+Makefile;3576232642;1;1057256027;
+readme.txt;1234540378;1;1123802474;
+uciter8.c;431165986;1;1207088266;
+uciter8.sln;1227602252;1;1207088266;
+uciter8.vcproj;3738650650;1;1207088266;
+uit_len8.c;3711650849;1;1157065518;
+uit_len8.h;3157295146;1;1057256027;

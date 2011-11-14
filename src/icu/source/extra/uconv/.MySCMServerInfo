@@ -1,0 +1,15 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/extra/uconv
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=802
+Makefile.in;4130212236;1;1207088259;
+README;4266837004;1;1044480696;
+makedata.mak;1973075000;1;1207088259;
+pkgdata.inc.in;1613838873;1;1207088259;
+pkgdatain.txt;2450404032;1;1308069996;
+resfiles.mk;416427546;1;1044480696;
+uconv.1.in;2425251705;1;1123802430;
+uconv.cpp;243118161;1;1215802409;
+uconv.vcproj;2740503654;1;1307144128;
+uconv.vcproj.8.00.old;3048422652;1;1215802409;
+uwmsg.c;1608948216;1;1101322474;

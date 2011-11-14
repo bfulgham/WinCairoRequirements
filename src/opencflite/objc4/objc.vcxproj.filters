@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="runtime\error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\hashtable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\hashtable2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\maptable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-api.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-auto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-initialize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-load.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-loadmethod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-os.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-references.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-runtime-new.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-runtime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-sel-set.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-sel-table.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc-sync.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\objcrt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\Protocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\runtime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="runtime\hashtable2.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\maptable.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-cache.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-class-old.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-class.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-errors.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-exception.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-file.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-initialize.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-layout.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-load.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-loadmethod.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-lockdebug.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\Messengers.subproj\objc-msg-win32.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-os.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-references.mm">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-runtime-new.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-runtime-old.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-runtime.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-sel-set.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-sel.mm">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-sync.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\objc-typeencoding.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

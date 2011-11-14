@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/jpake
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=923
+Makefile;448635047;1;1225454958;
+jpake.c;2144528439;1;1290787403;
+jpake.h;1134766805;1;1290787403;
+jpake_err.c;2658146884;1;1290787403;
+jpaketest.c;797631385;1;1228180865;

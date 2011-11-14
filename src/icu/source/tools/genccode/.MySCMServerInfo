@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/genccode
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=847
+Makefile.in;143116219;1;1215802421;
+genccode.8.in;1709122017;1;1088210981;
+genccode.c;632979324;1;1207088280;
+genccode.vcproj;3822259237;1;1307144128;
+genccode.vcproj.8.00.old;844094270;1;1215802421;

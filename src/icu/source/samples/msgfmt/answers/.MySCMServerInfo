@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/samples/msgfmt/answers
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1001
+main_0.cpp;1094973184;1;1057256027;
+main_1.cpp;1872037290;1;1044480706;
+main_2.cpp;1533586732;1;1044480706;
+main_3.cpp;2449487997;1;1044480706;

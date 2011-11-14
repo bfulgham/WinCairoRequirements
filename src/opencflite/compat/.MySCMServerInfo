@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/compat
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=724
+Makefile.am;3740026494;1;1307983140;
+Makefile.in;2345243723;1;1307983140;
+dirent.c;3055371745;1;1307983140;
+dirent.h;1429164169;1;1307983140;
+gettimeofday.c;461304907;1;1307983140;
+strlcat.c;3445905783;1;1307983140;
+strlcpy.c;1095401968;1;1307983140;

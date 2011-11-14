@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libiconv/windows
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=429
+alloca.h;4069297289;1;1307034586;
+dllexport.h;2298757337;1;1307034586;
+iconv.rc;3944030273;1;1307034586;
+stdbool.h;544451773;1;1307034586;

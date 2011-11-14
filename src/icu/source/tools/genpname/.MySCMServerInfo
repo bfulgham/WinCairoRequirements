@@ -1,0 +1,13 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/genpname
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=854
+Makefile.in;2927476901;1;1207088281;
+SyntheticPropertyAliases.txt;1347195421;1;1123802526;
+SyntheticPropertyValueAliases.txt;503175980;1;1215802421;
+data.h;3051521652;1;1215802421;
+genpname.cpp;464201743;1;1207088281;
+genpname.vcproj;1086337067;1;1307144128;
+genpname.vcproj.8.00.old;2380917629;1;1215802421;
+gensvpa.pl;4266177820;1;1157065542;
+preparse.pl;4011556520;1;1215802421;

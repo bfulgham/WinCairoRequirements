@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/stack
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=945
+Makefile;3812651382;1;1221601494;
+safestack.h;2415501988;1;1291312922;
+stack.c;2511814808;1;1169385402;
+stack.h;1609738899;1;1096907410;

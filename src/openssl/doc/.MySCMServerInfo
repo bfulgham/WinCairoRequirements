@@ -1,0 +1,13 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/doc
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=741
+README;1039689769;1;958684970;
+c-indentation.el;1083043806;1;1203578626;
+fingerprints.txt;4229295462;1;1115275135;
+openssl-shared.txt;3400645987;1;1042215272;
+openssl.txt;3399210167;1;1140032685;
+openssl_button.gif;1952714830;1;920552142;
+openssl_button.html;2449825233;1;920552141;
+ssleay.txt;3468153490;1;1234648212;
+standards.txt;79180954;1;1177372213;

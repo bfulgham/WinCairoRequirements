@@ -1,0 +1,13 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/vstudio/vc8
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=412
+miniunz.vcproj;3487517825;1;1309199595;
+minizip.vcproj;2023321288;1;1309199595;
+testzlib.vcproj;3740469412;1;1309199595;
+testzlibdll.vcproj;341352772;1;1309199595;
+zlib.rc;668673;1;1309199595;
+zlibstat.vcproj;3333364809;1;1309199595;
+zlibvc.def;3007812648;1;1309199595;
+zlibvc.sln;2234763805;1;1309199595;
+zlibvc.vcproj;1098987857;1;1309199595;

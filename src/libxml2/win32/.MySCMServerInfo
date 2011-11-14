@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxml2/win32
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=229
+.cvsignore;2652267934;1;1307034608;
+configure.js;2508293531;1;1307034609;
+defgen.xsl;2968399630;1;1307034609;
+libxml2.def.src;299071816;1;1307034609;
+Makefile.bcb;503804230;1;1307034609;
+Makefile.mingw;3642877928;1;1307034609;
+Readme.txt;539136139;1;1307034609;
+config.msvc;4268465060;3;1309204689;
+Makefile;1503934886;2;1307754365;
+Makefile.msvc;2157004707;6;1309205273;

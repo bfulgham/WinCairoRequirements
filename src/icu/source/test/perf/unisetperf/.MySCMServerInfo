@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/perf/unisetperf
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1013
+Makefile.in;3827372446;1;1207088275;
+unisetperf.cpp;3994074290;1;1207088275;
+unisetperf.pl;1653478522;1;1215802419;
+unisetperf.vcproj;25866724;1;1207088275;

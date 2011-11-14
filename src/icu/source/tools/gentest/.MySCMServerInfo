@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/gentest
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=859
+Makefile.in;1706688756;1;1215802421;
+genres32.c;1328353365;1;1207088281;
+gentest.c;1139561366;1;1215802421;
+gentest.h;674146153;1;1088210981;
+gentest.vcproj;1124746851;1;1307144128;
+gentest.vcproj.8.00.old;2408537353;1;1215802421;

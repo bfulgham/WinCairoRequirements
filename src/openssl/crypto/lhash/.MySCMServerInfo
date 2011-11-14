@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/lhash
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=925
+Makefile;2863104196;1;1221601488;
+lh_stats.c;2407288317;1;1037202173;
+lh_test.c;3488411270;1;1016737715;
+lhash.c;1424313657;1;1260366109;
+lhash.h;1530400569;1;1067403425;
+num.pl;3992924739;1;914237551;

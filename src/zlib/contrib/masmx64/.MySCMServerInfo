@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/contrib/masmx64
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=400
+bld_ml64.bat;3388856248;1;1307034720;
+gvmat64.obj;2696756502;1;1307034720;
+inffasx64.obj;1161226406;1;1307034720;
+gvmat64.asm;2991460385;2;1267557680;
+inffas8664.c;2654966557;2;1266994092;
+inffasx64.asm;3272815878;2;1267556810;
+readme.txt;2693499908;2;1269808070;

@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/perlasm
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=933
+cbc.pl;3348349554;1;1115675280;
+readme;2429514827;1;914237730;
+x86_64-xlate.pl;610443546;1;1263937516;
+x86asm.pl;931859752;1;1139016409;
+x86ms.pl;2245494603;1;1209683492;
+x86nasm.pl;440175579;1;1209683492;
+x86unix.pl;1084219477;1;1209683492;

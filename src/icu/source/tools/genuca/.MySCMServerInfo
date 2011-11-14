@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/genuca
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=860
+Makefile.in;450722675;1;1207088281;
+genuca.8.in;2594595152;1;1044480727;
+genuca.cpp;2276453801;1;1215802421;
+genuca.h;3709655114;1;1101322533;
+genuca.vcproj;1534087154;1;1307144128;
+genuca.vcproj.8.00.old;3930781695;1;1215802421;

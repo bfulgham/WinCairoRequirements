@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/krb5
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=924
+Makefile;518815232;1;1221601488;
+krb5_asn.c;1723877412;1;994865373;
+krb5_asn.h;1692768239;1;1079392519;

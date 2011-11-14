@@ -1,0 +1,16 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/threads
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=947
+README;4066932005;1;951489629;
+mttest.c;770651998;1;1072541240;
+netware.bat;3312757628;1;1070025042;
+profile.sh;4109137113;1;951520707;
+ptest.bat;765487935;1;951520707;
+pthread.sh;2552809823;1;951520706;
+pthread2.sh;759487722;1;951520666;
+pthreads-vms.com;1532849014;1;1242405446;
+purify.sh;3785027649;1;951520706;
+solaris.sh;184963499;1;951520706;
+th-lock.c;2541939811;1;1048202792;
+win32.bat;2720870534;1;951520706;

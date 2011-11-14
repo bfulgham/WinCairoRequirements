@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/samples/legacy
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=818
+Makefile;1670454133;1;1088210976;
+README;3538401336;1;1044480706;
+legacy.cpp;340213618;1;1123802472;
+legacy.sln;2562997117;1;1207088265;
+legacy.vcproj;924919513;1;1207088265;
+newcol.cpp;2260593703;1;1123802472;
+oldcol.cpp;1895238789;1;1123802472;

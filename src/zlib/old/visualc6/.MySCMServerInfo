@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/old/visualc6
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1066
+README.txt;2955641289;1;1098331200;
+example.dsp;1396093936;1;1155411660;
+minigzip.dsp;1771239980;1;1155411660;
+zlib.dsp;3184288120;1;1266108098;
+zlib.dsw;4020209311;1;1085976000;

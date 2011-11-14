@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libiconv/libcharset/lib
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=435
+ChangeLog;2931174194;1;1307034575;
+config.charset;535653907;1;1307034575;
+localcharset.c;448565792;1;1307034575;
+Makefile.in;1853917920;1;1307034575;
+Makefile.msvc;1635556634;3;1307034575;
+Makefile.vms;582788219;1;1307034575;
+ref-add.sin;121152880;1;1307034575;
+ref-del.sin;1564472393;1;1307034575;
+relocatable.c;4255215525;1;1307034575;
+relocatable.h;1533576750;1;1307034575;

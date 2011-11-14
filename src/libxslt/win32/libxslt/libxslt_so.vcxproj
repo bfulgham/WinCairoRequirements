@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <ProjectGuid>{DDB943EB-AC6A-1866-688F-44A6C87427C1}</ProjectGuid>
+    <ProjectName>libxslt</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)\libxml2\include;$(SolutionDir)\libxslt\libxslt;$(SolutionDir)\libxslt;$(SolutionDir)\libiconv\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LIBXSLT_SO_EXPORTS</PreprocessorDefinitions>
+      <PrecompiledHeaderOutputFile>.\Debug\libxslt_so.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\libxslt_so.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake />
+    <Link>
+      <LinkDLL>true</LinkDLL>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\libxslt"
+xcopy /Y /R "$(ProjectDir)..\..\libxslt\*.h" "$(SolutionDir)include\libxslt"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LIBXSLT_SO_EXPORTS</PreprocessorDefinitions>
+      <PrecompiledHeaderOutputFile>.\Release\libxslt_so.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\libxslt_so.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake />
+    <Link>
+      <LinkDLL>true</LinkDLL>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\libxslt"
+xcopy /Y /R "$(ProjectDir)..\..\libxslt\*.h" "$(SolutionDir)include\libxslt"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libxslt\attributes.c" />
+    <ClCompile Include="..\..\libxslt\attrvt.c" />
+    <ClCompile Include="..\..\libxslt\documents.c" />
+    <ClCompile Include="..\..\libxslt\extensions.c" />
+    <ClCompile Include="..\..\libxslt\extra.c" />
+    <ClCompile Include="..\..\libxslt\functions.c" />
+    <ClCompile Include="..\..\libxslt\imports.c" />
+    <ClCompile Include="..\..\libxslt\keys.c" />
+    <ClCompile Include="..\..\libxslt\namespaces.c" />
+    <ClCompile Include="..\..\libxslt\numbers.c" />
+    <ClCompile Include="..\..\libxslt\pattern.c" />
+    <ClCompile Include="..\..\libxslt\preproc.c" />
+    <ClCompile Include="..\..\libxslt\security.c" />
+    <ClCompile Include="..\..\libxslt\templates.c" />
+    <ClCompile Include="..\..\libxslt\transform.c" />
+    <ClCompile Include="..\..\libxslt\variables.c" />
+    <ClCompile Include="..\..\libxslt\xslt.c" />
+    <ClCompile Include="..\..\libxslt\xsltlocale.c" />
+    <ClCompile Include="..\..\libxslt\xsltutils.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="libxslt.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libxslt\attributes.h" />
+    <ClInclude Include="..\..\config.h" />
+    <ClInclude Include="..\..\libxslt\documents.h" />
+    <ClInclude Include="..\..\libxslt\extensions.h" />
+    <ClInclude Include="..\..\libxslt\extra.h" />
+    <ClInclude Include="..\..\libxslt\functions.h" />
+    <ClInclude Include="..\..\libxslt\imports.h" />
+    <ClInclude Include="..\..\libxslt\keys.h" />
+    <ClInclude Include="..\..\libxslt\namespaces.h" />
+    <ClInclude Include="..\..\libxslt\numbersInternals.h" />
+    <ClInclude Include="..\..\libxslt\pattern.h" />
+    <ClInclude Include="..\..\libxslt\preproc.h" />
+    <ClInclude Include="..\..\libxslt\security.h" />
+    <ClInclude Include="..\..\libxslt\templates.h" />
+    <ClInclude Include="..\..\libxslt\transform.h" />
+    <ClInclude Include="..\..\libxslt\variables.h" />
+    <ClInclude Include="..\..\libxslt\xslt.h" />
+    <ClInclude Include="..\..\libxslt\xsltconfig.h" />
+    <ClInclude Include="..\..\libxslt\xsltInternals.h" />
+    <ClInclude Include="..\..\libxslt\xsltlocale.h" />
+    <ClInclude Include="..\..\libxslt\xsltutils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libxml2\win32\libxml2\libxml2.vcxproj">
+      <Project>{32029ce6-ea72-437d-810d-e1a51a498c9b}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,7 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/examples/SimpleWebServer
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=880
+Makefile.am;2025736223;1;1307983119;
+Makefile.in;54625640;1;1307983119;
+SimpleWebServer.c;1835631143;1;1307983119;

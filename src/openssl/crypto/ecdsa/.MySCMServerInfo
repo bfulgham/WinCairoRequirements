@@ -1,0 +1,14 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/crypto/ecdsa
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=917
+Makefile;3032252423;1;1254060272;
+ecdsa.h;365130902;1;1159991703;
+ecdsatest.c;3143230420;1;1183553792;
+ecs_asn1.c;3825596838;1;1114790166;
+ecs_err.c;4137724723;1;1164140081;
+ecs_lib.c;950606154;1;1276348730;
+ecs_locl.h;2647063968;1;1116238261;
+ecs_ossl.c;93686548;1;1259688736;
+ecs_sign.c;2646652675;1;1252498061;
+ecs_vrf.c;1554041094;1;1114790166;

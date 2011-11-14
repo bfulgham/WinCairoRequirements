@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/apps/set
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=897
+set-g-ca.pem;2228819143;1;914237562;
+set-m-ca.pem;3681209428;1;914237562;
+set_b_ca.pem;1311217228;1;914237562;
+set_c_ca.pem;4147420898;1;914237562;
+set_d_ct.pem;4250700683;1;914237562;
+set_root.pem;4022599020;1;914237562;

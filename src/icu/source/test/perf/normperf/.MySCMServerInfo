@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/perf/normperf
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1008
+Makefile.in;1141531013;1;1207088275;
+NormPerf.pl;3400256150;1;1215802419;
+NormPerf_r.pl;1513947993;1;1215802419;
+normperf.cpp;3881020407;1;1123802516;
+normperf.h;1154642289;1;1157065533;
+normperf.vcproj;3177767696;1;1207088275;

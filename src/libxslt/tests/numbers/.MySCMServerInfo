@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libxslt/tests/numbers
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=297
+format-number.out;1778408623;1;1307034693;
+format-number.xml;3011023379;1;1307034693;
+format-number.xsl;3624728469;1;1307034696;
+Makefile.am;1404099487;1;1307034696;
+Makefile.in;4136637289;1;1307034696;

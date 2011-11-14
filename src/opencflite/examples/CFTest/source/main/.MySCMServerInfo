@@ -1,0 +1,8 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/opencflite/examples/CFTest/source/main
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1052
+CFTest.cpp;3069653774;1;1307983118;
+CFTest.h;792531594;1;1307983118;
+main.cpp;4244986106;1;1307983118;
+stdafx.h;795377962;1;1307983118;

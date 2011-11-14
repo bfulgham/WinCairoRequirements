@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/openssl/demos/engines/ibmca
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1045
+Makefile;2042745079;1;1029241822;
+hw_ibmca.c;2389247188;1;1114871668;
+hw_ibmca.ec;1771298617;1;1029241822;
+hw_ibmca_err.c;1455812453;1;1029241822;
+hw_ibmca_err.h;154354307;1;1208504602;
+ica_openssl_api.h;1167985998;1;1029241822;

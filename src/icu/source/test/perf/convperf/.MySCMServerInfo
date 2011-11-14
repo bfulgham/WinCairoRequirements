@@ -1,0 +1,12 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/perf/convperf
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=1007
+ConvPerf_r.pl;2455132523;1;1215802419;
+Makefile.in;3801595127;1;1207088275;
+convperf.cpp;2948806775;1;1123802516;
+convperf.h;277632699;1;1207088274;
+convperf.vcproj;938389332;1;1207088274;
+convperf_ansi.pl;1770475217;1;1215802419;
+convperf_iml.pl;1481338380;1;1215802419;
+data.h;1360503860;1;1076022284;

@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/test/threadtest
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=841
+Makefile.in;101880123;1;1207088279;
+converttest.cpp;2943499093;1;1076022284;
+stringtest.cpp;2492108752;1;1044480724;
+threadtest.cpp;2175263501;1;1123802523;
+threadtest.dsp;1394252448;1;1101322528;
+threadtest.dsw;2891830034;1;1044480724;
+threadtest.h;1011342105;1;1044480724;

@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/zlib/msdos
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=372
+Makefile.bor;1689026411;2;1266107880;
+Makefile.dj2;1279685172;2;1266107867;
+Makefile.emx;315483058;2;1266107859;
+Makefile.msc;2375034304;2;1266107852;
+Makefile.tc;1788224069;2;1266107842;

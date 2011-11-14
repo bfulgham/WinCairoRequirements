@@ -1,0 +1,11 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/samples/date
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=814
+Makefile.in;50821866;1;1215802413;
+date.c;509876215;1;1207088265;
+date.sln;2951177695;1;1207088265;
+date.vcproj;1205821418;1;1207088265;
+readme.txt;1884980831;1;1123802471;
+uprint.c;2930511166;1;1044480705;
+uprint.h;1184417468;1;1088210975;

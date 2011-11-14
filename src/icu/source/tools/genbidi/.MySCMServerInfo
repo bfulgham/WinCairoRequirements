@@ -1,0 +1,10 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/icu/source/tools/genbidi
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=844
+Makefile.in;1722485986;1;1207088279;
+genbidi.c;4226475690;1;1157065539;
+genbidi.h;3899803745;1;1123802524;
+genbidi.vcproj;3714146882;1;1307144128;
+genbidi.vcproj.8.00.old;169540757;1;1215802421;
+store.c;3190152149;1;1123802524;

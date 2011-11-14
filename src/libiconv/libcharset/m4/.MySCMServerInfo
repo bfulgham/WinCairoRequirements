@@ -1,0 +1,9 @@
+SCMBranch=External Dependencies
+SCMRepository=External Dependencies/src/libiconv/libcharset/m4
+SCMMainlineUUID={49768a25-3559-48c3-b9a1-b43d4686e928}
+SCMBranchRepositoryID=436
+codeset.m4;1890954396;1;1307034575;
+glibc21.m4;3293473460;1;1307034575;
+libtool.m4;3728104906;1;1307034575;
+relocatable.m4;1788551747;1;1307034575;
+visibility.m4;725317095;1;1307034575;
