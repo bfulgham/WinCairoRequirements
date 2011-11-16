@@ -115,10 +115,11 @@
       <ImportLibrary>$(SolutionDir)Lib/zdll.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(SolutionDir)include"
-xcopy /Y /R "$(ProjectDir)..\..\..\zconf.h" "$(SolutionDir)include"
-xcopy /Y /R "$(ProjectDir)..\..\..\zlib.h" "$(SolutionDir)include"
-xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include"</Command>
+      <Command>mkdir "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\zconf.h" "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\zlib.h" "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -150,10 +151,11 @@ xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include"</Command>
       <ImportLibrary>$(SolutionDir)Lib/zdll.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(SolutionDir)include"
-xcopy /Y /R "$(ProjectDir)..\..\..\zconf.h" "$(SolutionDir)include"
-xcopy /Y /R "$(ProjectDir)..\..\..\zlib.h" "$(SolutionDir)include"
-xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include"</Command>
+      <Command>mkdir "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\zconf.h" "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\zlib.h" "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include\zlib"
+xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

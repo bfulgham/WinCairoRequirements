@@ -38,6 +38,7 @@
     </ClCompile>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jconfig.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)jdct.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)jerror.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)jinclude.h" "$(SolutionDir)include"
