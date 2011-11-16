@@ -573,6 +573,9 @@ xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(SolutionDir)bin\CFLite.resources\"
     <ProjectReference Include="..\..\icu\source\common\common.vcxproj">
       <Project>{73c0a65b-d1f2-4de1-b3a6-15dad2c23f3d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\icu\source\data\makedata.vcxproj">
+      <Project>{d9df7f2f-93b7-4810-b5cd-96f4f33c079b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\icu\source\i18n\i18n.vcxproj">
       <Project>{0178b127-6269-407d-b112-93877bb62776}</Project>
     </ProjectReference>

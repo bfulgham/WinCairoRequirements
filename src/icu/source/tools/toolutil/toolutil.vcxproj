@@ -56,6 +56,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_TOOLUTIL_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -80,6 +81,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_TOOLUTIL_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -94,30 +96,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dbgutil.cpp" />
     <ClCompile Include="filestrm.c" />
     <ClCompile Include="filetools.cpp" />
     <ClCompile Include="flagparser.c" />
     <ClCompile Include="package.cpp" />
-    <ClCompile Include="pkg_genc.c" />
-    <ClCompile Include="pkg_gencmn.c" />
+    <ClCompile Include="pkg_genc.c">
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
+    </ClCompile>
+    <ClCompile Include="pkg_gencmn.c">
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
+    </ClCompile>
     <ClCompile Include="pkg_icu.cpp" />
     <ClCompile Include="pkgitems.cpp" />
     <ClCompile Include="swapimpl.cpp" />
-    <ClCompile Include="toolutil.cpp" />
+    <ClCompile Include="toolutil.cpp">
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
+    </ClCompile>
     <ClCompile Include="ucbuf.c" />
-    <ClCompile Include="ucln_tu.c" />
     <ClCompile Include="ucm.c" />
     <ClCompile Include="ucmstate.c" />
-    <ClCompile Include="udbgutil.cpp" />
     <ClCompile Include="unewdata.c" />
     <ClCompile Include="uoptions.c" />
     <ClCompile Include="uparse.c" />
     <ClCompile Include="writesrc.c" />
     <ClCompile Include="xmlparser.cpp" />
+    <ClCompile Include="dbgutil.cpp" />
+    <ClCompile Include="udbgutil.cpp" />
+    <ClCompile Include="ucln_tu.c">
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dbgutil.h" />
     <ClInclude Include="filestrm.h" />
     <ClInclude Include="filetools.h" />
     <ClInclude Include="flagparser.h" />
@@ -131,12 +144,13 @@
     <ClInclude Include="toolutil.h" />
     <ClInclude Include="ucbuf.h" />
     <ClInclude Include="ucm.h" />
-    <ClInclude Include="udbgutil.h" />
     <ClInclude Include="unewdata.h" />
     <ClInclude Include="uoptions.h" />
     <ClInclude Include="uparse.h" />
     <ClInclude Include="writesrc.h" />
     <ClInclude Include="xmlparser.h" />
+    <ClInclude Include="dbgutil.h" />
+    <ClInclude Include="udbgutil.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\common\common.vcxproj">

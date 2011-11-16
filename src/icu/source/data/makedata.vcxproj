@@ -138,6 +138,10 @@
       <Project>{fdd3c4f2-9805-44eb-9a77-bc1c1c95b547}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\tools\gencfu\gencfu.vcxproj">
+      <Project>{691ee0c0-dc57-4a48-8aee-8ed75eb3a057}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\tools\gencmn\gencmn.vcxproj">
       <Project>{a8d36f8d-09e6-4174-91c3-7beaa9c3f04f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -148,6 +152,10 @@
     </ProjectReference>
     <ProjectReference Include="..\tools\genctd\genctd.vcxproj">
       <Project>{9d4211f7-2c77-439c-82f0-30a4e43ba569}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\tools\gennorm2\gennorm2.vcxproj">
+      <Project>{c7891a65-80ab-4245-912e-5f1e17b0e6c4}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\tools\genrb\derb.vcxproj">

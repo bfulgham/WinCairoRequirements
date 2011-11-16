@@ -56,6 +56,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_LAYOUT_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <ResourceCompile>
@@ -84,6 +85,7 @@ xcopy /Y /R "$(ProjectDir)*.h" "$(SolutionDir)include\unicode\"</Command>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;U_LAYOUT_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -194,7 +196,6 @@ xcopy /Y /R "$(ProjectDir)*.h" "$(SolutionDir)include\unicode\"</Command>
     <ClInclude Include="DefaultCharMapper.h" />
     <ClInclude Include="DeviceTables.h" />
     <ClInclude Include="ExtensionSubtables.h" />
-    <ClInclude Include="Features.h" />
     <ClInclude Include="GDEFMarkFilter.h" />
     <ClInclude Include="GlyphDefinitionTables.h" />
     <ClInclude Include="GlyphIterator.h" />
@@ -207,6 +208,7 @@ xcopy /Y /R "$(ProjectDir)*.h" "$(SolutionDir)include\unicode\"</Command>
     <ClInclude Include="GXLayoutEngine.h" />
     <ClInclude Include="HangulLayoutEngine.h" />
     <ClInclude Include="HanLayoutEngine.h" />
+    <ClInclude Include="ICUFeatures.h" />
     <ClInclude Include="IndicLayoutEngine.h" />
     <ClInclude Include="IndicRearrangement.h" />
     <ClInclude Include="IndicRearrangementProcessor.h" />
