@@ -14,6 +14,7 @@
     <ProjectGuid>{FD42917E-C1F2-4C77-8CFE-E26572BD909D}</ProjectGuid>
     <RootNamespace>png</RootNamespace>
     <Keyword>MFCProj</Keyword>
+    <ProjectName>libpng</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
