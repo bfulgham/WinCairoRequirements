@@ -1,7 +1,7 @@
 Build
-Lib
-bin
-include
+./Lib
+./bin
+./include
 WinCairo.sdf
 WinCairo.suo
 WinCairo_vc9.ncb

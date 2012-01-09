@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="SQLite3"
-	ProjectGUID="{0637EB24-7B2D-4B4A-9D95-7C72E7B48D5C}"
-	RootNamespace="SQLite"
+	Name="curl"
+	ProjectGUID="{3BF9FC5F-3110-40C3-9E8D-D305AB3E74CD}"
+	RootNamespace="curl"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\debug.vsprops"
+			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -39,27 +39,22 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D_LIB /DSQLITE_THREADSAFE=2 /DSQLITE_DEFAULT_MEMSTATUS=0 /DNO_TCL /D_HAVE_SQLITE_CONFIG_H /DSQLITE_THREAD_OVERRIDE_LOCK=-1 /DSQLITE_OMIT_LOAD_EXTENSION=1 /DSQLITE_TEMP_STORE=1"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\includes\&quot;"
-				PreprocessorDefinitions="SQLITE_EXPORTS;THREADSAFE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_DEFAULT_CACHE_SIZE=500;SQLITE_DEFAULT_WAL_SAFETYLEVEL=2"
-				CompileAs="1"
+				AdditionalIncludeDirectories="$(ProjectDir)..\..\include;$(ProjectDir)..\..\lib;"
+				PreprocessorDefinitions="_CONSOLE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\includes\&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DYNAMICBASE /NXCOMPAT /SAFESEH"
-				OutputFile="$(OutDir)\$(ProjectName)_debug.dll"
-				ModuleDefinitionFile="..\sqlite3.def"
-				SubSystem="2"
+				AdditionalDependencies="ws2_32.lib wldap32.lib"
+				SubSystem="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -85,8 +80,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\release.vsprops"
+			ConfigurationType="1"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -107,26 +102,22 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D_LIB /DSQLITE_THREADSAFE=2 /DSQLITE_DEFAULT_MEMSTATUS=0 /DNO_TCL /D_HAVE_SQLITE_CONFIG_H /DSQLITE_THREAD_OVERRIDE_LOCK=-1 /DSQLITE_OMIT_LOAD_EXTENSION=1 /DSQLITE_TEMP_STORE=1"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\includes\&quot;"
-				PreprocessorDefinitions="SQLITE_EXPORTS;THREADSAFE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_DEFAULT_CACHE_SIZE=500;SQLITE_DEFAULT_WAL_SAFETYLEVEL=2"
-				CompileAs="1"
+				AdditionalIncludeDirectories="$(ProjectDir)..\..\include;$(ProjectDir)..\..\lib;"
+				PreprocessorDefinitions="_CONSOLE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\includes\&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DYNAMICBASE /NXCOMPAT /SAFESEH"
-				ModuleDefinitionFile="..\sqlite3.def"
-				SubSystem="2"
+				AdditionalDependencies="ws2_32.lib wldap32.lib"
+				SubSystem="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -160,15 +151,51 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\shell.c"
+				RelativePath="..\curlutil.c"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3.c"
+				RelativePath="..\getpass.c"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3.def"
+				RelativePath="..\homedir.c"
+				>
+			</File>
+			<File
+				RelativePath="..\hugehelp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\main.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\nonblock.c"
+				>
+			</File>
+			<File
+				RelativePath="..\os-specific.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\rawstr.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\strtoofft.c"
+				>
+			</File>
+			<File
+				RelativePath="..\urlglob.c"
+				>
+			</File>
+			<File
+				RelativePath="..\writeout.c"
+				>
+			</File>
+			<File
+				RelativePath="..\xattr.c"
 				>
 			</File>
 		</Filter>
@@ -178,23 +205,47 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\includes\autoversion.h"
+				RelativePath="..\curlutil.h"
 				>
 			</File>
 			<File
-				RelativePath="..\resource.h"
+				RelativePath="..\getpass.h"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3.h"
+				RelativePath="..\homedir.h"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3ext.h"
+				RelativePath="..\hugehelp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\win_config.h"
+				RelativePath="..\..\lib\nonblock.h"
+				>
+			</File>
+			<File
+				RelativePath="..\os-specific.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\rawstr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\strtoofft.h"
+				>
+			</File>
+			<File
+				RelativePath="..\urlglob.h"
+				>
+			</File>
+			<File
+				RelativePath="..\writeout.h"
+				>
+			</File>
+			<File
+				RelativePath="..\xattr.h"
 				>
 			</File>
 		</Filter>
@@ -203,10 +254,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath="..\SQLite3.rc"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

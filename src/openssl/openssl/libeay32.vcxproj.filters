@@ -139,9 +139,6 @@
     <Filter Include="Source Files\sha">
       <UniqueIdentifier>{86359175-bf2a-4f00-a644-113c3a2dc9f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\strore">
-      <UniqueIdentifier>{4a3c6e3d-858b-4738-adad-4f1caae4ae18}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\ui">
       <UniqueIdentifier>{29f287df-a67a-421a-a024-3f2f06d1cb7d}</UniqueIdentifier>
     </Filter>
@@ -159,6 +156,9 @@
     </Filter>
     <Filter Include="Source Files\engines">
       <UniqueIdentifier>{06b077da-abeb-4daf-8f5f-1e6aafc349ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\store">
+      <UniqueIdentifier>{4a3c6e3d-858b-4738-adad-4f1caae4ae18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1395,16 +1395,16 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\crypto\store\str_err.c">
-      <Filter>Source Files\strore</Filter>
+      <Filter>Source Files\store</Filter>
     </ClCompile>
     <ClCompile Include="..\crypto\store\str_lib.c">
-      <Filter>Source Files\strore</Filter>
+      <Filter>Source Files\store</Filter>
     </ClCompile>
     <ClCompile Include="..\crypto\store\str_mem.c">
-      <Filter>Source Files\strore</Filter>
+      <Filter>Source Files\store</Filter>
     </ClCompile>
     <ClCompile Include="..\crypto\store\str_meth.c">
-      <Filter>Source Files\strore</Filter>
+      <Filter>Source Files\store</Filter>
     </ClCompile>
     <ClCompile Include="..\crypto\ui\ui_compat.c">
       <Filter>Source Files\ui</Filter>
@@ -1841,10 +1841,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\crypto\store\store.h">
-      <Filter>Source Files\strore</Filter>
+      <Filter>Source Files\store</Filter>
     </ClInclude>
     <ClInclude Include="..\crypto\store\str_locl.h">
-      <Filter>Source Files\strore</Filter>
+      <Filter>Source Files\store</Filter>
     </ClInclude>
     <ClInclude Include="..\crypto\ui\ui.h">
       <Filter>Source Files\ui</Filter>
