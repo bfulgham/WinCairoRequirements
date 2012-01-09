@@ -255,6 +255,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -262,6 +263,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
