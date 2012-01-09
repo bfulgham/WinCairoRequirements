@@ -68,6 +68,7 @@
       <Command>xcopy /Y /R "$(ProjectDir)png.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
 </Command>
+      <Message>Install headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,6 +85,7 @@ xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
       <Command>xcopy /Y /R "$(ProjectDir)png.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
 </Command>
+      <Message>Install headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

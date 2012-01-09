@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="cairo"
 	ProjectGUID="{A02A055B-7676-4A0F-A81E-573030C69571}"
 	RootNamespace="cairo"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -17,9 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -39,16 +39,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="..\..\pixman\pixman\"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;CAIRO_EXPORTS"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\pixman\pixman&quot;;&quot;$(SolutionDir)include\zlib&quot;"
+				PreprocessorDefinitions="CAIRO_EXPORTS"
+				CompileAs="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -61,10 +54,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
+				AdditionalDependencies="Msimg32.lib"
+				ModuleDefinitionFile=""
 				SubSystem="2"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -85,17 +77,15 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\cairo-version.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-deprecated.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-features.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-pdf.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-ps.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-svg.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-win32.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-xml.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -116,13 +106,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\pixman\pixman\;..\..\..\zlib;..\..\..\libpng"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;CAIRO_EXPORTS"
-				RuntimeLibrary="0"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\pixman\pixman&quot;;&quot;$(SolutionDir)include\zlib&quot;"
+				PreprocessorDefinitions="CAIRO_EXPORTS"
+				CompileAs="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -135,14 +121,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libpng.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="F:\WinCairo\src\libpng\projects\visualc8\Win32_LIB_Release;F:\WinCairo\src\libpng\projects\visualc8\Win32_LIB_ASM_Release\ZLib"
-				GenerateDebugInformation="true"
+				AdditionalDependencies="Msimg32.lib"
+				AdditionalLibraryDirectories=""
+				ModuleDefinitionFile=""
 				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -163,10 +145,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\cairo-version.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-deprecated.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-features.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-pdf.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-ps.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-svg.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-win32.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-xml.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

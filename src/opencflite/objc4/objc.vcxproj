@@ -52,6 +52,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\props\common.props" />
     <Import Project="..\..\..\props\dll.props" />
+    <Import Project="..\..\..\props\debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -70,7 +71,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Message>Install</Message>
+      <Message>Install Headers</Message>
       <Command>xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-api.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-auto.h" "$(SolutionDir)include\objc\"
@@ -121,7 +122,6 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
     </ClCompile>
     <Link>
       <AdditionalOptions>/dynamicbase %(AdditionalOptions)</AdditionalOptions>
-      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <SubSystem>Windows</SubSystem>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -133,7 +133,7 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
     <PreBuildEvent>
-      <Message>Install</Message>
+      <Message>Install Headers</Message>
       <Command>xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-api.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-auto.h" "$(SolutionDir)include\objc\"

@@ -120,6 +120,7 @@ xcopy /Y /R "$(ProjectDir)..\..\..\zconf.h" "$(SolutionDir)include\zlib"
 xcopy /Y /R "$(ProjectDir)..\..\..\zlib.h" "$(SolutionDir)include\zlib"
 xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include\zlib"
 xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Command>
+      <Message>Install headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,6 +157,7 @@ xcopy /Y /R "$(ProjectDir)..\..\..\zconf.h" "$(SolutionDir)include\zlib"
 xcopy /Y /R "$(ProjectDir)..\..\..\zlib.h" "$(SolutionDir)include\zlib"
 xcopy /Y /R "$(ProjectDir)..\..\..\zutil.h" "$(SolutionDir)include\zlib"
 xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Command>
+      <Message>Install headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

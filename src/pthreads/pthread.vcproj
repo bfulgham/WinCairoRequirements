@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="pthread"
 	ProjectGUID="{1C577933-7FC6-477F-9971-FB9405875D17}"
+	RootNamespace="pthread"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -15,10 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\."
-			IntermediateDirectory=".\."
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops;..\..\props\common.vsprops;..\..\props\dll.vsprops;..\..\props\release.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -46,27 +46,17 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="__CLEANUP_C;WIN32;NDEBUG;_WINDOWS;_USRDLL;PTW32_BUILD"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\./pthread.pch"
-				AssemblerListingLocation=".\./"
-				ObjectFile=".\./"
-				ProgramDataBaseFileName=".\./"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
+				PreprocessorDefinitions="__CLEANUP_C;PTW32_BUILD"
+				EnableFunctionLevelLinking="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG,PTW32_RC_MSC"
-				Culture="1033"
+				PreprocessorDefinitions="PTW32_RC_MSC"
 				AdditionalIncludeDirectories="."
 			/>
 			<Tool
@@ -75,11 +65,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib"
-				OutputFile=".\pthreadVC2.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				ImportLibrary=".\./pthreadVC2.lib"
-				TargetMachine="1"
+				OutputFile="$(OutDir)\pthreadVC2.dll"
+				ModuleDefinitionFile=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -92,8 +79,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\./pthread.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -102,18 +87,15 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\pthreads&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pthread.h&quot; &quot;$(SolutionDir)include\pthreads&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)sched.h&quot; &quot;$(SolutionDir)include\pthreads&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)semaphore.h&quot; &quot;$(SolutionDir)include\pthreads&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\."
-			IntermediateDirectory=".\."
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops;..\..\props\common.vsprops;..\..\props\dll.vsprops;..\..\props\debug.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -141,27 +123,15 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
 				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="__CLEANUP_C;WIN32;_DEBUG;_WINDOWS;_USRDLL;PTW32_BUILD"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\./pthread.pch"
-				AssemblerListingLocation=".\./"
-				ObjectFile=".\./"
-				ProgramDataBaseFileName=".\./"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="4"
+				PreprocessorDefinitions="__CLEANUP_C;PTW32_BUILD"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG,PTW32_RC_MSC"
-				Culture="1033"
+				PreprocessorDefinitions="PTW32_RC_MSC"
 				AdditionalIncludeDirectories="."
 			/>
 			<Tool
@@ -170,15 +140,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib"
-				OutputFile=".\pthreadVC2.dll"
-				LinkIncremental="2"
-				SuppressStartupBanner="true"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\./pthreadVC2.pdb"
-				GenerateMapFile="true"
-				MapFileName=".\./pthreadVC2.map"
-				ImportLibrary=".\./pthreadVC2.lib"
-				TargetMachine="1"
+				OutputFile="$(OutDir)\pthreadVC2.dll"
+				ModuleDefinitionFile=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -191,8 +154,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\./pthread.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -201,10 +162,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\pthreads&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pthread.h&quot; &quot;$(SolutionDir)include\pthreads&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)sched.h&quot; &quot;$(SolutionDir)include\pthreads&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)semaphore.h&quot; &quot;$(SolutionDir)include\pthreads&quot;"
 			/>
 		</Configuration>
 	</Configurations>

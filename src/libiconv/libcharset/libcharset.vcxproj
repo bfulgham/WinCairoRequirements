@@ -67,6 +67,7 @@ xcopy /Y /R $(ProjectDir)include\localcharset.h.in $(ProjectDir)include\localcha
     <PostBuildEvent>
       <Command>xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
 xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,6 +89,7 @@ xcopy /Y /R $(ProjectDir)include\localcharset.h.in $(ProjectDir)include\localcha
     <PostBuildEvent>
       <Command>xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
 xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

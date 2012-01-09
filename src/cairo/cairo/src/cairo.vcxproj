@@ -74,6 +74,7 @@ xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-win32.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
 </Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -99,6 +100,7 @@ xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-win32.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
 </Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

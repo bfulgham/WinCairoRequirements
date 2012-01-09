@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\lib.vsprops;..\..\..\..\props\release.vsprops"
+			InheritedPropertySheets="..\..\props\common.vsprops;..\..\props\lib.vsprops;..\..\props\release.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -70,13 +70,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;"
+				Description="Install headers"
+				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\lib.vsprops;..\..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\props\common.vsprops;..\..\props\lib.vsprops;..\..\props\debug.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -127,7 +128,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;"
+				Description="Install headers"
+				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -139,51 +141,51 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\png.c"
+				RelativePath="png.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngerror.c"
+				RelativePath="pngerror.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngget.c"
+				RelativePath="pngget.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngmem.c"
+				RelativePath="pngmem.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngpread.c"
+				RelativePath="pngpread.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngread.c"
+				RelativePath="pngread.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngrio.c"
+				RelativePath="pngrio.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngrtran.c"
+				RelativePath="pngrtran.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngrutil.c"
+				RelativePath="pngrutil.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngset.c"
+				RelativePath="pngset.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngtrans.c"
+				RelativePath="pngtrans.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\scripts\pngw32.def"
+				RelativePath="scripts\pngw32.def"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -203,19 +205,19 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\pngwio.c"
+				RelativePath="pngwio.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngwrite.c"
+				RelativePath="pngwrite.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngwtran.c"
+				RelativePath="pngwtran.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngwutil.c"
+				RelativePath="pngwutil.c"
 				>
 			</File>
 		</Filter>
@@ -224,11 +226,11 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\png.h"
+				RelativePath="png.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngconf.h"
+				RelativePath="pngconf.h"
 				>
 			</File>
 		</Filter>
@@ -237,7 +239,7 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="..\..\scripts\pngw32.rc"
+				RelativePath="scripts\pngw32.rc"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -257,14 +259,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\PRJ0041.mak"
-			>
-		</File>
-		<File
-			RelativePath="README.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

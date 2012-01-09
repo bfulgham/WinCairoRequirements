@@ -89,6 +89,7 @@
 xcopy /Y /R "$(ProjectDir)pthread.h" "$(SolutionDir)include\pthreads"
 xcopy /Y /R "$(ProjectDir)sched.h" "$(SolutionDir)include\pthreads"
 xcopy /Y /R "$(ProjectDir)semaphore.h" "$(SolutionDir)include\pthreads"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -127,6 +128,7 @@ xcopy /Y /R "$(ProjectDir)semaphore.h" "$(SolutionDir)include\pthreads"</Command
 xcopy /Y /R "$(ProjectDir)pthread.h" "$(SolutionDir)include\pthreads"
 xcopy /Y /R "$(ProjectDir)sched.h" "$(SolutionDir)include\pthreads"
 xcopy /Y /R "$(ProjectDir)semaphore.h" "$(SolutionDir)include\pthreads"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

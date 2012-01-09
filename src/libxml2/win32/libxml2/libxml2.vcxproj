@@ -62,6 +62,7 @@
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\libxml"
 xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxml"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -77,6 +78,7 @@ xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxm
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\libxml"
 xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxml"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

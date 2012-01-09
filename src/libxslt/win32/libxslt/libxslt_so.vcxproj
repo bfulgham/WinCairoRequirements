@@ -72,6 +72,7 @@
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\libxslt"
 xcopy /Y /R "$(ProjectDir)..\..\libxslt\*.h" "$(SolutionDir)include\libxslt"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -98,6 +99,7 @@ xcopy /Y /R "$(ProjectDir)..\..\libxslt\*.h" "$(SolutionDir)include\libxslt"</Co
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\libxslt"
 xcopy /Y /R "$(ProjectDir)..\..\libxslt\*.h" "$(SolutionDir)include\libxslt"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

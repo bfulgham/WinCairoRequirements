@@ -17,10 +17,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="10"
-			CharacterSet="2"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\debug.vsprops"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -34,15 +33,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy /Y &quot;$(OutDir)\objcrt_debug.obj&quot; &quot;$(SolutionDir)\dist\lib&quot;"
+				CommandLine="xcopy /Y &quot;$(OutDir)\objcrt_debug.obj&quot; &quot;$(SolutionDir)lib&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="10"
-			CharacterSet="2"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\release.vsprops"
+			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -57,7 +55,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy /Y &quot;$(OutDir)\objcrt.obj&quot; &quot;$(SolutionDir)\dist\lib&quot;"
+				CommandLine="xcopy /Y /R &quot;$(OutDir)objcrt.obj&quot; &quot;$(SolutionDir)lib&quot;"
 			/>
 		</Configuration>
 	</Configurations>
