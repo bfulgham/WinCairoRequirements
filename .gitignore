@@ -35,6 +35,7 @@ src/libxslt/win32/libxslt/Release
 src/opencflite/objc4/*.user
 src/opencflite/objc4/objcrt/vc*
 src/opencflite/objc4/objcrt/*.pdb
+src/openssl/openssl/*.user
 src/pthreads/*.user
 src/zlib/contrib/vstudio/vc9/*.user
 
