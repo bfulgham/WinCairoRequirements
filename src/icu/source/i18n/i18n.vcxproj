@@ -71,6 +71,7 @@
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\unicode"
 xcopy /Y /R "$(ProjectDir)unicode\*.h" "$(SolutionDir)include\unicode\"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -99,6 +100,7 @@ xcopy /Y /R "$(ProjectDir)unicode\*.h" "$(SolutionDir)include\unicode\"</Command
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\unicode"
 xcopy /Y /R "$(ProjectDir)unicode\*.h" "$(SolutionDir)include\unicode\"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -409,7 +411,7 @@ xcopy /Y /R "$(ProjectDir)unicode\*.h" "$(SolutionDir)include\unicode\"</Command
     </CustomBuild>
     <ClInclude Include="currfmt.h" />
     <CustomBuild Include="unicode\currpinf.h">
- <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode

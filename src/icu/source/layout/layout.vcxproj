@@ -72,6 +72,7 @@
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\unicode"
 xcopy /Y /R "$(ProjectDir)*.h" "$(SolutionDir)include\unicode\"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,6 +101,7 @@ xcopy /Y /R "$(ProjectDir)*.h" "$(SolutionDir)include\unicode\"</Command>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\unicode"
 xcopy /Y /R "$(ProjectDir)*.h" "$(SolutionDir)include\unicode\"</Command>
+      <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

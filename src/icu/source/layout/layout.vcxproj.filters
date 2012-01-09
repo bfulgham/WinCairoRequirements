@@ -290,9 +290,6 @@
     <ClInclude Include="ExtensionSubtables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Features.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GDEFMarkFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -465,6 +462,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ValueRecords.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ICUFeatures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
