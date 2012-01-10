@@ -33,6 +33,7 @@ src/icu/source/test/cintltst/*.user
 src/icu/source/test/intltest/*.user
 src/icu/source/test/iotest/*.user
 src/icu/source/test/letest/*.user
+src/icu/source/test/testdata/out/*
 src/icu/source/tools/ctestfw/*.user
 src/icu/source/tools/genbrk/*.user
 src/icu/source/tools/genccode/*.user

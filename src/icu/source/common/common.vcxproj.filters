@@ -567,6 +567,9 @@
     <ClInclude Include="uhash.h">
       <Filter>collections</Filter>
     </ClInclude>
+    <ClInclude Include="ulist.h">
+      <Filter>collections</Filter>
+    </ClInclude>
     <ClInclude Include="ustrenum.h">
       <Filter>collections</Filter>
     </ClInclude>
@@ -714,6 +717,9 @@
     <ClInclude Include="uset_imp.h">
       <Filter>properties &amp; sets</Filter>
     </ClInclude>
+    <ClInclude Include="unicode\icuplug.h">
+      <Filter>registration</Filter>
+    </ClInclude>
     <ClInclude Include="icuplugimp.h">
       <Filter>registration</Filter>
     </ClInclude>
@@ -747,7 +753,6 @@
     <ClInclude Include="ustr_imp.h">
       <Filter>strings</Filter>
     </ClInclude>
-    <ClInclude Include="ulist.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc">
@@ -782,10 +787,19 @@
     <CustomBuild Include="unicode\docmain.h">
       <Filter>configuration</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\errorcode.h">
+      <Filter>configuration</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\icudataver.h">
+      <Filter>configuration</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\putil.h">
       <Filter>configuration</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\pwin32.h">
+      <Filter>configuration</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\std_string.h">
       <Filter>configuration</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\uconfig.h">
@@ -818,6 +832,9 @@
     <CustomBuild Include="unicode\utypes.h">
       <Filter>configuration</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\uvernum.h">
+      <Filter>configuration</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\uversion.h">
       <Filter>configuration</Filter>
     </CustomBuild>
@@ -830,6 +847,12 @@
     <CustomBuild Include="unicode\ucnv_err.h">
       <Filter>conversion</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\ucnvsel.h">
+      <Filter>conversion</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\localpointer.h">
+      <Filter>data &amp; memory</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\uclean.h">
       <Filter>data &amp; memory</Filter>
     </CustomBuild>
@@ -839,6 +862,9 @@
     <CustomBuild Include="unicode\uobject.h">
       <Filter>data &amp; memory</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\dtintrv.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\parseerr.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -847,6 +873,9 @@
     </CustomBuild>
     <CustomBuild Include="unicode\umisc.h">
       <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\idna.h">
+      <Filter>idna</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\uidna.h">
       <Filter>idna</Filter>
@@ -869,10 +898,16 @@
     <CustomBuild Include="unicode\caniter.h">
       <Filter>normalization</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\normalizer2.h">
+      <Filter>normalization</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\normlzr.h">
       <Filter>normalization</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\unorm.h">
+      <Filter>normalization</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\unorm2.h">
       <Filter>normalization</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\symtable.h">
@@ -905,6 +940,9 @@
     <CustomBuild Include="unicode\usprep.h">
       <Filter>sprep</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\bytestream.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\chariter.h">
       <Filter>strings</Filter>
     </CustomBuild>
@@ -912,6 +950,9 @@
       <Filter>strings</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\schriter.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\stringpiece.h">
       <Filter>strings</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\ucasemap.h">
@@ -950,18 +991,5 @@
     <CustomBuild Include="unicode\utf_old.h">
       <Filter>strings</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\errorcode.h" />
-    <CustomBuild Include="unicode\icudataver.h" />
-    <CustomBuild Include="unicode\std_string.h" />
-    <CustomBuild Include="unicode\uvernum.h" />
-    <CustomBuild Include="unicode\ucnvsel.h" />
-    <CustomBuild Include="unicode\localpointer.h" />
-    <CustomBuild Include="unicode\dtintrv.h" />
-    <CustomBuild Include="unicode\idna.h" />
-    <CustomBuild Include="unicode\normalizer2.h" />
-    <CustomBuild Include="unicode\unorm2.h" />
-    <CustomBuild Include="unicode\icuplug.h" />
-    <CustomBuild Include="unicode\bytestream.h" />
-    <CustomBuild Include="unicode\stringpiece.h" />
   </ItemGroup>
 </Project>
