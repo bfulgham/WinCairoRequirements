@@ -2,10 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="SQLite3"
-	ProjectGUID="{0637EB24-7B2D-4B4A-9D95-7C72E7B48D5C}"
-	RootNamespace="SQLite"
-	Keyword="Win32Proj"
+	Name="libexslt"
+	ProjectGUID="{7E2AD725-4BDA-4B90-8AB9-9289624B4443}"
+	RootNamespace="libexslt"
 	>
 	<Platforms>
 		<Platform
@@ -18,7 +17,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -38,27 +37,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D_LIB /DSQLITE_THREADSAFE=2 /DSQLITE_DEFAULT_MEMSTATUS=0 /DNO_TCL /D_HAVE_SQLITE_CONFIG_H /DSQLITE_THREAD_OVERRIDE_LOCK=-1 /DSQLITE_OMIT_LOAD_EXTENSION=1 /DSQLITE_TEMP_STORE=1"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\includes\&quot;"
-				PreprocessorDefinitions="SQLITE_EXPORTS;THREADSAFE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_DEFAULT_CACHE_SIZE=500;SQLITE_DEFAULT_WAL_SAFETYLEVEL=2"
-				CompileAs="1"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..&quot;;&quot;$(ProjectDir)..\..\libxslt&quot;;&quot;$(ProjectDir)..\..\libexslt&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LIBXSLT_SO_EXPORTS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\includes\&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DYNAMICBASE /NXCOMPAT /SAFESEH"
-				OutputFile="$(OutDir)\$(ProjectName)_debug.dll"
-				ModuleDefinitionFile="..\sqlite3.def"
-				SubSystem="2"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -79,16 +71,15 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\libexslt&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\libexslt\*.h&quot; &quot;$(SolutionDir)include\libexslt&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\release.vsprops"
+			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -109,26 +100,22 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D_LIB /DSQLITE_THREADSAFE=2 /DSQLITE_DEFAULT_MEMSTATUS=0 /DNO_TCL /D_HAVE_SQLITE_CONFIG_H /DSQLITE_THREAD_OVERRIDE_LOCK=-1 /DSQLITE_OMIT_LOAD_EXTENSION=1 /DSQLITE_TEMP_STORE=1"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\includes\&quot;"
-				PreprocessorDefinitions="SQLITE_EXPORTS;THREADSAFE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_DEFAULT_CACHE_SIZE=500;SQLITE_DEFAULT_WAL_SAFETYLEVEL=2"
-				CompileAs="1"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..&quot;;&quot;$(ProjectDir)..\..\libxslt&quot;;&quot;$(ProjectDir)..\..\libexslt&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;LIBXSLT_SO_EXPORTS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\includes\&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DYNAMICBASE /NXCOMPAT /SAFESEH"
-				ModuleDefinitionFile="..\sqlite3.def"
-				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -149,10 +136,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\libexslt&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\libexslt\*.h&quot; &quot;$(SolutionDir)include\libexslt&quot;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -165,15 +151,43 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\shell.c"
+				RelativePath="..\..\libexslt\common.c"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3.c"
+				RelativePath="..\..\libexslt\crypto.c"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3.def"
+				RelativePath="..\..\libexslt\date.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libexslt\dynamic.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libexslt\exslt.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libexslt\functions.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libexslt\math.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libexslt\saxon.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libexslt\sets.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libexslt\strings.c"
 				>
 			</File>
 		</Filter>
@@ -183,23 +197,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\includes\autoversion.h"
+				RelativePath="..\..\libexslt\exslt.h"
 				>
 			</File>
 			<File
-				RelativePath="..\resource.h"
+				RelativePath="..\..\libexslt\exsltconfig.h"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3.h"
+				RelativePath="..\..\libexslt\exsltexports.h"
 				>
 			</File>
 			<File
-				RelativePath="..\sqlite3ext.h"
-				>
-			</File>
-			<File
-				RelativePath="..\win_config.h"
+				RelativePath="..\..\libexslt\libexslt.h"
 				>
 			</File>
 		</Filter>
@@ -208,10 +218,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath="..\SQLite3.rc"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

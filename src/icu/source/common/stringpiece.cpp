@@ -75,7 +75,7 @@ operator==(const StringPiece& x, const StringPiece& y) {
  * Visual Studios 9.0.
  * Cygwin with MSVC 9.0 also complains here about redefinition.
  */
-#if (!defined(_MSC_VER) || (_MSC_VER >= 1500)) && !defined(CYGWINMSVC)
+#if (!defined(_MSC_VER) || (_MSC_VER >= 1400)) && !defined(CYGWINMSVC)
 //const int32_t StringPiece::npos;
 const int32_t StringPiece::npos = 0x7fffffff;
 #endif

@@ -17,15 +17,14 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)\dist\bin"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Prepare include path"
-				CommandLine="mkdir &quot;$(SolutionDir)\dist\bin&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\lib&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\dist\include\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\CoreFoundation&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)include\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\*.h&quot; &quot;$(SolutionDir)include\CoreFoundation\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\c99\*.h&quot; &quot;$(SolutionDir)include\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\*.h&quot; &quot;$(SolutionDir)include\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -41,18 +40,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\icu&quot;;&quot;$(SolutionDir)\objc4&quot;;&quot;$(SolutionDir)\pthreads\include&quot;"
-				PreprocessorDefinitions="WIN32;DEBUG;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;_USRDLL;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;TARGET_OS_WIN32;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				MinimalRebuild="true"
-				ExceptionHandling="0"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="2"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\CoreFoundation\GNUCompatibility&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(SolutionDir)include\objc4&quot;;&quot;$(SolutionDir)include\pthreads&quot;;&quot;$(SolutionDir)include\unicode&quot;"
+				PreprocessorDefinitions="DEBUG;WIN32_LEAN_AND_MEAN;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;TARGET_OS_WIN32;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -68,15 +57,10 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="netapi32.lib ole32.lib ws2_32.lib kernel32.lib libicuuc.lib libicuin.lib rpcrt4.lib msvcrt.lib pthreadVC2.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_$(ConfigurationName).dll"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\icu\lib_vc2005&quot;;&quot;$(SolutionDir)\pthreads\lib_vc2005&quot;;&quot;$(SolutionDir)\dist\lib&quot;"
-				IgnoreAllDefaultLibraries="false"
-				GenerateDebugInformation="true"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames="LIBCMT"
+				ModuleDefinitionFile=""
 				SubSystem="2"
-				OptimizeReferences="1"
-				EnableCOMDATFolding="0"
-				ImportLibrary="$(SolutionDir)\dist\lib\$(TargetName).lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -89,7 +73,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="$(SolutionDir)\dist\bin\$(ProjectName)_$(ConfigurationName).bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -102,21 +85,21 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(SolutionDir)\icu\bin_vc2005\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\pthreads\bin_vc2005\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.bitmap&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.data&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.mapping&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\Info.plist&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFBundlePriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFBundle_BinaryTypes.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFBundle_Internal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFCharacterSetPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFError_Private.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFPlugIn_Factory.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFRunLoopPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFRuntime.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStorage.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStreamAbstract.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStreamPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStreamInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringDefaultEncoding.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringEncodingConverter.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringEncodingConverterExt.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringEncodingConverterPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUniChar.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUniCharPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUnicodeDecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUnicodePrecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\ForFoundationOnly.h&quot;&#x0D;&#x0A;"
+				Description="Clean up includes"
+				CommandLine="del /F &quot;$(SolutionDir)include\CoreFoundation\CFBundlePriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFBundle_BinaryTypes.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFBundle_Internal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFCharacterSetPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFError_Private.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFPlugIn_Factory.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFRuntime.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStorage.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStreamAbstract.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStreamPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStreamInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringDefaultEncoding.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringEncodingConverter.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterExt.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUniChar.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUniCharPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUnicodeDecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUnicodePrecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\ForFoundationOnly.h&quot;&#x0D;&#x0A;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)bin/CFlite.resources&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFCharacterSetBitmaps.bitmap&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFUniCharPropertyDatabase.data&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFUnicodeData-B.mapping&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFUnicodeData-L.mapping&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\Info.plist&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)\dist\bin"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Prepare include path"
-				CommandLine="mkdir &quot;$(SolutionDir)\dist\bin&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\lib&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.h&quot; &quot;$(SolutionDir)\dist\include\CoreFoundation\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\c99\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\include\*.h&quot; &quot;$(SolutionDir)\dist\include\&quot;&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\CoreFoundation&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)include\CoreFoundation\GNUCompatibility\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\*.h&quot; &quot;$(SolutionDir)include\CoreFoundation\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\c99\*.h&quot; &quot;$(SolutionDir)include\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\*.h&quot; &quot;$(SolutionDir)include\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -132,14 +115,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\dist\include&quot;;&quot;$(SolutionDir)\dist\include\CoreFoundation\GNUCompatibility&quot;;&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\icu&quot;;&quot;$(SolutionDir)\objc4&quot;;&quot;$(SolutionDir)\pthreads\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;_USRDLL;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;TARGET_OS_WIN32;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				ExceptionHandling="0"
-				RuntimeLibrary="2"
-				EnableEnhancedInstructionSet="2"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="3"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\CoreFoundation\GNUCompatibility&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(SolutionDir)include\objc4&quot;;&quot;$(SolutionDir)include\pthreads&quot;;&quot;$(SolutionDir)include\unicode&quot;"
+				PreprocessorDefinitions="WIN32_LEAN_AND_MEAN;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;TARGET_OS_WIN32;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -154,15 +131,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="netapi32.lib ole32.lib ws2_32.lib kernel32.lib libicuuc.lib libicuin.lib rpcrt4.lib msvcrt.lib pthreadVC2.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\icu\lib_vc2005&quot;;&quot;$(SolutionDir)\pthreads\lib_vc2005&quot;;&quot;$(SolutionDir)\dist\lib&quot;"
-				IgnoreAllDefaultLibraries="false"
-				GenerateDebugInformation="true"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames="LIBCMT"
+				ModuleDefinitionFile=""
 				SubSystem="2"
-				OptimizeReferences="1"
-				EnableCOMDATFolding="0"
-				ImportLibrary="$(SolutionDir)\dist\lib\$(TargetName).lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -175,7 +147,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="$(SolutionDir)\dist\bin\$(ProjectName)_$(ConfigurationName).bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -188,7 +159,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(SolutionDir)\icu\bin_vc2005\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\pthreads\bin_vc2005\*.dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.bitmap&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.data&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\*.mapping&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;copy &quot;$(SolutionDir)\Info.plist&quot; &quot;$(SolutionDir)\dist\bin\$(ProjectName).resources\&quot;&#x0D;&#x0A;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFBundlePriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFBundle_BinaryTypes.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFBundle_Internal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFCharacterSetPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFError_Private.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFPlugIn_Factory.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFRunLoopPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFRuntime.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStorage.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStreamAbstract.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStreamPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStreamInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringDefaultEncoding.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringEncodingConverter.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringEncodingConverterExt.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFStringEncodingConverterPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUniChar.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUniCharPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUnicodeDecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\CFUnicodePrecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)\dist\include\CoreFoundation\ForFoundationOnly.h&quot;&#x0D;&#x0A;"
+				Description="Clean up includes"
+				CommandLine="del /F &quot;$(SolutionDir)include\CoreFoundation\CFBundlePriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFBundle_BinaryTypes.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFBundle_Internal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFCharacterSetPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFError_Private.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFPlugIn_Factory.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFRuntime.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStorage.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStreamAbstract.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStreamPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStreamInternal.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringDefaultEncoding.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringEncodingConverter.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterExt.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFStringEncodingConverterPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUniChar.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUniCharPriv.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUnicodeDecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\CFUnicodePrecomposition.h&quot;&#x0D;&#x0A;del /F &quot;$(SolutionDir)include\CoreFoundation\ForFoundationOnly.h&quot;&#x0D;&#x0A;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)bin/CFlite.resources&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFCharacterSetBitmaps.bitmap&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFUniCharPropertyDatabase.data&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFUnicodeData-B.mapping&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\CFUnicodeData-L.mapping&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\Info.plist&quot; &quot;$(SolutionDir)bin\CFLite.resources\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -288,6 +260,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -295,6 +268,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>

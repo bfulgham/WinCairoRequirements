@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="sqlite_console"
 	ProjectGUID="{85EB94D7-1923-443D-8331-D2A847C174A7}"
 	RootNamespace="sqlite_console"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -19,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -73,13 +72,16 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\release.vsprops"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -132,6 +134,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
