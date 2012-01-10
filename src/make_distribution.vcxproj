@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3A83CC54-99F7-4A59-B7F1-E4AC0FE19BE2}</ProjectGuid>
+    <RootNamespace>master</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\props\common_vc8.props" />
+    <Import Project="..\props\release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\props\common_vc8.props" />
+    <Import Project="..\props\debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CustomBuildStep>
+      <Command>rm /f $(SolutionDir)bin\cintltst.*
+rm /f $(SolutionDir)bin\cal.*
+rm /f $(SolutionDir)bin\date.*
+rm /f $(SolutionDir)bin\gen*.*
+rm /f $(SolutionDir)bin\icupkg.*
+rm /f $(SolutionDir)bin\iotest.*
+rm /f $(SolutionDir)bin\letest.*
+rm /f $(SolutionDir)bin\pkgdata.*
+rm /f $(SolutionDir)bin\testzlib.*
+</Command>
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /f $(SolutionDir)bin\cal.*
+del /f $(SolutionDir)bin\cintltst.*
+del /f $(SolutionDir)bin\ctestfw.*
+del /f $(SolutionDir)bin\date.*
+del /f $(SolutionDir)bin\derb.*
+del /f $(SolutionDir)bin\gen*.*
+del /f $(SolutionDir)bin\icupkg.*
+del /f $(SolutionDir)bin\intltest.*
+del /f $(SolutionDir)bin\iotest.*
+del /f $(SolutionDir)bin\letest.*
+del /f $(SolutionDir)bin\icuio*.*
+del /f $(SolutionDir)bin\icule*.*
+del /f $(SolutionDir)bin\iculx*.*
+del /f $(SolutionDir)bin\pkgdata.*
+del /f $(SolutionDir)bin\icutu*.*
+del /f $(SolutionDir)bin\testzlib.*
+del /f $(SolutionDir)bin\uconv*.*
+
+del /f $(SolutionDir)lib\ctestfw.*
+del /f $(SolutionDir)lib\gen*.*
+del /f $(SolutionDir)lib\icuio*.*
+del /f $(SolutionDir)lib\icule*.*
+del /f $(SolutionDir)lib\iculx*.*
+del /f $(SolutionDir)lib\icutu*.*
+del /f $(SolutionDir)lib\intltest.*
+del /f $(SolutionDir)lib\letest.*
+del /f $(SolutionDir)lib\pixman-1.*
+del /f $(SolutionDir)lib\uconv*
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PostBuildEvent>
+      <Command>del /f $(SolutionDir)bin\cal.*
+del /f $(SolutionDir)bin\cintltst.*
+del /f $(SolutionDir)bin\ctestfw.*
+del /f $(SolutionDir)bin\date.*
+del /f $(SolutionDir)bin\derb.*
+del /f $(SolutionDir)bin\gen*.*
+del /f $(SolutionDir)bin\icupkg.*
+del /f $(SolutionDir)bin\intltest.*
+del /f $(SolutionDir)bin\iotest.*
+del /f $(SolutionDir)bin\letest.*
+del /f $(SolutionDir)bin\icuio*.*
+del /f $(SolutionDir)bin\icule*.*
+del /f $(SolutionDir)bin\iculx*.*
+del /f $(SolutionDir)bin\pkgdata.*
+del /f $(SolutionDir)bin\icutu*.*
+del /f $(SolutionDir)bin\testzlib.*
+del /f $(SolutionDir)bin\uconv*.*
+
+del /f $(SolutionDir)lib\ctestfw.*
+del /f $(SolutionDir)lib\gen*.*
+del /f $(SolutionDir)lib\icuio*.*
+del /f $(SolutionDir)lib\icule*.*
+del /f $(SolutionDir)lib\iculx*.*
+del /f $(SolutionDir)lib\icutu*.*
+del /f $(SolutionDir)lib\intltest.*
+del /f $(SolutionDir)lib\letest.*
+del /f $(SolutionDir)lib\pixman-1.*
+del /f $(SolutionDir)lib\uconv*
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
