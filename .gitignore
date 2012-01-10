@@ -4,6 +4,8 @@ Build
 ./include
 WinCairo.sdf
 WinCairo.suo
+WinCairo_vc8.ncb
+WinCairo_vc8.suo
 WinCairo_vc9.ncb
 WinCairo_vc9.suo
 src/cairo/cairo/src/Debug
@@ -36,5 +38,5 @@ src/opencflite/objc4/*.user
 src/opencflite/objc4/objcrt/vc*
 src/opencflite/objc4/objcrt/*.pdb
 src/pthreads/*.user
+src/zlib/contrib/vstudio/vc8/*.user
 src/zlib/contrib/vstudio/vc9/*.user
-
