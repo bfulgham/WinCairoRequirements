@@ -6,7 +6,6 @@
 	ProjectGUID="{B3408263-0CF1-47BE-83CC-56070EFC9BC1}"
 	RootNamespace="objc"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -18,15 +17,14 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Install"
-				CommandLine="xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;"
+				Description="Install Headers"
+				CommandLine="xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -42,16 +40,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
+				CompileAs="2"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -66,15 +57,8 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/dynamicbase"
 				OutputFile="$(OutDir)\$(ProjectName)_debug.dll"
-				LinkIncremental="2"
-				IgnoreAllDefaultLibraries="false"
-				GenerateDebugInformation="true"
+				ModuleDefinitionFile=""
 				SubSystem="2"
-				OptimizeReferences="1"
-				EnableCOMDATFolding="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -95,23 +79,25 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Install"
-				CommandLine="xcopy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).exp&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).lib&quot; &quot;$(SolutionDir)\dist\lib\&quot;&#x0D;&#x0A;"
+				Description=""
+				CommandLine="&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\dll.vsprops;..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Install Headers"
-				CommandLine="xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;"
+				CommandLine="xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -128,12 +114,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
+				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
+				CompileAs="2"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -147,15 +129,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/dynamicbase"
-				LinkIncremental="1"
-				IgnoreAllDefaultLibraries="false"
-				GenerateDebugInformation="true"
+				ModuleDefinitionFile=""
 				SubSystem="2"
-				OptimizeReferences="1"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -176,92 +151,12 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCPostBuildEventTool"
-				Description="Install"
-				CommandLine="xcopy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).exp&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).lib&quot; &quot;$(SolutionDir)\dist\lib\&quot;&#x0D;&#x0A;"
-			/>
-		</Configuration>
-		<Configuration
-			Name="DebugDLL|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-				Description="Install"
-				CommandLine="xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)\dist\include\objc\&quot;&#x0D;&#x0A;"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions="/dynamicbase"
-				OutputFile="$(OutDir)\$(ProjectName)_debug.dll"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="1"
-				EnableCOMDATFolding="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Install"
-				CommandLine="xcopy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).exp&quot; &quot;$(SolutionDir)\dist\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).lib&quot; &quot;$(SolutionDir)\dist\lib\&quot;&#x0D;&#x0A;"
+				Description=""
+				CommandLine="&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -292,14 +187,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\maptable.m"
@@ -314,14 +201,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -348,14 +227,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-class-old.m"
@@ -370,14 +241,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -404,14 +267,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-errors.m"
@@ -426,14 +281,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -460,14 +307,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-file.m"
@@ -482,14 +321,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -516,14 +347,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-layout.m"
@@ -538,14 +361,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -572,14 +387,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-loadmethod.m"
@@ -594,14 +401,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -628,14 +427,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\Messengers.subproj\objc-msg-win32.m"
@@ -650,14 +441,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -684,14 +467,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-references.mm"
@@ -705,13 +480,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -731,14 +499,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -765,14 +525,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-runtime.m"
@@ -787,14 +539,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -821,14 +565,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-sel.mm"
@@ -842,13 +578,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -874,14 +603,6 @@
 						CompileAs="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\runtime\objc-typeencoding.m"
@@ -896,14 +617,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugDLL|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

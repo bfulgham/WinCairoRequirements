@@ -83,6 +83,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\SQLite&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\sqlite3.h&quot; &quot;$(SolutionDir)include\SQLite&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\sqlite3ext.h&quot; &quot;$(SolutionDir)include\SQLite&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -153,6 +155,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\SQLite&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\sqlite3.h&quot; &quot;$(SolutionDir)include\SQLite&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\sqlite3ext.h&quot; &quot;$(SolutionDir)include\SQLite&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

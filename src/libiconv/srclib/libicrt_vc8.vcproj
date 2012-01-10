@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir)..\windows;$(ProjectDir).."
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\windows&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(ProjectDir)&quot;"
 				PreprocessorDefinitions="HAVE_CONFIG_H=1;DEPENDS_ON_LIBICONV=1;DEPENDS_ON_LIBINTL=1;_WIN32_;EXEEXT=\&quot;.exe\&quot;"
 			/>
 			<Tool
@@ -92,7 +92,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir)..\windows;$(ProjectDir).."
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\windows&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(ProjectDir)&quot;"
 				PreprocessorDefinitions="HAVE_CONFIG_H=1;DEPENDS_ON_LIBICONV=1;DEPENDS_ON_LIBINTL=1;_WIN32_;EXEEXT=\&quot;.exe\&quot;"
 			/>
 			<Tool
