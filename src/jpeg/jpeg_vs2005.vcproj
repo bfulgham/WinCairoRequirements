@@ -6,7 +6,6 @@
 	ProjectGUID="{E61592E1-28F4-4AFC-9EE1-9BE833A061C1}"
 	RootNamespace="jpeg"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -18,9 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\..\props\common_vc8.vsprops;..\..\props\lib.vsprops;..\..\props\release.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
@@ -41,16 +39,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
-				EnableIntrinsicFunctions="false"
-				EnableFiberSafeOptimizations="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-				CompileAs="0"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -78,6 +68,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jconfig.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jdct.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jerror.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jinclude.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jmemsys.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jmorecfg.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jpegint.h &quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jpeglib.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)jversion.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cdjpeg.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cderror.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)transupp.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

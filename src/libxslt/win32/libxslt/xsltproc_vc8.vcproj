@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
-	Name="sqlite_console"
-	ProjectGUID="{85EB94D7-1923-443D-8331-D2A847C174A7}"
-	RootNamespace="sqlite_console"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
+	Version="8.00"
+	Name="xsltproc"
+	ProjectGUID="{FE93D67B-FBB2-454C-9BEF-53A7E6540A61}"
+	RootNamespace="xsltproc"
 	>
 	<Platforms>
 		<Platform
@@ -19,7 +17,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -39,7 +37,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\libxslt&quot;"
+				PreprocessorDefinitions="_CONSOLE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -79,7 +78,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\release.vsprops"
+			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -100,7 +99,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\libxslt&quot;"
+				PreprocessorDefinitions="_CONSOLE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -142,7 +142,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\shell.c"
+			RelativePath="..\..\xsltproc\xsltproc.c"
 			>
 		</File>
 	</Files>

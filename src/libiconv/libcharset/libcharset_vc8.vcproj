@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
-	Name="sqlite_console"
-	ProjectGUID="{85EB94D7-1923-443D-8331-D2A847C174A7}"
-	RootNamespace="sqlite_console"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
+	Version="8.00"
+	Name="libcharset"
+	ProjectGUID="{ADCAA9EB-0CEA-4AB3-9623-FDE798B76B72}"
+	RootNamespace="libcharset"
 	>
 	<Platforms>
 		<Platform
@@ -18,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\debug.vsprops"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\lib.vsprops;..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -39,7 +37,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION"
+				AdditionalIncludeDirectories=".."
+				PreprocessorDefinitions="LIBCHARSET_EXPORTS;HAVE_CONFIG_H=1;BUILDING_LIBCHARSET=1;ENABLE_RELOCATABLE=1;NO_XMALLOC=1;IN_LIBRARY=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -51,14 +50,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				SubSystem="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -70,16 +65,15 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include&#x0D;&#x0A;xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\release.vsprops"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\lib.vsprops;..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -100,7 +94,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION"
+				AdditionalIncludeDirectories=".."
+				PreprocessorDefinitions="LIBCHARSET_EXPORTS;HAVE_CONFIG_H=1;BUILDING_LIBCHARSET=1;ENABLE_RELOCATABLE=1;NO_XMALLOC=1;IN_LIBRARY=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -112,14 +107,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				SubSystem="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -131,10 +122,9 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Install Headers"
+				CommandLine="xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include&#x0D;&#x0A;xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include"
 			/>
 		</Configuration>
 	</Configurations>
@@ -142,7 +132,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\shell.c"
+			RelativePath=".\config.h"
+			>
+		</File>
+		<File
+			RelativePath=".\windows\dllexport.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lib\localcharset.c"
+			>
+		</File>
+		<File
+			RelativePath=".\lib\relocatable.c"
 			>
 		</File>
 	</Files>

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
-	Name="sqlite_console"
-	ProjectGUID="{85EB94D7-1923-443D-8331-D2A847C174A7}"
-	RootNamespace="sqlite_console"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
+	Version="8.00"
+	Name="iconvexe"
+	ProjectGUID="{65C68796-8922-43F8-9CED-5B5D37AF9CF5}"
+	RootNamespace="iconvexe"
 	>
 	<Platforms>
 		<Platform
@@ -19,7 +17,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -39,7 +37,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION"
+				AdditionalIncludeDirectories="$(ProjectDir)..\srclib;$(ProjectDir).."
+				PreprocessorDefinitions="_CONSOLE;INSTALLPREFIX=&quot;$(SolutionDir)&quot;;INSTALLDIR=&quot;$(SolutionDir)Bin&quot;;LOCALEDIR=&quot;$(SolutionDir)\locale&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -79,7 +78,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\release.vsprops"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -100,7 +99,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="_CONSOLE;SQLITE_OMIT_LOAD_EXTENSION"
+				AdditionalIncludeDirectories="$(ProjectDir)..\srclib;$(ProjectDir).."
+				PreprocessorDefinitions="_CONSOLE;INSTALLPREFIX=&quot;$(SolutionDir)&quot;;INSTALLDIR=&quot;$(SolutionDir)Bin&quot;;LOCALEDIR=&quot;$(SolutionDir)\locale&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -142,7 +142,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\shell.c"
+			RelativePath=".\iconv_no_i18n.c"
 			>
 		</File>
 	</Files>

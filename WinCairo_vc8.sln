@@ -10,7 +10,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cairo", "src\cairo\cairo\sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "graphics", "graphics", "{61698F44-8890-4A6C-9E50-F1AFD95A9C5F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjpeg", "src\jpeg\jpeg_vc8.vcproj", "{E61592E1-28F4-4AFC-9EE1-9BE833A061C1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjpeg", "src\jpeg\jpeg_vs2005.vcproj", "{E61592E1-28F4-4AFC-9EE1-9BE833A061C1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pixman", "src\cairo\pixman\pixman\pixman_vc8.vcproj", "{F7D5E865-5D85-4F42-B59E-6ACF60BFE791}"
 EndProject
@@ -77,16 +77,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xsltproc", "src\libxslt\win
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenCFLite", "OpenCFLite", "{6C9519C1-3D6F-4914-822A-EE2E97297CB1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "objcrt", "src\opencflite\objc4\objcrt\objcrt_vc8.vcproj", "{E38C1996-8B3D-4050-A4B2-DC85957B047D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "objcrt", "src\opencflite\objc4\objcrt\objcrt_vs2005.vcproj", "{E38C1996-8B3D-4050-A4B2-DC85957B047D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "objc", "src\opencflite\objc4\objc_vc8.vcproj", "{B3408263-0CF1-47BE-83CC-56070EFC9BC1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "objc", "src\opencflite\objc4\objc_vs2005.vcproj", "{B3408263-0CF1-47BE-83CC-56070EFC9BC1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StringExample", "src\opencflite\examples\StringExample\StringExample_vc8.vcproj", "{4E98FDA7-54AE-4A8E-847A-8665DEF6BBE1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StringExample", "src\opencflite\examples\StringExample\StringExample_vs2005.vcproj", "{4E98FDA7-54AE-4A8E-847A-8665DEF6BBE1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EC99198F-4CDD-4D85-AE6F-F837FF6CC372} = {EC99198F-4CDD-4D85-AE6F-F837FF6CC372}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFLite", "src\opencflite\windows\CFLiteLib_vc8.vcproj", "{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFLite", "src\opencflite\windows\CFLiteLib_vs2005.vcproj", "{EC99198F-4CDD-4D85-AE6F-F837FF6CC372}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
 		{D9DF7F2F-93B7-4810-B5CD-96F4F33C079B} = {D9DF7F2F-93B7-4810-B5CD-96F4F33C079B}
@@ -345,11 +345,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "toolutil", "src\icu\source\
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLite", "SQLite", "{F8F3629D-8B3C-4741-B909-2B9581ECDB01}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLite_f", "SQLite_f", "{F8F3629D-8B3C-4741-B909-2B9581ECDB01}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3", "src\sqlite\sqlite\sqlite_vc8.vcproj", "{0637EB24-7B2D-4B4A-9D95-7C72E7B48D5C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite3", "src\sqlite\sqlite_vc2005\sqlite.vcproj", "{0637EB24-7B2D-4B4A-9D95-7C72E7B48D5C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite_console", "src\sqlite\sqlite\sqlite_console_vc8.vcproj", "{85EB94D7-1923-443D-8331-D2A847C174A7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite_console", "src\sqlite\sqlite_vc2005\sqlite_console.vcproj", "{85EB94D7-1923-443D-8331-D2A847C174A7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0637EB24-7B2D-4B4A-9D95-7C72E7B48D5C} = {0637EB24-7B2D-4B4A-9D95-7C72E7B48D5C}
 	EndProjectSection
