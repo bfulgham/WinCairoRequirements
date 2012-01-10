@@ -300,6 +300,9 @@
     <ClCompile Include="vtzone.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="vzone.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="windtfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -471,7 +474,6 @@
     <ClCompile Include="uspoof_wsconf.cpp">
       <Filter>spoof</Filter>
     </ClCompile>
-    <ClCompile Include="vzone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bocsu.h">
@@ -514,6 +516,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="currfmt.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="unicode\currpinf.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="decContext.h">
@@ -595,6 +600,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="umsg_imp.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="vzone.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="windtfmt.h">
@@ -747,7 +755,6 @@
     <ClInclude Include="uspoof_wsconf.h">
       <Filter>spoof</Filter>
     </ClInclude>
-    <ClInclude Include="vzone.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc">
@@ -755,10 +762,19 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="unicode\bms.h">
+      <Filter>collation</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\bmsearch.h">
+      <Filter>collation</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\coleitr.h">
       <Filter>collation</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\coll.h">
+      <Filter>collation</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\colldata.h">
       <Filter>collation</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\search.h">
@@ -809,6 +825,12 @@
     <CustomBuild Include="unicode\dtfmtsym.h">
       <Filter>formatting</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\dtitvfmt.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\dtitvinf.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\dtptngen.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -824,7 +846,13 @@
     <CustomBuild Include="unicode\format.h">
       <Filter>formatting</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\fpositer.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\gregocal.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\locdspnm.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\measfmt.h">
@@ -842,6 +870,9 @@
     <CustomBuild Include="unicode\numfmt.h">
       <Filter>formatting</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\numsys.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\plurfmt.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -854,6 +885,9 @@
     <CustomBuild Include="unicode\rbtz.h">
       <Filter>formatting</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\selfmt.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\simpletz.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -861,6 +895,15 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\timezone.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\tmunit.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\tmutamt.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\tmutfmt.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\tzrule.h">
@@ -879,6 +922,9 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\udatpg.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\uldnames.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\ulocdata.h">
@@ -914,20 +960,8 @@
     <CustomBuild Include="unicode\ucsdet.h">
       <Filter>charset detect</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\bms.h" />
-    <CustomBuild Include="unicode\bmsearch.h" />
-    <CustomBuild Include="unicode\colldata.h" />
-    <CustomBuild Include="unicode\currpinf.h" />
-    <CustomBuild Include="unicode\dtitvfmt.h" />
-    <CustomBuild Include="unicode\dtitvinf.h" />
-    <CustomBuild Include="unicode\fpositer.h" />
-    <CustomBuild Include="unicode\locdspnm.h" />
-    <CustomBuild Include="unicode\numsys.h" />
-    <CustomBuild Include="unicode\selfmt.h" />
-    <CustomBuild Include="unicode\tmunit.h" />
-    <CustomBuild Include="unicode\tmutamt.h" />
-    <CustomBuild Include="unicode\tmutfmt.h" />
-    <CustomBuild Include="unicode\uldnames.h" />
-    <CustomBuild Include="unicode\uspoof.h" />
+    <CustomBuild Include="unicode\uspoof.h">
+      <Filter>spoof</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

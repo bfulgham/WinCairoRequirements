@@ -326,6 +326,9 @@
     <ClInclude Include="HanLayoutEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ICUFeatures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="IndicLayoutEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -462,9 +465,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ValueRecords.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ICUFeatures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

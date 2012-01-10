@@ -70,6 +70,9 @@
     <ClCompile Include="rbbitst.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
+    <ClCompile Include="itspoof.cpp">
+      <Filter>spoof detection</Filter>
+    </ClCompile>
     <ClCompile Include="allcoll.cpp">
       <Filter>collation</Filter>
     </ClCompile>
@@ -436,9 +439,6 @@
     <ClCompile Include="bidiconf.cpp">
       <Filter>bidi</Filter>
     </ClCompile>
-    <ClCompile Include="itspoof.cpp">
-      <Filter>spoof detection</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
@@ -449,6 +449,9 @@
     </ClInclude>
     <ClInclude Include="rbbitst.h">
       <Filter>break iteration</Filter>
+    </ClInclude>
+    <ClInclude Include="itspoof.h">
+      <Filter>spoof detection</Filter>
     </ClInclude>
     <ClInclude Include="allcoll.h">
       <Filter>collation</Filter>
@@ -800,9 +803,6 @@
     </ClInclude>
     <ClInclude Include="csdetest.h">
       <Filter>charset detection</Filter>
-    </ClInclude>
-    <ClInclude Include="itspoof.h">
-      <Filter>spoof detection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
