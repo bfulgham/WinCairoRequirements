@@ -236,6 +236,9 @@
     <ClCompile Include="..\CFRunLoop.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\CFWindowsUtilities.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CFLocaleKeys.m">

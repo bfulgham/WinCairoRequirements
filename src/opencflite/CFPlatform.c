@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2008-2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
  * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
@@ -39,7 +39,7 @@
 
 #include <CoreFoundation/CoreFoundation_Prefix.h>
 #include "CFInternal.h"
-#include "CFPriv.h"
+#include <CoreFoundation/CFPriv.h>
 #include <fcntl.h>
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED
     #include <stdlib.h>
@@ -609,8 +609,6 @@ static void __CFTSDFinalize(void *arg);
 
 #if DEPLOYMENT_TARGET_WINDOWS
 
-// NOT IN DIST: #include "CFVersionCheck.h"
-
 static DWORD __CFTSDIndexKey = 0xFFFFFFFF;
 
 // Called from CFRuntime's startup code, on Windows only
@@ -1104,60 +1102,6 @@ extern CFStringRef CFCreateWindowsDrivePathFromVolumeName(CFStringRef volNameStr
     free(driveNames);
     free(theVolumeName);
     return drivePathResult;
-}
-
-bool OSAtomicCompareAndSwapPtr(void *oldp, void *newp, void *volatile *dst) 
-{ 
-    // fixme barrier is overkill
-    void* original = InterlockedCompareExchangePointer(dst, newp, oldp);
-    return (original == oldp);
-}
-
-bool OSAtomicCompareAndSwapLong(long oldl, long newl, long volatile *dst) 
-{ 
-    // fixme barrier is overkill
-    long original = InterlockedCompareExchange(dst, newl, oldl);
-    return (original == oldl);
-}
-
-bool OSAtomicCompareAndSwapPtrBarrier(void *oldp, void *newp, void * volatile *dst) 
-{ 
-    void *original = InterlockedCompareExchangePointer(dst, newp, oldp);
-    return (original == oldp);
-}
-
-int32_t OSAtomicAdd32Barrier(int32_t theAmount, volatile int32_t *theValue)
-{
-   return InterlockedExchangeAdd((volatile long *)theValue, theAmount);
-}
-
-bool OSAtomicCompareAndSwap32Barrier(int32_t oldl, int32_t newl, int32_t volatile *dst) 
-{ 
-    long original = InterlockedCompareExchange((volatile long *)dst, newl, oldl);
-    return (original == oldl);
-}
-
-int32_t OSAtomicDecrement32Barrier(volatile int32_t *dst)
-{
-    return InterlockedDecrement((volatile long *)dst);
-}
-
-int32_t OSAtomicIncrement32Barrier(volatile int32_t *dst)
-{
-    return InterlockedIncrement((volatile long *)dst);
-}
-
-int32_t OSAtomicAdd32(int32_t theAmount, volatile int32_t *theValue)
-{
-   return OSAtomicAdd32Barrier(theAmount, theValue);
-}
-
-int32_t OSAtomicIncrement32(volatile int32_t *theValue) {
-    return OSAtomicIncrement32Barrier(theValue);
-}
-
-int32_t OSAtomicDecrement32(volatile int32_t *theValue) {
-    return OSAtomicDecrement32Barrier(theValue);
 }
 
 #endif // DEPLOYMENT_TARGET_WINDOWS

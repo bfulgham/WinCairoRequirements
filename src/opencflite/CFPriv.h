@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2008-2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
  * the terms of the APSL version 2.0 (see below).
@@ -428,6 +428,9 @@ CF_INLINE bool CFCharacterSetInlineBufferIsLongCharacterMember(CFCharacterSetInl
 #if TARGET_OS_WIN32
 CF_EXPORT CFMutableStringRef _CFCreateApplicationRepositoryPath(CFAllocatorRef alloc, int nFolder);
 #endif
+
+CF_EXPORT CFTypeRef _CFTryRetain(CFTypeRef cf);
+CF_EXPORT Boolean _CFIsDeallocating(CFTypeRef cf);
 
 /*
  CFLocaleGetLanguageRegionEncodingForLocaleIdentifier gets the appropriate language and region codes,

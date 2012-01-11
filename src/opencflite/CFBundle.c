@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2008-2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
  * Copyright (c) 2009 Grant Erickson <gerickson@nuovations.com>. All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
@@ -44,12 +44,11 @@
 #include <CoreFoundation/CFURLAccess.h>
 #include <CoreFoundation/CFError.h>
 #include <string.h>
-#include "CFPriv.h"
+#include <CoreFoundation/CFPriv.h>
 #include <CoreFoundation/CoreFoundation_Prefix.h>
 #include "CFInternal.h"
 #include <CoreFoundation/CFByteOrder.h>
 #include <CoreFoundation/CFBundle_BinaryTypes.h>
-// NOT IN DIST: #include <CoreFoundation/CFVersionCheck.h>
 #include <ctype.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -4943,7 +4942,6 @@ __private_extern__ void *_CFBundleDLLGetSymbolByName(CFBundleRef bundle, CFStrin
 
 /* Workarounds to be applied in the presence of certain bundles can go here. This is called on every bundle creation.
 */
-CF_EXPORT void _CFStringSetCompatibility(CFOptionFlags);
 
 static void _CFBundleCheckWorkarounds(CFBundleRef bundle) {
 }
