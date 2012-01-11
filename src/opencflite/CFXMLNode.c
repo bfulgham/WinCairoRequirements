@@ -144,7 +144,7 @@ static CFHashCode __CFXMLNodeHash(CFTypeRef  cf) {
         return url ? (CFHashCode)CFHash(url) : (CFHashCode)cf;
     } else {
         CFAssert2(false, __kCFLogAssertion, "%s(): Saw unexpected XML type code %d", __PRETTY_FUNCTION__, node->dataTypeID);
-        return (CFHashCode)cf;
+        return (CFHashCode)CFHash(cf);
     }
 }
 

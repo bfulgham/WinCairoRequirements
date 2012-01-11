@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2008-2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
  * the terms of the APSL version 2.0 (see below).
@@ -37,13 +37,12 @@
 */
 
 #include <CoreFoundation/CFURL.h>
-#include "CFPriv.h"
+#include <CoreFoundation/CFPriv.h>
 #include <CoreFoundation/CFCharacterSetPriv.h>
 #include <CoreFoundation/CFNumber.h>
 #include <CoreFoundation/CoreFoundation_Prefix.h>
 #include "CFInternal.h"
 #include <CoreFoundation/CFStringEncodingConverter.h>
-#include "CFPriv.h"
 #include <CoreFoundation/CFURLPriv.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -1078,8 +1077,15 @@ static CFStringRef  __CFURLCopyFormattingDescription(CFTypeRef  cf, CFDictionary
     CFURLRef  url = (CFURLRef)cf;
     __CFGenericValidateType(cf, CFURLGetTypeID());
     if (! url->_base) {
+#if DEPLOYMENT_TARGET_MACOSX
+        {
+            CFRetain(url->_string);
+            return url->_string;
+        }
+#else
         CFRetain(url->_string);
         return url->_string;
+#endif
     } else {
         // Do not dereference url->_base; it may be an ObjC object
         return CFStringCreateWithFormat(CFGetAllocator(url), NULL, CFSTR("%@ -- %@"), url->_string, url->_base);
@@ -1679,6 +1685,14 @@ static void _CFURLInit(struct __CFURL *url, CFStringRef URLString, UInt32 fsType
 	if ( url->_base )
         numURLsWithBaseURL ++;
 #endif
+   {
+        if (URL_PATH_TYPE(url) != FULL_URL_REPRESENTATION) {
+            _convertToURLRepresentation((struct __CFURL *)url);
+        }
+        if (!(url->_flags & IS_PARSED)) {
+            _parseComponentsOfURL(url);
+        }
+    }
 }
 
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD

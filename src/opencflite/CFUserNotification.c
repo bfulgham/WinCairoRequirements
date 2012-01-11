@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2008-2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
  * the terms of the APSL version 2.0 (see below).
@@ -260,7 +260,7 @@ static SInt32 _CFUserNotificationSendRequest(CFAllocatorRef allocator, CFStringR
             data = CFPropertyListCreateXMLData(allocator, modifiedDictionary);
             if (data) {
                 size = sizeof(mach_msg_base_t) + ((CFDataGetLength(data) + 3) & (~0x3));
-                msg = (mach_msg_base_t *)CFAllocatorAllocate(allocator, size, 0);
+                msg = (mach_msg_base_t *)CFAllocatorAllocate(kCFAllocatorSystemDefault, size, 0);
                 if (__CFOASafe) __CFSetLastAllocationEventName(msg, "CFUserNotification (temp)");
                 if (msg) {
                     memset(msg, 0, size);
@@ -273,7 +273,7 @@ static SInt32 _CFUserNotificationSendRequest(CFAllocatorRef allocator, CFStringR
                     CFDataGetBytes(data, CFRangeMake(0, CFDataGetLength(data)), (uint8_t *)msg + sizeof(mach_msg_base_t));
                     //CFShow(CFStringCreateWithBytes(kCFAllocatorSystemDefault, (UInt8 *)msg + sizeof(mach_msg_base_t), CFDataGetLength(data), kCFStringEncodingUTF8, false));
                     retval = mach_msg((mach_msg_header_t *)msg, MACH_SEND_MSG|MACH_SEND_TIMEOUT, size, 0, MACH_PORT_NULL, MESSAGE_TIMEOUT, MACH_PORT_NULL);
-                    CFAllocatorDeallocate(allocator, msg);
+                    CFAllocatorDeallocate(kCFAllocatorSystemDefault, msg);
                 } else {
                     retval = unix_err(ENOMEM);
                 }
@@ -346,7 +346,7 @@ static void _CFUserNotificationMachPortCallBack(CFMachPortRef port, void *m, CFI
     if (msg->header.msgh_size > sizeof(mach_msg_base_t)) {
         CFDataRef responseData = CFDataCreate(kCFAllocatorSystemDefault, (uint8_t *)msg + sizeof(mach_msg_base_t), msg->header.msgh_size - sizeof(mach_msg_base_t));
         if (responseData) {
-            userNotification->_responseDictionary = (CFDictionaryRef)CFPropertyListCreateFromXMLData(kCFAllocatorSystemDefault, responseData, kCFPropertyListImmutable, NULL);
+            userNotification->_responseDictionary = CFPropertyListCreateFromXMLData(kCFAllocatorSystemDefault, responseData, kCFPropertyListImmutable, NULL);
             CFRelease(responseData);
         }
     }
@@ -369,7 +369,7 @@ SInt32 CFUserNotificationReceiveResponse(CFUserNotificationRef userNotification,
     CFDataRef responseData;
     
     if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) {
-        msg = (mach_msg_base_t *)CFAllocatorAllocate(CFGetAllocator(userNotification), size, 0);
+        msg = (mach_msg_base_t *)CFAllocatorAllocate(kCFAllocatorSystemDefault, size, 0);
 	if (__CFOASafe) __CFSetLastAllocationEventName(msg, "CFUserNotification (temp)");
         if (msg) {
             memset(msg, 0, size);
@@ -384,7 +384,7 @@ SInt32 CFUserNotificationReceiveResponse(CFUserNotificationRef userNotification,
                 if (msg->header.msgh_size > sizeof(mach_msg_base_t)) {
                     responseData = CFDataCreate(kCFAllocatorSystemDefault, (uint8_t *)msg + sizeof(mach_msg_base_t), msg->header.msgh_size - sizeof(mach_msg_base_t));
                     if (responseData) {
-                        userNotification->_responseDictionary = (CFDictionaryRef)CFPropertyListCreateFromXMLData(kCFAllocatorSystemDefault, responseData, kCFPropertyListImmutable, NULL);
+                        userNotification->_responseDictionary = CFPropertyListCreateFromXMLData(kCFAllocatorSystemDefault, responseData, kCFPropertyListImmutable, NULL);
                         CFRelease(responseData);
                     }
                 }
@@ -396,7 +396,7 @@ SInt32 CFUserNotificationReceiveResponse(CFUserNotificationRef userNotification,
                 mach_port_destroy(mach_task_self(), userNotification->_replyPort);
                 userNotification->_replyPort = MACH_PORT_NULL;
             }
-            CFAllocatorDeallocate(CFGetAllocator(userNotification), msg);
+            CFAllocatorDeallocate(kCFAllocatorSystemDefault, msg);
         } else {
             retval = unix_err(ENOMEM);
         }
@@ -429,9 +429,7 @@ SInt32 CFUserNotificationUpdate(CFUserNotificationRef userNotification, CFTimeIn
     CHECK_FOR_FORK();
     SInt32 retval = ERR_SUCCESS;
 #if DEPLOYMENT_TARGET_MACOSX
-    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) {
-        retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, userNotification->_replyPort, userNotification->_token, timeout, flags|kCFUserNotificationUpdateFlag, dictionary);
-    }
+    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, userNotification->_replyPort, userNotification->_token, timeout, flags|kCFUserNotificationUpdateFlag, dictionary);
 #endif
     return retval;
 }
@@ -440,9 +438,7 @@ SInt32 CFUserNotificationCancel(CFUserNotificationRef userNotification) {
     CHECK_FOR_FORK();
     SInt32 retval = ERR_SUCCESS;
 #if DEPLOYMENT_TARGET_MACOSX
-    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) {
-        retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, userNotification->_replyPort, userNotification->_token, 0, kCFUserNotificationCancelFlag, NULL);
-    }
+    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, userNotification->_replyPort, userNotification->_token, 0, kCFUserNotificationCancelFlag, NULL);
 #endif
     return retval;
 }

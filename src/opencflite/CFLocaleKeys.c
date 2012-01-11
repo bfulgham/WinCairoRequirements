@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2009-2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
  * the terms of the APSL version 2.0 (see below).
@@ -40,7 +40,7 @@
 
 #include <CoreFoundation/CFLocale.h>
 #include <CoreFoundation/CoreFoundation_Prefix.h>
-#include "CFInternal.h"
+#include <CoreFoundation/CFInternal.h>
 #include "CFLocaleInternal.h"
 
 CONST_STRING_DECL(kCFLocaleAlternateQuotationBeginDelimiterKey, "kCFLocaleAlternateQuotationBeginDelimiterKey");
@@ -49,6 +49,9 @@ CONST_STRING_DECL(kCFLocaleQuotationBeginDelimiterKey, "kCFLocaleQuotationBeginD
 CONST_STRING_DECL(kCFLocaleQuotationEndDelimiterKey, "kCFLocaleQuotationEndDelimiterKey");
 CONST_STRING_DECL(kCFLocaleCalendarIdentifierKey, "calendar"); // ***
 CONST_STRING_DECL(kCFLocaleCalendarKey, "kCFLocaleCalendarKey");
+#if DEPLOYMENT_TARGET_WINDOWS
+CONST_STRING_DECL(kCFLocaleCalendarIdentifier, "calendar");
+#endif
 
 CONST_STRING_DECL(kCFLocaleCollationIdentifierKey, "collation"); // ***
 CONST_STRING_DECL(kCFLocaleCollatorIdentifierKey, "kCFLocaleCollatorIdentifierKey");

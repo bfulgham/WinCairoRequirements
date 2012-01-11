@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ * Copyright (c) 2008-2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
  *
  * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
  * the terms of the APSL version 2.0 (see below).
@@ -840,8 +840,8 @@ __private_extern__ void __CFFinalizeWindowsThreadData();
 extern void __CFStreamInitialize(void);
 extern void __CFPreferencesDomainInitialize(void);
 extern void __CFUserNotificationInitialize(void);
-extern void __CFCalendarInitialize(void);
-extern void __CFTimeZoneInitialize(void);
+extern void __CFCalendarInitialize();
+extern void __CFTimeZoneInitialize();
 
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED
 __private_extern__ uint8_t __CF120290 = false;
@@ -1195,7 +1195,7 @@ static CFBundleRef RegisterCoreFoundationBundle(void) {
 #define DLL_THREAD_DETACH    3
 #define DLL_PROCESS_DETACH   0
 
-int __stdcall DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved ) {
+int DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved ) {
     static CFBundleRef cfBundle = NULL;
     if (dwReason == DLL_PROCESS_ATTACH) {
 	__CFInitialize();
