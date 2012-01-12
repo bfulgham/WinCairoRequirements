@@ -150,31 +150,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\curlutil.c"
-				>
-			</File>
-			<File
-				RelativePath="..\getpass.c"
-				>
-			</File>
-			<File
-				RelativePath="..\homedir.c"
-				>
-			</File>
-			<File
 				RelativePath="..\hugehelp.c"
 				>
 			</File>
 			<File
-				RelativePath="..\main.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\lib\nonblock.c"
-				>
-			</File>
-			<File
-				RelativePath="..\os-specific.c"
 				>
 			</File>
 			<File
@@ -186,15 +166,151 @@
 				>
 			</File>
 			<File
-				RelativePath="..\urlglob.c"
+				RelativePath="..\tool_binmode.c"
 				>
 			</File>
 			<File
-				RelativePath="..\writeout.c"
+				RelativePath="..\tool_bname.c"
 				>
 			</File>
 			<File
-				RelativePath="..\xattr.c"
+				RelativePath="..\tool_cb_dbg.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_hdr.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_prg.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_rea.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_see.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_skt.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_wrt.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cfgable.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_convert.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_dirhie.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_doswin.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_easysrc.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_formparse.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_getparam.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_getpass.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_help.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_helpers.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_homedir.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_libinfo.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_main.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_mfiles.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_msgs.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_operate.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_operhlp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_panykey.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_paramhlp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_parsecfg.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_setopt.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_sleep.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_urlglob.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_util.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_vms.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_writeenv.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_writeout.c"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_xattr.c"
 				>
 			</File>
 		</Filter>
@@ -204,27 +320,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\curlutil.h"
-				>
-			</File>
-			<File
-				RelativePath="..\getpass.h"
-				>
-			</File>
-			<File
-				RelativePath="..\homedir.h"
-				>
-			</File>
-			<File
 				RelativePath="..\hugehelp.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\lib\nonblock.h"
-				>
-			</File>
-			<File
-				RelativePath="..\os-specific.h"
 				>
 			</File>
 			<File
@@ -236,15 +336,159 @@
 				>
 			</File>
 			<File
-				RelativePath="..\urlglob.h"
+				RelativePath="..\tool_binmode.h"
 				>
 			</File>
 			<File
-				RelativePath="..\writeout.h"
+				RelativePath="..\tool_bname.h"
 				>
 			</File>
 			<File
-				RelativePath="..\xattr.h"
+				RelativePath="..\tool_cb_dbg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_hdr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_prg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_rea.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_see.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_skt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cb_wrt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_cfgable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_convert.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_dirhie.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_doswin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_easysrc.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_formparse.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_getparam.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_getpass.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_help.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_helpers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_homedir.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_libinfo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_main.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_mfiles.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_msgs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_operate.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_operhlp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_panykey.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_paramhlp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_parsecfg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_sdecls.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_setopt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_sleep.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_urlglob.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_util.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_version.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_vms.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_writeenv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_writeout.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tool_xattr.h"
 				>
 			</File>
 		</Filter>

@@ -61,8 +61,8 @@
       </HeaderFileName>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BUILDING_LIBCURL;USE_WINDOWS_SSPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\openssl;$(SolutionDir)include\zlib;$(ProjectDir);$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILDING_LIBCURL;HAVE_ZLIB_H;HAVE_ZLIB;HAVE_LIBZ;USE_SSLEAY;USE_WINDOWS_SSPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile />
     <Link>
@@ -89,8 +89,8 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
       </HeaderFileName>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BUILDING_LIBCURL;USE_WINDOWS_SSPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\openssl;$(SolutionDir)include\zlib;$(ProjectDir);$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILDING_LIBCURL;HAVE_ZLIB_H;HAVE_ZLIB;HAVE_LIBZ;USE_SSLEAY;USE_WINDOWS_SSPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile />
     <Link>
@@ -110,6 +110,8 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="asyn-ares.c" />
+    <ClCompile Include="asyn-thread.c" />
     <ClCompile Include="axtls.c" />
     <ClCompile Include="base64.c" />
     <ClCompile Include="connect.c" />
@@ -118,7 +120,12 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     <ClCompile Include="curl_addrinfo.c" />
     <ClCompile Include="curl_fnmatch.c" />
     <ClCompile Include="curl_gethostname.c" />
+    <ClCompile Include="curl_gssapi.c" />
     <ClCompile Include="curl_memrchr.c" />
+    <ClCompile Include="curl_ntlm.c" />
+    <ClCompile Include="curl_ntlm_core.c" />
+    <ClCompile Include="curl_ntlm_msgs.c" />
+    <ClCompile Include="curl_ntlm_wb.c" />
     <ClCompile Include="curl_rand.c" />
     <ClCompile Include="curl_rtmp.c" />
     <ClCompile Include="curl_sspi.c" />
@@ -138,19 +145,16 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     <ClCompile Include="gtls.c" />
     <ClCompile Include="hash.c" />
     <ClCompile Include="hmac.c" />
-    <ClCompile Include="hostares.c" />
     <ClCompile Include="hostasyn.c" />
     <ClCompile Include="hostip.c" />
     <ClCompile Include="hostip4.c" />
     <ClCompile Include="hostip6.c" />
     <ClCompile Include="hostsyn.c" />
-    <ClCompile Include="hostthre.c" />
     <ClCompile Include="http.c" />
     <ClCompile Include="http_chunks.c" />
     <ClCompile Include="http_digest.c" />
     <ClCompile Include="http_negotiate.c" />
     <ClCompile Include="http_negotiate_sspi.c" />
-    <ClCompile Include="http_ntlm.c" />
     <ClCompile Include="http_proxy.c" />
     <ClCompile Include="idn_win32.c" />
     <ClCompile Include="if2ip.c" />
@@ -218,12 +222,17 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     <ClInclude Include="curl_base64.h" />
     <ClInclude Include="curl_fnmatch.h" />
     <ClInclude Include="curl_gethostname.h" />
+    <ClInclude Include="curl_gssapi.h" />
     <ClInclude Include="curl_hmac.h" />
     <ClInclude Include="curl_ldap.h" />
     <ClInclude Include="curl_md4.h" />
     <ClInclude Include="curl_md5.h" />
     <ClInclude Include="curl_memory.h" />
     <ClInclude Include="curl_memrchr.h" />
+    <ClInclude Include="curl_ntlm.h" />
+    <ClInclude Include="curl_ntlm_core.h" />
+    <ClInclude Include="curl_ntlm_msgs.h" />
+    <ClInclude Include="curl_ntlm_wb.h" />
     <ClInclude Include="curl_rand.h" />
     <ClInclude Include="curl_rtmp.h" />
     <ClInclude Include="curl_sspi.h" />
@@ -247,7 +256,6 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     <ClInclude Include="http_chunks.h" />
     <ClInclude Include="http_digest.h" />
     <ClInclude Include="http_negotiate.h" />
-    <ClInclude Include="http_ntlm.h" />
     <ClInclude Include="http_proxy.h" />
     <ClInclude Include="if2ip.h" />
     <ClInclude Include="imap.h" />

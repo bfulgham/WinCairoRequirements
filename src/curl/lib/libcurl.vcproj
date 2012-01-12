@@ -45,8 +45,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir);$(ProjectDir)..\include"
-				PreprocessorDefinitions="BUILDING_LIBCURL;USE_WINDOWS_SSPI"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\openssl&quot;;&quot;$(SolutionDir)include\zlib&quot;;&quot;$(ProjectDir)&quot;;&quot;$(ProjectDir)..\include&quot;"
+				PreprocessorDefinitions="BUILDING_LIBCURL;HAVE_ZLIB_H;HAVE_ZLIB;HAVE_LIBZ;USE_SSLEAY;USE_WINDOWS_SSPI"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -76,8 +76,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\Release/libcurl.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -88,7 +86,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install Headers"
-				CommandLine="mkdir &quot;$(SolutionDir)include\curl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\curl\*.h&quot; &quot;$(SolutionDir)include\curl\&quot;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\curl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\curl\*.h&quot; &quot;$(SolutionDir)include\curl\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -122,8 +120,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir);$(ProjectDir)..\include"
-				PreprocessorDefinitions="BUILDING_LIBCURL;USE_WINDOWS_SSPI"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\openssl&quot;;&quot;$(SolutionDir)include\zlib&quot;;&quot;$(ProjectDir)&quot;;&quot;$(ProjectDir)..\include&quot;"
+				PreprocessorDefinitions="BUILDING_LIBCURL;HAVE_ZLIB_H;HAVE_ZLIB;HAVE_LIBZ;USE_SSLEAY;USE_WINDOWS_SSPI"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -153,8 +151,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\Debug/libcurl.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -165,7 +161,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install Headers"
-				CommandLine="mkdir &quot;$(SolutionDir)include\curl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\curl\*.h&quot; &quot;$(SolutionDir)include\curl\&quot;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\curl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\include\curl\*.h&quot; &quot;$(SolutionDir)include\curl\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -175,6 +171,14 @@
 		<Filter
 			Name="Source Files"
 			>
+			<File
+				RelativePath="asyn-ares.c"
+				>
+			</File>
+			<File
+				RelativePath="asyn-thread.c"
+				>
+			</File>
 			<File
 				RelativePath="axtls.c"
 				>
@@ -208,7 +212,27 @@
 				>
 			</File>
 			<File
+				RelativePath="curl_gssapi.c"
+				>
+			</File>
+			<File
 				RelativePath="curl_memrchr.c"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm.c"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm_core.c"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm_msgs.c"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm_wb.c"
 				>
 			</File>
 			<File
@@ -288,10 +312,6 @@
 				>
 			</File>
 			<File
-				RelativePath="hostares.c"
-				>
-			</File>
-			<File
 				RelativePath="hostasyn.c"
 				>
 			</File>
@@ -312,10 +332,6 @@
 				>
 			</File>
 			<File
-				RelativePath="hostthre.c"
-				>
-			</File>
-			<File
 				RelativePath="http.c"
 				>
 			</File>
@@ -333,10 +349,6 @@
 			</File>
 			<File
 				RelativePath="http_negotiate_sspi.c"
-				>
-			</File>
-			<File
-				RelativePath="http_ntlm.c"
 				>
 			</File>
 			<File
@@ -568,6 +580,10 @@
 				>
 			</File>
 			<File
+				RelativePath="asyn.h"
+				>
+			</File>
+			<File
 				RelativePath="axtls.h"
 				>
 			</File>
@@ -604,6 +620,10 @@
 				>
 			</File>
 			<File
+				RelativePath="curl_gssapi.h"
+				>
+			</File>
+			<File
 				RelativePath="curl_hmac.h"
 				>
 			</File>
@@ -625,6 +645,22 @@
 			</File>
 			<File
 				RelativePath="curl_memrchr.h"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm.h"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm_core.h"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm_msgs.h"
+				>
+			</File>
+			<File
+				RelativePath="curl_ntlm_wb.h"
 				>
 			</File>
 			<File
@@ -717,10 +753,6 @@
 			</File>
 			<File
 				RelativePath="http_negotiate.h"
-				>
-			</File>
-			<File
-				RelativePath="http_ntlm.h"
 				>
 			</File>
 			<File
