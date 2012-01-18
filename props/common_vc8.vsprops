@@ -14,7 +14,7 @@
 		Name="VCCLCompilerTool"
 		AdditionalOptions="/wd4251 /w44265 /wd4275 /w44289 /w44302  /w44431 /w44640 /w44905 /w44906 /w44946"
 		AdditionalIncludeDirectories="&quot;$(SolutionDir)include&quot;;&quot;$(ProjectDir)/include&quot;"
-		PreprocessorDefinitions="WIN32;_WINDOWS;_MT;SS_NO_CONVERSION"
+		PreprocessorDefinitions="WIN32;_WINDOWS;_MT;SS_NO_CONVERSION;WINVER=0x502;_WIN32_WINNT=0x502;_WIN32_IE=0x603;"
 		ExceptionHandling="2"
 		OpenMP="false"
 		UsePrecompiledHeader="0"
