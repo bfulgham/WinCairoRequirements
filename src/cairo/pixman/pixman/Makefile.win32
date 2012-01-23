@@ -19,7 +19,11 @@ ifeq ($(SSE2_VAR),)
 SSE2_VAR=on
 endif
 
-CFLAGS     = -MD -nologo -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_BIND_TO_CURRENT_VCLIBS_VERSION -D_MT -I../pixman/src -I. -DPACKAGE=$(LIBRARY) -DPACKAGE_VERSION="" -DPACKAGE_BUGREPORT=""
+# Note: changes here to use pthreads because of problems with win32 TLS (thread local storage) using: __declspec( thread ).  
+# Happens because cairo/pixman is loaded using LoadLibrary in Skype and so memory doesn't get allocated for TLS in lookup_composite_function (in pixman).
+PTHREADS = -DHAVE_PTHREAD_SETSPECIFIC  -I../../pthreads-win32/pthreads.2
+
+CFLAGS     = -MD -nologo -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_BIND_TO_CURRENT_VCLIBS_VERSION -D_MT -I../pixman/src -I. -DPACKAGE=$(LIBRARY) -DPACKAGE_VERSION="" -DPACKAGE_BUGREPORT="" $(PTHREADS)
 MMX_CFLAGS = -DUSE_MMX -w14710 -w14714
 SSE2_CFLAGS = -DUSE_SSE2
 
