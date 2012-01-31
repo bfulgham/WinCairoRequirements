@@ -43,6 +43,11 @@
 #endif
 #define _WIN32_WINNT 0x400
 
+#ifdef _WIN32_IE
+#undef _WIN32_IE
+#endif
+#define _WIN32_IE 0x601
+
 #include <windows.h>
 
 /*

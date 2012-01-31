@@ -251,6 +251,9 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ProjectReference Include="..\..\..\libpng\png.vcxproj">
       <Project>{fd42917e-c1f2-4c77-8cfe-e26572bd909d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\pthreads\pthread.vcxproj">
+      <Project>{1c577933-7fc6-477f-9971-fb9405875d17}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\zlib\contrib\vstudio\vc10\zlibvc.vcxproj">
       <Project>{8fd826f8-3739-44e6-8cc8-997122e53b8d}</Project>
     </ProjectReference>
