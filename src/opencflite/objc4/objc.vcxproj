@@ -72,9 +72,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
       <Message>Install Headers</Message>
-      <Command>xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
+      <Command>call version.bat
+xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-api.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-auto.h" "$(SolutionDir)include\objc\"
+xcopy /Y /R "$(ProjectDir)runtime\objc-class.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-exception.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\message.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\runtime.h" "$(SolutionDir)include\objc\"
@@ -105,9 +107,11 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
       <Message>Install Headers</Message>
-      <Command>xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
+      <Command>call version.bat
+xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-api.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-auto.h" "$(SolutionDir)include\objc\"
+xcopy /Y /R "$(ProjectDir)runtime\objc-class.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-exception.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\message.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\runtime.h" "$(SolutionDir)include\objc\"
@@ -130,13 +134,21 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
       </ModuleDefinitionFile>
     </Link>
     <PostBuildEvent />
+    <PreLinkEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
     <PreBuildEvent>
       <Message>Install Headers</Message>
-      <Command>xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
+      <Command>call version.bat
+xcopy /Y /R "$(ProjectDir)runtime\objc.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-api.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-auto.h" "$(SolutionDir)include\objc\"
+xcopy /Y /R "$(ProjectDir)runtime\objc-class.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\objc-exception.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\message.h" "$(SolutionDir)include\objc\"
 xcopy /Y /R "$(ProjectDir)runtime\runtime.h" "$(SolutionDir)include\objc\"
