@@ -34,3 +34,10 @@ Build/
 Lib/
 bin/
 include/
+
+src/icu/source/data/out/icudt46l.dat
+src/icu/source/data/out/tmp/icudata.lst
+src/icu/source/data/out/tmp/icudata.res
+src/icu/source/test/testdata/out/testdata.dat
+src/icu/source/test/testdata/out/testdata/nam.typ
+src/opencflite/objc4/version.h
