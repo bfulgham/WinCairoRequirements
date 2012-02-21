@@ -70,67 +70,67 @@ rm /f $(SolutionDir)bin\testzlib.*
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>del /f $(SolutionDir)bin\cal.*
-del /f $(SolutionDir)bin\cintltst.*
-del /f $(SolutionDir)bin\ctestfw.*
-del /f $(SolutionDir)bin\date.*
-del /f $(SolutionDir)bin\derb.*
-del /f $(SolutionDir)bin\gen*.*
-del /f $(SolutionDir)bin\icupkg.*
-del /f $(SolutionDir)bin\intltest.*
-del /f $(SolutionDir)bin\iotest.*
-del /f $(SolutionDir)bin\letest.*
-del /f $(SolutionDir)bin\icuio*.*
-del /f $(SolutionDir)bin\icule*.*
-del /f $(SolutionDir)bin\iculx*.*
-del /f $(SolutionDir)bin\pkgdata.*
-del /f $(SolutionDir)bin\icutu*.*
-del /f $(SolutionDir)bin\testzlib.*
-del /f $(SolutionDir)bin\uconv*.*
+      <Command>del /f $(OutputPath)cal.*
+del /f $(OutputPath)cintltst.*
+del /f $(OutputPath)ctestfw.*
+del /f $(OutputPath)date.*
+del /f $(OutputPath)derb.*
+del /f $(OutputPath)gen*.*
+del /f $(OutputPath)icupkg.*
+del /f $(OutputPath)intltest.*
+del /f $(OutputPath)iotest.*
+del /f $(OutputPath)letest.*
+del /f $(OutputPath)icuio*.*
+del /f $(OutputPath)icule*.*
+del /f $(OutputPath)iculx*.*
+del /f $(OutputPath)pkgdata.*
+del /f $(OutputPath)icutu*.*
+del /f $(OutputPath)testzlib.*
+del /f $(OutputPath)uconv*.*
 
-del /f $(SolutionDir)lib\ctestfw.*
-del /f $(SolutionDir)lib\gen*.*
-del /f $(SolutionDir)lib\icuio*.*
-del /f $(SolutionDir)lib\icule*.*
-del /f $(SolutionDir)lib\iculx*.*
-del /f $(SolutionDir)lib\icutu*.*
-del /f $(SolutionDir)lib\intltest.*
-del /f $(SolutionDir)lib\letest.*
-del /f $(SolutionDir)lib\pixman-1.*
-del /f $(SolutionDir)lib\uconv*
+del /f $(SolutionDir)lib\$(Configuration)\ctestfw.*
+del /f $(SolutionDir)lib\$(Configuration)\gen*.*
+del /f $(SolutionDir)lib\$(Configuration)\icuio*.*
+del /f $(SolutionDir)lib\$(Configuration)\icule*.*
+del /f $(SolutionDir)lib\$(Configuration)\iculx*.*
+del /f $(SolutionDir)lib\$(Configuration)\icutu*.*
+del /f $(SolutionDir)lib\$(Configuration)\intltest.*
+del /f $(SolutionDir)lib\$(Configuration)\letest.*
+del /f $(SolutionDir)lib\$(Configuration)\pixman-1.*
+del /f $(SolutionDir)lib\$(Configuration)\uconv*
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PostBuildEvent>
-      <Command>del /f $(SolutionDir)bin\cal.*
-del /f $(SolutionDir)bin\cintltst.*
-del /f $(SolutionDir)bin\ctestfw.*
-del /f $(SolutionDir)bin\date.*
-del /f $(SolutionDir)bin\derb.*
-del /f $(SolutionDir)bin\gen*.*
-del /f $(SolutionDir)bin\icupkg.*
-del /f $(SolutionDir)bin\intltest.*
-del /f $(SolutionDir)bin\iotest.*
-del /f $(SolutionDir)bin\letest.*
-del /f $(SolutionDir)bin\icuio*.*
-del /f $(SolutionDir)bin\icule*.*
-del /f $(SolutionDir)bin\iculx*.*
-del /f $(SolutionDir)bin\pkgdata.*
-del /f $(SolutionDir)bin\icutu*.*
-del /f $(SolutionDir)bin\testzlib.*
-del /f $(SolutionDir)bin\uconv*.*
+      <Command>del /f $(OutputPath)cal.*
+del /f $(OutputPath)cintltst.*
+del /f $(OutputPath)ctestfw.*
+del /f $(OutputPath)date.*
+del /f $(OutputPath)derb.*
+del /f $(OutputPath)gen*.*
+del /f $(OutputPath)icupkg.*
+del /f $(OutputPath)intltest.*
+del /f $(OutputPath)iotest.*
+del /f $(OutputPath)letest.*
+del /f $(OutputPath)icuio*.*
+del /f $(OutputPath)icule*.*
+del /f $(OutputPath)iculx*.*
+del /f $(OutputPath)pkgdata.*
+del /f $(OutputPath)icutu*.*
+del /f $(OutputPath)testzlib.*
+del /f $(OutputPath)uconv*.*
 
-del /f $(SolutionDir)lib\ctestfw.*
-del /f $(SolutionDir)lib\gen*.*
-del /f $(SolutionDir)lib\icuio*.*
-del /f $(SolutionDir)lib\icule*.*
-del /f $(SolutionDir)lib\iculx*.*
-del /f $(SolutionDir)lib\icutu*.*
-del /f $(SolutionDir)lib\intltest.*
-del /f $(SolutionDir)lib\letest.*
-del /f $(SolutionDir)lib\pixman-1.*
-del /f $(SolutionDir)lib\uconv*
+del /f $(SolutionDir)lib\$(Configuration)\ctestfw.*
+del /f $(SolutionDir)lib\$(Configuration)\gen*.*
+del /f $(SolutionDir)lib\$(Configuration)\icuio*.*
+del /f $(SolutionDir)lib\$(Configuration)\icule*.*
+del /f $(SolutionDir)lib\$(Configuration)\iculx*.*
+del /f $(SolutionDir)lib\$(Configuration)\icutu*.*
+del /f $(SolutionDir)lib\$(Configuration)\intltest.*
+del /f $(SolutionDir)lib\$(Configuration)\letest.*
+del /f $(SolutionDir)lib\$(Configuration)\pixman-1.*
+del /f $(SolutionDir)lib\$(Configuration)\uconv*
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

@@ -113,13 +113,13 @@ del /F "$(SolutionDir)include\CoreFoundation\CFUnicodeDecomposition.h"
 del /F "$(SolutionDir)include\CoreFoundation\CFUnicodePrecomposition.h"
 del /F "$(SolutionDir)include\CoreFoundation\ForFoundationOnly.h"
 
-mkdir "$(SolutionDir)bin/CFlite.resources"
+mkdir "$(OutputPath)CFlite.resources"
 
-xcopy /Y /R "$(ProjectDir)..\CFCharacterSetBitmaps.bitmap" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\CFUniCharPropertyDatabase.data" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-B.mapping" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-L.mapping" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFCharacterSetBitmaps.bitmap" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUniCharPropertyDatabase.data" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-B.mapping" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-L.mapping" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(OutputPath)CFLite.resources\"
 </Command>
       <Message>Clean up includes</Message>
     </PostBuildEvent>
@@ -182,13 +182,13 @@ del /F "$(SolutionDir)include\CoreFoundation\CFUnicodeDecomposition.h"
 del /F "$(SolutionDir)include\CoreFoundation\CFUnicodePrecomposition.h"
 del /F "$(SolutionDir)include\CoreFoundation\ForFoundationOnly.h"
 
-mkdir "$(SolutionDir)bin/CFlite.resources"
+mkdir "$(OutputPath)CFlite.resources"
 
-xcopy /Y /R "$(ProjectDir)..\CFCharacterSetBitmaps.bitmap" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\CFUniCharPropertyDatabase.data" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-B.mapping" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-L.mapping" "$(SolutionDir)bin\CFLite.resources\"
-xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(SolutionDir)bin\CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFCharacterSetBitmaps.bitmap" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUniCharPropertyDatabase.data" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-B.mapping" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\CFUnicodeData-L.mapping" "$(OutputPath)CFLite.resources\"
+xcopy /Y /R "$(ProjectDir)..\Info.plist" "$(OutputPath)CFLite.resources\"
 </Command>
       <Message>Clean up includes</Message>
     </PostBuildEvent>
