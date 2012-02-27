@@ -40,7 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
 				CompileAs="2"
 			/>
@@ -83,7 +83,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine="&#x0D;&#x0A;"
 			/>
 		</Configuration>
@@ -113,7 +112,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
 				CompileAs="2"
 			/>
@@ -155,7 +154,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine="&#x0D;&#x0A;"
 			/>
 		</Configuration>
