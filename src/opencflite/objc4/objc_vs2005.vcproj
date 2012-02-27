@@ -40,7 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
 				CompileAs="2"
 			/>
@@ -83,12 +83,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-<<<<<<< HEAD
-				CommandLine="&#x0D;&#x0A;"
-=======
 				Description="Install Headers"
 				CommandLine="xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
->>>>>>> 6a9ba74487487cf4bbe59c7da7536c1d84c69d08
 			/>
 		</Configuration>
 		<Configuration
@@ -117,7 +113,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
 				CompileAs="2"
 			/>
@@ -159,12 +155,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-<<<<<<< HEAD
-				CommandLine="&#x0D;&#x0A;"
-=======
 				Description="Install"
 				CommandLine="xcopy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;%DSTROOT%\AppleInternal\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).exp&quot; &quot;%DSTROOT%\AppleInternal\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).lib&quot; &quot;%DSTROOT%\AppleInternal\lib\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%DSTROOT%\AppleInternal\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdbstripped&quot; &quot;$(TargetDir)$(TargetName).pdb&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%DSTROOT%\AppleInternal\public\sym\&quot;&#x0D;&#x0A;"
->>>>>>> 6a9ba74487487cf4bbe59c7da7536c1d84c69d08
 			/>
 		</Configuration>
 	</Configurations>
@@ -313,6 +305,24 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="1"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\runtime\objc-file-old.m"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
