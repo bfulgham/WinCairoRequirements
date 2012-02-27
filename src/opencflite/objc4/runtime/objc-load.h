@@ -30,7 +30,9 @@
 
 #include <objc/objc-class.h>
 
+#if !TARGET_OS_WIN32
 #include <mach-o/loader.h>
+#endif
 #include <AvailabilityMacros.h>
 
 /* dynamically loading Mach-O object files that contain Objective-C code */

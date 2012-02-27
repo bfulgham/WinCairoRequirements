@@ -31,7 +31,9 @@
 #include "cmemory.h"
 
 #if defined(U_WINDOWS) && defined(_MSC_VER) && (_MSC_VER >= 1500)
+#if (WINVER >= 0x0600)
 #define USE_WINDOWS_LOCALE_API
+#endif
 #endif
 
 #ifdef USE_WINDOWS_LOCALE_API
