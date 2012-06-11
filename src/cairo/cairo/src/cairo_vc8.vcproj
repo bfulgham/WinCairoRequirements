@@ -38,7 +38,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\pixman\pixman&quot;;&quot;$(SolutionDir)include\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)&quot;;&quot;$(ProjectDir)..\..\pixman\pixman&quot;;&quot;$(SolutionDir)include\zlib&quot;"
 				PreprocessorDefinitions="CAIRO_EXPORTS"
 				CompileAs="0"
 			/>
@@ -76,6 +76,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install Headers"
 				CommandLine="mkdir &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\cairo-version.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-deprecated.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-features.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-pdf.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-ps.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-svg.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-win32.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-xml.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;"
@@ -105,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\pixman\pixman&quot;;&quot;$(SolutionDir)include\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)&quot;;&quot;$(ProjectDir)..\..\pixman\pixman&quot;;&quot;$(SolutionDir)include\zlib&quot;"
 				PreprocessorDefinitions="CAIRO_EXPORTS"
 				CompileAs="0"
 			/>
@@ -142,6 +145,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -195,11 +201,39 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-botor-scan-converter.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-boxes-intersect.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-boxes.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-cache.c"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-cff-subset.c"
+				RelativePath=".\cairo-clip-boxes.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-clip-polygon.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-clip-region.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-clip-surface.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-clip-tor-scan-converter.c"
 				>
 			</File>
 			<File
@@ -211,11 +245,43 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-composite-rectangles.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-compositor.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-contour.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-damage.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-debug.c"
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-default-context.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-deflate-stream.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-device.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-error.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-fallback-compositor.c"
 				>
 			</File>
 			<File
@@ -239,6 +305,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-freed-pool.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-freelist.c"
 				>
 			</File>
@@ -255,7 +325,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-image-compositor.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-image-info.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-image-source.c"
 				>
 			</File>
 			<File
@@ -267,11 +345,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-mask-compositor.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-matrix.c"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-meta-surface.c"
+				RelativePath=".\cairo-mesh-pattern-rasterizer.c"
 				>
 			</File>
 			<File
@@ -279,7 +361,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-mono-scan-converter.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-mutex.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-no-compositor.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-observer.c"
 				>
 			</File>
 			<File
@@ -307,6 +401,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-path-stroke-boxes.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-path-stroke-polygon.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-path-stroke-tristrip.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-path-stroke.c"
 				>
 			</File>
@@ -319,14 +425,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-pdf-operators.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-pdf-surface.c"
-				>
-			</File>
-			<File
 				RelativePath=".\cairo-pen.c"
 				>
 			</File>
@@ -335,15 +433,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-polygon-intersect.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-polygon-reduce.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-polygon.c"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-ps-surface.c"
+				RelativePath=".\cairo-raster-source-pattern.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-recording-surface.c"
 				>
 			</File>
 			<File
 				RelativePath=".\cairo-rectangle.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-rectangular-scan-converter.c"
 				>
 			</File>
 			<File
@@ -355,15 +469,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-scaled-font-subsets.c"
-				>
-			</File>
-			<File
 				RelativePath=".\cairo-scaled-font.c"
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-shape-mask-compositor.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-slope.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-spans-compositor.c"
 				>
 			</File>
 			<File
@@ -372,6 +490,10 @@
 			</File>
 			<File
 				RelativePath=".\cairo-spline.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-stroke-dash.c"
 				>
 			</File>
 			<File
@@ -387,6 +509,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-surface-observer.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-offset.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-snapshot.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-subsurface.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-surface-wrapper.c"
 				>
 			</File>
@@ -395,15 +533,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-svg-surface.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-system.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-tee-surface.c"
+				RelativePath=".\cairo-time.c"
 				>
 			</File>
 			<File
@@ -411,7 +541,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-tor22-scan-converter.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-toy-font-face.c"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-traps-compositor.c"
 				>
 			</File>
 			<File
@@ -419,19 +557,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-truetype-subset.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-type1-fallback.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-type1-subset.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-type3-glyph-surface.c"
+				RelativePath=".\cairo-tristrip.c"
 				>
 			</File>
 			<File
@@ -451,18 +577,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-win32-font.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-win32-printing-surface.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-win32-surface.c"
-				>
-			</File>
-			<File
 				RelativePath=".\cairo-xml-surface.c"
 				>
 			</File>
@@ -470,11 +584,495 @@
 				RelativePath=".\cairo.c"
 				>
 			</File>
+			<Filter
+				Name="Font"
+				>
+				<File
+					RelativePath=".\cairo-cff-subset.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-scaled-font-subsets.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-truetype-subset.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-type1-fallback.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-type1-glyph-names.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-type1-subset.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-type3-glyph-surface.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GL"
+				>
+				<File
+					RelativePath=".\cairo-gl-composite.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-device.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-dispatch.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-glyphs.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-gradient.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-info.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-msaa-compositor.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-operand.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-shaders.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-source.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-spans-compositor.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-surface.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-traps-compositor.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\cairo-wgl-context.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+			</Filter>
+			<Filter
+				Name="PDF"
+				>
+				<File
+					RelativePath=".\cairo-pdf-operators.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-pdf-shading.c"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-pdf-surface.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PS"
+				>
+				<File
+					RelativePath=".\cairo-ps-surface.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="SVG"
+				>
+				<File
+					RelativePath=".\cairo-svg-surface.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Win32"
+				>
+				<File
+					RelativePath=".\win32\cairo-win32-debug.c"
+					>
+				</File>
+				<File
+					RelativePath=".\win32\cairo-win32-device.c"
+					>
+				</File>
+				<File
+					RelativePath=".\win32\cairo-win32-display-surface.c"
+					>
+				</File>
+				<File
+					RelativePath=".\win32\cairo-win32-font.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\win32\cairo-win32-gdi-compositor.c"
+					>
+				</File>
+				<File
+					RelativePath=".\win32\cairo-win32-printing-surface.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\win32\cairo-win32-surface.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\win32\cairo-win32-system.c"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<File
+				RelativePath=".\cairo-deprecated.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-features.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-pdf.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-ps.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-svg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-version.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-win32.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-xml.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+		</Filter>
+		<Filter
+			Name="Headers (Private)"
 			>
 			<File
 				RelativePath=".\cairo-analysis-surface-private.h"
@@ -485,7 +1083,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-array-private.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-atomic-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-backend-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-box-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-boxes-private.h"
 				>
 			</File>
 			<File
@@ -493,7 +1107,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-clip-inline.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-clip-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-combsort-inline.h"
 				>
 			</File>
 			<File
@@ -505,15 +1127,39 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-deprecated.h"
+				RelativePath=".\cairo-composite-rectangles-private.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-drm.h"
+				RelativePath=".\cairo-compositor-private.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-features.h"
+				RelativePath=".\cairo-contour-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-contour-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-damage-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-default-context-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-device-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-error-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-error-private.h"
 				>
 			</File>
 			<File
@@ -525,7 +1171,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-fontconfig-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-freed-pool-private.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-freelist-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-freelist-type-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-gl-private.h"
 				>
 			</File>
 			<File
@@ -541,15 +1203,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-image-surface-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-image-surface-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-list-inline.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-list-private.h"
 				>
 			</File>
 			<File
 				RelativePath=".\cairo-malloc-private.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-meta-surface-private.h"
 				>
 			</File>
 			<File
@@ -589,15 +1259,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-pdf-operators-private.h"
+				RelativePath=".\cairo-pattern-inline.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-pdf-surface-private.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-pdf.h"
+				RelativePath=".\cairo-pattern-private.h"
 				>
 			</File>
 			<File
@@ -605,11 +1271,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-ps-surface-private.h"
+				RelativePath=".\cairo-recording-surface-inline.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-ps.h"
+				RelativePath=".\cairo-recording-surface-private.h"
 				>
 			</File>
 			<File
@@ -629,15 +1295,23 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-scaled-font-subsets-private.h"
-				>
-			</File>
-			<File
 				RelativePath=".\cairo-slope-private.h"
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-spans-compositor-private.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-spans-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-stroke-dash-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-backend-private.h"
 				>
 			</File>
 			<File
@@ -649,7 +1323,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-surface-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-observer-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-observer-private.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-surface-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-snapshot-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-snapshot-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-subsurface-inline.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-surface-subsurface-private.h"
 				>
 			</File>
 			<File
@@ -657,27 +1359,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-svg-surface-private.h"
+				RelativePath=".\cairo-time-private.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-svg.h"
+				RelativePath=".\cairo-traps-private.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-tee-surface-private.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-truetype-subset-private.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-type1-private.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-type3-glyph-surface-private.h"
+				RelativePath=".\cairo-tristrip-private.h"
 				>
 			</File>
 			<File
@@ -689,10 +1379,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-version.h"
-				>
-			</File>
-			<File
 				RelativePath=".\cairo-wideint-private.h"
 				>
 			</File>
@@ -701,35 +1387,85 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cairo-win32-private.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-win32.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-xcb-xrender.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-xml.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo.h"
-				>
-			</File>
-			<File
 				RelativePath=".\cairoint.h"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
+			<Filter
+				Name="Font"
+				>
+				<File
+					RelativePath=".\cairo-scaled-font-subsets-private.h"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-truetype-subset-private.h"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-type1-private.h"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-type3-glyph-surface-private.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GL"
+				>
+				<File
+					RelativePath=".\cairo-gl-dispatch-private.h"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-ext-def-private.h"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-gl-gradient-private.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PDF"
+				>
+				<File
+					RelativePath=".\cairo-pdf-operators-private.h"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-pdf-shading-private.h"
+					>
+				</File>
+				<File
+					RelativePath=".\cairo-pdf-surface-private.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PS"
+				>
+				<File
+					RelativePath=".\cairo-ps-surface-private.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="SVG"
+				>
+				<File
+					RelativePath=".\cairo-svg-surface-private.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Win32"
+				>
+				<File
+					RelativePath=".\cairo-win32-private.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
