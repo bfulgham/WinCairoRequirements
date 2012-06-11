@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +176,9 @@
     <ClCompile Include="..\crypto\cryptlib.c" />
     <ClCompile Include="..\crypto\cversion.c">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MK1MF_BUILD;MK1MF_PLATFORM_VC_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MK1MF_BUILD;MK1MF_PLATFORM_VC_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MK1MF_BUILD;MK1MF_PLATFORM_VC_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MK1MF_BUILD;MK1MF_PLATFORM_VC_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="..\crypto\des\cbc_cksm.c" />
     <ClCompile Include="..\crypto\des\cbc_enc.c" />
@@ -631,7 +641,18 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -647,7 +668,19 @@
     <Import Project="..\..\..\props\dll.props" />
     <Import Project="..\..\..\props\debug.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\props\common.props" />
+    <Import Project="..\..\..\props\dll.props" />
+    <Import Project="..\..\..\props\debug.props" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\props\common.props" />
+    <Import Project="..\..\..\props\dll.props" />
+    <Import Project="..\..\..\props\release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\props\common.props" />
     <Import Project="..\..\..\props\dll.props" />
@@ -655,7 +688,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -744,7 +779,183 @@ xcopy /Y /R "$(ProjectDir)..\ssl\ssl23.h" "$(SolutionDir)include\openssl"
 xcopy /Y /R "$(ProjectDir)..\ssl\tls1.h" "$(SolutionDir)include\openssl"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ssl;$(ProjectDir)..\crypto;$(ProjectDir)..;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>wsock32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent />
+    <PreBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\aes\aes.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\asn1\asn1.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\asn1\asn1_mac.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\asn1\asn1t.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\bf\blowfish.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\bio\bio.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\bn\bn.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\buffer\buffer.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\cast\cast.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\comp\comp.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\conf\conf.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\conf\conf_api.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\crypto.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\des\des.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\des\des_old.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\dh\dh.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\dsa\dsa.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\dso\dso.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ebcdic.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ec\ec.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ecdh\ecdh.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ecdsa\ecdsa.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\engine\engine.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\err\err.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\evp\evp.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\hmac\hmac.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\idea\idea.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\krb5\krb5_asn.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\lhash\lhash.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\md2\md2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\md4\md4.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\md5\md5.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\mdc2\mdc2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\objects\obj_mac.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\objects\objects.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ocsp\ocsp.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\opensslconf.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\opensslv.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ossl_typ.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pem\pem.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pem\pem2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pkcs7\pkcs7.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pkcs12\pkcs12.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pqueue\pqueue.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pqueue\pq_compat.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rand\rand.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rc2\rc2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rc4\rc4.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rc5\rc5.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ripemd\ripemd.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rsa\rsa.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\sha\sha.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\stack\stack.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\store\store.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\stack\stack.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\stack\safestack.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\symhacks.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\tmdiff.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\txt_db\txt_db.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ui\ui.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ui\ui_compat.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\x509\x509.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\x509\x509_vfy.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\x509v3\x509v3.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\e_os2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\fips\fips.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\fips\rand\fips_rand.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\dtls1.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\kssl.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl3.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl23.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\tls1.h" "$(SolutionDir)include\openssl"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ssl;$(ProjectDir)..\crypto;$(ProjectDir)..;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>wsock32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent />
+    <PreBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\aes\aes.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\asn1\asn1.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\asn1\asn1_mac.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\asn1\asn1t.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\bf\blowfish.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\bio\bio.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\bn\bn.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\buffer\buffer.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\cast\cast.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\comp\comp.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\conf\conf.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\conf\conf_api.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\crypto.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\des\des.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\des\des_old.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\dh\dh.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\dsa\dsa.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\dso\dso.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ebcdic.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ec\ec.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ecdh\ecdh.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ecdsa\ecdsa.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\engine\engine.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\err\err.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\evp\evp.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\hmac\hmac.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\idea\idea.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\krb5\krb5_asn.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\lhash\lhash.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\md2\md2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\md4\md4.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\md5\md5.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\mdc2\mdc2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\objects\obj_mac.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\objects\objects.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ocsp\ocsp.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\opensslconf.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\opensslv.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ossl_typ.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pem\pem.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pem\pem2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pkcs7\pkcs7.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pkcs12\pkcs12.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pqueue\pqueue.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\pqueue\pq_compat.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rand\rand.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rc2\rc2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rc4\rc4.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rc5\rc5.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ripemd\ripemd.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\rsa\rsa.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\sha\sha.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\stack\stack.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\store\store.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\stack\stack.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\stack\safestack.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\symhacks.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\tmdiff.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\txt_db\txt_db.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ui\ui.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\ui\ui_compat.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\x509\x509.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\x509\x509_vfy.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\crypto\x509v3\x509v3.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\e_os2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\fips\fips.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\fips\rand\fips_rand.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\dtls1.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\kssl.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl2.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl3.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\ssl23.h" "$(SolutionDir)include\openssl"
+xcopy /Y /R "$(ProjectDir)..\ssl\tls1.h" "$(SolutionDir)include\openssl"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\ssl;$(ProjectDir)..\crypto;$(ProjectDir)..;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

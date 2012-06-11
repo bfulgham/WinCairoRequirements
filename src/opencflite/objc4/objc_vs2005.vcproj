@@ -40,7 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
 				CompileAs="2"
 			/>
@@ -113,7 +113,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
 				CompileAs="2"
 			/>
@@ -305,6 +305,24 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="1"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\runtime\objc-file-old.m"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>

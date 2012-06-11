@@ -5,6 +5,10 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>libjpeg</ProjectName>
@@ -18,10 +22,21 @@
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\props\common.props" />
+    <Import Project="..\..\props\lib.props" />
+    <Import Project="..\..\props\release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\props\common.props" />
     <Import Project="..\..\props\lib.props" />
@@ -32,6 +47,31 @@
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jconfig.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jdct.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jerror.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jinclude.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jmemsys.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jmorecfg.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jpegint.h " "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jpeglib.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jversion.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)cdjpeg.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)cderror.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)transupp.h" "$(SolutionDir)include"
+</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Install headers</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
