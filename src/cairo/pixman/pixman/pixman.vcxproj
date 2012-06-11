@@ -97,6 +97,7 @@
     <ClCompile Include="pixman-linear-gradient.c" />
     <ClCompile Include="pixman-matrix.c" />
     <ClCompile Include="pixman-mmx.c" />
+    <ClCompile Include="pixman-noop.c" />
     <ClCompile Include="pixman-radial-gradient.c" />
     <ClCompile Include="pixman-region16.c" />
     <ClCompile Include="pixman-region32.c" />

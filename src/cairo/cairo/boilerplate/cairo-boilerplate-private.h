@@ -35,7 +35,7 @@ _cairo_boilerplate_register_all (void);
 
 void
 _cairo_boilerplate_register_backend (const cairo_boilerplate_target_t *targets,
-				     unsigned int count);
+				     unsigned int		       count);
 
 #define CAIRO_BOILERPLATE(name__, targets__) \
 void _register_##name__ (void); \
@@ -43,6 +43,10 @@ void _register_##name__ (void) { \
     _cairo_boilerplate_register_backend (targets__, \
 					 sizeof (targets__) / sizeof (targets__[0])); \
 }
+
+#define CAIRO_NO_BOILERPLATE(name__) \
+void _register_##name__ (void); \
+void _register_##name__ (void) { }
 
 CAIRO_END_DECLS
 

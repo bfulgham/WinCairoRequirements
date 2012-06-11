@@ -24,7 +24,7 @@
  * SOFTWARE.
  *
  * Authors: Carl Worth <cworth@cworth.org>
- *          Chris Wilson <chris@chris-wilson.co.uk>
+ *	    Chris Wilson <chris@chris-wilson.co.uk>
  */
 
 #include "cairo-perf.h"
@@ -54,7 +54,7 @@ struct color {
 };
 
 #define FONT_SIZE 12
-#define PAD (FONT_SIZE/2+1)
+#define PAD (4)
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
@@ -72,7 +72,8 @@ to_factor (double x)
 }
 
 static int
-_double_cmp (const void *_a, const void *_b)
+_double_cmp (const void *_a,
+	     const void *_b)
 {
     const double *a = _a;
     const double *b = _b;
@@ -85,8 +86,10 @@ _double_cmp (const void *_a, const void *_b)
 }
 
 static void
-trim_outliers (double *values, int num_values,
-	       double *min, double *max)
+trim_outliers (double *values,
+	       int     num_values,
+	       double *min,
+	       double *max)
 {
     double q1, q3, iqr;
     double outlier_min, outlier_max;
@@ -105,13 +108,13 @@ trim_outliers (double *values, int num_values,
     qsort (values, num_values,
 	   sizeof (double), _double_cmp);
 
-    q1		= values[1*num_values / 4];
-    q3		= values[3*num_values / 4];
+    q1		= values[1*num_values / 6];
+    q3		= values[5*num_values / 6];
 
     iqr = q3 - q1;
 
-    outlier_min = q1 - 1.5 * iqr;
-    outlier_max = q3 + 1.5 * iqr;
+    outlier_min = q1 - 3 * iqr;
+    outlier_max = q3 + 3 * iqr;
 
     i = 0;
     while (i < num_values && values[i] < outlier_min)
@@ -137,6 +140,8 @@ find_ranges (struct chart *chart)
     double test_time;
     int seen_non_null;
     int num_tests = 0;
+    double slow_sum = 0, fast_sum = 0, sum;
+    int slow_count = 0, fast_count = 0;
     int i;
 
     num_values = 0;
@@ -198,17 +203,25 @@ find_ranges (struct chart *chart)
 		    test_time = report_time;
 
 		if (chart->relative) {
-		    double v = to_factor (test_time / report_time);
-		    if (num_values == size_values) {
-			size_values *= 2;
-			values = xrealloc (values,
-					   size_values * sizeof (double));
+		    if (test_time != report_time) {
+			double v = to_factor (test_time / report_time);
+			if (num_values == size_values) {
+			    size_values *= 2;
+			    values = xrealloc (values,
+					       size_values * sizeof (double));
+			}
+			values[num_values++] = v;
+			if (v < min)
+			    min = v;
+			if (v > max)
+			    max = v;
+			if (v > 0)
+			    fast_sum += v/100, fast_count++;
+			else
+			    slow_sum += v/100, slow_count++;
+			sum += v/100;
+			printf ("%s %d: %f\n", min_test->name, num_values, v);
 		    }
-		    values[num_values++] = v;
-		    if (v < min)
-			min = v;
-		    if (v > max)
-			max = v;
 		} else {
 		    if (report_time < min)
 			min = report_time;
@@ -227,11 +240,17 @@ find_ranges (struct chart *chart)
 
     free (values);
     free (tests);
+
+    printf ("%d: slow[%d] average: %f, fast[%d] average: %f, %f\n",
+	    num_values, slow_count, slow_sum / slow_count, fast_count, fast_sum / fast_count, sum / num_values);
 }
 
 #define SET_COLOR(C, R, G, B) (C)->red = (R), (C)->green = (G), (C)->blue = (B)
 static void
-hsv_to_rgb (double h, double s, double v, struct color *color)
+hsv_to_rgb (double	  h,
+	    double	  s,
+	    double	  v,
+	    struct color *color)
 {
     double m, n, f;
     int i;
@@ -278,8 +297,31 @@ static void set_report_color (struct chart *chart, int report)
     cairo_set_source_rgb (chart->cr, color.red, color.green, color.blue);
 }
 
+static void set_report_gradient (struct chart *chart, int report,
+				 double x, double y, double w, double h)
+{
+    struct color color;
+    cairo_pattern_t *p;
+
+    hsv_to_rgb (6. / chart->num_reports * report, .7, .7, &color);
+
+    p = cairo_pattern_create_linear (x, 0, x+w, 0);
+    cairo_pattern_add_color_stop_rgba (p, 0.0,
+				       color.red, color.green, color.blue,
+				       .50);
+    cairo_pattern_add_color_stop_rgba (p, 0.5,
+				       color.red, color.green, color.blue,
+				       .50);
+    cairo_pattern_add_color_stop_rgba (p, 1.0,
+				       color.red, color.green, color.blue,
+				       1.0);
+    cairo_set_source (chart->cr, p);
+    cairo_pattern_destroy (p);
+}
+
 static void
-test_background (struct chart *c, int test)
+test_background (struct chart *c,
+		 int	       test)
 {
     double dx, x;
 
@@ -292,23 +334,23 @@ test_background (struct chart *c, int test)
 	cairo_set_source_rgba (c->cr, .8, .8, .8, .2);
 
     cairo_rectangle (c->cr, floor (x), 0,
-	             floor (dx + x) - floor (x), c->height);
+		     floor (dx + x) - floor (x), c->height);
     cairo_fill (c->cr);
 }
 
 static void
-add_chart (struct chart *c, int test, int report, double value)
+add_chart (struct chart *c,
+	   int		 test,
+	   int		 report,
+	   double	 value)
 {
     double dx, dy, x;
 
     if (fabs (value) < 0.1)
 	return;
 
-    set_report_color (c, report);
-
     if (c->relative) {
 	cairo_text_extents_t extents;
-	cairo_bool_t show_label;
 	char buf[80];
 	double y;
 
@@ -317,17 +359,31 @@ add_chart (struct chart *c, int test, int report, double value)
 	dx = c->width / (double) (c->num_tests * c->num_reports);
 	x = dx * (c->num_reports * test + report - .5);
 
+	set_report_gradient (c, report,
+			     floor (x), c->height / 2.,
+			     floor (x + dx) - floor (x),
+			     ceil (-dy*value - c->height/2.) + c->height/2.);
+
 	cairo_rectangle (c->cr,
 			 floor (x), c->height / 2.,
 			 floor (x + dx) - floor (x),
 			 ceil (-dy*value - c->height/2.) + c->height/2.);
-	cairo_fill (c->cr);
+	cairo_fill_preserve (c->cr);
+	cairo_save (c->cr);
+	cairo_clip_preserve (c->cr);
+	set_report_color (c, report);
+	cairo_stroke (c->cr);
+	cairo_restore (c->cr);
+
+	/* Skip the label if the difference between the two is less than 0.1% */
+	if (fabs (value) < 0.1)
+		return;
 
 	cairo_save (c->cr);
 	cairo_set_font_size (c->cr, dx - 2);
 
 	if (value < 0) {
-	    sprintf (buf, "%.1f", value/100 - 1);
+	    sprintf (buf, "%.1f", -value/100 + 1);
 	} else {
 	    sprintf (buf, "%.1f", value/100 + 1);
 	}
@@ -341,55 +397,82 @@ add_chart (struct chart *c, int test, int report, double value)
 	    y = c->height/2;
 	}
 
+	if (y < 0) {
+	    if (y > -extents.width - 6)
+		    y -= extents.width + 6;
+	} else {
+	    if (y < extents.width + 6)
+		    y += extents.width + 6;
+	}
+
 	cairo_translate (c->cr,
 			 floor (x) + (floor (x + dx) - floor (x))/2,
 			 floor (y) + c->height/2.);
 	cairo_rotate (c->cr, -M_PI/2);
 	if (y < 0) {
 	    cairo_move_to (c->cr, -extents.x_bearing -extents.width - 4, -extents.y_bearing/2);
-	    show_label = y < -extents.width - 6;
 	} else {
 	    cairo_move_to (c->cr, 2, -extents.y_bearing/2);
-	    show_label = y > extents.width + 6;
 	}
 
 	cairo_set_source_rgb (c->cr, .95, .95, .95);
-	if (show_label)
-	    cairo_show_text (c->cr, buf);
+	cairo_show_text (c->cr, buf);
 	cairo_restore (c->cr);
     } else {
 	dy = (c->height - PAD) / c->max_value;
 	dx = c->width / (double) (c->num_tests * (c->num_reports+1));
 	x = dx * ((c->num_reports+1) * test + report + .5);
 
+	set_report_gradient (c, report,
+			 floor (x), c->height,
+			 floor (x + dx) - floor (x),
+			 floor (c->height - dy*value) - c->height);
+
 	cairo_rectangle (c->cr,
 			 floor (x), c->height,
 			 floor (x + dx) - floor (x),
 			 floor (c->height - dy*value) - c->height);
-	cairo_fill (c->cr);
+	cairo_fill_preserve (c->cr);
+	cairo_save (c->cr);
+	cairo_clip_preserve (c->cr);
+	set_report_color (c, report);
+	cairo_stroke (c->cr);
+	cairo_restore (c->cr);
     }
 }
 
 static void
-add_label (struct chart *c, int test, const char *label)
+add_label (struct chart *c,
+	   int		 test,
+	   const char	*label)
 {
     cairo_text_extents_t extents;
     double dx, x;
 
     cairo_save (c->cr);
     dx = c->width / (double) c->num_tests;
-    if (dx / 2 - PAD < 6)
+    if (dx / 2 - PAD < 4)
 	return;
     cairo_set_font_size (c->cr, dx / 2 - PAD);
     cairo_text_extents (c->cr, label, &extents);
 
+    cairo_set_source_rgb (c->cr, .5, .5, .5);
+
     x = (test + .5) * dx;
+    cairo_save (c->cr);
+    cairo_translate (c->cr, x, c->height - PAD / 2);
+    cairo_rotate (c->cr, -M_PI/2);
+    cairo_move_to (c->cr, 0, -extents.y_bearing/2);
+    cairo_show_text (c->cr, label);
+    cairo_restore (c->cr);
+
+    cairo_save (c->cr);
     cairo_translate (c->cr, x, PAD / 2);
     cairo_rotate (c->cr, -M_PI/2);
-
-    cairo_set_source_rgb (c->cr, .5, .5, .5);
     cairo_move_to (c->cr, -extents.width, -extents.y_bearing/2);
     cairo_show_text (c->cr, label);
+    cairo_restore (c->cr);
+
     cairo_restore (c->cr);
 }
 
@@ -452,10 +535,10 @@ done:
 	cairo_text_extents (c->cr, buf, &extents);
 
 	cairo_set_source_rgba (c->cr, .75, 0, 0, .95);
-	cairo_move_to (c->cr, -extents.x_bearing, floor (y) - (extents.height/2 + extents.y_bearing) + .5);
+	cairo_move_to (c->cr, 1-extents.x_bearing, floor (y) - (extents.height/2 + extents.y_bearing) + .5);
 	cairo_show_text (c->cr, buf);
 
-	cairo_move_to (c->cr, c->width-extents.width+extents.x_bearing, floor (y) - (extents.height/2 + extents.y_bearing) + .5);
+	cairo_move_to (c->cr, c->width-extents.width-1, floor (y) - (extents.height/2 + extents.y_bearing) + .5);
 	cairo_show_text (c->cr, buf);
 
 	cairo_set_source_rgba (c->cr, .75, 0, 0, .5);
@@ -513,17 +596,17 @@ done:
 	cairo_text_extents (c->cr, buf, &extents);
 
 	cairo_set_source_rgba (c->cr, .75, 0, 0, .95);
-	cairo_move_to (c->cr, -extents.x_bearing, floor (mid + y) - (extents.height/2 + extents.y_bearing)+ .5);
+	cairo_move_to (c->cr, 1-extents.x_bearing, floor (mid + y) - (extents.height/2 + extents.y_bearing) + .5);
 	cairo_show_text (c->cr, buf);
 
-	cairo_move_to (c->cr, c->width-extents.width+extents.x_bearing, floor (mid + y) - (extents.height/2 + extents.y_bearing)+ .5);
+	cairo_move_to (c->cr, c->width-extents.width-1, floor (mid + y) - (extents.height/2 + extents.y_bearing) + .5);
 	cairo_show_text (c->cr, buf);
 
 	cairo_set_source_rgba (c->cr, 0, .75, 0, .95);
-	cairo_move_to (c->cr, -extents.x_bearing, ceil (mid - y) - (extents.height/2 + extents.y_bearing)+ .5);
+	cairo_move_to (c->cr, 1-extents.x_bearing, ceil (mid - y) - (extents.height/2 + extents.y_bearing) + .5);
 	cairo_show_text (c->cr, buf);
 
-	cairo_move_to (c->cr, c->width-extents.width+extents.x_bearing, ceil (mid - y) - (extents.height/2 + extents.y_bearing)+ .5);
+	cairo_move_to (c->cr, c->width-extents.width-1, ceil (mid - y) - (extents.height/2 + extents.y_bearing) + .5);
 	cairo_show_text (c->cr, buf);
 
 	/* trim the dashes to no obscure the labels */
@@ -532,7 +615,7 @@ done:
 		       ceil (extents.width + extents.x_bearing + 2),
 		       floor (mid + y) + .5);
 	cairo_line_to (c->cr,
-		       floor (c->width - (extents.width + extents.x_bearing + 2)),
+		       floor (c->width - (extents.width + 2)),
 		       floor (mid + y) + .5);
 	cairo_stroke (c->cr);
 
@@ -541,7 +624,7 @@ done:
 		       ceil (extents.width + extents.x_bearing + 2),
 		       ceil (mid - y) + .5);
 	cairo_line_to (c->cr,
-		       floor (c->width - (extents.width + extents.x_bearing + 2)),
+		       floor (c->width - (extents.width + 2)),
 		       ceil (mid - y) + .5);
 	cairo_stroke (c->cr);
 
@@ -585,7 +668,8 @@ add_slower_faster_guide (struct chart *c)
 }
 
 static void
-cairo_perf_reports_compare (struct chart *chart, cairo_bool_t print)
+cairo_perf_reports_compare (struct chart *chart,
+			    cairo_bool_t  print)
 {
     test_report_t **tests, *min_test;
     double test_time, best_time;
@@ -797,7 +881,8 @@ add_legend (struct chart *chart)
 }
 
 int
-main (int argc, const char *argv[])
+main (int	  argc,
+      const char *argv[])
 {
     cairo_surface_t *surface;
     struct chart chart;
@@ -826,7 +911,7 @@ main (int argc, const char *argv[])
 	    chart.names[chart.num_reports] = argv[i] + 7;
 	} else {
 	    cairo_perf_report_load (&chart.reports[chart.num_reports++],
-		                    argv[i],
+				    argv[i], i,
 				    test_report_cmp_name);
 	}
     }

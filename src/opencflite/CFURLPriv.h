@@ -1,5 +1,15 @@
 /*
- * Copyright (c) 2011 Apple Inc. All rights reserved.
+ * Copyright (c) 2012 Brent Fulgham <bfulgham@gmail.org>.  All rights reserved.
+ *
+ * This source code is a modified version of the CoreFoundation sources released by Apple Inc. under
+ * the terms of the APSL version 2.0 (see below).
+ *
+ * For information about changes from the original Apple source release can be found by reviewing the
+ * source control system for the project at https://sourceforge.net/svn/?group_id=246198.
+ *
+ * The original license information is as follows:
+ * 
+ * Copyright (c) 2012 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
  * 
@@ -181,6 +191,12 @@ CF_EXPORT const CFStringRef _kCFURLLocalizedTypeDescriptionDictionaryKey CF_AVAI
 
 CF_EXPORT const CFStringRef _kCFURLApplicationCategoriesKey CF_AVAILABLE(10_7, NA);
     /* The array of category UTI strings associated with the url. (CFArray) */
+
+CF_EXPORT const CFStringRef _kCFURLApplicationHighResolutionModeIsMagnifiedKey CF_AVAILABLE(10_7, NA);
+    /* True if the app runs with magnified 1x graphics on a 2x display (Per-user, CFBoolean) */
+
+CF_EXPORT const CFStringRef _kCFURLCanSetApplicationHighResolutionModeIsMagnifiedKey CF_AVAILABLE(10_7, NA);
+    /* True if the app can run in either magnified or native resolution modes (Read only, CFBoolean) */
 
 /* Additional volume properties */
 

@@ -151,7 +151,7 @@ draw (cairo_t *cr, int width, int height)
 	}
 
 	if (!double_buf_equal (ctx, new_buf, expected_values,
-			       sizeof(expected_values)/sizeof(double)) != 0)
+			       ARRAY_LENGTH (expected_values)) != 0)
 	{
 	    cairo_pattern_destroy (pat);
 	    return CAIRO_TEST_FAILURE;
@@ -178,6 +178,88 @@ draw (cairo_t *cr, int width, int height)
 	{
 	    cairo_pattern_destroy (pat);
 	    return CAIRO_TEST_FAILURE;
+	}
+
+	cairo_pattern_destroy (pat);
+    }
+
+    /* Test mesh getters */
+    {
+	unsigned int count;
+	int i;
+	pat = cairo_pattern_create_mesh ();
+
+	status = cairo_mesh_pattern_get_patch_count (pat, &count);
+	CHECK_SUCCESS;
+
+	if (count != 0) {
+	    cairo_pattern_destroy (pat);
+	    return CAIRO_TEST_FAILURE;
+	}
+
+	cairo_mesh_pattern_begin_patch (pat);
+	cairo_mesh_pattern_move_to (pat, 0, 0);
+	cairo_mesh_pattern_line_to (pat, 0, 3);
+	cairo_mesh_pattern_line_to (pat, 3, 3);
+	cairo_mesh_pattern_line_to (pat, 3, 0);
+
+	status = cairo_mesh_pattern_get_patch_count (pat, &count);
+	CHECK_SUCCESS;
+
+	if (count != 0) {
+	    cairo_pattern_destroy (pat);
+	    return CAIRO_TEST_FAILURE;
+	}
+
+	cairo_mesh_pattern_end_patch (pat);
+
+	status = cairo_mesh_pattern_get_patch_count (pat, &count);
+	CHECK_SUCCESS;
+
+	if (count != 1) {
+	    cairo_pattern_destroy (pat);
+	    return CAIRO_TEST_FAILURE;
+	}
+
+	for (i = 0; i < 4; i++) {
+	    double cp_x[4] = { 1, 1, 2, 2 };
+	    double cp_y[4] = { 1, 2, 2, 1 };
+	    double x, y;
+
+	    status = cairo_mesh_pattern_get_control_point (pat, 0, i, &x, &y);
+	    CHECK_SUCCESS;
+
+	    if (!CAIRO_TEST_DOUBLE_EQUALS(x,cp_x[i]) ||
+		!CAIRO_TEST_DOUBLE_EQUALS(y,cp_y[i]))
+	    {
+		cairo_pattern_destroy (pat);
+		return CAIRO_TEST_FAILURE;
+	    }
+	}
+
+	cairo_mesh_pattern_begin_patch (pat);
+	cairo_mesh_pattern_move_to (pat, 0, 0);
+	cairo_mesh_pattern_line_to (pat, 1, 0);
+	cairo_mesh_pattern_line_to (pat, 1, 1);
+	cairo_mesh_pattern_set_corner_color_rgb (pat, 0, 1, 1, 1);
+	cairo_mesh_pattern_end_patch (pat);
+
+	for (i = 0; i < 4; i++) {
+	    double corner_color[4] = { 1, 0, 0, 1 };
+	    double a, r, g, b;
+
+	    status = cairo_mesh_pattern_get_corner_color_rgba (pat, 1, i,
+							       &r, &g, &b, &a);
+	    CHECK_SUCCESS;
+
+	    if (!CAIRO_TEST_DOUBLE_EQUALS(a,corner_color[i]) ||
+		!CAIRO_TEST_DOUBLE_EQUALS(r,corner_color[i]) ||
+		!CAIRO_TEST_DOUBLE_EQUALS(g,corner_color[i]) ||
+		!CAIRO_TEST_DOUBLE_EQUALS(b,corner_color[i]))
+	    {
+		cairo_pattern_destroy (pat);
+		return CAIRO_TEST_FAILURE;
+	    }
 	}
 
 	cairo_pattern_destroy (pat);

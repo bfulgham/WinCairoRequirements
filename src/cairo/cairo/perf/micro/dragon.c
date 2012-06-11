@@ -94,7 +94,7 @@ path (cairo_t *cr, int step, int dir, int iterations)
     }
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 do_dragon (cairo_t *cr, int width, int height, int loops)
 {
     cairo_pattern_t *pattern;
@@ -161,13 +161,12 @@ do_dragon (cairo_t *cr, int width, int height, int loops)
     return cairo_perf_timer_elapsed ();
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 do_dragon_solid (cairo_t *cr, int width, int height, int loops)
 {
-    double cx, cy, r;
+    double cx, cy;
 
     cx = cy = .5 * MAX (width, height);
-    r = .5 * MIN (width, height);
 
     cairo_perf_timer_start ();
 
@@ -203,7 +202,14 @@ do_dragon_solid (cairo_t *cr, int width, int height, int loops)
     return cairo_perf_timer_elapsed ();
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
+do_dragon_solid_unaligned (cairo_t *cr, int width, int height, int loops)
+{
+    cairo_translate (cr, 0.01, 0.01);
+    return do_dragon_solid (cr, width, height, loops);
+}
+
+static cairo_time_t
 do_dragon_solid_aligned_clip (cairo_t *cr, int width, int height, int loops)
 {
     cairo_reset_clip (cr);
@@ -214,7 +220,19 @@ do_dragon_solid_aligned_clip (cairo_t *cr, int width, int height, int loops)
     return do_dragon_solid (cr, width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
+do_dragon_unaligned_solid_aligned_clip (cairo_t *cr, int width, int height, int loops)
+{
+    cairo_translate (cr, 0.01, 0.01);
+    cairo_reset_clip (cr);
+    cairo_rectangle (cr, 10, 10, width/2 + 10, height/2 + 10);
+    cairo_rectangle (cr, width/2-20, height/2-20, width/2 + 10, height/2 + 10);
+    cairo_clip (cr);
+
+    return do_dragon_solid (cr, width, height, loops);
+}
+
+static cairo_time_t
 do_dragon_solid_unaligned_clip (cairo_t *cr, int width, int height, int loops)
 {
     cairo_reset_clip (cr);
@@ -225,7 +243,19 @@ do_dragon_solid_unaligned_clip (cairo_t *cr, int width, int height, int loops)
     return do_dragon_solid (cr, width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
+do_dragon_unaligned_solid_unaligned_clip (cairo_t *cr, int width, int height, int loops)
+{
+    cairo_translate (cr, 0.01, 0.01);
+    cairo_reset_clip (cr);
+    cairo_rectangle (cr, 10.5, 10.5, width/2 + 10, height/2 + 10);
+    cairo_rectangle (cr, width/2-20, height/2-20, width/2 + 9.5, height/2 + 9.5);
+    cairo_clip (cr);
+
+    return do_dragon_solid (cr, width, height, loops);
+}
+
+static cairo_time_t
 do_dragon_solid_circle_clip (cairo_t *cr, int width, int height, int loops)
 {
     cairo_reset_clip (cr);
@@ -235,15 +265,21 @@ do_dragon_solid_circle_clip (cairo_t *cr, int width, int height, int loops)
     return do_dragon_solid (cr, width, height, loops);
 }
 
+cairo_bool_t
+dragon_enabled (cairo_perf_t *perf)
+{
+    return cairo_perf_can_run (perf, "dragon", NULL);
+}
+
 void
 dragon (cairo_perf_t *perf, cairo_t *cr, int width, int height)
 {
-    if (! cairo_perf_can_run (perf, "dragon", NULL))
-	return;
-
-    cairo_perf_run (perf, "dragon-solid", do_dragon_solid);
-    cairo_perf_run (perf, "dragon-solid-aligned-clip", do_dragon_solid_aligned_clip);
-    cairo_perf_run (perf, "dragon-solid-unaligned-clip", do_dragon_solid_unaligned_clip);
-    cairo_perf_run (perf, "dragon-solid-circle-clip", do_dragon_solid_circle_clip);
-    cairo_perf_run (perf, "dragon", do_dragon);
+    cairo_perf_run (perf, "dragon-solid", do_dragon_solid, NULL);
+    cairo_perf_run (perf, "dragon-unaligned-solid", do_dragon_solid_unaligned, NULL);
+    cairo_perf_run (perf, "dragon-solid-aligned-clip", do_dragon_solid_aligned_clip, NULL);
+    cairo_perf_run (perf, "dragon-unaligned-solid-aligned-clip", do_dragon_unaligned_solid_aligned_clip, NULL);
+    cairo_perf_run (perf, "dragon-solid-unaligned-clip", do_dragon_solid_unaligned_clip, NULL);
+    cairo_perf_run (perf, "dragon-unaligned-solid-unaligned-clip", do_dragon_unaligned_solid_unaligned_clip, NULL);
+    cairo_perf_run (perf, "dragon-solid-circle-clip", do_dragon_solid_circle_clip, NULL);
+    cairo_perf_run (perf, "dragon", do_dragon, NULL);
 }

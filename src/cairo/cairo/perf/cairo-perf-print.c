@@ -24,7 +24,7 @@
  * SOFTWARE.
  *
  * Authors: Carl Worth <cworth@cworth.org>
- *          Chris Wilson <chris@chris-wilson.co.uk>
+ *	    Chris Wilson <chris@chris-wilson.co.uk>
  */
 
 #include "cairo-perf.h"
@@ -57,14 +57,15 @@ report_print (const cairo_perf_report_t *report)
 }
 
 int
-main (int argc, const char *argv[])
+main (int	  argc,
+      const char *argv[])
 {
     int i;
 
     for (i = 1; i < argc; i++ ) {
 	cairo_perf_report_t report;
 
-	cairo_perf_report_load (&report, argv[i], NULL);
+	cairo_perf_report_load (&report, argv[i], i, NULL);
 	report_print (&report);
     }
 

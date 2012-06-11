@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -33,37 +33,19 @@
 #include "cairoint.h"
 
 #include "cairo-drm-private.h"
-#include "cairo-surface-fallback-private.h"
 
-cairo_surface_t *
-_cairo_drm_surface_create_similar (void			*abstract_surface,
-			           cairo_content_t	 content,
-				   int			 width,
-				   int			 height)
-{
-    cairo_drm_surface_t *surface = abstract_surface;
-    cairo_drm_device_t *device;
-
-    if (surface->fallback != NULL)
-	return _cairo_image_surface_create_with_content (content,
-		                                         width, height);
-
-    device = surface->device;
-    if (width > device->max_surface_size || height > device->max_surface_size)
-	return NULL;
-
-    return device->surface.create (device, content, width, height);
-}
+#include "cairo-error-private.h"
+#include "cairo-image-surface-inline.h"
 
 void
 _cairo_drm_surface_init (cairo_drm_surface_t *surface,
-			 cairo_drm_device_t *device)
+			 cairo_format_t format,
+			 int width, int height)
 {
-    surface->device = cairo_drm_device_reference (device);
-
     surface->bo = NULL;
-    surface->width  = 0;
-    surface->height = 0;
+    surface->format = format;
+    surface->width  = width;
+    surface->height = height;
     surface->stride = 0;
 
     surface->fallback = NULL;
@@ -73,10 +55,10 @@ _cairo_drm_surface_init (cairo_drm_surface_t *surface,
 cairo_status_t
 _cairo_drm_surface_finish (cairo_drm_surface_t *surface)
 {
-    if (surface->bo != NULL)
-	cairo_drm_bo_destroy (surface->device, surface->bo);
+    assert (surface->fallback == NULL);
 
-    cairo_drm_device_destroy (surface->device);
+    if (surface->bo != NULL)
+	cairo_drm_bo_destroy (surface->base.device, surface->bo);
 
     return CAIRO_STATUS_SUCCESS;
 }
@@ -104,170 +86,54 @@ _cairo_drm_surface_get_extents (void *abstract_surface,
     return TRUE;
 }
 
-cairo_int_status_t
-_cairo_drm_surface_paint (void			*abstract_surface,
-			  cairo_operator_t	 op,
-			  const cairo_pattern_t	*source,
-			  cairo_clip_t		*clip)
-{
-    cairo_drm_surface_t *surface = abstract_surface;
-
-    if (surface->fallback != NULL)
-	return _cairo_surface_paint (surface->fallback, op, source, clip);
-
-    return _cairo_surface_fallback_paint (&surface->base, op, source, clip);
-}
-
-cairo_int_status_t
-_cairo_drm_surface_mask (void			*abstract_surface,
-			  cairo_operator_t	 op,
-			  const cairo_pattern_t	*source,
-			  const cairo_pattern_t	*mask,
-			  cairo_clip_t		*clip)
-{
-    cairo_drm_surface_t *surface = abstract_surface;
-
-    if (surface->fallback != NULL) {
-	return _cairo_surface_mask (surface->fallback,
-				    op, source, mask,
-				    clip);
-    }
-
-    return _cairo_surface_fallback_mask (&surface->base,
-	                                 op, source, mask, clip);
-}
-
-cairo_int_status_t
-_cairo_drm_surface_stroke (void				*abstract_surface,
-			   cairo_operator_t		 op,
-			   const cairo_pattern_t	*source,
-			   cairo_path_fixed_t		*path,
-			   cairo_stroke_style_t		*style,
-			   cairo_matrix_t		*ctm,
-			   cairo_matrix_t		*ctm_inverse,
-			   double			 tolerance,
-			   cairo_antialias_t		 antialias,
-			   cairo_clip_t			*clip)
-{
-    cairo_drm_surface_t *surface = abstract_surface;
-
-    if (surface->fallback != NULL) {
-	return _cairo_surface_stroke (surface->fallback,
-				      op, source,
-				      path, style,
-				      ctm, ctm_inverse,
-				      tolerance, antialias,
-				      clip);
-    }
-
-    return _cairo_surface_fallback_stroke (&surface->base, op, source,
-					   path, style,
-					   ctm, ctm_inverse,
-					   tolerance, antialias,
-					   clip);
-}
-
-cairo_int_status_t
-_cairo_drm_surface_fill (void			*abstract_surface,
-			 cairo_operator_t	 op,
-			 const cairo_pattern_t	*source,
-			 cairo_path_fixed_t	*path,
-			 cairo_fill_rule_t	 fill_rule,
-			 double			 tolerance,
-			 cairo_antialias_t	 antialias,
-			 cairo_clip_t		*clip)
-{
-    cairo_drm_surface_t *surface = abstract_surface;
-
-    if (surface->fallback != NULL) {
-	return _cairo_surface_fill (surface->fallback,
-				    op, source,
-				    path, fill_rule,
-				    tolerance, antialias,
-				    clip);
-    }
-
-    return _cairo_surface_fallback_fill (&surface->base, op, source,
-					 path, fill_rule,
-					 tolerance, antialias,
-					 clip);
-}
-
-cairo_int_status_t
-_cairo_drm_surface_show_glyphs (void			*abstract_surface,
-				cairo_operator_t	 op,
-				const cairo_pattern_t	*source,
-				cairo_glyph_t		*glyphs,
-				int			 num_glyphs,
-				cairo_scaled_font_t	*scaled_font,
-				cairo_clip_t		*clip,
-				int			*remaining_glyphs)
-{
-    cairo_drm_surface_t *surface = abstract_surface;
-
-    if (surface->fallback != NULL) {
-	*remaining_glyphs = 0;
-	return _cairo_surface_show_text_glyphs (surface->fallback,
-						op, source,
-						NULL, 0,
-						glyphs, num_glyphs,
-						NULL, 0, 0,
-						scaled_font,
-						clip);
-    }
-
-    return _cairo_surface_fallback_show_glyphs (&surface->base,
-						op, source,
-						glyphs, num_glyphs,
-						scaled_font,
-						clip);
-}
-
-
 cairo_surface_t *
-cairo_drm_surface_create (cairo_drm_device_t *device,
-			  cairo_content_t content,
+cairo_drm_surface_create (cairo_device_t *abstract_device,
+			  cairo_format_t format,
 			  int width, int height)
 {
+    cairo_drm_device_t *device = (cairo_drm_device_t *) abstract_device;
     cairo_surface_t *surface;
 
-    if (! CAIRO_CONTENT_VALID (content))
-	return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_INVALID_CONTENT));
-
-    if (device != NULL && device->status)
+    if (device != NULL && device->base.status)
     {
-	surface = _cairo_surface_create_in_error (device->status);
+	surface = _cairo_surface_create_in_error (device->base.status);
     }
     else if (device == NULL ||
 	     device->surface.create == NULL ||
 	     width == 0 || width > device->max_surface_size ||
 	     height == 0 || height > device->max_surface_size)
     {
-	surface = _cairo_image_surface_create_with_content (content,
-							    width, height);
+	surface = cairo_image_surface_create (format, width, height);
+    }
+    else if (device->base.finished)
+    {
+	surface = _cairo_surface_create_in_error (CAIRO_STATUS_SURFACE_FINISHED);
     }
     else
     {
-	surface = device->surface.create (device, content, width, height);
+	surface = device->surface.create (device, format, width, height);
+	if (surface->status == CAIRO_STATUS_INVALID_SIZE)
+	    surface = cairo_image_surface_create (format, width, height);
     }
 
     return surface;
 }
 
 cairo_surface_t *
-cairo_drm_surface_create_for_name (cairo_drm_device_t *device,
+cairo_drm_surface_create_for_name (cairo_device_t *abstract_device,
 				   unsigned int name,
 	                           cairo_format_t format,
 				   int width, int height, int stride)
 {
+    cairo_drm_device_t *device = (cairo_drm_device_t *) abstract_device;
     cairo_surface_t *surface;
 
     if (! CAIRO_FORMAT_VALID (format))
 	return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_INVALID_FORMAT));
 
-    if (device != NULL && device->status)
+    if (device != NULL && device->base.status)
     {
-	surface = _cairo_surface_create_in_error (device->status);
+	surface = _cairo_surface_create_in_error (device->base.status);
     }
     else if (device == NULL || device->surface.create_for_name == NULL)
     {
@@ -279,6 +145,10 @@ cairo_drm_surface_create_for_name (cairo_drm_device_t *device,
     {
 	surface = _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_INVALID_SIZE));
     }
+    else if (device->base.finished)
+    {
+	surface = _cairo_surface_create_in_error (CAIRO_STATUS_SURFACE_FINISHED);
+    }
     else
     {
 	surface = device->surface.create_for_name (device,
@@ -288,20 +158,25 @@ cairo_drm_surface_create_for_name (cairo_drm_device_t *device,
 
     return surface;
 }
+slim_hidden_def (cairo_drm_surface_create_for_name);
 
 cairo_surface_t *
-cairo_drm_surface_create_from_cacheable_image (cairo_drm_device_t *dev,
+cairo_drm_surface_create_from_cacheable_image (cairo_device_t *abstract_device,
 	                                       cairo_surface_t *surface)
 {
+    cairo_drm_device_t *device = (cairo_drm_device_t *) abstract_device;
+
     if (surface->status) {
 	surface = _cairo_surface_create_in_error (surface->status);
-    } else if (dev != NULL && dev->status) {
-	surface = _cairo_surface_create_in_error (dev->status);
-    } else if (dev == NULL || dev->surface.create_from_cacheable_image == NULL) {
+    } else if (device != NULL && device->base.status) {
+	surface = _cairo_surface_create_in_error (device->base.status);
+    } else if (device == NULL || device->surface.create_from_cacheable_image == NULL) {
 	/* XXX invalid device! */
 	surface = _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_INVALID_FORMAT));
+    } else if (device->base.finished) {
+	surface = _cairo_surface_create_in_error (CAIRO_STATUS_SURFACE_FINISHED);
     } else {
-	surface = dev->surface.create_from_cacheable_image (dev, surface);
+	surface = device->surface.create_from_cacheable_image (device, surface);
     }
 
     return surface;
@@ -323,32 +198,22 @@ cairo_status_t
 cairo_drm_surface_enable_scan_out (cairo_surface_t *abstract_surface)
 {
     cairo_drm_surface_t *surface;
+    cairo_drm_device_t *device;
 
     surface = _cairo_surface_as_drm (abstract_surface);
-    if (surface == NULL)
+    if (unlikely (surface == NULL))
 	return _cairo_error (CAIRO_STATUS_SURFACE_TYPE_MISMATCH);
+    if (unlikely (surface->base.finished))
+	return _cairo_error (CAIRO_STATUS_SURFACE_FINISHED);
 
-    if (surface->device->surface.enable_scan_out == NULL)
+    device = (cairo_drm_device_t *) surface->base.device;
+    if (device->surface.enable_scan_out == NULL)
 	return CAIRO_STATUS_SUCCESS;
 
-    return surface->device->surface.enable_scan_out (abstract_surface);
-}
+    if (unlikely (device->base.finished))
+	return _cairo_error (CAIRO_STATUS_SURFACE_FINISHED);
 
-cairo_drm_device_t *
-cairo_drm_surface_get_device (cairo_surface_t *abstract_surface)
-{
-    cairo_drm_surface_t *surface;
-
-    if (unlikely (abstract_surface->status))
-	return _cairo_drm_device_create_in_error (abstract_surface->status);
-
-    surface = _cairo_surface_as_drm (abstract_surface);
-    if (surface == NULL) {
-	_cairo_error_throw (CAIRO_STATUS_SURFACE_TYPE_MISMATCH);
-	return NULL;
-    }
-
-    return surface->device;
+    return device->surface.enable_scan_out (abstract_surface);
 }
 
 unsigned int
@@ -370,13 +235,15 @@ _cairo_drm_surface_flink (void *abstract_surface)
 {
     cairo_drm_surface_t *surface = abstract_surface;
 
-    return _cairo_drm_bo_flink (surface->device, surface->bo);
+    return _cairo_drm_bo_flink ((cairo_drm_device_t *) surface->base.device,
+				surface->bo);
 }
 
 unsigned int
 cairo_drm_surface_get_name (cairo_surface_t *abstract_surface)
 {
     cairo_drm_surface_t *surface;
+    cairo_drm_device_t *device;
     cairo_status_t status;
 
     surface = _cairo_surface_as_drm (abstract_surface);
@@ -388,10 +255,11 @@ cairo_drm_surface_get_name (cairo_surface_t *abstract_surface)
     if (surface->bo->name)
 	return surface->bo->name;
 
-    if (surface->device->surface.flink == NULL)
+    device = (cairo_drm_device_t *) surface->base.device;
+    if (device->surface.flink == NULL)
 	return 0;
 
-    status = surface->device->surface.flink (abstract_surface);
+    status = device->surface.flink (abstract_surface);
     if (status) {
 	if (_cairo_status_is_error (status))
 	    status = _cairo_surface_set_error (abstract_surface, status);
@@ -452,13 +320,11 @@ cairo_drm_surface_get_stride (cairo_surface_t *abstract_surface)
 
 /* XXX drm or general surface layer? naming? */
 cairo_surface_t *
-cairo_drm_surface_map (cairo_surface_t *abstract_surface)
+cairo_drm_surface_map_to_image (cairo_surface_t *abstract_surface)
 {
     cairo_drm_surface_t *surface;
-    cairo_rectangle_int_t roi;
-    cairo_image_surface_t *image;
+    cairo_drm_device_t *device;
     cairo_status_t status;
-    void *image_extra;
 
     if (unlikely (abstract_surface->status))
 	return _cairo_surface_create_in_error (abstract_surface->status);
@@ -473,23 +339,9 @@ cairo_drm_surface_map (cairo_surface_t *abstract_surface)
 	return _cairo_surface_create_in_error (status);
     }
 
-    roi.x = roi.y = 0;
-    roi.width = surface->width;
-    roi.height = surface->height;
-
-    status = _cairo_surface_acquire_dest_image (abstract_surface,
-	                                        &roi,
-						&image,
-						&roi,
-						&image_extra);
-    if (unlikely (status))
-	return _cairo_surface_create_in_error (status);
-
-    assert (image_extra == NULL);
-
     surface->map_count++;
-
-    return &image->base;
+    device = (cairo_drm_device_t *) surface->base.device;
+    return cairo_surface_reference (device->surface.map_to_image (surface));
 }
 
 void

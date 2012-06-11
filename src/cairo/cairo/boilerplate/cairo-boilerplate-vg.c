@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -71,15 +71,14 @@ _cairo_boilerplate_vg_cleanup_glx (void *closure)
 }
 
 static cairo_surface_t *
-_cairo_boilerplate_vg_create_surface_glx (const char	*name,
-					  cairo_content_t	 content,
-					  double		 width,
-					  double		 height,
-					  double		 max_width,
-					  double		 max_height,
-					  cairo_boilerplate_mode_t mode,
-					  int		 id,
-					  void		**closure)
+_cairo_boilerplate_vg_create_surface_glx (const char		    *name,
+					  cairo_content_t	     content,
+					  double		     width,
+					  double		     height,
+					  double		     max_width,
+					  double		     max_height,
+					  cairo_boilerplate_mode_t   mode,
+					  void			   **closure)
 {
     int rgba_attribs[] = {
 	GLX_RGBA,
@@ -200,15 +199,14 @@ _cairo_boilerplate_vg_cleanup_egl (void *closure)
 }
 
 static cairo_surface_t *
-_cairo_boilerplate_vg_create_surface_egl (const char	*name,
-					  cairo_content_t	 content,
-					  double		 width,
-					  double		 height,
-					  double		 max_width,
-					  double		 max_height,
-					  cairo_boilerplate_mode_t mode,
-					  int		 id,
-					  void		**closure)
+_cairo_boilerplate_vg_create_surface_egl (const char		    *name,
+					  cairo_content_t	     content,
+					  double		     width,
+					  double		     height,
+					  double		     max_width,
+					  double		     max_height,
+					  cairo_boilerplate_mode_t   mode,
+					  void			   **closure)
 {
     int rgba_attribs[] = {
 	EGL_RED_SIZE, 8,
@@ -307,22 +305,28 @@ static const cairo_boilerplate_target_t targets[] = {
 	CAIRO_SURFACE_TYPE_VG, CAIRO_CONTENT_COLOR_ALPHA, 1,
 	"cairo_vg_context_create_for_glx",
 	_cairo_boilerplate_vg_create_surface_glx,
+	cairo_surface_create_similar,
 	NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	_cairo_boilerplate_vg_cleanup_glx,
-	_cairo_boilerplate_vg_synchronize
+	_cairo_boilerplate_vg_synchronize,
+        NULL,
+	TRUE, FALSE, FALSE
     },
     {
 	"vg-glx", "vg", NULL, NULL,
 	CAIRO_SURFACE_TYPE_VG, CAIRO_CONTENT_COLOR, 1,
 	"cairo_vg_context_create_for_glx",
 	_cairo_boilerplate_vg_create_surface_glx,
+	cairo_surface_create_similar,
 	NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	_cairo_boilerplate_vg_cleanup_glx,
-	_cairo_boilerplate_vg_synchronize
+	_cairo_boilerplate_vg_synchronize,
+        NULL,
+	FALSE, FALSE, FALSE
     },
 #endif
 #if CAIRO_HAS_EGL_FUNCTIONS
@@ -331,22 +335,28 @@ static const cairo_boilerplate_target_t targets[] = {
 	CAIRO_SURFACE_TYPE_VG, CAIRO_CONTENT_COLOR_ALPHA, 1,
 	"cairo_vg_context_create_for_egl",
 	_cairo_boilerplate_vg_create_surface_egl,
+	cairo_surface_create_similar,
 	NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	_cairo_boilerplate_vg_cleanup_egl,
-	_cairo_boilerplate_vg_synchronize
+	_cairo_boilerplate_vg_synchronize,
+        NULL,
+	TRUE, FALSE, FALSE
     },
     {
 	"vg-egl", "vg", NULL, NULL,
 	CAIRO_SURFACE_TYPE_VG, CAIRO_CONTENT_COLOR, 1,
 	"cairo_vg_context_create_for_egl",
 	_cairo_boilerplate_vg_create_surface_egl,
+	cairo_surface_create_similar,
 	NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	_cairo_boilerplate_vg_cleanup_egl,
-	_cairo_boilerplate_vg_synchronize
+	_cairo_boilerplate_vg_synchronize,
+        NULL,
+	FALSE, FALSE, FALSE
     },
 #endif
 };

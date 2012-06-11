@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -53,6 +53,9 @@ struct _cairo_region {
     pixman_region32_t rgn;
 };
 
+cairo_private cairo_region_t *
+_cairo_region_create_in_error (cairo_status_t status);
+
 cairo_private void
 _cairo_region_init (cairo_region_t *region);
 
@@ -62,6 +65,12 @@ _cairo_region_init_rectangle (cairo_region_t *region,
 
 cairo_private void
 _cairo_region_fini (cairo_region_t *region);
+
+cairo_private cairo_region_t *
+_cairo_region_create_from_boxes (const cairo_box_t *boxes, int count);
+
+cairo_private cairo_box_t *
+_cairo_region_get_boxes (const cairo_region_t *region, int *nbox);
 
 CAIRO_END_DECLS
 

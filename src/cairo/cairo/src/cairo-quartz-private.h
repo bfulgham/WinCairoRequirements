@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -44,6 +44,19 @@
 #include "cairo-quartz.h"
 #include "cairo-surface-clipper-private.h"
 
+#ifdef CGFLOAT_DEFINED
+typedef CGFloat cairo_quartz_float_t;
+#else
+typedef float cairo_quartz_float_t;
+#endif
+
+typedef enum {
+    DO_DIRECT,
+    DO_SHADING,
+    DO_IMAGE,
+    DO_TILED_IMAGE
+} cairo_quartz_action_t;
+
 typedef struct cairo_quartz_surface {
     cairo_surface_t base;
 
@@ -55,36 +68,23 @@ typedef struct cairo_quartz_surface {
 
     cairo_surface_clipper_t clipper;
     cairo_rectangle_int_t extents;
-
-    /* These are stored while drawing operations are in place, set up
-     * by quartz_setup_source() and quartz_finish_source()
-     */
-    CGAffineTransform sourceTransform;
-
-    CGImageRef sourceImage;
-    cairo_surface_t *sourceImageSurface;
-    CGRect sourceImageRect;
-
-    CGShadingRef sourceShading;
-    CGPatternRef sourcePattern;
-
-    CGInterpolationQuality oldInterpolationQuality;
+    cairo_rectangle_int_t virtual_extents;
 } cairo_quartz_surface_t;
 
 typedef struct cairo_quartz_image_surface {
     cairo_surface_t base;
 
-    cairo_rectangle_int_t extents;
+    int width, height;
 
     CGImageRef image;
     cairo_image_surface_t *imageSurface;
 } cairo_quartz_image_surface_t;
 
-cairo_bool_t
+cairo_private cairo_bool_t
 _cairo_quartz_verify_surface_size(int width, int height);
 
-CGImageRef
-_cairo_quartz_create_cgimage (cairo_format_t format,
+cairo_private CGImageRef
+CairoQuartzCreateCGImage (cairo_format_t format,
 			      unsigned int width,
 			      unsigned int height,
 			      unsigned int stride,
@@ -94,7 +94,7 @@ _cairo_quartz_create_cgimage (cairo_format_t format,
 			      CGDataProviderReleaseDataCallback releaseCallback,
 			      void *releaseInfo);
 
-CGFontRef
+cairo_private CGFontRef
 _cairo_quartz_scaled_font_get_cg_font_ref (cairo_scaled_font_t *sfont);
 
 #else

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -39,8 +39,12 @@
 
 #include "cairoint.h"
 
+#include "cairo-boxes-private.h"
+#include "cairo-error-private.h"
 #include "cairo-region-private.h"
 #include "cairo-slope-private.h"
+#include "cairo-traps-private.h"
+#include "cairo-spans-private.h"
 
 /* private functions */
 
@@ -71,6 +75,15 @@ _cairo_traps_limit (cairo_traps_t	*traps,
 {
     traps->limits = limits;
     traps->num_limits = num_limits;
+}
+
+void
+_cairo_traps_init_with_clip (cairo_traps_t *traps,
+			     const cairo_clip_t *clip)
+{
+    _cairo_traps_init (traps);
+    if (clip)
+	_cairo_traps_limit (traps, clip->boxes, clip->num_boxes);
 }
 
 void
@@ -146,7 +159,7 @@ _cairo_traps_add_trap (cairo_traps_t *traps,
 }
 
 /**
- * _cairo_traps_init_box:
+ * _cairo_traps_init_boxes:
  * @traps: a #cairo_traps_t
  * @box: an array box that will each be converted to a single trapezoid
  *       to store in @traps.
@@ -156,45 +169,45 @@ _cairo_traps_add_trap (cairo_traps_t *traps,
  **/
 cairo_status_t
 _cairo_traps_init_boxes (cairo_traps_t	    *traps,
-		         const cairo_box_t  *boxes,
-			 int		     num_boxes)
+		         const cairo_boxes_t *boxes)
 {
     cairo_trapezoid_t *trap;
+    const struct _cairo_boxes_chunk *chunk;
 
     _cairo_traps_init (traps);
 
-    while (traps->traps_size < num_boxes) {
+    while (traps->traps_size < boxes->num_boxes) {
 	if (unlikely (! _cairo_traps_grow (traps))) {
 	    _cairo_traps_fini (traps);
 	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
 	}
     }
 
-    traps->num_traps = num_boxes;
+    traps->num_traps = boxes->num_boxes;
     traps->is_rectilinear = TRUE;
     traps->is_rectangular = TRUE;
+    traps->maybe_region = boxes->is_pixel_aligned;
 
     trap = &traps->traps[0];
-    while (num_boxes--) {
-	trap->top    = boxes->p1.y;
-	trap->bottom = boxes->p2.y;
+    for (chunk = &boxes->chunks; chunk != NULL; chunk = chunk->next) {
+	const cairo_box_t *box;
+	int i;
 
-	trap->left.p1   = boxes->p1;
-	trap->left.p2.x = boxes->p1.x;
-	trap->left.p2.y = boxes->p2.y;
+	box = chunk->base;
+	for (i = 0; i < chunk->count; i++) {
+	    trap->top    = box->p1.y;
+	    trap->bottom = box->p2.y;
 
-	trap->right.p1.x = boxes->p2.x;
-	trap->right.p1.y = boxes->p1.y;
-	trap->right.p2   = boxes->p2;
+	    trap->left.p1   = box->p1;
+	    trap->left.p2.x = box->p1.x;
+	    trap->left.p2.y = box->p2.y;
 
-	if (traps->maybe_region) {
-	    traps->maybe_region  = _cairo_fixed_is_integer (boxes->p1.x) &&
-		                   _cairo_fixed_is_integer (boxes->p1.y) &&
-		                   _cairo_fixed_is_integer (boxes->p2.x) &&
-		                   _cairo_fixed_is_integer (boxes->p2.y);
+	    trap->right.p1.x = box->p2.x;
+	    trap->right.p1.y = box->p1.y;
+	    trap->right.p2   = box->p2;
+
+	    box++, trap++;
 	}
-
-	trap++, boxes++;
     }
 
     return CAIRO_STATUS_SUCCESS;
@@ -483,6 +496,44 @@ _cairo_traps_extents (const cairo_traps_t *traps,
     }
 }
 
+static cairo_bool_t
+_mono_edge_is_vertical (const cairo_line_t *line)
+{
+    return _cairo_fixed_integer_round_down (line->p1.x) == _cairo_fixed_integer_round_down (line->p2.x);
+}
+
+static cairo_bool_t
+_traps_are_pixel_aligned (cairo_traps_t *traps,
+			  cairo_antialias_t antialias)
+{
+    int i;
+
+    if (antialias == CAIRO_ANTIALIAS_NONE) {
+	for (i = 0; i < traps->num_traps; i++) {
+	    if (! _mono_edge_is_vertical (&traps->traps[i].left)   ||
+		! _mono_edge_is_vertical (&traps->traps[i].right))
+	    {
+		traps->maybe_region = FALSE;
+		return FALSE;
+	    }
+	}
+    } else {
+	for (i = 0; i < traps->num_traps; i++) {
+	    if (traps->traps[i].left.p1.x != traps->traps[i].left.p2.x   ||
+		traps->traps[i].right.p1.x != traps->traps[i].right.p2.x ||
+		! _cairo_fixed_is_integer (traps->traps[i].top)          ||
+		! _cairo_fixed_is_integer (traps->traps[i].bottom)       ||
+		! _cairo_fixed_is_integer (traps->traps[i].left.p1.x)    ||
+		! _cairo_fixed_is_integer (traps->traps[i].right.p1.x))
+	    {
+		traps->maybe_region = FALSE;
+		return FALSE;
+	    }
+	}
+    }
+
+    return TRUE;
+}
 
 /**
  * _cairo_traps_extract_region:
@@ -500,6 +551,7 @@ _cairo_traps_extents (const cairo_traps_t *traps,
  **/
 cairo_int_status_t
 _cairo_traps_extract_region (cairo_traps_t   *traps,
+			     cairo_antialias_t antialias,
 			     cairo_region_t **region)
 {
     cairo_rectangle_int_t stack_rects[CAIRO_STACK_ARRAY_LENGTH (cairo_rectangle_int_t)];
@@ -508,20 +560,12 @@ _cairo_traps_extract_region (cairo_traps_t   *traps,
     int i, rect_count;
 
     /* we only treat this a hint... */
-    if (! traps->maybe_region)
+    if (antialias != CAIRO_ANTIALIAS_NONE && ! traps->maybe_region)
 	return CAIRO_INT_STATUS_UNSUPPORTED;
 
-    for (i = 0; i < traps->num_traps; i++) {
-	if (traps->traps[i].left.p1.x != traps->traps[i].left.p2.x   ||
-	    traps->traps[i].right.p1.x != traps->traps[i].right.p2.x ||
-	    ! _cairo_fixed_is_integer (traps->traps[i].top)          ||
-	    ! _cairo_fixed_is_integer (traps->traps[i].bottom)       ||
-	    ! _cairo_fixed_is_integer (traps->traps[i].left.p1.x)    ||
-	    ! _cairo_fixed_is_integer (traps->traps[i].right.p1.x))
-	{
-	    traps->maybe_region = FALSE;
-	    return CAIRO_INT_STATUS_UNSUPPORTED;
-	}
+    if (! _traps_are_pixel_aligned (traps, antialias)) {
+	traps->maybe_region = FALSE;
+	return CAIRO_INT_STATUS_UNSUPPORTED;
     }
 
     if (traps->num_traps > ARRAY_LENGTH (stack_rects)) {
@@ -533,18 +577,29 @@ _cairo_traps_extract_region (cairo_traps_t   *traps,
 
     rect_count = 0;
     for (i = 0; i < traps->num_traps; i++) {
-	int x1 = _cairo_fixed_integer_part (traps->traps[i].left.p1.x);
-	int y1 = _cairo_fixed_integer_part (traps->traps[i].top);
-	int x2 = _cairo_fixed_integer_part (traps->traps[i].right.p1.x);
-	int y2 = _cairo_fixed_integer_part (traps->traps[i].bottom);
+	int x1, y1, x2, y2;
 
-	rects[rect_count].x = x1;
-	rects[rect_count].y = y1;
-	rects[rect_count].width = x2 - x1;
-	rects[rect_count].height = y2 - y1;
+	if (antialias == CAIRO_ANTIALIAS_NONE) {
+	    x1 = _cairo_fixed_integer_round_down (traps->traps[i].left.p1.x);
+	    y1 = _cairo_fixed_integer_round_down (traps->traps[i].top);
+	    x2 = _cairo_fixed_integer_round_down (traps->traps[i].right.p1.x);
+	    y2 = _cairo_fixed_integer_round_down (traps->traps[i].bottom);
+	} else {
+	    x1 = _cairo_fixed_integer_part (traps->traps[i].left.p1.x);
+	    y1 = _cairo_fixed_integer_part (traps->traps[i].top);
+	    x2 = _cairo_fixed_integer_part (traps->traps[i].right.p1.x);
+	    y2 = _cairo_fixed_integer_part (traps->traps[i].bottom);
+	}
 
-	rect_count++;
+	if (x2 > x1 && y2 > y1) {
+	    rects[rect_count].x = x1;
+	    rects[rect_count].y = y1;
+	    rects[rect_count].width  = x2 - x1;
+	    rects[rect_count].height = y2 - y1;
+	    rect_count++;
+	}
     }
+
 
     *region = cairo_region_create_rectangles (rects, rect_count);
     status = (*region)->status;
@@ -553,6 +608,66 @@ _cairo_traps_extract_region (cairo_traps_t   *traps,
 	free (rects);
 
     return status;
+}
+
+cairo_bool_t
+_cairo_traps_to_boxes (cairo_traps_t *traps,
+		       cairo_antialias_t antialias,
+		       cairo_boxes_t *boxes)
+{
+    int i;
+
+    for (i = 0; i < traps->num_traps; i++) {
+	if (traps->traps[i].left.p1.x  != traps->traps[i].left.p2.x ||
+	    traps->traps[i].right.p1.x != traps->traps[i].right.p2.x)
+	    return FALSE;
+    }
+
+    _cairo_boxes_init (boxes);
+
+    boxes->num_boxes    = traps->num_traps;
+    boxes->chunks.base  = (cairo_box_t *) traps->traps;
+    boxes->chunks.count = traps->num_traps;
+    boxes->chunks.size  = traps->num_traps;
+
+    if (antialias != CAIRO_ANTIALIAS_NONE) {
+	for (i = 0; i < traps->num_traps; i++) {
+	    /* Note the traps and boxes alias so we need to take the local copies first. */
+	    cairo_fixed_t x1 = traps->traps[i].left.p1.x;
+	    cairo_fixed_t x2 = traps->traps[i].right.p1.x;
+	    cairo_fixed_t y1 = traps->traps[i].top;
+	    cairo_fixed_t y2 = traps->traps[i].bottom;
+
+	    boxes->chunks.base[i].p1.x = x1;
+	    boxes->chunks.base[i].p1.y = y1;
+	    boxes->chunks.base[i].p2.x = x2;
+	    boxes->chunks.base[i].p2.y = y2;
+
+	    if (boxes->is_pixel_aligned) {
+		boxes->is_pixel_aligned =
+		    _cairo_fixed_is_integer (x1) && _cairo_fixed_is_integer (y1) &&
+		    _cairo_fixed_is_integer (x2) && _cairo_fixed_is_integer (y2);
+	    }
+	}
+    } else {
+	boxes->is_pixel_aligned = TRUE;
+
+	for (i = 0; i < traps->num_traps; i++) {
+	    /* Note the traps and boxes alias so we need to take the local copies first. */
+	    cairo_fixed_t x1 = traps->traps[i].left.p1.x;
+	    cairo_fixed_t x2 = traps->traps[i].right.p1.x;
+	    cairo_fixed_t y1 = traps->traps[i].top;
+	    cairo_fixed_t y2 = traps->traps[i].bottom;
+
+	    /* round down here to match Pixman's behavior when using traps. */
+	    boxes->chunks.base[i].p1.x = _cairo_fixed_round_down (x1);
+	    boxes->chunks.base[i].p1.y = _cairo_fixed_round_down (y1);
+	    boxes->chunks.base[i].p2.x = _cairo_fixed_round_down (x2);
+	    boxes->chunks.base[i].p2.y = _cairo_fixed_round_down (y2);
+	}
+    }
+
+    return TRUE;
 }
 
 /* moves trap points such that they become the actual corners of the trapezoid */
@@ -600,4 +715,100 @@ _cairo_traps_path (const cairo_traps_t *traps,
     }
 
     return CAIRO_STATUS_SUCCESS;
+}
+
+void
+_cairo_debug_print_traps (FILE *file, const cairo_traps_t *traps)
+{
+    cairo_box_t extents;
+    int n;
+
+#if 0
+    if (traps->has_limits) {
+	printf ("%s: limits=(%d, %d, %d, %d)\n",
+		filename,
+		traps->limits.p1.x, traps->limits.p1.y,
+		traps->limits.p2.x, traps->limits.p2.y);
+    }
+#endif
+
+    _cairo_traps_extents (traps, &extents);
+    fprintf (file, "extents=(%d, %d, %d, %d)\n",
+	     extents.p1.x, extents.p1.y,
+	     extents.p2.x, extents.p2.y);
+
+    for (n = 0; n < traps->num_traps; n++) {
+	fprintf (file, "%d %d L:(%d, %d), (%d, %d) R:(%d, %d), (%d, %d)\n",
+		 traps->traps[n].top,
+		 traps->traps[n].bottom,
+		 traps->traps[n].left.p1.x,
+		 traps->traps[n].left.p1.y,
+		 traps->traps[n].left.p2.x,
+		 traps->traps[n].left.p2.y,
+		 traps->traps[n].right.p1.x,
+		 traps->traps[n].right.p1.y,
+		 traps->traps[n].right.p2.x,
+		 traps->traps[n].right.p2.y);
+    }
+}
+
+struct cairo_trap_renderer {
+    cairo_span_renderer_t base;
+    cairo_traps_t *traps;
+};
+
+static cairo_status_t
+span_to_traps (void *abstract_renderer, int y, int h,
+	       const cairo_half_open_span_t *spans, unsigned num_spans)
+{
+    struct cairo_trap_renderer *r = abstract_renderer;
+    cairo_fixed_t top, bot;
+
+    if (num_spans == 0)
+	return CAIRO_STATUS_SUCCESS;
+
+    top = _cairo_fixed_from_int (y);
+    bot = _cairo_fixed_from_int (y + h);
+    do {
+	if (spans[0].coverage) {
+	    cairo_fixed_t x0 = _cairo_fixed_from_int(spans[0].x);
+	    cairo_fixed_t x1 = _cairo_fixed_from_int(spans[1].x);
+	    cairo_line_t left = { { x0, top }, { x0, bot } },
+			 right = { { x1, top }, { x1, bot } };
+	    _cairo_traps_add_trap (r->traps, top, bot, &left, &right);
+	}
+	spans++;
+    } while (--num_spans > 1);
+
+    return CAIRO_STATUS_SUCCESS;
+}
+
+cairo_int_status_t
+_cairo_rasterise_polygon_to_traps (cairo_polygon_t			*polygon,
+				   cairo_fill_rule_t			 fill_rule,
+				   cairo_antialias_t			 antialias,
+				   cairo_traps_t *traps)
+{
+    struct cairo_trap_renderer renderer;
+    cairo_scan_converter_t *converter;
+    cairo_int_status_t status;
+    cairo_rectangle_int_t r;
+
+    TRACE ((stderr, "%s: fill_rule=%d, antialias=%d\n",
+	    __FUNCTION__, fill_rule, antialias));
+    assert(antialias == CAIRO_ANTIALIAS_NONE);
+
+    renderer.traps = traps;
+    renderer.base.render_rows = span_to_traps;
+
+    _cairo_box_round_to_rectangle (&polygon->extents, &r);
+    converter = _cairo_mono_scan_converter_create (r.x, r.y,
+						   r.x + r.width,
+						   r.y + r.height,
+						   fill_rule);
+    status = _cairo_mono_scan_converter_add_polygon (converter, polygon);
+    if (likely (status == CAIRO_INT_STATUS_SUCCESS))
+	status = converter->generate (converter, &renderer.base);
+    converter->destroy (converter);
+    return status;
 }

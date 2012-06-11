@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -39,6 +39,24 @@
  */
 
 #include "cairoint.h"
+#include "cairo-error-private.h"
+
+/**
+ * SECTION:cairo-font-face
+ * @Title: cairo_font_face_t
+ * @Short_Description: Base class for font faces
+ * @See_Also: #cairo_scaled_font_t
+ *
+ * #cairo_font_face_t represents a particular font at a particular weight,
+ * slant, and other characteristic but no size, transformation, or size.
+ *
+ * Font faces are created using <firstterm>font-backend</firstterm>-specific
+ * constructors, typically of the form
+ * <function>cairo_<emphasis>backend</emphasis>_font_face_create(<!-- -->)</function>,
+ * or implicitly using the <firstterm>toy</firstterm> text API by way of
+ * cairo_select_font_face().  The resulting face can be accessed using
+ * cairo_get_font_face().
+ **/
 
 /* #cairo_font_face_t */
 
@@ -90,6 +108,8 @@ _cairo_font_face_init (cairo_font_face_t               *font_face,
  * cairo_font_face_get_reference_count().
  *
  * Return value: the referenced #cairo_font_face_t.
+ *
+ * Since: 1.0
  **/
 cairo_font_face_t *
 cairo_font_face_reference (cairo_font_face_t *font_face)
@@ -115,6 +135,8 @@ slim_hidden_def (cairo_font_face_reference);
  * Decreases the reference count on @font_face by one. If the result
  * is zero, then @font_face and all associated resources are freed.
  * See cairo_font_face_reference().
+ *
+ * Since: 1.0
  **/
 void
 cairo_font_face_destroy (cairo_font_face_t *font_face)
@@ -194,6 +216,8 @@ cairo_font_face_get_reference_count (cairo_font_face_t *font_face)
  *
  * Return value: %CAIRO_STATUS_SUCCESS or another error such as
  *   %CAIRO_STATUS_NO_MEMORY.
+ *
+ * Since: 1.0
  **/
 cairo_status_t
 cairo_font_face_status (cairo_font_face_t *font_face)
@@ -212,6 +236,8 @@ cairo_font_face_status (cairo_font_face_t *font_face)
  * function returns %NULL.
  *
  * Return value: the user data previously attached or %NULL.
+ *
+ * Since: 1.0
  **/
 void *
 cairo_font_face_get_user_data (cairo_font_face_t	   *font_face,
@@ -237,6 +263,8 @@ slim_hidden_def (cairo_font_face_get_user_data);
  *
  * Return value: %CAIRO_STATUS_SUCCESS or %CAIRO_STATUS_NO_MEMORY if a
  * slot could not be allocated for the user data.
+ *
+ * Since: 1.0
  **/
 cairo_status_t
 cairo_font_face_set_user_data (cairo_font_face_t	   *font_face,

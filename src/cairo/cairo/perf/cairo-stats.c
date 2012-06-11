@@ -25,28 +25,26 @@
 
 #include "cairo-stats.h"
 
-static int
-_cairo_perf_ticks_cmp (const void *_a, const void *_b)
-{
-    const cairo_perf_ticks_t *a = _a;
-    const cairo_perf_ticks_t *b = _b;
-
-    if (*a > *b)
-	return 1;
-    if (*a < *b)
-	return -1;
-    return 0;
-}
+#include <assert.h>
 
 void
-_cairo_stats_compute (cairo_stats_t		*stats,
-		      cairo_perf_ticks_t	*values,
-		      int			 num_values)
+_cairo_stats_compute (cairo_stats_t *stats,
+		      cairo_time_t  *values,
+		      int	     num_values)
 {
-    int i;
-    double sum, mean, delta, q1, q3, iqr;
-    double outlier_min, outlier_max;
-    int min_valid, num_valid;
+    cairo_time_t sum, mean, q1, q3, iqr;
+    cairo_time_t outlier_min, outlier_max;
+    int i, min_valid, num_valid;
+    double s;
+
+    assert (num_values > 0);
+
+    if (num_values == 1) {
+	stats->min_ticks = stats->median_ticks = values[0];
+	stats->std_dev = 0;
+	stats->iterations = 1;
+	return;
+    }
 
     /* First, identify any outliers, using the definition of "mild
      * outliers" from:
@@ -58,46 +56,39 @@ _cairo_stats_compute (cairo_stats_t		*stats,
      * and third quartiles and IQR is the inter-quartile range (Q3 -
      * Q1).
      */
-    qsort (values, num_values,
-	   sizeof (cairo_perf_ticks_t), _cairo_perf_ticks_cmp);
+    qsort (values, num_values, sizeof (cairo_time_t), _cairo_time_cmp);
 
-    q1	 	= values[(1*num_values)/4];
-    q3		= values[(3*num_values)/4];
+    q1 = values[1*num_values/4];
+    q3 = values[3*num_values/4];
 
+    /* XXX assumes we have native uint64_t */
     iqr = q3 - q1;
+    outlier_min = q1 - 3 * iqr / 2;
+    outlier_max = q3 + 3 * iqr / 2;
 
-    outlier_min = q1 - 1.5 * iqr;
-    outlier_max = q3 + 1.5 * iqr;
+    for (i = 0; i < num_values && values[i] < outlier_min; i++)
+	;
+    min_valid = i;
 
-    min_valid = 0;
-    while (min_valid < num_values && values[min_valid] < outlier_min)
-	min_valid++;
-
-    i = min_valid;
-    num_valid = 0;
-    while (i + num_valid < num_values && values[i+num_valid] <= outlier_max)
-	num_valid++;
+    for (i = 0; i < num_values && values[i] <= outlier_max; i++)
+	;
+    num_valid = i - min_valid;
+    assert(num_valid);
 
     stats->iterations = num_valid;
     stats->min_ticks = values[min_valid];
-
-    sum = 0.0;
-    for (i = min_valid; i < min_valid + num_valid; i++) {
-	sum += values[i];
-	if (values[i] < stats->min_ticks)
-	    stats->min_ticks = values[i];
-    }
-
-    mean = sum / num_valid;
     stats->median_ticks = values[min_valid + num_valid / 2];
 
-    sum = 0.0;
-    for (i = min_valid; i < min_valid + num_valid; i++) {
-	delta = values[i] - mean;
-	sum += delta * delta;
-    }
+    sum = 0;
+    for (i = min_valid; i < min_valid + num_valid; i++)
+	sum = _cairo_time_add (sum, values[i]);
+    mean = sum / num_valid;
 
-    /* Let's use a std. deviation normalized to the mean for easier
-     * comparison. */
-    stats->std_dev = sqrt(sum / num_valid) / mean;
+    /* Let's use a normalized std. deviation for easier comparison. */
+    s = 0;
+    for (i = min_valid; i < min_valid + num_valid; i++) {
+	double delta = (values[i] - mean) / (double)mean;
+	s += delta * delta;
+    }
+    stats->std_dev = sqrt(s / num_valid);
 }

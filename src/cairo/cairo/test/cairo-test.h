@@ -79,9 +79,23 @@ cairo_test_NaN (void)
 #endif
 }
 
+#ifndef MIN
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#endif
+
+#ifndef MAX
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#endif
+
+#ifndef ARRAY_LENGTH
+#define ARRAY_LENGTH(__array) ((int) (sizeof (__array) / sizeof (__array[0])))
+#endif
+
 #define CAIRO_TEST_OUTPUT_DIR "output"
 
 #define CAIRO_TEST_LOG_SUFFIX ".log"
+
+#define CAIRO_TEST_FONT_FAMILY "DejaVu"
 
 /* What is a fail and what isn't?
  * When running the test suite we want to detect unexpected output. This
@@ -124,6 +138,7 @@ typedef enum cairo_test_status {
     CAIRO_TEST_FAILURE,
     CAIRO_TEST_NEW,
     CAIRO_TEST_XFAILURE,
+    CAIRO_TEST_ERROR,
     CAIRO_TEST_CRASHED,
     CAIRO_TEST_UNTESTED = 77 /* match automake's skipped exit status */
 } cairo_test_status_t;
@@ -177,7 +192,7 @@ struct _cairo_test {
 #define CAIRO_TEST(name, description, keywords, requirements, width, height, preamble, draw) \
 void _register_##name (void); \
 void _register_##name (void) { \
-    static const cairo_test_t test = { \
+    static cairo_test_t test = { \
 	#name, description, \
 	keywords, requirements, \
 	width, height, \
@@ -187,7 +202,7 @@ void _register_##name (void) { \
 }
 
 void
-cairo_test_register (const cairo_test_t *test);
+cairo_test_register (cairo_test_t *test);
 
 /* The full context for the test.
  * For ordinary tests (using the CAIRO_TEST()->draw interface) the context
@@ -204,6 +219,7 @@ struct _cairo_test_context {
     const char *test_name;
 
     FILE *log_file;
+    const char *output;
     const char *srcdir; /* directory containing sources and input data */
     const char *refdir; /* directory containing reference images */
 
@@ -220,8 +236,6 @@ struct _cairo_test_context {
     int last_fault_count;
 
     int timeout;
-
-    int thread;
 };
 
 /* Retrieve the test context from the cairo_t, used for logging, paths etc */
@@ -236,10 +250,6 @@ cairo_test_log (const cairo_test_context_t *ctx,
 void
 cairo_test_logv (const cairo_test_context_t *ctx,
 	        const char *fmt, va_list ap) CAIRO_BOILERPLATE_PRINTF_FORMAT(2, 0);
-
-void
-cairo_test_log_path (const cairo_test_context_t *ctx,
-		     const cairo_path_t *path);
 
 /* Helper functions that take care of finding source images even when
  * building in a non-srcdir manner, (i.e. the tests will be run in a

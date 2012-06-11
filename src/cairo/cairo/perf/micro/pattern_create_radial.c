@@ -55,7 +55,7 @@ generate_double_in_range (double min, double max)
     return d;
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 do_pattern_create_radial (cairo_t *cr, int width, int height, int loops)
 {
     cairo_perf_timer_start ();
@@ -79,13 +79,16 @@ do_pattern_create_radial (cairo_t *cr, int width, int height, int loops)
     return cairo_perf_timer_elapsed ();
 }
 
+cairo_bool_t
+pattern_create_radial_enabled (cairo_perf_t *perf)
+{
+    return cairo_perf_can_run (perf, "pattern-create-radial", NULL);
+}
+
 void
 pattern_create_radial (cairo_perf_t *perf, cairo_t *cr, int width, int height)
 {
     int i;
-
-    if (! cairo_perf_can_run (perf, "pattern-create-radial", NULL))
-	return;
 
     srand (time (0));
     for (i = 0; i < RADIALS_COUNT; i++)
@@ -99,5 +102,5 @@ pattern_create_radial (cairo_perf_t *perf, cairo_t *cr, int width, int height)
     }
 
     cairo_perf_run (perf, "pattern-create-radial",
-                          do_pattern_create_radial);
+                          do_pattern_create_radial, NULL);
 }

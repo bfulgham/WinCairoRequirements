@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -44,6 +44,45 @@
 #include "config.h"
 #endif
 
+/* Size in bytes of buffer to use off the stack per functions.
+ * Mostly used by text functions.  For larger allocations, they'll
+ * malloc(). */
+#ifndef CAIRO_STACK_BUFFER_SIZE
+#define CAIRO_STACK_BUFFER_SIZE (512 * sizeof (int))
+#endif
+
+#define CAIRO_STACK_ARRAY_LENGTH(T) (CAIRO_STACK_BUFFER_SIZE / sizeof(T))
+
+/*
+ * The goal of this block is to define the following macros for
+ * providing faster linkage to functions in the public API for calls
+ * from within cairo.
+ *
+ * slim_hidden_proto(f)
+ * slim_hidden_proto_no_warn(f)
+ *
+ *   Declares `f' as a library internal function and hides the
+ *   function from the global symbol table.  This macro must be
+ *   expanded after `f' has been declared with a prototype but before
+ *   any calls to the function are seen by the compiler.  The no_warn
+ *   variant inhibits warnings about the return value being unused at
+ *   call sites.  The macro works by renaming `f' to an internal name
+ *   in the symbol table and hiding that.  As far as cairo internal
+ *   calls are concerned they're calling a library internal function
+ *   and thus don't need to bounce via the PLT.
+ *
+ * slim_hidden_def(f)
+ *
+ *   Exports `f' back to the global symbol table.  This macro must be
+ *   expanded right after the function definition and only for symbols
+ *   hidden previously with slim_hidden_proto().  The macro works by
+ *   adding a global entry to the symbol table which points at the
+ *   internal name of `f' created by slim_hidden_proto().
+ *
+ * Functions in the public API which aren't called by the library
+ * don't need to be hidden and re-exported using the slim hidden
+ * macros.
+ */
 #if __GNUC__ >= 3 && defined(__ELF__) && !defined(__sun)
 # define slim_hidden_proto(name)		slim_hidden_proto1(name, slim_hidden_int_name(name)) cairo_private
 # define slim_hidden_proto_no_warn(name)	slim_hidden_proto1(name, slim_hidden_int_name(name)) cairo_private_no_warn
@@ -75,7 +114,9 @@
 
 /* slim_internal.h */
 #define CAIRO_HAS_HIDDEN_SYMBOLS 1
-#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3)) && defined(__ELF__) && !defined(__sun)
+#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3)) && \
+    (defined(__ELF__) || defined(__APPLE__)) &&			\
+    !defined(__sun)
 #define cairo_private_no_warn	__attribute__((__visibility__("hidden")))
 #elif defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)
 #define cairo_private_no_warn	__hidden
@@ -134,23 +175,16 @@
 #if __GNUC__ >= 3
 #define cairo_pure __attribute__((pure))
 #define cairo_const __attribute__((const))
+#define cairo_always_inline inline __attribute__((always_inline))
 #else
 #define cairo_pure
 #define cairo_const
+#define cairo_always_inline inline
 #endif
 
 #if defined(__GNUC__) && (__GNUC__ > 2) && defined(__OPTIMIZE__)
-#define _CAIRO_BOOLEAN_EXPR(expr)                   \
- __extension__ ({                               \
-   int _cairo_boolean_var_;                         \
-   if (expr)                                    \
-      _cairo_boolean_var_ = 1;                      \
-   else                                         \
-      _cairo_boolean_var_ = 0;                      \
-   _cairo_boolean_var_;                             \
-})
-#define likely(expr) (__builtin_expect (_CAIRO_BOOLEAN_EXPR(expr), 1))
-#define unlikely(expr) (__builtin_expect (_CAIRO_BOOLEAN_EXPR(expr), 0))
+#define likely(expr) (__builtin_expect (!!(expr), 1))
+#define unlikely(expr) (__builtin_expect (!!(expr), 0))
 #else
 #define likely(expr) (expr)
 #define unlikely(expr) (expr)
@@ -162,15 +196,22 @@
 #endif
 
 #if (defined(__WIN32__) && !defined(__WINE__)) || defined(_MSC_VER)
-#define snprintf _snprintf
-#define popen _popen
-#define pclose _pclose
+#define access _access
+#define fdopen _fdopen
 #define hypot _hypot
+#define pclose _pclose
+#define popen _popen
+#define snprintf _snprintf
+#define strdup _strdup
+#define unlink _unlink
+#define vsnprintf _vsnprintf
 #endif
 
 #ifdef _MSC_VER
+#ifndef __cplusplus
 #undef inline
 #define inline __inline
+#endif
 #endif
 
 #if defined(_MSC_VER) && defined(_M_IX86)

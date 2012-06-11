@@ -36,37 +36,33 @@
 /* A structure representing an open-ended horizontal span of constant
  * pixel coverage. */
 typedef struct _cairo_half_open_span {
-    /* The inclusive x-coordinate of the start of the span. */
-    int x;
-
-    /* The pixel coverage for the pixels to the right. */
-    int coverage;
+    int32_t x; /* The inclusive x-coordinate of the start of the span. */
+    uint8_t coverage; /* The pixel coverage for the pixels to the right. */
+    uint8_t inverse; /* between regular mask and clip */
 } cairo_half_open_span_t;
 
 /* Span renderer interface. Instances of renderers are provided by
  * surfaces if they want to composite spans instead of trapezoids. */
 typedef struct _cairo_span_renderer cairo_span_renderer_t;
 struct _cairo_span_renderer {
+    /* Private status variable. */
+    cairo_status_t status;
+
     /* Called to destroy the renderer. */
     cairo_destroy_func_t	destroy;
 
-    /* Render the spans on row y of the source by whatever compositing
-     * method is required.  The function should ignore spans outside
-     * the bounding box set by the init() function. */
-    cairo_status_t (*render_row)(
-	void				*abstract_renderer,
-	int				 y,
-	const cairo_half_open_span_t	*coverages,
-	unsigned			 num_coverages);
+    /* Render the spans on row y of the destination by whatever compositing
+     * method is required. */
+    cairo_warn cairo_status_t
+    (*render_rows) (void *abstract_renderer,
+		    int y, int height,
+		    const cairo_half_open_span_t	*coverages,
+		    unsigned num_coverages);
 
     /* Called after all rows have been rendered to perform whatever
      * final rendering step is required.  This function is called just
      * once before the renderer is destroyed. */
-    cairo_status_t (*finish)(
-	void		      *abstract_renderer);
-
-    /* Private status variable. */
-    cairo_status_t status;
+    cairo_status_t (*finish) (void *abstract_renderer);
 };
 
 /* Scan converter interface. */
@@ -74,17 +70,6 @@ typedef struct _cairo_scan_converter cairo_scan_converter_t;
 struct _cairo_scan_converter {
     /* Destroy this scan converter. */
     cairo_destroy_func_t	destroy;
-
-    /* Add a single edge to the converter. */
-    cairo_status_t (*add_edge) (void		    *abstract_converter,
-				const cairo_point_t *p1,
-				const cairo_point_t *p2,
-				int top, int bottom,
-				int dir);
-
-    /* Add a polygon (set of edges) to the converter. */
-    cairo_status_t (*add_polygon) (void		    *abstract_converter,
-				   const cairo_polygon_t  *polygon);
 
     /* Generates coverage spans for rows for the added edges and calls
      * the renderer function for each row. After generating spans the
@@ -103,7 +88,85 @@ _cairo_tor_scan_converter_create (int			xmin,
 				  int			ymin,
 				  int			xmax,
 				  int			ymax,
-				  cairo_fill_rule_t	fill_rule);
+				  cairo_fill_rule_t	fill_rule,
+				  cairo_antialias_t	antialias);
+cairo_private cairo_status_t
+_cairo_tor_scan_converter_add_polygon (void		*converter,
+				       const cairo_polygon_t *polygon);
+
+cairo_private cairo_scan_converter_t *
+_cairo_tor22_scan_converter_create (int			xmin,
+				    int			ymin,
+				    int			xmax,
+				    int			ymax,
+				    cairo_fill_rule_t	fill_rule,
+				    cairo_antialias_t	antialias);
+cairo_private cairo_status_t
+_cairo_tor22_scan_converter_add_polygon (void		*converter,
+					 const cairo_polygon_t *polygon);
+
+cairo_private cairo_scan_converter_t *
+_cairo_mono_scan_converter_create (int			xmin,
+				   int			ymin,
+				   int			xmax,
+				   int			ymax,
+				   cairo_fill_rule_t	fill_rule);
+cairo_private cairo_status_t
+_cairo_mono_scan_converter_add_polygon (void		*converter,
+					const cairo_polygon_t *polygon);
+
+cairo_private cairo_scan_converter_t *
+_cairo_clip_tor_scan_converter_create (cairo_clip_t *clip,
+				       cairo_polygon_t *polygon,
+				       cairo_fill_rule_t fill_rule,
+				       cairo_antialias_t antialias);
+
+typedef struct _cairo_rectangular_scan_converter {
+    cairo_scan_converter_t base;
+
+    cairo_box_t extents;
+
+    struct _cairo_rectangular_scan_converter_chunk {
+	struct _cairo_rectangular_scan_converter_chunk *next;
+	void *base;
+	int count;
+	int size;
+    } chunks, *tail;
+    char buf[CAIRO_STACK_BUFFER_SIZE];
+    int num_rectangles;
+} cairo_rectangular_scan_converter_t;
+
+cairo_private void
+_cairo_rectangular_scan_converter_init (cairo_rectangular_scan_converter_t *self,
+					const cairo_rectangle_int_t *extents);
+
+cairo_private cairo_status_t
+_cairo_rectangular_scan_converter_add_box (cairo_rectangular_scan_converter_t *self,
+					   const cairo_box_t *box,
+					   int dir);
+
+typedef struct _cairo_botor_scan_converter {
+    cairo_scan_converter_t base;
+
+    cairo_box_t extents;
+    cairo_fill_rule_t fill_rule;
+
+    int xmin, xmax;
+
+    struct _cairo_botor_scan_converter_chunk {
+	struct _cairo_botor_scan_converter_chunk *next;
+	void *base;
+	int count;
+	int size;
+    } chunks, *tail;
+    char buf[CAIRO_STACK_BUFFER_SIZE];
+    int num_edges;
+} cairo_botor_scan_converter_t;
+
+cairo_private void
+_cairo_botor_scan_converter_init (cairo_botor_scan_converter_t *self,
+				  const cairo_box_t *extents,
+				  cairo_fill_rule_t fill_rule);
 
 /* cairo-spans.c: */
 
@@ -139,17 +202,5 @@ _cairo_surface_composite_polygon (cairo_surface_t	*surface,
 				  const cairo_composite_rectangles_t *rects,
 				  cairo_polygon_t	*polygon,
 				  cairo_region_t	*clip_region);
-
-cairo_private cairo_status_t
-_cairo_surface_composite_trapezoids_as_polygon (cairo_surface_t	*surface,
-						cairo_operator_t	 op,
-						const cairo_pattern_t	*pattern,
-						cairo_antialias_t	antialias,
-						int src_x, int src_y,
-						int dst_x, int dst_y,
-						int width, int height,
-						cairo_trapezoid_t	*traps,
-						int num_traps,
-						cairo_region_t	*clip_region);
 
 #endif /* CAIRO_SPANS_PRIVATE_H */

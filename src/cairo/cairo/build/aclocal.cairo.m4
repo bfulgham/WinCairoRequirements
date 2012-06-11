@@ -75,30 +75,36 @@ AC_DEFUN([CAIRO_CONFIG_COMMANDS],
 	], $3)
 ])
 
-dnl check compiler flags with a program and no muttering.
-AC_DEFUN([CAIRO_CC_TRY_FLAG_SILENT],
-[dnl     (flags..., optional program, true-action, false-action)
-
-	_compile_program='$2'
-	if test "x$_compile_program" = "x"; then
-		# AC_LANG_PROGRAM() produces a main() w/o args,
-		# but -Wold-style-definition doesn't like that.
-		# We need _some_ program so that we don't get
-		# warnings about empty compilation units.
-		_compile_program='
-			int main(int c, char **v) {
-			    (void)c; (void)v; return 0; }'
-	fi
+dnl CAIRO_CC_TRY_LINK_WITH_ENV_SILENT(env-setup, program,
+dnl				      true-action, false-action)
+dnl
+dnl Compile and link the program with the given environment setup.
+dnl The global cairo_cc_flag is set to "yes" or "no" according as
+dnl the link succeeded or not.  The link step must complete without
+dnl warnings or errors to stderr.
+dnl
+dnl Perform true-action on success and false-action on failure.
+dnl The values of CFLAGS, LIBS, LDFLAGS are saved before env-setup
+dnl is executed and restored right before the end of the macro.
+AC_DEFUN([CAIRO_CC_TRY_LINK_WITH_ENV_SILENT],[dnl
+	# AC_LANG_PROGRAM() produces a main() w/o args,
+	# but -Wold-style-definition doesn't like that.
+	# We need _some_ program so that we don't get
+	# warnings about empty compilation units, so always
+	# append a reasonable main().
+	_compile_program="$2"'
+		int main(int c, char **v) { (void)c; (void)v; return 0; }'
 
 	_save_cflags="$CFLAGS"
-	CFLAGS="$CFLAGS $1"
-	AC_COMPILE_IFELSE(
-		[$_compile_program],
+	_save_ldflags="$LDFLAGS"
+	_save_libs="$LIBS"
+	$1
+	AC_LINK_IFELSE(
+		[AC_LANG_SOURCE([$_compile_program])],
 		[cairo_cc_stderr=`test -f conftest.err && cat conftest.err`
 		 cairo_cc_flag=yes],
 		[cairo_cc_stderr=`test -f conftest.err && cat conftest.err`
 		 cairo_cc_flag=no])
-	CFLAGS="$_save_cflags"
 
 	if test "x$cairo_cc_stderr" != "x"; then
 		cairo_cc_flag=no
@@ -109,6 +115,16 @@ AC_DEFUN([CAIRO_CC_TRY_FLAG_SILENT],
 	else
 		ifelse([$4], , :, [$4])
 	fi
+	CFLAGS="$_save_cflags"
+	LDFLAGS="$_save_ldflags"
+	LIBS="$_save_libs"
+])
+
+dnl check compiler flags with a program and no muttering.
+AC_DEFUN([CAIRO_CC_TRY_FLAG_SILENT],
+[dnl     (flags..., optional program, true-action, false-action)
+	CAIRO_CC_TRY_LINK_WITH_ENV_SILENT([CFLAGS="$CFLAGS $1"],
+					  [$2], [$3], [$4])
 ])
 
 dnl find a -Werror equivalent
@@ -137,27 +153,6 @@ AC_DEFUN([CAIRO_CC_TRY_FLAG],
 	AC_MSG_RESULT([$cairo_cc_flag])
 ])
 
-dnl check compiler/ld flags
-AC_DEFUN([CAIRO_CC_TRY_LINK_FLAG],
-[dnl
-	CAIRO_CC_CHECK_WERROR
-	AC_MSG_CHECKING([whether $CC supports $1])
-
-	_save_cflags="$CFLAGS"
-	CFLAGS="$CFLAGS $WERROR $1"
-	AC_LINK_IFELSE([int main(void){ return 0;} ],
-                       [cairo_cc_flag=yes],
-                       [cairo_cc_flag=no])
-	CFLAGS="$_save_cflags"
-
-	if test "x$cairo_cc_flag" = "xyes"; then
-		ifelse([$2], , :, [$2])
-	else
-		ifelse([$3], , :, [$3])
-	fi
-	AC_MSG_RESULT([$cairo_cc_flag])
-])
-
 dnl Usage:
 dnl   CAIRO_CHECK_NATIVE_ATOMIC_PRIMITIVES
 AC_DEFUN([CAIRO_CHECK_NATIVE_ATOMIC_PRIMITIVES],
@@ -172,10 +167,30 @@ int atomic_cmpxchg(int i, int j, int k) { return __sync_val_compare_and_swap (&i
 ], [],
 		  cairo_cv_atomic_primitives="Intel"
 		  )
+
+		if test "x$cairo_cv_atomic_primitives" = "xnone"; then
+			AC_CHECK_HEADER([atomic_ops.h],
+					cairo_cv_atomic_primitives="libatomic-ops")
+		fi
+
+		if test "x$cairo_cv_atomic_primitives" = "xnone"; then
+			AC_CHECK_HEADER([libkern/OSAtomic.h],
+					cairo_cv_atomic_primitives="OSAtomic")
+		fi
 	])
 	if test "x$cairo_cv_atomic_primitives" = xIntel; then
 		AC_DEFINE(HAVE_INTEL_ATOMIC_PRIMITIVES, 1,
 			  [Enable if your compiler supports the Intel __sync_* atomic primitives])
+	fi
+
+	if test "x$cairo_cv_atomic_primitives" = "xlibatomic-ops"; then
+		AC_DEFINE(HAVE_LIB_ATOMIC_OPS, 1,
+			  [Enable if you have libatomic-ops-dev installed])
+	fi
+
+	if test "x$cairo_cv_atomic_primitives" = xOSAtomic; then
+		AC_DEFINE(HAVE_OS_ATOMIC_OPS, 1,
+			  [Enable if you have MacOS X atomic operations])
 	fi
 ])
 

@@ -67,6 +67,7 @@
     <PostBuildEvent>
       <Command>xcopy /Y /R "$(ProjectDir)png.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)pnglibconf.h" "$(SolutionDir)include"
 </Command>
       <Message>Install headers</Message>
     </PostBuildEvent>
@@ -84,6 +85,7 @@ xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
     <PostBuildEvent>
       <Command>xcopy /Y /R "$(ProjectDir)png.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)pnglibconf.h" "$(SolutionDir)include"
 </Command>
       <Message>Install headers</Message>
     </PostBuildEvent>
@@ -155,12 +157,6 @@ xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="pngvcrd.c">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
     <ClCompile Include="pngwio.c">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -189,6 +185,7 @@ xcopy /Y /R "$(ProjectDir)pngconf.h" "$(SolutionDir)include"
   <ItemGroup>
     <ClInclude Include="png.h" />
     <ClInclude Include="pngconf.h" />
+    <ClInclude Include="pnglibconf.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\zlib\contrib\vstudio\vc10\zlibvc.vcxproj">

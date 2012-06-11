@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -82,6 +82,38 @@ uint64_shift32 (cairo_uint64_t i)
 }
 
 static const cairo_uint64_t uint64_carry32 = { 0, 1 };
+
+cairo_uint64_t
+_cairo_double_to_uint64 (double i)
+{
+    cairo_uint64_t	q;
+
+    q.hi = i * (1. / 4294967296.);
+    q.lo = i - q.hi * 4294967296.;
+    return q;
+}
+
+double
+_cairo_uint64_to_double (cairo_uint64_t i)
+{
+    return i.hi * 4294967296. + i.lo;
+}
+
+cairo_int64_t
+_cairo_double_to_int64 (double i)
+{
+    cairo_uint64_t	q;
+
+    q.hi = i * (1. / INT32_MAX);
+    q.lo = i - q.hi * (double)INT32_MAX;
+    return q;
+}
+
+double
+_cairo_int64_to_double (cairo_int64_t i)
+{
+    return i.hi * INT32_MAX + i.lo;
+}
 
 cairo_uint64_t
 _cairo_uint32_to_uint64 (uint32_t i)
@@ -672,7 +704,8 @@ _cairo_int128_divrem (cairo_int128_t num, cairo_int128_t den)
  * bits then the returned remainder is equal to the divisor, and the
  * quotient is the largest representable 64 bit integer.  It is an
  * error to call this function with the high 32 bits of @num being
- * non-zero. */
+ * non-zero.
+ **/
 cairo_uquorem64_t
 _cairo_uint_96by64_32x64_divrem (cairo_uint128_t num,
 				 cairo_uint64_t den)
@@ -802,7 +835,7 @@ _cairo_int_96by64_32x64_divrem (cairo_int128_t num, cairo_int64_t den)
     uqr = _cairo_uint_96by64_32x64_divrem (num, nonneg_den);
     if (_cairo_uint64_eq (uqr.rem, nonneg_den)) {
 	/* bail on overflow. */
-	qr.quo = _cairo_uint32s_to_uint64 (0x7FFFFFFF, -1U);;
+	qr.quo = _cairo_uint32s_to_uint64 (0x7FFFFFFF, -1U);
 	qr.rem = den;
 	return qr;
     }

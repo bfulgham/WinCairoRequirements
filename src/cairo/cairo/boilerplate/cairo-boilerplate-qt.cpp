@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -53,15 +53,14 @@ _cairo_boilerplate_qt_cleanup (void *closure)
 }
 
 static cairo_surface_t *
-_cairo_boilerplate_qt_create_surface (const char		 *name,
-				      cairo_content_t		  content,
-				      double			  width,
-				      double			  height,
-				      double			  max_width,
-				      double			  max_height,
-				      cairo_boilerplate_mode_t	  mode,
-				      int			  id,
-				      void			**closure)
+_cairo_boilerplate_qt_create_surface (const char		*name,
+				      cairo_content_t		 content,
+				      double			 width,
+				      double			 height,
+				      double			 max_width,
+				      double			 max_height,
+				      cairo_boilerplate_mode_t	 mode,
+				      void		       **closure)
 {
     qt_closure_t *qtc;
 
@@ -92,8 +91,9 @@ static const cairo_boilerplate_target_t targets[] = {
     {
 	"qt", "qt", NULL, NULL,
 	CAIRO_SURFACE_TYPE_QT, CAIRO_CONTENT_COLOR_ALPHA, 0,
+	"cairo_qt_surface_create",
 	_cairo_boilerplate_qt_create_surface,
-	NULL, NULL,
+	NULL, NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	_cairo_boilerplate_qt_cleanup
@@ -101,8 +101,9 @@ static const cairo_boilerplate_target_t targets[] = {
     {
 	"qt", "qt", NULL, NULL,
 	CAIRO_SURFACE_TYPE_QT, CAIRO_CONTENT_COLOR, 0,
+	"cairo_qt_surface_create",
 	_cairo_boilerplate_qt_create_surface,
-	NULL, NULL,
+	NULL, NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	_cairo_boilerplate_qt_cleanup

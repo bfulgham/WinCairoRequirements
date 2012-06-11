@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -51,14 +51,13 @@ typedef cairo_status_t
 						     double,
 						     cairo_antialias_t);
 struct _cairo_surface_clipper {
-    cairo_clip_t clip;
-    cairo_bool_t is_clipped;
+    cairo_clip_t *clip;
     cairo_surface_clipper_intersect_clip_path_func_t intersect_clip_path;
 };
 
 cairo_private cairo_status_t
 _cairo_surface_clipper_set_clip (cairo_surface_clipper_t *clipper,
-				 cairo_clip_t *clip);
+				 const cairo_clip_t *clip);
 
 cairo_private void
 _cairo_surface_clipper_init (cairo_surface_clipper_t *clipper,

@@ -38,7 +38,7 @@
  *	https://bugs.freedesktop.org/show_bug.cgi?id=6955
  *
  *   We replicate this bug by using the cairo_scaled_font_set_max_glyphs_per_font
- *   function to artifically induce cache pressure. (This function was added
+ *   function to artificially induce cache pressure. (This function was added
  *   for this very purpose.)
  *
  * 2006-06-22  Carl Worth  <cworth@cworth.org>
@@ -58,7 +58,7 @@ draw (cairo_t *cr, int width, int height)
     cairo_paint (cr);
     cairo_restore (cr);
 
-    cairo_select_font_face (cr, "Bitstream Vera Sans",
+    cairo_select_font_face (cr, CAIRO_TEST_FONT_FAMILY " Sans",
 			    CAIRO_FONT_SLANT_NORMAL,
 			    CAIRO_FONT_WEIGHT_NORMAL);
     cairo_set_font_size (cr, TEXT_SIZE);

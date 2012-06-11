@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -34,6 +34,7 @@
  */
 
 #include "cairoint.h"
+#include "cairo-image-surface-private.h"
 
 /**
  * cairo_debug_reset_static_data:
@@ -55,6 +56,8 @@
  * functions have been called as necessary). If there are active cairo
  * objects, this call is likely to cause a crash, (eg. an assertion
  * failure due to a hash table being destroyed when non-empty).
+ *
+ * Since: 1.0
  **/
 void
 cairo_debug_reset_static_data (void)
@@ -69,6 +72,10 @@ cairo_debug_reset_static_data (void)
     _cairo_ft_font_reset_static_data ();
 #endif
 
+#if CAIRO_HAS_WIN32_FONT
+    _cairo_win32_font_reset_static_data ();
+#endif
+
     _cairo_intern_string_reset_static_data ();
 
     _cairo_scaled_font_reset_static_data ();
@@ -77,8 +84,16 @@ cairo_debug_reset_static_data (void)
 
     _cairo_clip_reset_static_data ();
 
+    _cairo_image_reset_static_data ();
+
 #if CAIRO_HAS_DRM_SURFACE
     _cairo_drm_device_reset_static_data ();
+#endif
+
+    _cairo_default_context_reset_static_data ();
+
+#if CAIRO_HAS_COGL_SURFACE
+    _cairo_cogl_context_reset_static_data ();
 #endif
 
     CAIRO_MUTEX_FINALIZE ();
@@ -106,10 +121,15 @@ _cairo_debug_check_image_surface_is_defined (const cairo_surface_t *surface)
     case CAIRO_FORMAT_A8:
 	width = image->width;
 	break;
+    case CAIRO_FORMAT_RGB16_565:
+	width = image->width*2;
+	break;
     case CAIRO_FORMAT_RGB24:
+    case CAIRO_FORMAT_RGB30:
     case CAIRO_FORMAT_ARGB32:
 	width = image->width*4;
 	break;
+    case CAIRO_FORMAT_INVALID:
     default:
 	/* XXX compute width from pixman bpp */
 	return;
@@ -220,9 +240,16 @@ void
 _cairo_debug_print_path (FILE *stream, cairo_path_fixed_t *path)
 {
     cairo_status_t status;
+    cairo_box_t box;
+
+    fprintf (stream,
+	     "path: extents=(%f, %f), (%f, %f)\n",
+	    _cairo_fixed_to_double (path->extents.p1.x),
+	    _cairo_fixed_to_double (path->extents.p1.y),
+	    _cairo_fixed_to_double (path->extents.p2.x),
+	    _cairo_fixed_to_double (path->extents.p2.y));
 
     status = _cairo_path_fixed_interpret (path,
-					  CAIRO_DIRECTION_FORWARD,
 					  _print_move_to,
 					  _print_line_to,
 					  _print_curve_to,
@@ -230,5 +257,48 @@ _cairo_debug_print_path (FILE *stream, cairo_path_fixed_t *path)
 					  stream);
     assert (status == CAIRO_STATUS_SUCCESS);
 
+    if (_cairo_path_fixed_is_box (path, &box)) {
+	fprintf (stream, "[box (%d, %d), (%d, %d)]",
+		 box.p1.x, box.p1.y, box.p2.x, box.p2.y);
+    }
+
     printf ("\n");
+}
+
+void
+_cairo_debug_print_polygon (FILE *stream, cairo_polygon_t *polygon)
+{
+    int n;
+
+    fprintf (stream,
+	     "polygon: extents=(%f, %f), (%f, %f)\n",
+	    _cairo_fixed_to_double (polygon->extents.p1.x),
+	    _cairo_fixed_to_double (polygon->extents.p1.y),
+	    _cairo_fixed_to_double (polygon->extents.p2.x),
+	    _cairo_fixed_to_double (polygon->extents.p2.y));
+    if (polygon->num_limits) {
+	fprintf (stream,
+		 "       : limit=(%f, %f), (%f, %f) x %d\n",
+		 _cairo_fixed_to_double (polygon->limit.p1.x),
+		 _cairo_fixed_to_double (polygon->limit.p1.y),
+		 _cairo_fixed_to_double (polygon->limit.p2.x),
+		 _cairo_fixed_to_double (polygon->limit.p2.y),
+		 polygon->num_limits);
+    }
+
+    for (n = 0; n < polygon->num_edges; n++) {
+	cairo_edge_t *edge = &polygon->edges[n];
+
+	fprintf (stream,
+		 "  [%d] = [(%f, %f), (%f, %f)], top=%f, bottom=%f, dir=%d\n",
+		 n,
+		 _cairo_fixed_to_double (edge->line.p1.x),
+		 _cairo_fixed_to_double (edge->line.p1.y),
+		 _cairo_fixed_to_double (edge->line.p2.x),
+		 _cairo_fixed_to_double (edge->line.p2.y),
+		 _cairo_fixed_to_double (edge->top),
+		 _cairo_fixed_to_double (edge->bottom),
+		 edge->dir);
+
+    }
 }

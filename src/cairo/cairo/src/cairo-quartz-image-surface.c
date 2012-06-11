@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -28,7 +28,7 @@
  *
  * The Original Code is the cairo graphics library.
  *
- * The Initial Developer of the Original Code is Mozilla Corporation.
+ * The Initial Developer of the Original Code is Mozilla Foundation.
  *
  * Contributor(s):
  *	Vladimir Vukicevic <vladimir@mozilla.com>
@@ -36,8 +36,13 @@
 
 #include "cairoint.h"
 
+#include "cairo-image-surface-private.h"
 #include "cairo-quartz-image.h"
 #include "cairo-quartz-private.h"
+#include "cairo-surface-backend-private.h"
+
+#include "cairo-error-private.h"
+#include "cairo-default-context-private.h"
 
 #define SURFACE_ERROR_NO_MEMORY (_cairo_surface_create_in_error(_cairo_error(CAIRO_STATUS_NO_MEMORY)))
 #define SURFACE_ERROR_TYPE_MISMATCH (_cairo_surface_create_in_error(_cairo_error(CAIRO_STATUS_SURFACE_TYPE_MISMATCH)))
@@ -57,13 +62,22 @@ _cairo_quartz_image_surface_create_similar (void *asurface,
 					    int width,
 					    int height)
 {
-    cairo_surface_t *result;
     cairo_surface_t *isurf =
-	_cairo_image_surface_create_for_content (content, width, height);
-    if (cairo_surface_status(isurf))
-	return isurf;
+	_cairo_image_surface_create_with_content (content, width, height);
+    cairo_surface_t *result = cairo_quartz_image_surface_create (isurf);
+    cairo_surface_destroy (isurf);
 
-    result = cairo_quartz_image_surface_create (isurf);
+    return result;
+}
+
+static cairo_surface_t *
+_cairo_quartz_image_surface_create_similar_image (void *asurface,
+						  cairo_format_t format,
+						  int width,
+						  int height)
+{
+    cairo_surface_t *isurf = cairo_image_surface_create (format, width, height);
+    cairo_surface_t *result = cairo_quartz_image_surface_create (isurf);
     cairo_surface_destroy (isurf);
 
     return result;
@@ -93,20 +107,23 @@ _cairo_quartz_image_surface_acquire_source_image (void *asurface,
     return CAIRO_STATUS_SUCCESS;
 }
 
-static cairo_status_t
-_cairo_quartz_image_surface_acquire_dest_image (void *asurface,
-						cairo_rectangle_int_t *interest_rect,
-						cairo_image_surface_t **image_out,
-						cairo_rectangle_int_t *image_rect,
-						void **image_extra)
+static cairo_surface_t *
+_cairo_quartz_image_surface_map_to_image (void *asurface,
+					  const cairo_rectangle_int_t *extents)
 {
     cairo_quartz_image_surface_t *surface = (cairo_quartz_image_surface_t *) asurface;
 
-    *image_out = surface->imageSurface;
-    *image_rect = surface->extents;
-    *image_extra = NULL;
+    return cairo_surface_map_to_image (&surface->imageSurface->base, extents);
+}
 
-    return CAIRO_STATUS_SUCCESS;
+static cairo_int_status_t
+_cairo_quartz_image_surface_unmap_image (void *asurface,
+					 cairo_image_surface_t *image)
+{
+    cairo_quartz_image_surface_t *surface = (cairo_quartz_image_surface_t *) asurface;
+
+    cairo_surface_unmap_image (&surface->imageSurface->base, &image->base);
+    return cairo_surface_status (&surface->imageSurface->base);
 }
 
 static cairo_bool_t
@@ -115,7 +132,10 @@ _cairo_quartz_image_surface_get_extents (void *asurface,
 {
     cairo_quartz_image_surface_t *surface = (cairo_quartz_image_surface_t *) asurface;
 
-    *extents = surface->extents;
+    extents->x = 0;
+    extents->y = 0;
+    extents->width  = surface->width;
+    extents->height = surface->height;
     return TRUE;
 }
 
@@ -130,18 +150,20 @@ _cairo_quartz_image_surface_flush (void *asurface)
     CGImageRef oldImage = surface->image;
     CGImageRef newImage = NULL;
 
+    /* XXX only flush if the image has been modified. */
+
     /* To be released by the ReleaseCallback */
     cairo_surface_reference ((cairo_surface_t*) surface->imageSurface);
 
-    newImage = _cairo_quartz_create_cgimage (surface->imageSurface->format,
-					     surface->imageSurface->width,
-					     surface->imageSurface->height,
-					     surface->imageSurface->stride,
-					     surface->imageSurface->data,
-					     TRUE,
-					     NULL,
-					     DataProviderReleaseCallback,
-					     surface->imageSurface);
+    newImage = CairoQuartzCreateCGImage (surface->imageSurface->format,
+					 surface->imageSurface->width,
+					 surface->imageSurface->height,
+					 surface->imageSurface->stride,
+					 surface->imageSurface->data,
+					 TRUE,
+					 NULL,
+					 DataProviderReleaseCallback,
+					 surface->imageSurface);
 
     surface->image = newImage;
     CGImageRelease (oldImage);
@@ -149,44 +171,120 @@ _cairo_quartz_image_surface_flush (void *asurface)
     return CAIRO_STATUS_SUCCESS;
 }
 
+static cairo_int_status_t
+_cairo_quartz_image_surface_paint (void			*abstract_surface,
+				   cairo_operator_t		 op,
+				   const cairo_pattern_t	*source,
+				   const cairo_clip_t		*clip)
+{
+    cairo_quartz_image_surface_t *surface = abstract_surface;
+    return _cairo_surface_paint (&surface->imageSurface->base,
+				 op, source, clip);
+}
+
+static cairo_int_status_t
+_cairo_quartz_image_surface_mask (void				*abstract_surface,
+				  cairo_operator_t		 op,
+				  const cairo_pattern_t		*source,
+				  const cairo_pattern_t		*mask,
+				  const cairo_clip_t		*clip)
+{
+    cairo_quartz_image_surface_t *surface = abstract_surface;
+    return _cairo_surface_mask (&surface->imageSurface->base,
+				op, source, mask, clip);
+}
+
+static cairo_int_status_t
+_cairo_quartz_image_surface_stroke (void			*abstract_surface,
+				    cairo_operator_t		 op,
+				    const cairo_pattern_t	*source,
+				    const cairo_path_fixed_t	*path,
+				    const cairo_stroke_style_t	*style,
+				    const cairo_matrix_t	*ctm,
+				    const cairo_matrix_t	*ctm_inverse,
+				    double			 tolerance,
+				    cairo_antialias_t		 antialias,
+				    const cairo_clip_t		*clip)
+{
+    cairo_quartz_image_surface_t *surface = abstract_surface;
+    return _cairo_surface_stroke (&surface->imageSurface->base,
+				  op, source, path,
+				  style, ctm, ctm_inverse,
+				  tolerance, antialias, clip);
+}
+
+static cairo_int_status_t
+_cairo_quartz_image_surface_fill (void				*abstract_surface,
+			   cairo_operator_t		 op,
+			   const cairo_pattern_t	*source,
+			   const cairo_path_fixed_t	*path,
+			   cairo_fill_rule_t		 fill_rule,
+			   double			 tolerance,
+			   cairo_antialias_t		 antialias,
+			   const cairo_clip_t		*clip)
+{
+    cairo_quartz_image_surface_t *surface = abstract_surface;
+    return _cairo_surface_fill (&surface->imageSurface->base,
+				op, source, path,
+				fill_rule, tolerance, antialias,
+				clip);
+}
+
+static cairo_int_status_t
+_cairo_quartz_image_surface_glyphs (void			*abstract_surface,
+				    cairo_operator_t		 op,
+				    const cairo_pattern_t	*source,
+				    cairo_glyph_t		*glyphs,
+				    int				 num_glyphs,
+				    cairo_scaled_font_t		*scaled_font,
+				    const cairo_clip_t		*clip)
+{
+    cairo_quartz_image_surface_t *surface = abstract_surface;
+    return _cairo_surface_show_text_glyphs (&surface->imageSurface->base,
+					    op, source,
+					    NULL, 0,
+					    glyphs, num_glyphs,
+					    NULL, 0, 0,
+					    scaled_font, clip);
+}
+
+
 static const cairo_surface_backend_t cairo_quartz_image_surface_backend = {
     CAIRO_SURFACE_TYPE_QUARTZ_IMAGE,
-    _cairo_quartz_image_surface_create_similar,
     _cairo_quartz_image_surface_finish,
+
+    _cairo_default_context_create,
+
+    _cairo_quartz_image_surface_create_similar,
+    _cairo_quartz_image_surface_create_similar_image,
+    _cairo_quartz_image_surface_map_to_image,
+    _cairo_quartz_image_surface_unmap_image,
+
+    _cairo_surface_default_source,
     _cairo_quartz_image_surface_acquire_source_image,
     NULL, /* release_source_image */
-    _cairo_quartz_image_surface_acquire_dest_image,
-    NULL, /* release_dest_image */
-    NULL, /* clone_similar */
-    NULL, /* composite */
-    NULL, /* fill_rectangles */
-    NULL, /* composite_trapezoids */
-    NULL, /* create_span_renderer */
-    NULL, /* check_span_renderer */
+    NULL, /* snapshot */
+
     NULL, /* copy_page */
     NULL, /* show_page */
+
     _cairo_quartz_image_surface_get_extents,
-    NULL, /* old_show_glyphs */
     NULL, /* get_font_options */
+
     _cairo_quartz_image_surface_flush,
     NULL, /* mark_dirty_rectangle */
-    NULL, /* scaled_font_fini */
-    NULL, /* scaled_glyph_fini */
 
-    NULL, /* paint */
-    NULL, /* mask */
-    NULL, /* stroke */
-    NULL, /* fill */
-    NULL, /* surface_show_glyphs */
-    NULL, /* snapshot */
-    NULL, /* is_similar */
-    NULL  /* fill_stroke */
-
+    _cairo_quartz_image_surface_paint,
+    _cairo_quartz_image_surface_mask,
+    _cairo_quartz_image_surface_stroke,
+    _cairo_quartz_image_surface_fill,
+    NULL,  /* fill-stroke */
+    _cairo_quartz_image_surface_glyphs,
 };
 
 /**
- * cairo_quartz_image_surface_create
- * @surface: a cairo image surface to wrap with a quartz image surface
+ * cairo_quartz_image_surface_create:
+ * @image_surface: a cairo image surface to wrap with a quartz image surface
  *
  * Creates a Quartz surface backed by a CGImageRef that references the
  * given image surface. The resulting surface can be rendered quickly
@@ -198,7 +296,7 @@ static const cairo_surface_backend_t cairo_quartz_image_surface_backend = {
  * Return value: the newly created surface.
  *
  * Since: 1.6
- */
+ **/
 cairo_surface_t *
 cairo_quartz_image_surface_create (cairo_surface_t *surface)
 {
@@ -210,6 +308,9 @@ cairo_quartz_image_surface_create (cairo_surface_t *surface)
     int width, height, stride;
     cairo_format_t format;
     unsigned char *data;
+
+    if (surface->status)
+	return surface;
 
     if (cairo_surface_get_type(surface) != CAIRO_SURFACE_TYPE_IMAGE)
 	return SURFACE_ERROR_TYPE_MISMATCH;
@@ -242,14 +343,14 @@ cairo_quartz_image_surface_create (cairo_surface_t *surface)
      */
     cairo_surface_reference (surface);
 
-    image = _cairo_quartz_create_cgimage (format,
-					  width, height,
-					  stride,
-					  data,
-					  TRUE,
-					  NULL,
-					  DataProviderReleaseCallback,
-					  image_surface);
+    image = CairoQuartzCreateCGImage (format,
+				      width, height,
+				      stride,
+				      data,
+				      TRUE,
+				      NULL,
+				      DataProviderReleaseCallback,
+				      image_surface);
 
     if (!image) {
 	free (qisurf);
@@ -258,11 +359,11 @@ cairo_quartz_image_surface_create (cairo_surface_t *surface)
 
     _cairo_surface_init (&qisurf->base,
 			 &cairo_quartz_image_surface_backend,
+			 NULL, /* device */
 			 _cairo_content_from_format (format));
 
-    qisurf->extents.x = qisurf->extents.y = 0;
-    qisurf->extents.width = width;
-    qisurf->extents.height = height;
+    qisurf->width = width;
+    qisurf->height = height;
 
     qisurf->image = image;
     qisurf->imageSurface = image_surface;

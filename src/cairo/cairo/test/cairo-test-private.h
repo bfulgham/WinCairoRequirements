@@ -36,12 +36,14 @@
 
 CAIRO_BEGIN_DECLS
 
-cairo_bool_t
+typedef enum {
+    DIRECT,
+    SIMILAR
+} cairo_test_similar_t;
+
+cairo_test_similar_t
 cairo_test_target_has_similar (const cairo_test_context_t *ctx,
 			       const cairo_boilerplate_target_t *target);
-
-cairo_test_status_t
-_cairo_test_context_run (cairo_test_context_t *ctx);
 
 cairo_test_status_t
 _cairo_test_context_run_for_target (cairo_test_context_t *ctx,
@@ -56,10 +58,8 @@ _cairo_test_context_init_for_test (cairo_test_context_t *ctx,
 
 void
 cairo_test_init (cairo_test_context_t *ctx,
-		 const char *test_name);
-
-cairo_test_status_t
-cairo_test (const cairo_test_t *test);
+		 const char *test_name,
+		 const char *output);
 
 void
 cairo_test_fini (cairo_test_context_t *ctx);

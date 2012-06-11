@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -98,9 +98,6 @@ radeon_bo_create (radeon_device_t *dev,
 
 cairo_private cairo_drm_bo_t *
 radeon_bo_create_for_name (radeon_device_t *dev, uint32_t name);
-
-cairo_private void
-radeon_bo_release (void *_dev, void *_bo);
 
 cairo_private cairo_surface_t *
 radeon_bo_get_image (const radeon_device_t *device,

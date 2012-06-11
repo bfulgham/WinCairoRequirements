@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -45,49 +45,33 @@
 #include "cairo-xml.h"
 
 #include "cairo-clip-private.h"
+#include "cairo-device-private.h"
+#include "cairo-default-context-private.h"
+#include "cairo-image-surface-private.h"
+#include "cairo-error-private.h"
 #include "cairo-output-stream-private.h"
-#include "cairo-meta-surface-private.h"
+#include "cairo-recording-surface-inline.h"
 
 #define static cairo_warn static
 
 typedef struct _cairo_xml_surface cairo_xml_surface_t;
 
-struct _cairo_xml {
-    cairo_status_t status;
-
-    int ref;
+typedef struct _cairo_xml {
+    cairo_device_t base;
 
     cairo_output_stream_t *stream;
     int indent;
-};
+} cairo_xml_t;
 
 struct _cairo_xml_surface {
     cairo_surface_t base;
 
-    cairo_xml_t *xml;
-
     double width, height;
 };
 
-slim_hidden_proto (cairo_xml_for_meta_surface);
-
-static const cairo_xml_t _nil_xml = {
-    CAIRO_STATUS_NO_MEMORY,
-    -1
-};
+slim_hidden_proto (cairo_xml_for_recording_surface);
 
 static const cairo_surface_backend_t _cairo_xml_surface_backend;
-
-static const char *
-_direction_to_string (cairo_bool_t backward)
-{
-    static const char *names[] = {
-	"FORWARD",
-	"BACKWARD"
-    };
-    assert (backward < ARRAY_LENGTH (names));
-    return names[backward];
-}
 
 static const char *
 _operator_to_string (cairo_operator_t op)
@@ -174,10 +158,13 @@ static const char *
 _antialias_to_string (cairo_antialias_t antialias)
 {
     static const char *names[] = {
-	"ANTIALIAS_DEFAULT",	/* CAIRO_ANTIALIAS_DEFAULT */
-	"ANTIALIAS_NONE",	/* CAIRO_ANTIALIAS_NONE */
-	"ANTIALIAS_GRAY",	/* CAIRO_ANTIALIAS_GRAY */
-	"ANTIALIAS_SUBPIXEL"	/* CAIRO_ANTIALIAS_SUBPIXEL */
+	"DEFAULT",	/* CAIRO_ANTIALIAS_DEFAULT */
+	"NONE",         /* CAIRO_ANTIALIAS_NONE */
+	"GRAY",         /* CAIRO_ANTIALIAS_GRAY */
+	"SUBPIXEL",	/* CAIRO_ANTIALIAS_SUBPIXEL */
+	"FAST",         /* CAIRO_ANTIALIAS_FAST */
+	"GOOD",         /* CAIRO_ANTIALIAS_GOOD */
+	"BEST",         /* CAIRO_ANTIALIAS_BEST */
     };
     assert (antialias < ARRAY_LENGTH (names));
     return names[antialias];
@@ -221,35 +208,68 @@ _content_to_string (cairo_content_t content)
 static const char *
 _format_to_string (cairo_format_t format)
 {
-    static const char *names[] = {
-	"ARGB32",	/* CAIRO_FORMAT_ARGB32 */
-	"RGB24",	/* CAIRO_FORMAT_RGB24 */
-	"A8",		/* CAIRO_FORMAT_A8 */
-	"A1"		/* CAIRO_FORMAT_A1 */
-    };
-    assert (format < ARRAY_LENGTH (names));
-    return names[format];
+    switch (format) {
+    case CAIRO_FORMAT_ARGB32:  return "ARGB32";
+    case CAIRO_FORMAT_RGB30:   return "RGB30";
+    case CAIRO_FORMAT_RGB24:   return "RGB24";
+    case CAIRO_FORMAT_RGB16_565:   return "RGB16_565";
+    case CAIRO_FORMAT_A8:      return "A8";
+    case CAIRO_FORMAT_A1:      return "A1";
+    case CAIRO_FORMAT_INVALID: return "INVALID";
+    }
+    ASSERT_NOT_REACHED;
+    return "INVALID";
 }
 
-static cairo_xml_t *
+static cairo_status_t
+_device_flush (void *abstract_device)
+{
+    cairo_xml_t *xml = abstract_device;
+    cairo_status_t status;
+
+    status = _cairo_output_stream_flush (xml->stream);
+
+    return status;
+}
+
+static void
+_device_destroy (void *abstract_device)
+{
+    cairo_xml_t *xml = abstract_device;
+    cairo_status_t status;
+
+    status = _cairo_output_stream_destroy (xml->stream);
+
+    free (xml);
+}
+
+static const cairo_device_backend_t _cairo_xml_device_backend = {
+    CAIRO_DEVICE_TYPE_XML,
+
+    NULL, NULL, /* lock, unlock */
+
+    _device_flush,
+    NULL,  /* finish */
+    _device_destroy
+};
+
+static cairo_device_t *
 _cairo_xml_create_internal (cairo_output_stream_t *stream)
 {
     cairo_xml_t *xml;
 
     xml = malloc (sizeof (cairo_xml_t));
-    if (unlikely (xml == NULL)) {
-	_cairo_error_throw (CAIRO_STATUS_NO_MEMORY);
-	return (cairo_xml_t *) &_nil_xml;
-    }
+    if (unlikely (xml == NULL))
+	return _cairo_device_create_in_error (CAIRO_STATUS_NO_MEMORY);
 
     memset (xml, 0, sizeof (cairo_xml_t));
-    xml->status = CAIRO_STATUS_SUCCESS;
-    xml->ref = 1;
-    xml->indent = 0;
 
+    _cairo_device_init (&xml->base, &_cairo_xml_device_backend);
+
+    xml->indent = 0;
     xml->stream = stream;
 
-    return xml;
+    return &xml->base;
 }
 
 static void
@@ -320,22 +340,6 @@ _cairo_xml_printf_end (cairo_xml_t *xml, const char *fmt, ...)
     _cairo_output_stream_write (xml->stream, "\n", 1);
 }
 
-static cairo_status_t
-_cairo_xml_destroy_internal (cairo_xml_t *xml)
-{
-    cairo_status_t status;
-
-    assert (xml->ref > 0);
-    if (--xml->ref)
-	return _cairo_output_stream_flush (xml->stream);
-
-    status = _cairo_output_stream_destroy (xml->stream);
-
-    free (xml);
-
-    return status;
-}
-
 static cairo_surface_t *
 _cairo_xml_surface_create_similar (void			*abstract_surface,
 				   cairo_content_t	 content,
@@ -348,15 +352,7 @@ _cairo_xml_surface_create_similar (void			*abstract_surface,
     extents.width  = width;
     extents.height = height;
 
-    return cairo_meta_surface_create (content, &extents);
-}
-
-static cairo_status_t
-_cairo_xml_surface_finish (void *abstract_surface)
-{
-    cairo_xml_surface_t *surface = abstract_surface;
-
-    return _cairo_xml_destroy_internal (surface->xml);
+    return cairo_recording_surface_create (content, &extents);
 }
 
 static cairo_bool_t
@@ -381,8 +377,8 @@ _cairo_xml_move_to (void *closure,
 		    const cairo_point_t *p1)
 {
     _cairo_xml_printf_continue (closure, " %f %f m",
-			      _cairo_fixed_to_double (p1->x),
-			      _cairo_fixed_to_double (p1->y));
+				_cairo_fixed_to_double (p1->x),
+				_cairo_fixed_to_double (p1->y));
 
     return CAIRO_STATUS_SUCCESS;
 }
@@ -392,8 +388,8 @@ _cairo_xml_line_to (void *closure,
 		    const cairo_point_t *p1)
 {
     _cairo_xml_printf_continue (closure, " %f %f l",
-			      _cairo_fixed_to_double (p1->x),
-			      _cairo_fixed_to_double (p1->y));
+				_cairo_fixed_to_double (p1->x),
+				_cairo_fixed_to_double (p1->y));
 
     return CAIRO_STATUS_SUCCESS;
 }
@@ -405,12 +401,13 @@ _cairo_xml_curve_to (void *closure,
 		     const cairo_point_t *p3)
 {
     _cairo_xml_printf_continue (closure, " %f %f %f %f %f %f c",
-			      _cairo_fixed_to_double (p1->x),
-			      _cairo_fixed_to_double (p1->y),
-			      _cairo_fixed_to_double (p2->x),
-			      _cairo_fixed_to_double (p2->y),
-			      _cairo_fixed_to_double (p3->x),
-			      _cairo_fixed_to_double (p3->y));
+				_cairo_fixed_to_double (p1->x),
+				_cairo_fixed_to_double (p1->y),
+				_cairo_fixed_to_double (p2->x),
+				_cairo_fixed_to_double (p2->y),
+				_cairo_fixed_to_double (p3->x),
+				_cairo_fixed_to_double (p3->y));
+
     return CAIRO_STATUS_SUCCESS;
 }
 
@@ -418,25 +415,25 @@ static cairo_status_t
 _cairo_xml_close_path (void *closure)
 {
     _cairo_xml_printf_continue (closure, " h");
+
     return CAIRO_STATUS_SUCCESS;
 }
 
 static void
 _cairo_xml_emit_path (cairo_xml_t *xml,
-		      cairo_path_fixed_t *path)
+		      const cairo_path_fixed_t *path)
 {
     cairo_status_t status;
 
     _cairo_xml_printf_start (xml, "<path>");
     status = _cairo_path_fixed_interpret (path,
-					CAIRO_DIRECTION_FORWARD,
 					_cairo_xml_move_to,
 					_cairo_xml_line_to,
 					_cairo_xml_curve_to,
 					_cairo_xml_close_path,
 					xml);
     assert (status == CAIRO_STATUS_SUCCESS);
-    _cairo_xml_printf_start (xml, "</path>");
+    _cairo_xml_printf_end (xml, "</path>");
 }
 
 static void
@@ -455,12 +452,19 @@ _cairo_xml_emit_double (cairo_xml_t *xml,
     _cairo_xml_printf (xml, "<%s>%f</%s>", node, data, node);
 }
 
+static cairo_xml_t *
+to_xml (cairo_xml_surface_t *surface)
+{
+    return (cairo_xml_t *) surface->base.device;
+}
+
 static cairo_status_t
 _cairo_xml_surface_emit_clip_path (cairo_xml_surface_t *surface,
 				   cairo_clip_path_t *clip_path)
 {
     cairo_box_t box;
     cairo_status_t status;
+    cairo_xml_t *xml;
 
     if (clip_path->prev != NULL) {
 	status = _cairo_xml_surface_emit_clip_path (surface, clip_path->prev);
@@ -481,25 +485,27 @@ _cairo_xml_surface_emit_clip_path (cairo_xml_surface_t *surface,
 	}
     }
 
-    _cairo_xml_printf_start (surface->xml, "<clip>");
-    _cairo_xml_indent (surface->xml, 2);
+    xml = to_xml (surface);
 
-    _cairo_xml_emit_path (surface->xml, &clip_path->path);
-    _cairo_xml_emit_double (surface->xml, "tolerance", clip_path->tolerance);
-    _cairo_xml_emit_string (surface->xml, "antialias",
+    _cairo_xml_printf_start (xml, "<clip>");
+    _cairo_xml_indent (xml, 2);
+
+    _cairo_xml_emit_path (xml, &clip_path->path);
+    _cairo_xml_emit_double (xml, "tolerance", clip_path->tolerance);
+    _cairo_xml_emit_string (xml, "antialias",
 			    _antialias_to_string (clip_path->antialias));
-    _cairo_xml_emit_string (surface->xml, "fill-rule",
+    _cairo_xml_emit_string (xml, "fill-rule",
 			    _fill_rule_to_string (clip_path->fill_rule));
 
-    _cairo_xml_indent (surface->xml, -2);
-    _cairo_xml_printf_end (surface->xml, "</clip>");
+    _cairo_xml_indent (xml, -2);
+    _cairo_xml_printf_end (xml, "</clip>");
 
     return CAIRO_STATUS_SUCCESS;
 }
 
 static cairo_status_t
 _cairo_xml_surface_emit_clip (cairo_xml_surface_t *surface,
-			      cairo_clip_t *clip)
+			      const cairo_clip_t *clip)
 {
     if (clip == NULL)
 	return CAIRO_STATUS_SUCCESS;
@@ -554,10 +560,8 @@ _cairo_xml_emit_linear (cairo_xml_t *xml,
 {
     _cairo_xml_printf (xml,
 		       "<linear x1='%f' y1='%f' x2='%f' y2='%f'>",
-		       _cairo_fixed_to_double (linear->p1.x),
-		       _cairo_fixed_to_double (linear->p1.y),
-		       _cairo_fixed_to_double (linear->p2.x),
-		       _cairo_fixed_to_double (linear->p2.y));
+		       linear->pd1.x, linear->pd1.y,
+		       linear->pd2.x, linear->pd2.y);
     _cairo_xml_indent (xml, 2);
     _cairo_xml_emit_gradient (xml, &linear->base);
     _cairo_xml_indent (xml, -2);
@@ -571,12 +575,8 @@ _cairo_xml_emit_radial (cairo_xml_t *xml,
 {
     _cairo_xml_printf (xml,
 		       "<radial x1='%f' y1='%f' r1='%f' x2='%f' y2='%f' r2='%f'>",
-		       _cairo_fixed_to_double (radial->c1.x),
-		       _cairo_fixed_to_double (radial->c1.y),
-		       _cairo_fixed_to_double (radial->r1),
-		       _cairo_fixed_to_double (radial->c2.x),
-		       _cairo_fixed_to_double (radial->c2.y),
-		       _cairo_fixed_to_double (radial->r2));
+		       radial->cd1.center.x, radial->cd1.center.y, radial->cd1.radius,
+		       radial->cd2.center.x, radial->cd2.center.y, radial->cd2.radius);
     _cairo_xml_indent (xml, 2);
     _cairo_xml_emit_gradient (xml, &radial->base);
     _cairo_xml_indent (xml, -2);
@@ -623,8 +623,8 @@ _cairo_xml_emit_surface (cairo_xml_t *xml,
     cairo_surface_t *source = pattern->surface;
     cairo_status_t status;
 
-    if (_cairo_surface_is_meta (source)) {
-	status = cairo_xml_for_meta_surface (xml, source);
+    if (_cairo_surface_is_recording (source)) {
+	status = cairo_xml_for_recording_surface (&xml->base, source);
     } else {
 	cairo_image_surface_t *image;
 	void *image_extra;
@@ -691,10 +691,10 @@ static cairo_int_status_t
 _cairo_xml_surface_paint (void			*abstract_surface,
 			  cairo_operator_t	 op,
 			  const cairo_pattern_t	*source,
-			  cairo_clip_t		*clip)
+			  const cairo_clip_t	*clip)
 {
     cairo_xml_surface_t *surface = abstract_surface;
-    cairo_xml_t *xml = surface->xml;
+    cairo_xml_t *xml = to_xml (surface);
     cairo_status_t status;
 
     _cairo_xml_printf (xml, "<paint>");
@@ -718,13 +718,13 @@ _cairo_xml_surface_paint (void			*abstract_surface,
 
 static cairo_int_status_t
 _cairo_xml_surface_mask (void			*abstract_surface,
-			  cairo_operator_t	 op,
-			  const cairo_pattern_t	*source,
-			  const cairo_pattern_t	*mask,
-			  cairo_clip_t		*clip)
+			 cairo_operator_t	 op,
+			 const cairo_pattern_t	*source,
+			 const cairo_pattern_t	*mask,
+			 const cairo_clip_t	*clip)
 {
     cairo_xml_surface_t *surface = abstract_surface;
-    cairo_xml_t *xml = surface->xml;
+    cairo_xml_t *xml = to_xml (surface);
     cairo_status_t status;
 
     _cairo_xml_printf (xml, "<mask>");
@@ -754,16 +754,16 @@ static cairo_int_status_t
 _cairo_xml_surface_stroke (void				*abstract_surface,
 			   cairo_operator_t		 op,
 			   const cairo_pattern_t	*source,
-			   cairo_path_fixed_t		*path,
-			   cairo_stroke_style_t		*style,
-			   cairo_matrix_t		*ctm,
-			   cairo_matrix_t		*ctm_inverse,
+			   const cairo_path_fixed_t		*path,
+			   const cairo_stroke_style_t		*style,
+			   const cairo_matrix_t		*ctm,
+			   const cairo_matrix_t		*ctm_inverse,
 			   double			 tolerance,
 			   cairo_antialias_t		 antialias,
-			   cairo_clip_t			*clip)
+			   const cairo_clip_t		*clip)
 {
     cairo_xml_surface_t *surface = abstract_surface;
-    cairo_xml_t *xml = surface->xml;
+    cairo_xml_t *xml = to_xml (surface);
     cairo_status_t status;
 
     _cairo_xml_printf (xml, "<stroke>");
@@ -794,7 +794,7 @@ _cairo_xml_surface_stroke (void				*abstract_surface,
 	_cairo_xml_printf_end (xml, "</dash>");
     }
 
-    _cairo_xml_emit_path (surface->xml, path);
+    _cairo_xml_emit_path (xml, path);
     _cairo_xml_emit_double (xml, "tolerance", tolerance);
     _cairo_xml_emit_string (xml, "antialias", _antialias_to_string (antialias));
 
@@ -810,14 +810,14 @@ static cairo_int_status_t
 _cairo_xml_surface_fill (void			*abstract_surface,
 			 cairo_operator_t	 op,
 			 const cairo_pattern_t	*source,
-			 cairo_path_fixed_t	*path,
+			 const cairo_path_fixed_t*path,
 			 cairo_fill_rule_t	 fill_rule,
 			 double			 tolerance,
 			 cairo_antialias_t	 antialias,
-			 cairo_clip_t		*clip)
+			 const cairo_clip_t	*clip)
 {
     cairo_xml_surface_t *surface = abstract_surface;
-    cairo_xml_t *xml = surface->xml;
+    cairo_xml_t *xml = to_xml (surface);
     cairo_status_t status;
 
     _cairo_xml_printf (xml, "<fill>");
@@ -833,7 +833,7 @@ _cairo_xml_surface_fill (void			*abstract_surface,
     if (unlikely (status))
 	return status;
 
-    _cairo_xml_emit_path (surface->xml, path);
+    _cairo_xml_emit_path (xml, path);
     _cairo_xml_emit_double (xml, "tolerance", tolerance);
     _cairo_xml_emit_string (xml, "antialias", _antialias_to_string (antialias));
     _cairo_xml_emit_string (xml, "fill-rule", _fill_rule_to_string (fill_rule));
@@ -871,7 +871,7 @@ _cairo_xml_emit_type42_font (cairo_xml_t *xml,
     if (unlikely (buf == NULL))
 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
 
-    status = backend->load_truetype_table (scaled_font, 0, 0, buf, NULL);
+    status = backend->load_truetype_table (scaled_font, 0, 0, buf, &size);
     if (unlikely (status)) {
 	free (buf);
 	return status;
@@ -929,7 +929,7 @@ _cairo_xml_emit_scaled_font (cairo_xml_t *xml,
 			     cairo_glyph_t *glyphs,
 			     int num_glyphs)
 {
-    cairo_status_t status;
+    cairo_int_status_t status;
 
     _cairo_xml_printf (xml, "<scaled-font>");
     _cairo_xml_indent (xml, 2);
@@ -953,11 +953,10 @@ _cairo_xml_surface_glyphs (void			    *abstract_surface,
 			   cairo_glyph_t	    *glyphs,
 			   int			     num_glyphs,
 			   cairo_scaled_font_t	    *scaled_font,
-			   cairo_clip_t		    *clip,
-			   int			    *remaining_glyphs)
+			   const cairo_clip_t       *clip)
 {
     cairo_xml_surface_t *surface = abstract_surface;
-    cairo_xml_t *xml = surface->xml;
+    cairo_xml_t *xml = to_xml (surface);
     cairo_status_t status;
     int i;
 
@@ -988,60 +987,50 @@ _cairo_xml_surface_glyphs (void			    *abstract_surface,
     _cairo_xml_indent (xml, -2);
     _cairo_xml_printf (xml, "</glyphs>");
 
-    *remaining_glyphs = 0;
     return CAIRO_STATUS_SUCCESS;
 }
 
 static const cairo_surface_backend_t
 _cairo_xml_surface_backend = {
     CAIRO_SURFACE_TYPE_XML,
+    NULL,
+
+    _cairo_default_context_create,
+
     _cairo_xml_surface_create_similar,
-    _cairo_xml_surface_finish,
-    NULL, NULL, /* source image */
-    NULL, NULL, /* dst image */
-    NULL, /* clone_similar */
-    NULL, /* composite */
-    NULL, /* fill_rectangles */
-    NULL, /* composite_trapezoids */
-    NULL, /* create_span_renderer */
-    NULL, /* check_span_renderer */
-    NULL, NULL, /* copy/show page */
+    NULL, /* create_similar_image */
+    NULL, /* map_to_image */
+    NULL, /* unmap_image */
+
+    _cairo_surface_default_source,
+    NULL, /* acquire source image */
+    NULL, /* release source image */
+    NULL, /* snapshot */
+
+    NULL, /* copy page */
+    NULL, /* show page */
+
     _cairo_xml_surface_get_extents,
-    NULL, /* old_show_glyphs */
     NULL, /* get_font_options */
+
     NULL, /* flush */
     NULL, /* mark_dirty_rectangle */
-    NULL, /* font fini */
-    NULL, /* scaled_glyph_fini */
 
-    /* The 5 high level operations */
     _cairo_xml_surface_paint,
     _cairo_xml_surface_mask,
     _cairo_xml_surface_stroke,
     _cairo_xml_surface_fill,
-    _cairo_xml_surface_glyphs,
-
-    NULL, /* snapshot */
-
-    NULL, /* is_similar */
     NULL, /* fill_stroke */
-    NULL, /* create_solid_pattern_surface */
-    NULL, /* can_repaint_solid_pattern_surface */
-
-    /* The alternate high-level text operation */
-    NULL, NULL, /* has, show_text_glyphs */
+    _cairo_xml_surface_glyphs,
 };
 
 static cairo_surface_t *
-_cairo_xml_surface_create_internal (cairo_xml_t *xml,
+_cairo_xml_surface_create_internal (cairo_device_t *device,
 				    cairo_content_t content,
 				    double width,
 				    double height)
 {
     cairo_xml_surface_t *surface;
-
-    if (unlikely (xml == NULL))
-	return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_NULL_POINTER));
 
     surface = malloc (sizeof (cairo_xml_surface_t));
     if (unlikely (surface == NULL))
@@ -1049,10 +1038,8 @@ _cairo_xml_surface_create_internal (cairo_xml_t *xml,
 
     _cairo_surface_init (&surface->base,
 			 &_cairo_xml_surface_backend,
+			 device,
 			 content);
-
-    surface->xml = xml;
-    xml->ref++;
 
     surface->width = width;
     surface->height = height;
@@ -1060,78 +1047,92 @@ _cairo_xml_surface_create_internal (cairo_xml_t *xml,
     return &surface->base;
 }
 
-cairo_xml_t *
+cairo_device_t *
 cairo_xml_create (const char *filename)
 {
     cairo_output_stream_t *stream;
+    cairo_status_t status;
 
     stream = _cairo_output_stream_create_for_filename (filename);
-    if (_cairo_output_stream_get_status (stream))
-	return (cairo_xml_t *) &_nil_xml;
+    if ((status = _cairo_output_stream_get_status (stream)))
+	return _cairo_device_create_in_error (status);
 
     return _cairo_xml_create_internal (stream);
 }
 
-cairo_xml_t *
+cairo_device_t *
 cairo_xml_create_for_stream (cairo_write_func_t	 write_func,
 			     void		*closure)
 {
     cairo_output_stream_t *stream;
+    cairo_status_t status;
 
     stream = _cairo_output_stream_create (write_func, NULL, closure);
-    if (_cairo_output_stream_get_status (stream))
-	return (cairo_xml_t *) &_nil_xml;
+    if ((status = _cairo_output_stream_get_status (stream)))
+	return _cairo_device_create_in_error (status);
 
     return _cairo_xml_create_internal (stream);
 }
 
 cairo_surface_t *
-cairo_xml_surface_create (cairo_xml_t *xml,
+cairo_xml_surface_create (cairo_device_t *device,
 			  cairo_content_t content,
 			  double width, double height)
 {
-    return _cairo_xml_surface_create_internal (xml, content, width, height);
+    if (unlikely (device->backend->type != CAIRO_DEVICE_TYPE_XML))
+	return _cairo_surface_create_in_error (CAIRO_STATUS_DEVICE_TYPE_MISMATCH);
+
+    if (unlikely (device->status))
+	return _cairo_surface_create_in_error (device->status);
+
+    return _cairo_xml_surface_create_internal (device, content, width, height);
 }
 
 cairo_status_t
-cairo_xml_for_meta_surface (cairo_xml_t *xml,
-			    cairo_surface_t *meta)
+cairo_xml_for_recording_surface (cairo_device_t	 *device,
+				 cairo_surface_t *recording_surface)
 {
     cairo_box_t bbox;
     cairo_rectangle_int_t extents;
     cairo_surface_t *surface;
+    cairo_xml_t *xml;
     cairo_status_t status;
 
-    if (unlikely (xml->status))
-	return xml->status;
+    if (unlikely (device->status))
+	return device->status;
 
-    if (unlikely (meta->status))
-	return meta->status;
+    if (unlikely (recording_surface->status))
+	return recording_surface->status;
 
-    if (unlikely (! _cairo_surface_is_meta (meta)))
+    if (unlikely (device->backend->type != CAIRO_DEVICE_TYPE_XML))
+	return _cairo_error (CAIRO_STATUS_DEVICE_TYPE_MISMATCH);
+
+    if (unlikely (! _cairo_surface_is_recording (recording_surface)))
 	return _cairo_error (CAIRO_STATUS_SURFACE_TYPE_MISMATCH);
 
-    status = _cairo_meta_surface_get_bbox ((cairo_meta_surface_t *) meta,
-					   &bbox, NULL);
+    status = _cairo_recording_surface_get_bbox ((cairo_recording_surface_t *) recording_surface,
+						&bbox, NULL);
     if (unlikely (status))
 	return status;
 
     _cairo_box_round_to_rectangle (&bbox, &extents);
-    surface = _cairo_xml_surface_create_internal (xml,
-						  meta->content,
+    surface = _cairo_xml_surface_create_internal (device,
+						  recording_surface->content,
 						  extents.width,
 						  extents.height);
     if (unlikely (surface->status))
 	return surface->status;
 
+    xml = (cairo_xml_t *) device;
+
     _cairo_xml_printf (xml,
 		       "<surface content='%s' width='%d' height='%d'>",
-		       _content_to_string (meta->content),
+		       _content_to_string (recording_surface->content),
 		       extents.width, extents.height);
     _cairo_xml_indent (xml, 2);
 
     cairo_surface_set_device_offset (surface, -extents.x, -extents.y);
-    status = _cairo_meta_surface_replay (meta, surface);
+    status = _cairo_recording_surface_replay (recording_surface, surface);
     cairo_surface_destroy (surface);
 
     _cairo_xml_indent (xml, -2);
@@ -1139,15 +1140,4 @@ cairo_xml_for_meta_surface (cairo_xml_t *xml,
 
     return status;
 }
-slim_hidden_def (cairo_xml_for_meta_surface);
-
-void
-cairo_xml_destroy (cairo_xml_t *xml)
-{
-    cairo_status_t status_ignored;
-
-    if (xml == NULL || xml->ref < 0)
-	return;
-
-    status_ignored = _cairo_xml_destroy_internal (xml);
-}
+slim_hidden_def (cairo_xml_for_recording_surface);

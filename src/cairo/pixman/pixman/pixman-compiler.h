@@ -18,6 +18,12 @@
 #  define FUNC     ((const char*) ("???"))
 #endif
 
+#if defined (__GNUC__)
+#  define MAYBE_UNUSED  __attribute__((unused))
+#else
+#  define MAYBE_UNUSED
+#endif
+
 #ifndef INT16_MIN
 # define INT16_MIN              (-32767-1)
 #endif
@@ -41,6 +47,15 @@
 #ifndef UINT32_MAX
 # define UINT32_MAX             (4294967295U)
 #endif
+
+#ifndef INT64_MIN
+# define INT64_MIN              (-9223372036854775807-1)
+#endif
+
+#ifndef INT64_MAX
+# define INT64_MAX              (9223372036854775807)
+#endif
+
 
 #ifndef M_PI
 # define M_PI			3.14159265358979323846
@@ -82,10 +97,10 @@
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     (&name)
 
-#elif defined(TOOLCHAIN_SUPPORTS__THREAD)
+#elif defined(TLS)
 
 #   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
-    static __thread type name
+    static TLS type name
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     (&name)
 
@@ -142,6 +157,12 @@
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     tls_ ## name ## _get ()
 
+#elif defined(_MSC_VER)
+
+#   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
+    static __declspec(thread) type name
+#   define PIXMAN_GET_THREAD_LOCAL(name)				\
+    (&name)
 
 #elif defined(HAVE_PTHREAD_SETSPECIFIC)
 
@@ -189,12 +210,6 @@
 
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     tls_ ## name ## _get ()
-#elif defined(_MSC_VER)
-
-#   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
-    static __declspec(thread) type name
-#   define PIXMAN_GET_THREAD_LOCAL(name)				\
-    (&name)
 
 #else
 

@@ -3347,6 +3347,14 @@ PRIVATE_EXTERN int startDebuggerMode(void)
         return DEBUGGER_OFF;
     }
 
+    // side table locks are not optional because we're being conservative
+    if (!noSideTableLocksHeld()) {
+        mutex_unlock(&cacheUpdateLock);
+        mutex_unlock(&methodListLock);
+        mutex_unlock(&classLock);
+        return DEBUGGER_OFF;
+    }
+    
     // selLock is optional
     if (rwlock_try_write(&selLock)) {
         debugger_selLock = RDWR;
@@ -3407,7 +3415,7 @@ PRIVATE_EXTERN BOOL isManagedDuringDebugger(void *lock)
 * Locking a managed mutex during debugger mode causes a trap unless 
 *   this returns YES.
 **********************************************************************/
-PRIVATE_EXTERN BOOL isLockedDuringDebugger(mutex_t *lock)
+PRIVATE_EXTERN BOOL isLockedDuringDebugger(void *lock)
 {
     assert(DebuggerMode);
 

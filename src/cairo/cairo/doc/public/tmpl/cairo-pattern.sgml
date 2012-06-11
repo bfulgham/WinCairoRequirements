@@ -1,31 +1,23 @@
 <!-- ##### SECTION Title ##### -->
-cairo_pattern_t
+cairo-pattern
 
 <!-- ##### SECTION Short_Description ##### -->
-Sources for drawing
+
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-#cairo_pattern_t is the paint with which cairo draws.
-The primary use of patterns is as the source for all cairo drawing operations,
-although they can also be used as masks, that is, as the brush too.
-</para>
-<para>
-A cairo pattern is created by using one of the many constructors,
-of the form cairo_pattern_create_<emphasis>type</emphasis>()
-or implicitly through
-cairo_set_source_<emphasis>type</emphasis>() functions.
+
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-<itemizedlist>
-<listitem>#cairo_t</listitem>
-<listitem>#cairo_surface_t</listitem>
-</itemizedlist>
+
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### TYPEDEF cairo_pattern_t ##### -->
@@ -193,6 +185,149 @@ cairo_set_source_<emphasis>type</emphasis>() functions.
 @Returns: 
 
 
+<!-- ##### FUNCTION cairo_pattern_create_mesh ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_begin_patch ##### -->
+<para>
+
+</para>
+
+@pattern: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_end_patch ##### -->
+<para>
+
+</para>
+
+@pattern: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_move_to ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_line_to ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_curve_to ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@x1: 
+@y1: 
+@x2: 
+@y2: 
+@x3: 
+@y3: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_set_control_point ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@point_num: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_set_corner_color_rgb ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@corner_num: 
+@red: 
+@green: 
+@blue: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_set_corner_color_rgba ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@corner_num: 
+@red: 
+@green: 
+@blue: 
+@alpha: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_get_patch_count ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_get_path ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@patch_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_get_control_point ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@patch_num: 
+@point_num: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_mesh_pattern_get_corner_color_rgba ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@patch_num: 
+@corner_num: 
+@red: 
+@green: 
+@blue: 
+@alpha: 
+@Returns: 
+
+
 <!-- ##### FUNCTION cairo_pattern_reference ##### -->
 <para>
 
@@ -304,6 +439,8 @@ cairo_set_source_<emphasis>type</emphasis>() functions.
 @CAIRO_PATTERN_TYPE_SURFACE: 
 @CAIRO_PATTERN_TYPE_LINEAR: 
 @CAIRO_PATTERN_TYPE_RADIAL: 
+@CAIRO_PATTERN_TYPE_MESH: 
+@CAIRO_PATTERN_TYPE_RASTER_SOURCE: 
 
 <!-- ##### FUNCTION cairo_pattern_get_type ##### -->
 <para>

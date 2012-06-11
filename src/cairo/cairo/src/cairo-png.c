@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -37,11 +37,42 @@
  */
 
 #include "cairoint.h"
+
+#include "cairo-error-private.h"
+#include "cairo-image-surface-private.h"
 #include "cairo-output-stream-private.h"
 
 #include <stdio.h>
 #include <errno.h>
 #include <png.h>
+
+/**
+ * SECTION:cairo-png
+ * @Title: PNG Support
+ * @Short_Description: Reading and writing PNG images
+ * @See_Also: #cairo_surface_t
+ *
+ * The PNG functions allow reading PNG images into image surfaces, and writing
+ * any surface to a PNG file.
+ *
+ * It is a toy API. It only offers very simple support for reading and
+ * writing PNG files, which is sufficient for testing and
+ * demonstration purposes. Applications which need more control over
+ * the generated PNG file should access the pixel data directly, using
+ * cairo_image_surface_get_data() or a backend-specific access
+ * function, and process it with another library, e.g. gdk-pixbuf or
+ * libpng.
+ **/
+
+/**
+ * CAIRO_HAS_PNG_FUNCTIONS:
+ *
+ * Defined if the PNG functions are available.
+ * This macro can be used to conditionally compile code using the cairo
+ * PNG functions.
+ *
+ * Since: 1.0
+ **/
 
 struct png_read_closure_t {
     cairo_read_func_t		 read_func;
@@ -141,7 +172,7 @@ write_png (cairo_surface_t	*surface,
 	   void			*closure)
 {
     int i;
-    cairo_status_t status;
+    cairo_int_status_t status;
     cairo_image_surface_t *image;
     cairo_image_surface_t * volatile clone;
     void *image_extra;
@@ -150,7 +181,7 @@ write_png (cairo_surface_t	*surface,
     png_byte **volatile rows = NULL;
     png_color_16 white;
     int png_color_type;
-    int depth;
+    int bpc;
 
     status = _cairo_surface_acquire_source_image (surface,
 						  &image,
@@ -170,14 +201,10 @@ write_png (cairo_surface_t	*surface,
     /* Handle the various fallback formats (e.g. low bit-depth XServers)
      * by coercing them to a simpler format using pixman.
      */
-    if (image->format == CAIRO_FORMAT_INVALID) {
-	clone = _cairo_image_surface_coerce (image,
-					     _cairo_format_from_content (image->base.content));
-	status = clone->base.status;
-	if (unlikely (status))
-	    goto BAIL1;
-    } else
-	clone = image;
+    clone = _cairo_image_surface_coerce (image);
+    status = clone->base.status;
+    if (unlikely (status))
+        goto BAIL1;
 
     rows = _cairo_malloc_ab (clone->height, sizeof (png_byte*));
     if (unlikely (rows == NULL)) {
@@ -211,27 +238,33 @@ write_png (cairo_surface_t	*surface,
 
     switch (clone->format) {
     case CAIRO_FORMAT_ARGB32:
-	depth = 8;
+	bpc = 8;
 	if (_cairo_image_analyze_transparency (clone) == CAIRO_IMAGE_IS_OPAQUE)
 	    png_color_type = PNG_COLOR_TYPE_RGB;
 	else
 	    png_color_type = PNG_COLOR_TYPE_RGB_ALPHA;
 	break;
+    case CAIRO_FORMAT_RGB30:
+	bpc = 10;
+	png_color_type = PNG_COLOR_TYPE_RGB;
+	break;
     case CAIRO_FORMAT_RGB24:
-	depth = 8;
+	bpc = 8;
 	png_color_type = PNG_COLOR_TYPE_RGB;
 	break;
     case CAIRO_FORMAT_A8:
-	depth = 8;
+	bpc = 8;
 	png_color_type = PNG_COLOR_TYPE_GRAY;
 	break;
     case CAIRO_FORMAT_A1:
-	depth = 1;
+	bpc = 1;
 	png_color_type = PNG_COLOR_TYPE_GRAY;
 #ifndef WORDS_BIGENDIAN
 	png_set_packswap (png);
 #endif
 	break;
+    case CAIRO_FORMAT_INVALID:
+    case CAIRO_FORMAT_RGB16_565:
     default:
 	status = _cairo_error (CAIRO_STATUS_INVALID_FORMAT);
 	goto BAIL4;
@@ -239,13 +272,13 @@ write_png (cairo_surface_t	*surface,
 
     png_set_IHDR (png, info,
 		  clone->width,
-		  clone->height, depth,
+		  clone->height, bpc,
 		  png_color_type,
 		  PNG_INTERLACE_NONE,
 		  PNG_COMPRESSION_TYPE_DEFAULT,
 		  PNG_FILTER_TYPE_DEFAULT);
 
-    white.gray = (1 << depth) - 1;
+    white.gray = (1 << bpc) - 1;
     white.red = white.blue = white.green = white.gray;
     png_set_bKGD (png, info, &white);
 
@@ -277,8 +310,7 @@ BAIL4:
 BAIL3:
     free (rows);
 BAIL2:
-    if (clone != image)
-	cairo_surface_destroy (&clone->base);
+    cairo_surface_destroy (&clone->base);
 BAIL1:
     _cairo_surface_release_source_image (surface, image, image_extra);
 
@@ -318,6 +350,8 @@ stdio_write_func (png_structp png, png_bytep data, png_size_t size)
  * %CAIRO_STATUS_SURFACE_TYPE_MISMATCH if the surface does not have
  * pixel contents, or %CAIRO_STATUS_WRITE_ERROR if an I/O error occurs
  * while attempting to write the file.
+ *
+ * Since: 1.0
  **/
 cairo_status_t
 cairo_surface_write_to_png (cairo_surface_t	*surface,
@@ -384,6 +418,8 @@ stream_write_func (png_structp png, png_bytep data, png_size_t size)
  * memory could not be allocated for the operation,
  * %CAIRO_STATUS_SURFACE_TYPE_MISMATCH if the surface does not have
  * pixel contents.
+ *
+ * Since: 1.0
  **/
 cairo_status_t
 cairo_surface_write_to_png_stream (cairo_surface_t	*surface,
@@ -512,7 +548,7 @@ read_png (struct png_read_closure_t *png_closure)
     cairo_format_t format;
     cairo_status_t status;
     unsigned char *mime_data;
-    unsigned int mime_data_length;
+    unsigned long mime_data_length;
 
     png_closure->png_data = _cairo_memory_stream_create ();
 
@@ -680,10 +716,8 @@ read_png (struct png_read_closure_t *png_closure)
     }
 
  BAIL:
-    if (row_pointers != NULL)
-	free (row_pointers);
-    if (data != NULL)
-	free (data);
+    free (row_pointers);
+    free (data);
     if (png != NULL)
 	png_destroy_read_struct (&png, &info, NULL);
     if (png_closure->png_data != NULL) {
@@ -714,6 +748,8 @@ read_png (struct png_read_closure_t *png_closure)
  * Alternatively, you can allow errors to propagate through the drawing
  * operations and check the status on the context upon completion
  * using cairo_status().
+ *
+ * Since: 1.0
  **/
 cairo_surface_t *
 cairo_image_surface_create_from_png (const char *filename)
@@ -767,6 +803,8 @@ cairo_image_surface_create_from_png (const char *filename)
  * Alternatively, you can allow errors to propagate through the drawing
  * operations and check the status on the context upon completion
  * using cairo_status().
+ *
+ * Since: 1.0
  **/
 cairo_surface_t *
 cairo_image_surface_create_from_png_stream (cairo_read_func_t	read_func,

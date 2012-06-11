@@ -23,7 +23,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  * Authors: Vladimir Vukicevic <vladimir@pobox.com>
- *          Carl Worth <cworth@cworth.org>
+ *	    Carl Worth <cworth@cworth.org>
  */
 
 #define _GNU_SOURCE 1	/* for sched_getaffinity() */
@@ -55,72 +55,17 @@
 #define CAIRO_PERF_ITERATION_MS_FAST		5
 
 typedef struct _cairo_perf_case {
-    CAIRO_PERF_DECL (*run);
+    CAIRO_PERF_RUN_DECL (*run);
+    cairo_bool_t (*enabled) (cairo_perf_t *perf);
     unsigned int min_size;
     unsigned int max_size;
 } cairo_perf_case_t;
 
 const cairo_perf_case_t perf_cases[];
 
-/* Some targets just aren't that interesting for performance testing,
- * (not least because many of these surface types use a meta-surface
- * and as such defer the "real" rendering to later, so our timing
- * loops wouldn't count the real work, just the recording by the
- * meta-surface. */
-static cairo_bool_t
-target_is_measurable (const cairo_boilerplate_target_t *target)
-{
-    switch ((int) target->expected_type) {
-    case CAIRO_SURFACE_TYPE_IMAGE:
-	if (strcmp (target->name, "pdf") == 0 ||
-	    strcmp (target->name, "ps") == 0)
-	{
-	    return FALSE;
-	}
-	else
-	{
-	    return TRUE;
-	}
-    case CAIRO_SURFACE_TYPE_XLIB:
-	if (strcmp (target->name, "xlib-fallback") == 0 ||
-	    strcmp (target->name, "xlib-reference") == 0)
-	{
-	    return FALSE;
-	}
-	else
-	{
-	    return TRUE;
-	}
-    case CAIRO_SURFACE_TYPE_XCB:
-    case CAIRO_SURFACE_TYPE_GLITZ:
-    case CAIRO_SURFACE_TYPE_QUARTZ:
-    case CAIRO_SURFACE_TYPE_WIN32:
-    case CAIRO_SURFACE_TYPE_BEOS:
-    case CAIRO_SURFACE_TYPE_DIRECTFB:
-#if CAIRO_VERSION > CAIRO_VERSION_ENCODE(1,1,2)
-    case CAIRO_SURFACE_TYPE_OS2:
-#endif
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,9,4)
-    case CAIRO_SURFACE_TYPE_QT:
-#endif
-#if CAIRO_HAS_GL_SURFACE
-    case CAIRO_SURFACE_TYPE_GL:
-#endif
-#if CAIRO_HAS_DRM_SURFACE
-    case CAIRO_SURFACE_TYPE_DRM:
-#endif
-#if CAIRO_HAS_SKIA_SURFACE
-    case CAIRO_SURFACE_TYPE_SKIA:
-#endif
-	return TRUE;
-
-    default:
-	return FALSE;
-    }
-}
-
 static const char *
-_content_to_string (cairo_content_t content, cairo_bool_t similar)
+_content_to_string (cairo_content_t content,
+		    cairo_bool_t    similar)
 {
     switch (content|similar) {
     case CAIRO_CONTENT_COLOR:
@@ -157,9 +102,9 @@ cairo_perf_has_similar (cairo_perf_t *perf)
 }
 
 cairo_bool_t
-cairo_perf_can_run (cairo_perf_t	*perf,
-		    const char		*name,
-		    cairo_bool_t	*is_explicit)
+cairo_perf_can_run (cairo_perf_t *perf,
+		    const char	 *name,
+		    cairo_bool_t *is_explicit)
 {
     unsigned int i;
 
@@ -181,20 +126,21 @@ cairo_perf_can_run (cairo_perf_t	*perf,
 }
 
 static unsigned
-cairo_perf_calibrate (cairo_perf_t *perf,
-		      cairo_perf_func_t	 perf_func)
+cairo_perf_calibrate (cairo_perf_t	*perf,
+		      cairo_perf_func_t  perf_func)
 {
-    cairo_perf_ticks_t calibration0, calibration;
+    cairo_time_t calibration, calibration_max;
     unsigned loops, min_loops;
 
-    calibration0 = perf_func (perf->cr, perf->size, perf->size, 1);
-    if (perf->fast_and_sloppy) {
-	calibration = calibration0;
-    } else {
-	loops = cairo_perf_ticks_per_second () / 100 / calibration0;
-	if (loops < 3)
-	    loops = 3;
-	calibration = (calibration0 + perf_func (perf->cr, perf->size, perf->size, loops)) / (loops + 1);
+    min_loops = 1;
+    calibration = perf_func (perf->cr, perf->size, perf->size, min_loops);
+
+    if (!perf->fast_and_sloppy) {
+	calibration_max = _cairo_time_from_s (perf->ms_per_iteration * 0.0001 / 4);
+	while (calibration < calibration_max) {
+	    min_loops *= 2;
+	    calibration = perf_func (perf->cr, perf->size, perf->size, min_loops);
+	}
     }
 
     /* XXX
@@ -208,7 +154,7 @@ cairo_perf_calibrate (cairo_perf_t *perf,
      * a more rigorous analysis of the synchronisation overhead,
      * that is to estimate the time for loop=0.
      */
-    loops = perf->ms_per_iteration * 0.001 * cairo_perf_ticks_per_second () / calibration;
+    loops = _cairo_time_from_s (perf->ms_per_iteration * 0.001 * min_loops / calibration);
     min_loops = perf->fast_and_sloppy ? 1 : 10;
     if (loops < min_loops)
 	loops = min_loops;
@@ -217,13 +163,14 @@ cairo_perf_calibrate (cairo_perf_t *perf,
 }
 
 void
-cairo_perf_run (cairo_perf_t		*perf,
-		const char		*name,
-		cairo_perf_func_t	 perf_func)
+cairo_perf_run (cairo_perf_t	   *perf,
+		const char	   *name,
+		cairo_perf_func_t   perf_func,
+		cairo_count_func_t  count_func)
 {
     static cairo_bool_t first_run = TRUE;
-    unsigned int i, similar, has_similar;
-    cairo_perf_ticks_t *times;
+    unsigned int i, similar, similar_iters;
+    cairo_time_t *times;
     cairo_stats_t stats = {0.0, 0.0};
     int low_std_dev_count;
 
@@ -257,7 +204,9 @@ cairo_perf_run (cairo_perf_t		*perf,
 		   name, perf->target->name,
 		   _content_to_string (perf->target->content, 0),
 		   perf->size);
+	cairo_save (perf->cr);
 	perf_func (perf->cr, perf->size, perf->size, 1);
+	cairo_restore (perf->cr);
 	status = cairo_surface_write_to_png (cairo_get_target (perf->cr), filename);
 	if (status) {
 	    fprintf (stderr, "Failed to generate output check '%s': %s\n",
@@ -268,8 +217,12 @@ cairo_perf_run (cairo_perf_t		*perf,
 	free (filename);
     }
 
-    has_similar = cairo_perf_has_similar (perf);
-    for (similar = 0; similar <= has_similar; similar++) {
+    if (cairo_perf_has_similar (perf))
+	similar_iters = 2;
+    else
+	similar_iters = 1;
+
+    for (similar = 0; similar < similar_iters; similar++) {
 	unsigned loops;
 
 	if (perf->summary) {
@@ -285,36 +238,42 @@ cairo_perf_run (cairo_perf_t		*perf,
 	cairo_perf_yield ();
 	if (similar)
 	    cairo_push_group_with_content (perf->cr,
-		                           cairo_boilerplate_content (perf->target->content));
+					   cairo_boilerplate_content (perf->target->content));
+	else
+	    cairo_save (perf->cr);
 	perf_func (perf->cr, perf->size, perf->size, 1);
 	loops = cairo_perf_calibrate (perf, perf_func);
 	if (similar)
 	    cairo_pattern_destroy (cairo_pop_group (perf->cr));
+	else
+	    cairo_restore (perf->cr);
 
 	low_std_dev_count = 0;
 	for (i =0; i < perf->iterations; i++) {
 	    cairo_perf_yield ();
 	    if (similar)
 		cairo_push_group_with_content (perf->cr,
-			                       cairo_boilerplate_content (perf->target->content));
-	    times[i] = perf_func (perf->cr, perf->size, perf->size, loops) / loops;
+					       cairo_boilerplate_content (perf->target->content));
+	    else
+		cairo_save (perf->cr);
+	    times[i] = perf_func (perf->cr, perf->size, perf->size, loops) ;
 	    if (similar)
 		cairo_pattern_destroy (cairo_pop_group (perf->cr));
-
+	    else
+		cairo_restore (perf->cr);
 	    if (perf->raw) {
 		if (i == 0)
 		    printf ("[*] %s.%s %s.%d %g",
 			    perf->target->name,
 			    _content_to_string (perf->target->content, similar),
 			    name, perf->size,
-			    cairo_perf_ticks_per_second () / 1000.0);
-		printf (" %lld", (long long) times[i]);
+			    _cairo_time_to_double (_cairo_time_from_s (1.)) / 1000.);
+		printf (" %lld", (long long) (times[i] / (double) loops));
 	    } else if (! perf->exact_iterations) {
 		if (i > 0) {
 		    _cairo_stats_compute (&stats, times, i+1);
 
-		    if (stats.std_dev <= CAIRO_PERF_LOW_STD_DEV)
-		    {
+		    if (stats.std_dev <= CAIRO_PERF_LOW_STD_DEV) {
 			low_std_dev_count++;
 			if (low_std_dev_count >= CAIRO_PERF_STABLE_STD_DEV_COUNT)
 			    break;
@@ -330,12 +289,25 @@ cairo_perf_run (cairo_perf_t		*perf,
 
 	if (perf->summary) {
 	    _cairo_stats_compute (&stats, times, i);
-	    fprintf (perf->summary,
-		     "%10lld %#8.3f %#8.3f %#5.2f%% %3d\n",
-		     (long long) stats.min_ticks,
-		     (stats.min_ticks * 1000.0) / cairo_perf_ticks_per_second (),
-		     (stats.median_ticks * 1000.0) / cairo_perf_ticks_per_second (),
-		     stats.std_dev * 100.0, stats.iterations);
+	    if (count_func != NULL) {
+		double count = count_func (perf->cr, perf->size, perf->size);
+		fprintf (perf->summary,
+			 "%.3f [%10lld/%d] %#8.3f %#8.3f %#5.2f%% %3d: %.2f\n",
+			 stats.min_ticks /(double) loops,
+			 (long long) stats.min_ticks, loops,
+			 _cairo_time_to_s (stats.min_ticks) * 1000.0 / loops,
+			 _cairo_time_to_s (stats.median_ticks) * 1000.0 / loops,
+			 stats.std_dev * 100.0, stats.iterations,
+			 count / _cairo_time_to_s (stats.min_ticks));
+	    } else {
+		fprintf (perf->summary,
+			 "%.3f [%10lld/%d] %#8.3f %#8.3f %#5.2f%% %3d\n",
+			 stats.min_ticks /(double) loops,
+			 (long long) stats.min_ticks, loops,
+			 _cairo_time_to_s (stats.min_ticks) * 1000.0 / loops,
+			 _cairo_time_to_s (stats.median_ticks) * 1000.0 / loops,
+			 stats.std_dev * 100.0, stats.iterations);
+	    }
 	    fflush (perf->summary);
 	}
 
@@ -347,24 +319,26 @@ static void
 usage (const char *argv0)
 {
     fprintf (stderr,
-"Usage: %s [-l] [-r] [-v] [-i iterations] [test-names ...]\n"
-"       %s -l\n"
+"Usage: %s [-flrv] [-i iterations] [test-names ...]\n"
 "\n"
 "Run the cairo performance test suite over the given tests (all by default)\n"
 "The command-line arguments are interpreted as follows:\n"
 "\n"
-"  -r	raw; display each time measurement instead of summary statistics\n"
-"  -v	verbose; in raw mode also show the summaries\n"
+"  -f	fast; faster, less accurate\n"
 "  -i	iterations; specify the number of iterations per test case\n"
 "  -l	list only; just list selected test case names without executing\n"
+"  -r	raw; display each time measurement instead of summary statistics\n"
+"  -v	verbose; in raw mode also show the summaries\n"
 "\n"
 "If test names are given they are used as sub-string matches so a command\n"
-"such as \"cairo-perf text\" can be used to run all text test cases.\n",
+"such as \"%s text\" can be used to run all text test cases.\n",
 	     argv0, argv0);
 }
 
 static void
-parse_options (cairo_perf_t *perf, int argc, char *argv[])
+parse_options (cairo_perf_t *perf,
+	       int	     argc,
+	       char	    *argv[])
 {
     int c;
     const char *iters;
@@ -391,11 +365,16 @@ parse_options (cairo_perf_t *perf, int argc, char *argv[])
     perf->summary = stdout;
 
     while (1) {
-	c = _cairo_getopt (argc, argv, "i:lrvf");
+	c = _cairo_getopt (argc, argv, "fi:lrv");
 	if (c == -1)
 	    break;
 
 	switch (c) {
+	case 'f':
+	    perf->fast_and_sloppy = TRUE;
+	    if (ms == NULL)
+		perf->ms_per_iteration = CAIRO_PERF_ITERATION_MS_FAST;
+	    break;
 	case 'i':
 	    perf->exact_iterations = TRUE;
 	    perf->iterations = strtoul (optarg, &end, 10);
@@ -411,11 +390,6 @@ parse_options (cairo_perf_t *perf, int argc, char *argv[])
 	case 'r':
 	    perf->raw = TRUE;
 	    perf->summary = NULL;
-	    break;
-	case 'f':
-	    perf->fast_and_sloppy = TRUE;
-	    if (ms == NULL)
-		perf->ms_per_iteration = CAIRO_PERF_ITERATION_MS_FAST;
 	    break;
 	case 'v':
 	    verbose = 1;
@@ -439,7 +413,7 @@ parse_options (cairo_perf_t *perf, int argc, char *argv[])
 }
 
 static int 
-check_cpu_affinity(void)
+check_cpu_affinity (void)
 {
 #ifdef HAVE_SCHED_GETAFFINITY
 
@@ -447,27 +421,27 @@ check_cpu_affinity(void)
     int i, cpu_count;
 
     if (sched_getaffinity(0, sizeof(affinity), &affinity)) {
-        perror("sched_getaffinity");
-        return -1;
+	perror("sched_getaffinity");
+	return -1;
     }
 
     for(i = 0, cpu_count = 0; i < CPU_SETSIZE; ++i) {
-        if (CPU_ISSET(i, &affinity))
-            ++cpu_count;
+	if (CPU_ISSET(i, &affinity))
+	    ++cpu_count;
     }
 
     if (cpu_count > 1) {
-        fputs(
-            "WARNING: cairo-perf has not been bound to a single CPU.\n", 
-            stderr);
-        return -1;
+	fputs(
+	    "WARNING: cairo-perf has not been bound to a single CPU.\n",
+	    stderr);
+	return -1;
     }
 
     return 0;
 #else
     fputs(
-        "WARNING: Cannot check CPU affinity for this platform.\n", 
-        stderr);
+	"WARNING: Cannot check CPU affinity for this platform.\n",
+	stderr);
     return -1;
 #endif
 }
@@ -476,6 +450,8 @@ static void
 cairo_perf_fini (cairo_perf_t *perf)
 {
     cairo_boilerplate_free_targets (perf->targets);
+    cairo_boilerplate_fini ();
+
     free (perf->times);
     cairo_debug_reset_static_data ();
 #if HAVE_FCFINI
@@ -485,7 +461,8 @@ cairo_perf_fini (cairo_perf_t *perf)
 
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
     int i, j;
     cairo_perf_t perf;
@@ -494,25 +471,25 @@ main (int argc, char *argv[])
     parse_options (&perf, argc, argv);
 
     if (check_cpu_affinity()) {
-        fputs(
-            "NOTICE: cairo-perf and the X server should be bound to CPUs (either the same\n"
-            "or separate) on SMP systems. Not doing so causes random results when the X\n"
-            "server is moved to or from cairo-perf's CPU during the benchmarks:\n"
-            "\n"
-            "    $ sudo taskset -cp 0 $(pidof X)\n"
-            "    $ taskset -cp 1 $$\n"
-            "\n"
-            "See taskset(1) for information about changing CPU affinity.\n",
-            stderr);
+	fputs(
+	    "NOTICE: cairo-perf and the X server should be bound to CPUs (either the same\n"
+	    "or separate) on SMP systems. Not doing so causes random results when the X\n"
+	    "server is moved to or from cairo-perf's CPU during the benchmarks:\n"
+	    "\n"
+	    "    $ sudo taskset -cp 0 $(pidof X)\n"
+	    "    $ taskset -cp 1 $$\n"
+	    "\n"
+	    "See taskset(1) for information about changing CPU affinity.\n",
+	    stderr);
     }
 
     perf.targets = cairo_boilerplate_get_targets (&perf.num_targets, NULL);
-    perf.times = xmalloc (perf.iterations * sizeof (cairo_perf_ticks_t));
+    perf.times = xmalloc (perf.iterations * sizeof (cairo_time_t));
 
     for (i = 0; i < perf.num_targets; i++) {
-        const cairo_boilerplate_target_t *target = perf.targets[i];
+	const cairo_boilerplate_target_t *target = perf.targets[i];
 
-	if (! target_is_measurable (target))
+	if (! target->is_measurable)
 	    continue;
 
 	perf.target = target;
@@ -520,6 +497,9 @@ main (int argc, char *argv[])
 
 	for (j = 0; perf_cases[j].run; j++) {
 	    const cairo_perf_case_t *perf_case = &perf_cases[j];
+
+	    if (! perf_case->enabled (&perf))
+		continue;
 
 	    for (perf.size = perf_case->min_size;
 		 perf.size <= perf_case->max_size;
@@ -532,7 +512,6 @@ main (int argc, char *argv[])
 						    perf.size, perf.size,
 						    perf.size, perf.size,
 						    CAIRO_BOILERPLATE_MODE_PERF,
-						    0,
 						    &closure);
 		if (surface == NULL) {
 		    fprintf (stderr,
@@ -566,31 +545,50 @@ main (int argc, char *argv[])
     return 0;
 }
 
+#define FUNC(f) f, f##_enabled
 const cairo_perf_case_t perf_cases[] = {
-    { paint,  64, 512},
-    { paint_with_alpha,  64, 512},
-    { fill,   64, 512},
-    { stroke, 64, 512},
-    { text,   64, 512},
-    { glyphs,   64, 512},
-    { mask,  64, 512},
-    { tessellate, 100, 100},
-    { subimage_copy, 16, 512},
-    { pattern_create_radial, 16, 16},
-    { zrusin, 415, 415},
-    { world_map, 800, 800},
-    { box_outline, 100, 100},
-    { mosaic, 800, 800 },
-    { long_lines, 100, 100},
-    { unaligned_clip, 100, 100},
-    { rectangles, 512, 512},
-    { rounded_rectangles, 512, 512},
-    { long_dashed_lines, 512, 512},
-    { composite_checker, 16, 512},
-    { twin, 800, 800},
-    { dragon, 1024, 1024 },
-    { pythagoras_tree, 768, 768 },
-    { intersections, 512, 512 },
-    { spiral, 512, 512 },
+    { FUNC(pixel),  1, 1 },
+    { FUNC(a1_pixel),  1, 1 },
+    { FUNC(paint),  64, 512},
+    { FUNC(paint_with_alpha),  64, 512},
+    { FUNC(fill),   64, 512},
+    { FUNC(stroke), 64, 512},
+    { FUNC(text),   64, 512},
+    { FUNC(glyphs), 64, 512},
+    { FUNC(mask),   64, 512},
+    { FUNC(line),  32, 512},
+    { FUNC(a1_line),  32, 512},
+    { FUNC(curve),  32, 512},
+    { FUNC(a1_curve),  32, 512},
+    { FUNC(disjoint),   64, 512},
+    { FUNC(hatching),   64, 512},
+    { FUNC(tessellate), 100, 100},
+    { FUNC(subimage_copy), 16, 512},
+    { FUNC(hash_table), 16, 16},
+    { FUNC(pattern_create_radial), 16, 16},
+    { FUNC(zrusin), 415, 415},
+    { FUNC(world_map), 800, 800},
+    { FUNC(box_outline), 100, 100},
+    { FUNC(mosaic), 800, 800 },
+    { FUNC(long_lines), 100, 100},
+    { FUNC(unaligned_clip), 100, 100},
+    { FUNC(rectangles), 512, 512},
+    { FUNC(rounded_rectangles), 512, 512},
+    { FUNC(long_dashed_lines), 512, 512},
+    { FUNC(composite_checker), 16, 512},
+    { FUNC(twin), 800, 800},
+    { FUNC(dragon), 1024, 1024 },
+    { FUNC(sierpinski), 32, 1024 },
+    { FUNC(pythagoras_tree), 768, 768 },
+    { FUNC(intersections), 512, 512 },
+    { FUNC(many_strokes), 32, 512 },
+    { FUNC(wide_strokes), 32, 512 },
+    { FUNC(many_fills), 32, 512 },
+    { FUNC(wide_fills), 32, 512 },
+    { FUNC(many_curves), 32, 512 },
+    { FUNC(spiral), 512, 512 },
+    { FUNC(wave), 500, 500 },
+    { FUNC(fill_clip), 16, 512 },
+    { FUNC(tiger), 16, 1024 },
     { NULL }
 };

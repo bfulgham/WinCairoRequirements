@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -37,11 +37,26 @@
 #include <limits.h> /* INT_MAX */
 #include <math.h> /* pow */
 #include <stdio.h> /* EOF */
+#include <stdint.h> /* for {INT,UINT}*_{MIN,MAX} */
 #include <string.h> /* memset */
 #include <assert.h>
 #include <zlib.h>
 
 #define DEBUG_SCAN 0
+
+#if WORDS_BIGENDIAN
+#define le16(x) bswap_16 (x)
+#define le32(x) bswap_32 (x)
+#define be16(x) x
+#define be32(x) x
+#define to_be32(x) x
+#else
+#define le16(x) x
+#define le32(x) x
+#define be16(x) bswap_16 (x)
+#define be32(x) bswap_32 (x)
+#define to_be32(x) bswap_32 (x)
+#endif
 
 /*
  * whitespace:
@@ -639,7 +654,7 @@ base85_end (csi_t *ctx, csi_scanner_t *scan, cairo_bool_t deflate)
     }
 
     if (deflate) {
-	uLongf len = *(uint32_t *) scan->buffer.base;
+        uLongf len = be32 (*(uint32_t *) scan->buffer.base);
 	Bytef *source = (Bytef *) (scan->buffer.base + sizeof (uint32_t));
 
 	status = csi_string_deflate_new (ctx, &obj,
@@ -753,7 +768,7 @@ base64_end (csi_t *ctx, csi_scanner_t *scan)
 	longjmp (scan->jmpbuf, status);
 }
 
-static inline void
+static void
 scan_read (csi_scanner_t *scan, csi_file_t *src, void *ptr, int len)
 {
     uint8_t *data = ptr;
@@ -765,20 +780,6 @@ scan_read (csi_scanner_t *scan, csi_file_t *src, void *ptr, int len)
 	len -= ret;
     } while (_csi_unlikely (len));
 }
-
-#if WORDS_BIGENDIAN
-#define le16(x) bswap_16 (x)
-#define le32(x) bswap_32 (x)
-#define be16(x) x
-#define be32(x) x
-#define to_be32(x) x
-#else
-#define le16(x) x
-#define le32(x) x
-#define be16(x) bswap_16 (x)
-#define be32(x) bswap_32 (x)
-#define to_be32(x) bswap_32 (x)
-#endif
 
 static void
 string_read (csi_t *ctx,
@@ -1374,6 +1375,7 @@ csi_status_t
 _csi_scan_file (csi_t *ctx, csi_file_t *src)
 {
     csi_status_t status;
+    int old_line_number;
 
     /* This function needs to be reentrant to handle recursive scanners.
      * i.e. one script executes a second.
@@ -1384,11 +1386,14 @@ _csi_scan_file (csi_t *ctx, csi_file_t *src)
 	    ctx->scanner.depth = 0;
 	    return status;
 	}
-
-	ctx->scanner.line_number = 0; /* XXX broken by recursive scanning */
     }
 
+    old_line_number = ctx->scanner.line_number;
+    ctx->scanner.line_number = 0;
+
     _scan_file (ctx, src);
+
+    ctx->scanner.line_number = old_line_number;
 
     --ctx->scanner.depth;
     return CSI_STATUS_SUCCESS;

@@ -56,9 +56,22 @@ draw (cairo_t *cr, int width, int height)
     return CAIRO_TEST_SUCCESS;
 }
 
+static cairo_test_status_t
+draw_a1 (cairo_t *cr, int width, int height)
+{
+    cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+    return draw (cr, width, height);
+}
+
 CAIRO_TEST (line_width,
 	    "Tests cairo_set_line_width",
 	    "stroke", /* keywords */
 	    NULL, /* requirements */
 	    IMAGE_WIDTH, IMAGE_HEIGHT,
 	    NULL, draw)
+CAIRO_TEST (a1_line_width,
+	    "Tests cairo_set_line_width",
+	    "stroke", /* keywords */
+	    "target=raster", /* requirements */
+	    IMAGE_WIDTH, IMAGE_HEIGHT,
+	    NULL, draw_a1)

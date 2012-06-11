@@ -17,8 +17,6 @@ echo Checking documentation for incorrect syntax
 
 cd "$srcdir"
 
-# Note: this test is also run from doc/public/ to check the SGML files
-
 if test "x$SGML_DOCS" = x; then
     FILES=$all_cairo_files
     if test "x$FILES" = x; then
@@ -28,7 +26,7 @@ fi
 
 enum_regexp="\([^%@']\|^\)\<\(FALSE\|TRUE\|NULL\|CAIRO_[0-9A-Z_]*\)\($\|[^(A-Za-z0-9_]\)"
 if test "x$SGML_DOCS" = x; then
-	enum_regexp='^[^:]*:[/ ][*]\(\|[ \t].*\)'$enum_regexp
+	enum_regexp='^[^:]*:[/ ][*]\(\|[ \t].*\)'$enum_regexp\($\|[^:]\)
 fi
 if echo $FILES | xargs grep . /dev/null | sed -e '/<programlisting>/,/<\/programlisting>/d' | grep "$enum_regexp" | grep -v '#####'; then
 	stat=1
@@ -44,7 +42,7 @@ else
 	type_regexp='\(.'$type_regexp'\)\|\('$type_regexp'.\)'
 fi
 
-if echo $FILES | xargs grep . /dev/null | sed -e '/<programlisting>/,/<\/programlisting>/d' | grep "$type_regexp" | grep -v '#####'; then
+if echo $FILES | xargs grep . /dev/null | sed -e '/<programlisting>/,/<\/programlisting>/d' | grep -v "@Title" | grep "$type_regexp" | grep -v '#####'; then
 	stat=1
 	echo Error: some type names in the docs are not prefixed by hash sign,
 	echo neither are the only token in the doc line followed by colon.
@@ -71,5 +69,14 @@ if echo $FILES | xargs grep "$note_regexp" /dev/null; then
 	echo Error: some source files contain the string 'NOTE'.
 	echo Be civil and replace it by 'Note' please.
 fi >&2
+
+# Only run the syntax checker on the source files (not doc/)
+if -e ./check-doc-syntax.awk; then
+    if echo $FILES | xargs ./check-doc-syntax.awk ; then
+	    :
+    else
+	    stat=1
+    fi >&2
+fi
 
 exit $stat

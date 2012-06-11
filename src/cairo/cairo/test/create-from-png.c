@@ -49,8 +49,8 @@ draw (cairo_t *cr, int width, int height)
     char *filename;
     cairo_surface_t *surface;
 
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.ref.png");
+    xasprintf (&filename, "%s/reference/%s",
+	       ctx->srcdir, "create-from-png.ref.png");
 
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
@@ -68,6 +68,10 @@ draw (cairo_t *cr, int width, int height)
 	return result;
     }
 
+    /* Pretend we modify the surface data (which detaches the PNG mime data) */
+    cairo_surface_flush (surface);
+    cairo_surface_mark_dirty (surface);
+
     cairo_set_source_surface (cr, surface, 0, 0);
     cairo_pattern_set_filter (cairo_get_source (cr), CAIRO_FILTER_NEAREST);
     cairo_paint (cr);
@@ -82,6 +86,7 @@ static cairo_test_status_t
 preamble (cairo_test_context_t *ctx)
 {
     char *filename;
+    char *path;
     cairo_surface_t *surface;
     cairo_status_t status;
     cairo_test_status_t result = CAIRO_TEST_SUCCESS;
@@ -126,8 +131,8 @@ preamble (cairo_test_context_t *ctx)
 	return result;
 
     /* cheekily test error propagation from the user write funcs as well ... */
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.ref.png");
+    xasprintf (&path, "%s/reference", ctx->srcdir);
+    xasprintf (&filename, "%s/%s", path, "create-from-png.ref.png");
 
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
@@ -177,8 +182,7 @@ preamble (cairo_test_context_t *ctx)
 	return result;
 
     /* check that loading alpha/opaque PNGs generate the correct surfaces */
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.alpha.ref.png");
+    xasprintf (&filename, "%s/%s", path, "create-from-png.alpha.ref.png");
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
 	result = cairo_test_status_from_status (ctx,
@@ -198,8 +202,7 @@ preamble (cairo_test_context_t *ctx)
     if (result != CAIRO_TEST_SUCCESS)
 	return result;
 
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.ref.png");
+    xasprintf (&filename, "%s/%s", path, "create-from-png.ref.png");
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
 	result = cairo_test_status_from_status (ctx,
@@ -220,8 +223,7 @@ preamble (cairo_test_context_t *ctx)
 	return result;
 
     /* check paletted PNGs */
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.indexed-alpha.ref.png");
+    xasprintf (&filename, "%s/%s", path, "create-from-png.indexed-alpha.ref.png");
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
 	result = cairo_test_status_from_status (ctx,
@@ -241,8 +243,7 @@ preamble (cairo_test_context_t *ctx)
     if (result != CAIRO_TEST_SUCCESS)
 	return result;
 
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.indexed.ref.png");
+    xasprintf (&filename, "%s/%s", path, "create-from-png.indexed.ref.png");
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
 	result = cairo_test_status_from_status (ctx,
@@ -263,8 +264,7 @@ preamble (cairo_test_context_t *ctx)
 	return result;
 
     /* check grayscale PNGs */
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.gray-alpha.ref.png");
+    xasprintf (&filename, "%s/%s", path, "create-from-png.gray-alpha.ref.png");
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
 	result = cairo_test_status_from_status (ctx,
@@ -284,8 +284,7 @@ preamble (cairo_test_context_t *ctx)
     if (result != CAIRO_TEST_SUCCESS)
 	return result;
 
-    xasprintf (&filename, "%s/%s", ctx->srcdir,
-	       "create-from-png.gray.ref.png");
+    xasprintf (&filename, "%s/%s", path, "create-from-png.gray.ref.png");
     surface = cairo_image_surface_create_from_png (filename);
     if (cairo_surface_status (surface)) {
 	result = cairo_test_status_from_status (ctx,
@@ -302,6 +301,8 @@ preamble (cairo_test_context_t *ctx)
     }
     free (filename);
     cairo_surface_destroy (surface);
+
+    free (path);
 
     return result;
 }
