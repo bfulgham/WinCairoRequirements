@@ -1421,11 +1421,7 @@ iteratePropertyAttributes(const char *attrs,
                           void *ctx1, void *ctx2)
 {
     unsigned int attrcount = 0;
-<<<<<<< HEAD
-	const char* attrsend = 0;
-=======
 	const char *attrsend = 0;
->>>>>>> d973f760363149f3aaef9c8a9f4d44366e5b95d4
     if (!attrs) return 0;
 
 #ifndef NDEBUG
