@@ -717,9 +717,6 @@
     <ClInclude Include="uset_imp.h">
       <Filter>properties &amp; sets</Filter>
     </ClInclude>
-    <ClInclude Include="unicode\icuplug.h">
-      <Filter>registration</Filter>
-    </ClInclude>
     <ClInclude Include="icuplugimp.h">
       <Filter>registration</Filter>
     </ClInclude>
@@ -991,5 +988,6 @@
     <CustomBuild Include="unicode\utf_old.h">
       <Filter>strings</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\icuplug.h" />
   </ItemGroup>
 </Project>

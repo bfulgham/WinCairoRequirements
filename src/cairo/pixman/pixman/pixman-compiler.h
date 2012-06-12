@@ -157,13 +157,6 @@
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     tls_ ## name ## _get ()
 
-#elif defined(_MSC_VER)
-
-#   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
-    static __declspec(thread) type name
-#   define PIXMAN_GET_THREAD_LOCAL(name)				\
-    (&name)
-
 #elif defined(HAVE_PTHREAD_SETSPECIFIC)
 
 #include <pthread.h>
@@ -210,6 +203,13 @@
 
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     tls_ ## name ## _get ()
+
+#elif defined(_MSC_VER)
+
+#   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
+    static __declspec(thread) type name
+#   define PIXMAN_GET_THREAD_LOCAL(name)				\
+    (&name)
 
 #else
 
