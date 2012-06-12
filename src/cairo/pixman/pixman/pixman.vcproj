@@ -199,6 +199,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\pixman-noop.c"
+			>
+		</File>
+		<File
 			RelativePath=".\pixman-radial-gradient.c"
 			>
 		</File>
