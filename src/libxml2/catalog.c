@@ -997,18 +997,15 @@ xmlLoadFileContent(const char *filename)
     }
 #ifdef HAVE_STAT
     len = read(fd, content, size);
+    close(fd);
 #else
     len = fread(content, 1, size, fd);
+    fclose(fd);
 #endif
     if (len < 0) {
         xmlFree(content);
         return (NULL);
     }
-#ifdef HAVE_STAT
-    close(fd);
-#else
-    fclose(fd);
-#endif
     content[len] = 0;
 
     return(content);
@@ -1409,8 +1406,6 @@ xmlFetchXMLCatalogFile(xmlCatalogEntryPtr catal) {
     if (catal == NULL) 
 	return(-1);
     if (catal->URL == NULL)
-	return(-1);
-    if (catal->children != NULL)
 	return(-1);
 
     /*

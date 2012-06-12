@@ -53,7 +53,7 @@ CPPFLAGS = /nologo
 CC = cl.exe
 CFLAGS = /nologo /D "WIN32" /D "_WINDOWS" /D "_MBCS" /W3 $(CRUNTIME) /D "_REENTRANT"
 CFLAGS = $(CFLAGS) /I$(BASEDIR) /I$(XSLT_SRCDIR) /I$(INCPREFIX)
-CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE /D_BIND_TO_CURRENT_VCLIBS_VERSION
+CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
 
 # The linker and its options.
 LD = link.exe
@@ -70,8 +70,8 @@ ARFLAGS = /nologo
 CFLAGS = $(CFLAGS) /D "_DEBUG" /Od /Z7
 LDFLAGS = $(LDFLAGS) /DEBUG
 !else
-CFLAGS = $(CFLAGS) /D "NDEBUG" /Ox /Ob2 /Oi /Ot /GL
-LDFLAGS = $(LDFLAGS) /ltcg
+CFLAGS = $(CFLAGS) /D "NDEBUG" /O2 
+LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
 !endif
 
 # Libxslt object files.
@@ -315,7 +315,7 @@ APPLIBS = $(LIBS) libxml2_a.lib
 APPLIBS = $(APPLIBS) iconv.lib
 !endif
 !if "$(WITH_ZLIB)" == "1"
-APPLIBS = $(APPLIBS) zdll.lib
+APPLIBS = $(APPLIBS) zlib.lib
 !endif
 {$(UTILS_SRCDIR)}.c{$(BINDIR)}.exe:
 	$(CC) /D "LIBXML_STATIC" /D "LIBXSLT_STATIC" /D "LIBEXSLT_STATIC" \

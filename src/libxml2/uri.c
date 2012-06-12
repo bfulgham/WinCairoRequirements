@@ -5,6 +5,8 @@
  *
  * See Copyright for the status of this software.
  *
+ * TODO: that module behaves really badly on OOM situation
+ *
  * daniel@veillard.com
  */
 
@@ -127,7 +129,7 @@ static void xmlCleanURI(xmlURIPtr uri);
       (((*(p) == '!')) || ((*(p) == '$')) || ((*(p) == '&')) ||		\
        ((*(p) == '(')) || ((*(p) == ')')) || ((*(p) == '*')) ||		\
        ((*(p) == '+')) || ((*(p) == ',')) || ((*(p) == ';')) ||		\
-       ((*(p) == '=')))
+       ((*(p) == '=')) || ((*(p) == '\'')))
 
 /*
  *    gen-delims    = ":" / "/" / "?" / "#" / "[" / "]" / "@"
@@ -1604,10 +1606,11 @@ xmlNormalizeURIPath(char *path) {
           break;
         }
         /* Valgrind complained, strcpy(cur, segp + 3); */
-	/* string will overlap, do not use strcpy */
-	tmp = cur;
-	segp += 3;
-	while ((*tmp++ = *segp++) != 0);
+        /* string will overlap, do not use strcpy */
+        tmp = cur;
+        segp += 3;
+        while ((*tmp++ = *segp++) != 0)
+          ;
 
         /* If there are no previous segments, then keep going from here.  */
         segp = cur;

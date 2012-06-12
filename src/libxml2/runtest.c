@@ -194,8 +194,11 @@ static void globfree(glob_t *pglob) {
              free(pglob->gl_pathv[i]);
     }
 }
+
+#if !defined(__MINGW32__)
 #define vsnprintf _vsnprintf
 #define snprintf _snprintf
+#endif
 #else
 #include <glob.h>
 #endif
@@ -3165,7 +3168,7 @@ rngTest(const char *filename,
     const char *instance;
     xmlRelaxNGParserCtxtPtr ctxt;
     xmlRelaxNGPtr schemas;
-    int res = 0, len, ret;
+    int res = 0, len, ret = 0;
     char pattern[500];
     char prefix[500];
     char result[500];

@@ -1,12 +1,12 @@
 Summary: Library providing XML and HTML support
 Name: libxml2
-Version: 2.7.6
+Version: 2.8.0
 Release: 1
 License: MIT
 Group: Development/Libraries
 Source: ftp://xmlsoft.org/libxml2/libxml2-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: python python-devel zlib-devel pkgconfig
+BuildRequires: python python-devel zlib-devel pkgconfig xz-devel
 URL: http://xmlsoft.org/
 
 %description
@@ -25,6 +25,7 @@ Summary: Libraries, includes, etc. to develop XML and HTML applications
 Group: Development/Libraries
 Requires: libxml2 = %{version}-%{release}
 Requires: zlib-devel
+Requires: xz-devel
 Requires: pkgconfig
 
 %description devel
@@ -127,6 +128,6 @@ rm -fr %{buildroot}
 %doc doc/python.html
 
 %changelog
-* Tue Oct  6 2009 Daniel Veillard <veillard@redhat.com>
-- upstream release 2.7.6 see http://xmlsoft.org/news.html
+* Wed May 23 2012 Daniel Veillard <veillard@redhat.com>
+- upstream release 2.8.0 see http://xmlsoft.org/news.html
 

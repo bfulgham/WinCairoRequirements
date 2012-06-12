@@ -1338,7 +1338,7 @@ xsltUnregisterExtModule(const xmlChar * URI)
  *
  * Unregister all the XSLT extension module from the library.
  */
-static void
+void
 xsltUnregisterAllExtModules(void)
 {
     if (xsltExtensionsHash == NULL)
