@@ -1,0 +1,14 @@
+Current versions:
+
+Cairo 			1.12.2
+ICU             4.6.1 (With Apple's 10.7.4 updates)
+libxml2 		2.8.0
+libxslt 		1.1.26
+libjpeg         7.0
+libpng 			1.5.10
+objc4: 			493.11
+OpenCFLite: 	635.21
+OpenSSL         0.9.8r
+Pixman 			0.26.0
+SQLite			3.7.7.1
+zlib 			1.2.7
