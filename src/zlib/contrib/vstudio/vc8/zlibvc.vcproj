@@ -20,7 +20,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\..\..\props\common_vc8.vsprops;..\..\..\..\..\props\dll.vsprops;..\..\..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\..\..\..\props\common_vc8.vsprops;..\..\..\..\..\props\debug.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -32,7 +32,6 @@
 			/>
 			<Tool
 				Name="MASM"
-				AdditionalOptions="/coff"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -72,95 +71,7 @@
 				ModuleDefinitionFile=".\zlibvc.def"
 				GenerateDebugInformation="false"
 				SubSystem="2"
-				ImportLibrary="$(SolutionDir)\Lib\zdll.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				Description="Install headers"
-				CommandLine="mkdir &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\zconf.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\zlib.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\zutil.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\gzguts.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\..\..\props\common_vc8.vsprops;..\..\..\..\..\props\dll.vsprops;..\..\..\..\..\props\release.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="MASM"
-				AdditionalOptions="/coff"
-				GeneratePreprocessedSourceListing="false"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="true"
-				SuppressStartupBanner="true"
-				TargetEnvironment="1"
-				TypeLibraryName="$(OutDir)/zlibvc.tlb"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..;..\..\masmx86"
-				PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ASMV;ASMINF"
-				ExceptionHandling="0"
-				EnableFunctionLevelLinking="false"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1036"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				OutputFile="$(OutDir)\zlib1.dll"
-				ModuleDefinitionFile=".\zlibvc.def"
-				GenerateDebugInformation="false"
-				SubSystem="2"
-				ImportLibrary="$(SolutionDir)\Lib\zdll.lib"
+				ImportLibrary="$(SolutionDir)Lib/zdll.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -249,6 +160,92 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\..\..\..\props\common_vc8.vsprops;..\..\..\..\..\props\release.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="MASM"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName="$(OutDir)/zlibvc.tlb"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\..;..\..\masmx86"
+				PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ASMV;ASMINF"
+				ExceptionHandling="0"
+				EnableFunctionLevelLinking="false"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1036"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalOptions="/MACHINE:I386"
+				OutputFile="$(OutDir)\zlib1.dll"
+				ModuleDefinitionFile=".\zlibvc.def"
+				GenerateDebugInformation="false"
+				SubSystem="2"
+				ImportLibrary="$(SolutionDir)Lib/zdll.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Install headers"
+				CommandLine="mkdir &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\zconf.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\zlib.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\zutil.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\..\gzguts.h&quot; &quot;$(SolutionDir)include\zlib&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
