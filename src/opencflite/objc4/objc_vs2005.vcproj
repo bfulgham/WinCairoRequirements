@@ -24,7 +24,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="prebuild.bat..."
-				CommandLine="prebuild"
+				CommandLine="call prebuild&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-class.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;%SolutionDir%include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -49,6 +49,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				ResourceOutputFileName="$(IntDir)/version.res"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -83,8 +84,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Install Headers"
-				CommandLine="xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
+				Description=""
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -97,7 +98,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="prebuild.bat..."
-				CommandLine="prebuild"
+				CommandLine="call prebuild&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-class.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;%SolutionDir%include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -113,7 +114,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
 				CompileAs="2"
 			/>
@@ -122,6 +123,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				ResourceOutputFileName="$(IntDir)/version.res"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -155,8 +157,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Install"
-				CommandLine="xcopy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;%DSTROOT%\AppleInternal\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).exp&quot; &quot;%DSTROOT%\AppleInternal\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).lib&quot; &quot;%DSTROOT%\AppleInternal\lib\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%DSTROOT%\AppleInternal\bin\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdbstripped&quot; &quot;$(TargetDir)$(TargetName).pdb&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%DSTROOT%\AppleInternal\public\sym\&quot;&#x0D;&#x0A;"
+				Description=""
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -316,6 +318,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="1"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -323,6 +326,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="1"
 					/>
 				</FileConfiguration>
 			</File>
@@ -334,6 +338,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -341,6 +346,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
@@ -492,6 +498,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -499,6 +506,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
@@ -510,6 +518,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -517,6 +526,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
@@ -588,6 +598,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -595,6 +606,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>

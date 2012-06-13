@@ -16,14 +16,13 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)Lib\"
 			ConfigurationType="10"
-			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\debug.vsprops"
-			CharacterSet="2"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\debug.vsprops"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="cl /nologo /c /MDd /D_DEBUG /D_BIND_TO_CURRENT_VCLIBS_VERSION /Od /Zl /DYNAMICBASE /GS /I&quot;$(ProjectDir)..\runtime&quot; /I&quot;$(SolutionDir)\include&quot; /I&quot;$(ProjectDir)\..\..\include&quot; /I&quot;$(ProjectDir)\..\include&quot; /D&quot;_WINDOWS&quot; /Dnil=0 ..\runtime\objcrt.c /Fo&quot;$(OutDir)\objcrt_debug.obj"
+				CommandLine="cl /nologo /c /MDd /D_DEBUG /D_BIND_TO_CURRENT_VCLIBS_VERSION /Od /Zl /DYNAMICBASE /GS /I&quot;$(ProjectDir)\runtime&quot; /I&quot;$(SolutionDir)\include&quot; /I&quot;$(ProjectDir)..\..\include&quot; /I&quot;$(ProjectDir)..\runtime&quot; /D&quot;_WINDOWS&quot; /Dnil=0 ..\runtime\objcrt.c /Fo&quot;$(SolutionDir)lib\objcrt_debug.obj&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -38,15 +37,14 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)Lib\"
 			ConfigurationType="10"
-			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\release.vsprops"
-			CharacterSet="2"
+			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\release.vsprops"
+			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="cl /nologo /c /MD /O1 /Zi /MP2 /D_BIND_TO_CURRENT_VCLIBS_VERSION /DYNAMICBASE /GS /I&quot;$(ProjectDir)..\runtime&quot; /I&quot;$(SolutionDir)\include&quot;  /I&quot;$(ProjectDir)\..\..\include&quot; /I&quot;$(ProjectDir)\..\include&quot; /D&quot;_WINDOWS&quot; /Dnil=0 ..\runtime\objcrt.c /Fo&quot;$(OutDir)\objcrt.obj"
+				CommandLine="cl /nologo /c /MD /O1 /Zi /MP2 /D_BIND_TO_CURRENT_VCLIBS_VERSION /DYNAMICBASE /GS /I&quot;$(ProjectDir)\runtime&quot; /I&quot;$(SolutionDir)\include&quot; /I&quot;$(ProjectDir)..\..\include&quot; /I&quot;$(ProjectDir)\..\runtime&quot; /D&quot;_WINDOWS&quot; /Dnil=0 ..\runtime\objcrt.c /Fo&quot;$(SolutionDir)lib\objcrt.obj"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
