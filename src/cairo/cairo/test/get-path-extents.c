@@ -61,10 +61,6 @@ check_extents (const cairo_test_context_t *ctx,
     if (cairo_status (cr))
 	return 1;
 
-    /* let empty rects match */
-    if ((ext_x1 == ext_x2 || ext_y1 == ext_y2) && (width == 0 || height == 0))
-        return 1;
-
     switch (relation) {
     default:
     case EQUALS:
@@ -155,11 +151,25 @@ draw (cairo_t *cr, int width, int height)
     errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 200, 400, 0, 0);
 
     cairo_new_path (cr2);
+    cairo_arc_negative (cr2, 200, 400, 0., 0, 2 * M_PI);
+    phase = "Degenerate negative arc (R=0)";
+    errors += !check_extents (ctx, phase, cr2, FILL, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, STROKE, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 200, 400, 0, 0);
+
+    cairo_new_path (cr2);
     cairo_arc (cr2, 200, 400, 10., 0, 0);
     phase = "Degenerate arc (Θ=0)";
     errors += !check_extents (ctx, phase, cr2, FILL, EQUALS, 0, 0, 0, 0);
     errors += !check_extents (ctx, phase, cr2, STROKE, EQUALS, 0, 0, 0, 0);
-    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 200, 400, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 210, 400, 0, 0);
+
+    cairo_new_path (cr2);
+    cairo_arc_negative (cr2, 200, 400, 10., 0, 0);
+    phase = "Degenerate negative arc (Θ=0)";
+    errors += !check_extents (ctx, phase, cr2, FILL, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, STROKE, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 210, 400, 0, 0);
 
     cairo_new_path (cr2);
     cairo_restore (cr2);
@@ -191,7 +201,7 @@ draw (cairo_t *cr, int width, int height)
     cairo_restore (cr2);
 
     /* http://bugs.freedesktop.org/show_bug.cgi?id=7965 */
-    phase = "A vertical, open path";
+    phase = "A horizontal, open path";
     cairo_save (cr2);
     cairo_set_line_cap (cr2, CAIRO_LINE_CAP_ROUND);
     cairo_set_line_join (cr2, CAIRO_LINE_JOIN_ROUND);
@@ -199,7 +209,33 @@ draw (cairo_t *cr, int width, int height)
     cairo_line_to (cr2, 750, 180);
     errors += !check_extents (ctx, phase, cr2, FILL, EQUALS, 0, 0, 0, 0);
     errors += !check_extents (ctx, phase, cr2, STROKE, EQUALS, -5, 175, 760, 10);
-    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 0, 180, 755, 0);
+    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 0, 180, 750, 0);
+    cairo_new_path (cr2);
+    cairo_restore (cr2);
+
+    phase = "A vertical, open path";
+    cairo_save (cr2);
+    cairo_set_line_cap (cr2, CAIRO_LINE_CAP_ROUND);
+    cairo_set_line_join (cr2, CAIRO_LINE_JOIN_ROUND);
+    cairo_new_path (cr2);
+    cairo_move_to (cr2, 180, 0);
+    cairo_line_to (cr2, 180, 750);
+    errors += !check_extents (ctx, phase, cr2, FILL, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, STROKE, EQUALS, 175, -5, 10, 760);
+    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 180, 0, 0, 750);
+    cairo_new_path (cr2);
+    cairo_restore (cr2);
+
+    phase = "A degenerate open path";
+    cairo_save (cr2);
+    cairo_set_line_cap (cr2, CAIRO_LINE_CAP_ROUND);
+    cairo_set_line_join (cr2, CAIRO_LINE_JOIN_ROUND);
+    cairo_new_path (cr2);
+    cairo_move_to (cr2, 180, 0);
+    cairo_line_to (cr2, 180, 0);
+    errors += !check_extents (ctx, phase, cr2, FILL, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, STROKE, EQUALS, 175, -5, 10, 10);
+    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 180, 0, 0, 0);
     cairo_new_path (cr2);
     cairo_restore (cr2);
 
@@ -292,7 +328,7 @@ draw (cairo_t *cr, int width, int height)
 
     phase = "Text";
     cairo_save (cr2);
-    cairo_select_font_face (cr2, "Bitstream Vera Sans",
+    cairo_select_font_face (cr2, CAIRO_TEST_FONT_FAMILY " Sans",
 			    CAIRO_FONT_SLANT_NORMAL,
 			    CAIRO_FONT_WEIGHT_NORMAL);
     cairo_set_font_size (cr2, 12);

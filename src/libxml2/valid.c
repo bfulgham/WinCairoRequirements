@@ -2679,7 +2679,8 @@ xmlIsID(xmlDocPtr doc, xmlNodePtr elem, xmlAttrPtr attr) {
         (!strcmp((char *) attr->ns->prefix, "xml")))
 	return(1);
     if (doc == NULL) return(0);
-    if ((doc->intSubset == NULL) && (doc->extSubset == NULL)) {
+    if ((doc->intSubset == NULL) && (doc->extSubset == NULL) &&
+        (doc->type != XML_HTML_DOCUMENT_NODE)) {
 	return(0);
     } else if (doc->type == XML_HTML_DOCUMENT_NODE) {
         if ((xmlStrEqual(BAD_CAST "id", attr->name)) ||
@@ -6558,6 +6559,7 @@ xmlValidateCheckRefCallback(xmlListPtr ref_list, xmlValidCtxtPtr ctxt,
 int
 xmlValidateDocumentFinal(xmlValidCtxtPtr ctxt, xmlDocPtr doc) {
     xmlRefTablePtr table;
+    unsigned int save;
 
     if (ctxt == NULL)
         return(0);
@@ -6566,6 +6568,10 @@ xmlValidateDocumentFinal(xmlValidCtxtPtr ctxt, xmlDocPtr doc) {
 		"xmlValidateDocumentFinal: doc == NULL\n", NULL);
 	return(0);
     }
+
+    /* trick to get correct line id report */
+    save = ctxt->finishDtd;
+    ctxt->finishDtd = 0;
 
     /*
      * Check all the NOTATION/NOTATIONS attributes
@@ -6580,6 +6586,8 @@ xmlValidateDocumentFinal(xmlValidCtxtPtr ctxt, xmlDocPtr doc) {
     ctxt->doc = doc;
     ctxt->valid = 1;
     xmlHashScan(table, (xmlHashScanner) xmlValidateCheckRefCallback, ctxt);
+
+    ctxt->finishDtd = save;
     return(ctxt->valid);
 }
 

@@ -395,7 +395,7 @@ public void writeToPNG (OutputStream stream) throws IOException;
     <remark>
       I'm not sure how to handle this for
       <link
-      linkend="cairo-pdf-surface-create-for-callback"><function>cairo_pdf_surface_create_for_callback()</function></link>.
+      linkend="cairo-pdf-surface-create-for-stream"><function>cairo_pdf_surface_create_for_stream()</function></link>.
       Other than keep a “exception to rethrow” thread-specific
       variable
       that is checked after <emphasis>every</emphasis> call to a Cairo
@@ -506,8 +506,13 @@ CAIRO_STATUS_WRITE_ERROR
       linkend="cairo-pattern-t"><type>cairo_pattern_t</type></link>
       in C, but in an object oriented language, there should instead
       be a hierarchy of types. (The functions that should map to
-      constructors for the various types are listed after the type,
-      methods on that type are listed below)
+      constructors or static methods for the various types are listed
+      after the type, methods on that type are listed below. Note that
+      cairo_pattern_create_rgb() and cairo_pattern_create_rgba()
+      should not be overloaded with each other as a SolidPattern()
+      constructor, but should appear as static methods instead.  This
+      is to maintain code clarity by making it clear how the arguments
+      relate to color components.)
     </para>
     <programlisting>
 cairo_pattern_t
@@ -524,6 +529,19 @@ cairo_pattern_t
          <link linkend="cairo-pattern-add-color-stop-rgba"><function>cairo_pattern_add_color_stop_rgba()</function></link>
       cairo_linear_gradient_t (<link linkend="cairo-pattern-create-linear"><function>cairo_pattern_create_linear()</function></link>)
       cairo_radial_gradient_t (<link linkend="cairo-pattern-create-radial"><function>cairo_pattern_create_radial()</function></link>)
+   cairo_mesh_t (<link linkend="cairo-pattern-create-mesh"><function>cairo_pattern_create_mesh()</function></link>)
+         <link linkend="cairo-mesh-pattern-begin-patch"><function>cairo_mesh_pattern_begin_patch()</function></link>
+         <link linkend="cairo-mesh-pattern-end-patch"><function>cairo_mesh_pattern_end_patch()</function></link>
+         <link linkend="cairo-mesh-pattern-move-to"><function>cairo_mesh_pattern_move_to()</function></link>
+         <link linkend="cairo-mesh-pattern-line-to"><function>cairo_mesh_pattern_line_to()</function></link>
+         <link linkend="cairo-mesh-pattern-curve-to"><function>cairo_mesh_pattern_curve_to()</function></link>
+         <link linkend="cairo-mesh-pattern-set-control-point"><function>cairo_mesh_pattern_set_control_point()</function></link>
+         <link linkend="cairo-mesh-pattern-set-corner-color-rgb"><function>cairo_mesh_pattern_set_corner_color_rgb()</function></link>
+         <link linkend="cairo-mesh-pattern-set-corner-color-rgba"><function>cairo_mesh_pattern_set_corner_color_rgba()</function></link>
+         <link linkend="cairo-mesh-pattern-get-patch-count"><function>cairo_mesh_pattern_get_patch_count()</function></link>
+         <link linkend="cairo-mesh-pattern-get-path"><function>cairo_mesh_pattern_get_path()</function></link>
+         <link linkend="cairo-mesh-pattern-get-control-point"><function>cairo_mesh_pattern_get_control_point()</function></link>
+         <link linkend="cairo-mesh-pattern-get-corner-color-rgba"><function>cairo_mesh_pattern_get_corner_color_rgba()</function></link>
     </programlisting>
     <para>
     </para>

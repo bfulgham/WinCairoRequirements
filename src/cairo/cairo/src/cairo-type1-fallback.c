@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -35,6 +35,9 @@
 
 #define _BSD_SOURCE /* for snprintf(), strdup() */
 #include "cairoint.h"
+
+#include "cairo-array-private.h"
+#include "cairo-error-private.h"
 
 #if CAIRO_HAS_FONT_SUBSET
 
@@ -145,7 +148,7 @@ static void
 charstring_encode_command (cairo_array_t *data, int command)
 {
     cairo_status_t status;
-    int orig_size;
+    unsigned int orig_size;
     unsigned char buf[5];
     unsigned char *p = buf;
 
@@ -172,7 +175,7 @@ charstring_encode_integer (cairo_array_t *data,
                            cairo_charstring_type_t type)
 {
     cairo_status_t status;
-    int orig_size;
+    unsigned int orig_size;
     unsigned char buf[10];
     unsigned char *p = buf;
 
@@ -406,7 +409,6 @@ cairo_type1_font_create_charstring (cairo_type1_font_t      *font,
     path_info.type = type;
     if (emit_path) {
 	status = _cairo_path_fixed_interpret (scaled_glyph->path,
-					      CAIRO_DIRECTION_FORWARD,
 					      _charstring_move_to,
 					      _charstring_line_to,
 					      _charstring_curve_to,
@@ -513,12 +515,27 @@ cairo_type1_font_write_header (cairo_type1_font_t *font,
                                  "} readonly def\n"
                                  "/Encoding 256 array\n"
 				 "0 1 255 {1 index exch /.notdef put} for\n");
-    for (i = 1; i < font->scaled_font_subset->num_glyphs; i++) {
-	if (font->scaled_font_subset->glyph_names != NULL) {
-	    _cairo_output_stream_printf (font->output, "dup %d /%s put\n",
-					 i, font->scaled_font_subset->glyph_names[i]);
-	} else {
-	    _cairo_output_stream_printf (font->output, "dup %d /g%d put\n", i, i);
+    if (font->scaled_font_subset->is_latin) {
+	for (i = 1; i < 256; i++) {
+	    int subset_glyph = font->scaled_font_subset->latin_to_subset_glyph_index[i];
+
+	    if (subset_glyph > 0) {
+		if (font->scaled_font_subset->glyph_names != NULL) {
+		    _cairo_output_stream_printf (font->output, "dup %d /%s put\n",
+						 i, font->scaled_font_subset->glyph_names[subset_glyph]);
+		} else {
+		    _cairo_output_stream_printf (font->output, "dup %d /g%d put\n", i, subset_glyph);
+		}
+	    }
+	}
+    } else {
+	for (i = 1; i < font->scaled_font_subset->num_glyphs; i++) {
+	    if (font->scaled_font_subset->glyph_names != NULL) {
+		_cairo_output_stream_printf (font->output, "dup %d /%s put\n",
+					     i, font->scaled_font_subset->glyph_names[i]);
+	    } else {
+		_cairo_output_stream_printf (font->output, "dup %d /g%d put\n", i, i);
+	    }
 	}
     }
     _cairo_output_stream_printf (font->output,
@@ -611,7 +628,7 @@ cairo_type1_font_write_private_dict (cairo_type1_font_t *font,
 
   fail:
     status2 = _cairo_output_stream_destroy (encrypted_output);
-    if (status == CAIRO_STATUS_SUCCESS)
+    if (status == CAIRO_INT_STATUS_SUCCESS)
 	status = status2;
 
     return status;
@@ -726,20 +743,20 @@ _cairo_type1_fallback_init_internal (cairo_type1_subset_t	*type1_subset,
         goto fail1;
     }
 
-    type1_subset->widths = calloc (sizeof (int), font->scaled_font_subset->num_glyphs);
+    type1_subset->widths = calloc (sizeof (double), font->scaled_font_subset->num_glyphs);
     if (unlikely (type1_subset->widths == NULL)) {
         status = _cairo_error (CAIRO_STATUS_NO_MEMORY);
         goto fail2;
     }
     for (i = 0; i < font->scaled_font_subset->num_glyphs; i++)
-	type1_subset->widths[i] = font->widths[i];
+	type1_subset->widths[i] = (double)font->widths[i]/1000;
 
-    type1_subset->x_min   = (int) font->x_min;
-    type1_subset->y_min   = (int) font->y_min;
-    type1_subset->x_max   = (int) font->x_max;
-    type1_subset->y_max   = (int) font->y_max;
-    type1_subset->ascent  = (int) font->y_max;
-    type1_subset->descent = (int) font->y_min;
+    type1_subset->x_min   = (double)font->x_min/1000;
+    type1_subset->y_min   = (double)font->y_min/1000;
+    type1_subset->x_max   = (double)font->x_max/1000;
+    type1_subset->y_max   = (double)font->y_max/1000;
+    type1_subset->ascent  = (double)font->y_max/1000;
+    type1_subset->descent = (double)font->y_min/1000;
 
     length = font->header_size + font->data_size +
 	font->trailer_size;
@@ -754,10 +771,10 @@ _cairo_type1_fallback_init_internal (cairo_type1_subset_t	*type1_subset,
     len = snprintf(type1_subset->data + font->bbox_position,
                    font->bbox_max_chars,
                    "%d %d %d %d",
-                   (int)type1_subset->x_min,
-                   (int)type1_subset->y_min,
-                   (int)type1_subset->x_max,
-                   (int)type1_subset->y_max);
+                   (int)font->x_min,
+                   (int)font->y_min,
+                   (int)font->x_max,
+                   (int)font->y_max);
     type1_subset->data[font->bbox_position + len] = ' ';
 
     type1_subset->header_length = font->header_size;

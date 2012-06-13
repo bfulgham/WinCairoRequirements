@@ -98,7 +98,7 @@ point_t points[300] = {
  {46.6169,94.982}, {96.7277,88.4318}, {45.8039,18.3765}, {76.6448,78.0224}, {25.7585,90.4782}
 };
 
-static cairo_perf_ticks_t
+static cairo_time_t
 do_tessellate (cairo_t *cr, int num_points, int loops)
 {
     int i;
@@ -123,33 +123,36 @@ do_tessellate (cairo_t *cr, int num_points, int loops)
     return cairo_perf_timer_elapsed ();
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 tessellate_16 (cairo_t *cr, int width, int height, int loops)
 {
     return do_tessellate (cr, 16, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 tessellate_64 (cairo_t *cr, int width, int height, int loops)
 {
     return do_tessellate (cr, 64, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 tessellate_256 (cairo_t *cr, int width, int height, int loops)
 {
     return do_tessellate (cr, 256, loops);
 }
 
+cairo_bool_t
+tessellate_enabled (cairo_perf_t *perf)
+{
+    return cairo_perf_can_run (perf, "tessellate", NULL);
+}
+
 void
 tessellate (cairo_perf_t *perf, cairo_t *cr, int width, int height)
 {
-    if (! cairo_perf_can_run (perf, "tessellate", NULL))
-	return;
-
-    cairo_perf_run (perf, "tessellate-16", tessellate_16);
-    cairo_perf_run (perf, "tessellate-64", tessellate_64);
-    cairo_perf_run (perf, "tessellate-256", tessellate_256);
+    cairo_perf_run (perf, "tessellate-16", tessellate_16, NULL);
+    cairo_perf_run (perf, "tessellate-64", tessellate_64, NULL);
+    cairo_perf_run (perf, "tessellate-256", tessellate_256, NULL);
 }
 
 #if 0

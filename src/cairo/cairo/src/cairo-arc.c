@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -37,6 +37,8 @@
 #include "cairoint.h"
 
 #include "cairo-arc-private.h"
+
+#define MAX_FULL_CIRCLES 65536
 
 /* Spline deviation from the circle in radius would be given by:
 
@@ -131,13 +133,13 @@ _arc_segments_needed (double	      angle,
 
    for some value of h.
 
-   "Approximation of circular arcs by cubic poynomials", Michael
+   "Approximation of circular arcs by cubic polynomials", Michael
    Goldapp, Computer Aided Geometric Design 8 (1991) 227-238, provides
    various values of h along with error analysis for each.
 
    From that paper, a very practical value of h is:
 
-	h = 4/3 * tan(angle/4)
+	h = 4/3 * R * tan(angle/4)
 
    This value does not give the spline with minimal error, but it does
    provide a very good approximation, (6th-order convergence), and the
@@ -184,8 +186,13 @@ _cairo_arc_in_direction (cairo_t	  *cr,
     if (cairo_status (cr))
         return;
 
-    while (angle_max - angle_min > 4 * M_PI)
-	angle_max -= 2 * M_PI;
+    assert (angle_max >= angle_min);
+
+    if (angle_max - angle_min > 2 * M_PI * MAX_FULL_CIRCLES) {
+	angle_max = fmod (angle_max - angle_min, 2 * M_PI);
+	angle_min = fmod (angle_min, 2 * M_PI);
+	angle_max += angle_min + 2 * M_PI * MAX_FULL_CIRCLES;
+    }
 
     /* Recurse if drawing arc larger than pi */
     if (angle_max - angle_min > M_PI) {
@@ -231,11 +238,15 @@ _cairo_arc_in_direction (cairo_t	  *cr,
 				angle,
 				angle + angle_step);
 	}
+    } else {
+	cairo_line_to (cr,
+		       xc + radius * cos (angle_min),
+		       yc + radius * sin (angle_min));
     }
 }
 
 /**
- * _cairo_arc_path
+ * _cairo_arc_path:
  * @cr: a cairo context
  * @xc: X position of the center of the arc
  * @yc: Y position of the center of the arc

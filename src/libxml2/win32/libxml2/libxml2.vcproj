@@ -5,7 +5,7 @@
 	Name="libxml2"
 	ProjectGUID="{93EFA45D-AA0C-4023-93B6-BF4073AF9E3B}"
 	RootNamespace="libxml2"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\debug.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -38,8 +38,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\zlib&quot;;&quot;$(ProjectDir)..\..\include&quot;"
-				PreprocessorDefinitions="LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\opencflite\include\c99&quot;;&quot;$(SolutionDir)include\zlib&quot;;&quot;$(ProjectDir)..\..\include&quot;"
+				PreprocessorDefinitions="LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H;NOLIBTOOL;EINPROGRESS=112;ECONNRESET=108"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -53,6 +53,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib Ws2_32.lib"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -75,13 +77,13 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install Headers"
-				CommandLine="mkdir &quot;$(SolutionDir)include\libxml&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\include\libxml\*.h&quot; &quot;$(SolutionDir)include\libxml&quot;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\libxml&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\include\libxml\*.h&quot; &quot;$(SolutionDir)include\libxml&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\..\..\props\common.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\release.vsprops"
+			InheritedPropertySheets="..\..\..\..\props\common_vc8.vsprops;..\..\..\..\props\dll.vsprops;..\..\..\..\props\release.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -102,8 +104,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\zlib&quot;;&quot;$(ProjectDir)..\..\include&quot;"
-				PreprocessorDefinitions="LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\opencflite\include\c99&quot;;&quot;$(SolutionDir)include\zlib&quot;;&quot;$(ProjectDir)..\..\include&quot;"
+				PreprocessorDefinitions="LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H;NOLIBTOOL;EINPROGRESS=112;ECONNRESET=108"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -117,6 +119,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib Ws2_32.lib"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -139,7 +143,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install Headers"
-				CommandLine="mkdir &quot;$(SolutionDir)include\libxml&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\include\libxml\*.h&quot; &quot;$(SolutionDir)include\libxml&quot;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\libxml&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\..\include\libxml\*.h&quot; &quot;$(SolutionDir)include\libxml&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -36,9 +36,19 @@
 
 #include "cairo-script-private.h"
 
+#if CAIRO_HAS_SCRIPT_SURFACE
+#include "cairo-script.h"
+#endif
+
 #include <stdio.h> /* snprintf */
 #include <stdlib.h> /* mkstemp */
 #include <string.h>
+
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES /* for M_LN2, M_PI and M_SQRT2 on win32 */
+#define snprintf _snprintf
+#endif
+
 #include <math.h>
 #include <limits.h> /* INT_MAX */
 #include <assert.h>
@@ -126,19 +136,17 @@ _csi_proxy_destroy (void *closure)
     cairo_script_interpreter_destroy (ctx);
 }
 
-static unsigned long
-_csi_blob_hash (const uint8_t *bytes, int len)
+static void
+_csi_blob_hash (csi_blob_t *blob, const uint32_t *data, int len)
 {
+    unsigned long hash = blob->hash;
     /* very simple! */
-    unsigned long hash = 5381;
-    unsigned long *data = (unsigned long *) bytes;
-    len /= sizeof (unsigned long);
     while (len--) {
 	unsigned long c = *data++;
 	hash *= 33;
 	hash ^= c;
     }
-    return hash;
+    blob->hash = hash;
 }
 
 static csi_boolean_t
@@ -152,10 +160,6 @@ _csi_blob_equal (const csi_list_t *link, void *data)
     if (A->len != B->len)
 	return FALSE;
 
-    if (A->hash == 0)
-	A->hash = _csi_blob_hash (A->bytes, A->len);
-    if (B->hash == 0)
-	B->hash = _csi_blob_hash (B->bytes, B->len);
     if (A->hash != B->hash)
 	return FALSE;
 
@@ -165,7 +169,7 @@ _csi_blob_equal (const csi_list_t *link, void *data)
 static void
 _csi_blob_init (csi_blob_t *blob, uint8_t *bytes, int len)
 {
-    blob->hash = 0;
+    blob->hash = 5381;
     blob->len = len;
     blob->bytes = bytes;
 }
@@ -278,6 +282,24 @@ _csi_ostack_get_number (csi_t *ctx, unsigned int i, double *out)
     return CSI_STATUS_SUCCESS;
 }
 
+static double
+_csi_object_as_real (csi_object_t *obj)
+{
+    int type;
+
+    type = csi_object_get_type (obj);
+    switch (type) {
+    case CSI_OBJECT_TYPE_BOOLEAN:
+	return obj->datum.boolean;
+    case CSI_OBJECT_TYPE_INTEGER:
+	return obj->datum.integer;
+    case CSI_OBJECT_TYPE_REAL:
+	return obj->datum.real;
+    default:
+	return 0;
+    }
+}
+
 static csi_status_t
 _csi_ostack_get_name (csi_t *ctx, unsigned int i, csi_name_t *out)
 {
@@ -351,12 +373,20 @@ static csi_status_t
 _csi_ostack_get_surface (csi_t *ctx, unsigned int i, cairo_surface_t **out)
 {
     csi_object_t *obj;
+    int type;
 
     obj = _csi_peek_ostack (ctx, i);
-    if (_csi_unlikely (csi_object_get_type (obj) != CSI_OBJECT_TYPE_SURFACE))
+    type = csi_object_get_type (obj);
+    switch (type) {
+    case CSI_OBJECT_TYPE_CONTEXT:
+	*out = cairo_get_target (obj->datum.cr);
+	break;
+    case CSI_OBJECT_TYPE_SURFACE:
+	*out = obj->datum.surface;
+	break;
+    default:
 	return _csi_error (CSI_STATUS_INVALID_SCRIPT);
-
-    *out = obj->datum.surface;
+    }
     return CSI_STATUS_SUCCESS;
 }
 
@@ -1090,10 +1120,11 @@ static csi_status_t
 _curve_to (csi_t *ctx)
 {
     csi_status_t status;
+    csi_object_t *obj;
+    int type;
     double x1, y1;
     double x2, y2;
     double x3, y3;
-    cairo_t *cr;
 
     check (7);
 
@@ -1115,13 +1146,20 @@ _curve_to (csi_t *ctx)
     status = _csi_ostack_get_number (ctx, 5, &x1);
     if (_csi_unlikely (status))
 	return status;
-    status = _csi_ostack_get_context (ctx, 6, &cr);
-    if (_csi_unlikely (status))
-	return status;
 
-    /* XXX handle path object */
+    obj = _csi_peek_ostack (ctx, 6);
+    type = csi_object_get_type (obj);
+    switch (type) {
+    case CSI_OBJECT_TYPE_CONTEXT:
+	cairo_curve_to (obj->datum.cr, x1, y1, x2, y2, x3, y3);
+	break;
+    case CSI_OBJECT_TYPE_PATTERN:
+	cairo_mesh_pattern_curve_to (obj->datum.pattern,
+				     x1, y1, x2, y2, x3, y3);
+	break;
+	/* XXX handle path object */
+    }
 
-    cairo_curve_to (cr, x1, y1, x2, y2, x3, y3);
     pop (6);
     return CSI_STATUS_SUCCESS;
 }
@@ -1662,12 +1700,13 @@ _ft_done_face (void *closure)
     cairo_script_interpreter_destroy (ctx);
 }
 
-#ifdef HAVE_MMAP
-/* manual form of swapping for swapless systems like tiny */
 struct mmap_vec {
     const uint8_t *bytes;
     size_t num_bytes;
 };
+
+#ifdef HAVE_MMAP
+/* manual form of swapping for swapless systems like tiny */
 static void *
 _mmap_bytes (const struct mmap_vec *vec, int count)
 {
@@ -1751,6 +1790,7 @@ _ft_create_for_source (csi_t *ctx,
     /* check for an existing FT_Face (kept alive by the font cache) */
     /* XXX index/flags */
     _csi_blob_init (&tmpl, (uint8_t *) source->string, source->len);
+    _csi_blob_hash (&tmpl, (uint32_t *) source->string, source->len / sizeof (uint32_t));
     link = _csi_list_find (ctx->_faces, _csi_blob_equal, &tmpl);
     if (link) {
 	if (--source->base.ref == 0)
@@ -1860,6 +1900,7 @@ _ft_create_for_pattern (csi_t *ctx,
     void *bytes;
 
     _csi_blob_init (&tmpl, (uint8_t *) string->string, string->len);
+    _csi_blob_hash (&tmpl, (uint32_t *) string->string, string->len / sizeof (uint32_t));
     link = _csi_list_find (ctx->_faces, _csi_blob_equal, &tmpl);
     if (link) {
 	if (--string->base.ref == 0)
@@ -1886,7 +1927,7 @@ _ft_create_for_pattern (csi_t *ctx,
 	/* prior to 1.9, you needed to pass a resolved pattern */
 	resolved = FcFontMatch (NULL, pattern, NULL);
 	if (_csi_unlikely (resolved == NULL)) {
-	    FcPatternDestroy (resolved);
+	    FcPatternDestroy (pattern);
 	    return _csi_error (CSI_STATUS_NO_MEMORY);
 	}
     }
@@ -2499,30 +2540,41 @@ _glyph_string (csi_t *ctx,
 	       cairo_scaled_font_t *scaled_font,
 	       cairo_glyph_t *glyphs)
 {
-    double x,y, dx;
-    csi_integer_t nglyphs, i, j;
+    struct glyph_advance_cache uncached;
     struct glyph_advance_cache *cache;
+    csi_integer_t nglyphs, i, j;
+    double x, y, dx;
     cairo_status_t status;
+
+    if (cairo_scaled_font_status (scaled_font))
+	return 0;
 
     cache = cairo_scaled_font_get_user_data (scaled_font,
 					     (cairo_user_data_key_t *) ctx);
     if (cache == NULL) {
 	cache = _csi_alloc (ctx, sizeof (*cache));
-	if (cache == NULL)
-	    return -1;
+	if (_csi_likely (cache != NULL)) {
+	    cache->ctx = ctx;
+	    memset (cache->have_glyph_advance, 0xff,
+		    sizeof (cache->have_glyph_advance));
+
+	    status = cairo_scaled_font_set_user_data (scaled_font,
+						      (cairo_user_data_key_t *) ctx,
+						      cache,
+						      glyph_advance_cache_destroy);
+	    if (_csi_unlikely (status)) {
+		_csi_free (ctx, cache);
+		cache = NULL;
+	    }
+	}
+    }
+
+    if (_csi_unlikely (cache == NULL)) {
+	cache = &uncached;
 
 	cache->ctx = ctx;
 	memset (cache->have_glyph_advance, 0xff,
 		sizeof (cache->have_glyph_advance));
-
-	status = cairo_scaled_font_set_user_data (scaled_font,
-						  (cairo_user_data_key_t *) ctx,
-						  cache,
-						  glyph_advance_cache_destroy);
-	if (status) {
-	    _csi_free (ctx, cache);
-	    return -1;
-	}
     }
 
     nglyphs = 0;
@@ -2660,6 +2712,7 @@ _glyph_path (csi_t *ctx)
     if (nglyphs > ARRAY_LENGTH (stack_glyphs)) {
 	if (_csi_unlikely ((unsigned) nglyphs >= INT_MAX / sizeof (cairo_glyph_t)))
 	    return _csi_error (CSI_STATUS_NO_MEMORY);
+
 	glyphs = _csi_alloc (ctx, sizeof (cairo_glyph_t) * nglyphs);
 	if (_csi_unlikely (glyphs == NULL))
 	    return _csi_error (CSI_STATUS_NO_MEMORY);
@@ -2667,13 +2720,6 @@ _glyph_path (csi_t *ctx)
 	glyphs = stack_glyphs;
 
     nglyphs = _glyph_string (ctx, array, cairo_get_scaled_font (cr), glyphs);
-    if (_csi_unlikely (nglyphs < 0)) {
-	if (glyphs != stack_glyphs)
-	    _csi_free (ctx, glyphs);
-
-	return _csi_error (CSI_STATUS_NO_MEMORY);
-    }
-
     cairo_glyph_path (cr, glyphs, nglyphs);
 
     if (glyphs != stack_glyphs)
@@ -2811,32 +2857,48 @@ _image_read_raw (csi_file_t *src,
 {
     cairo_surface_t *image;
     uint8_t *bp, *data;
-    int rem, len, ret, x, stride;
+    int rem, len, ret, x, rowlen, instride, stride;
     cairo_status_t status;
 
-    image = cairo_image_surface_create (format, width, height);
-    status = cairo_surface_status (image);
-    if (status)
+    stride = cairo_format_stride_for_width (format, width);
+    data = malloc (stride * height);
+    if (data == NULL)
+	return CAIRO_STATUS_NO_MEMORY;
+
+    image = cairo_image_surface_create_for_data (data, format,
+						 width, height, stride);
+    status = cairo_surface_set_user_data (image,
+					  (const cairo_user_data_key_t *) image,
+					  data, free);
+    if (status) {
+	cairo_surface_destroy (image);
+	free (image);
 	return status;
+    }
 
     switch (format) {
     case CAIRO_FORMAT_A1:
-	len = (width+7)/8 * height;
+	instride = rowlen = (width+7)/8;
 	break;
     case CAIRO_FORMAT_A8:
-	len = width * height;
+	instride = rowlen = width;
+	break;
+    case CAIRO_FORMAT_RGB16_565:
+	instride = rowlen = 2 * width;
 	break;
     case CAIRO_FORMAT_RGB24:
-	len = 3 * width * height;
+	rowlen = 3 * width;
+	instride = 4 *width;
 	break;
     default:
+    case CAIRO_FORMAT_RGB30:
+    case CAIRO_FORMAT_INVALID:
     case CAIRO_FORMAT_ARGB32:
-	len = 4 * width * height;
+	instride = rowlen = 4 * width;
 	break;
     }
+    len = rowlen * height;
 
-    stride = cairo_image_surface_get_stride (image);
-    data = cairo_image_surface_get_data (image);
     bp = data;
     rem = len;
     while (rem) {
@@ -2856,7 +2918,7 @@ _image_read_raw (csi_file_t *src,
 	    /* XXX pixel conversion */
 	    switch (format) {
 	    case CAIRO_FORMAT_A1:
-		for (x = (width+7)/8; x--; ) {
+		for (x = rowlen; x--; ) {
 		    uint8_t byte = *--bp;
 		    row[x] = CSI_BITSWAP8_IF_LITTLE_ENDIAN (byte);
 		}
@@ -2864,6 +2926,17 @@ _image_read_raw (csi_file_t *src,
 	    case CAIRO_FORMAT_A8:
 		for (x = width; x--; )
 		    row[x] = *--bp;
+		break;
+	    case CAIRO_FORMAT_RGB16_565:
+		for (x = width; x--; ) {
+#ifdef WORDS_BIGENDIAN
+		    row[2*x + 1] = *--bp;
+		    row[2*x + 0] = *--bp;
+#else
+		    row[2*x + 0] = *--bp;
+		    row[2*x + 1] = *--bp;
+#endif
+		}
 		break;
 	    case CAIRO_FORMAT_RGB24:
 		for (x = width; x--; ) {
@@ -2880,16 +2953,20 @@ _image_read_raw (csi_file_t *src,
 #endif
 		}
 		break;
+	    case CAIRO_FORMAT_RGB30:
+	    case CAIRO_FORMAT_INVALID:
 	    case CAIRO_FORMAT_ARGB32:
 		/* stride == width */
 		break;
 	    }
+
+	    memset (row + instride, 0, stride - instride);
 	}
 
 	/* need to treat last row carefully */
 	switch (format) {
 	case CAIRO_FORMAT_A1:
-	    for (x = (width+7)/8; x--; ) {
+	    for (x = rowlen; x--; ) {
 		uint8_t byte = *--bp;
 		data[x] = CSI_BITSWAP8_IF_LITTLE_ENDIAN (byte);
 	    }
@@ -2897,6 +2974,17 @@ _image_read_raw (csi_file_t *src,
 	case CAIRO_FORMAT_A8:
 	    for (x = width; x--; )
 		data[x] = *--bp;
+	    break;
+	case CAIRO_FORMAT_RGB16_565:
+	    for (x = width; x--; ) {
+#ifdef WORDS_BIGENDIAN
+		data[2*x + 1] = *--bp;
+		data[2*x + 0] = *--bp;
+#else
+		data[2*x + 0] = *--bp;
+		data[2*x + 1] = *--bp;
+#endif
+	    }
 	    break;
 	case CAIRO_FORMAT_RGB24:
 	    for (x = width; --x>1; ) {
@@ -2954,10 +3042,13 @@ _image_read_raw (csi_file_t *src,
 #endif
 	    }
 	    break;
+	case CAIRO_FORMAT_RGB30:
+	case CAIRO_FORMAT_INVALID:
 	case CAIRO_FORMAT_ARGB32:
 	    /* stride == width */
 	    break;
 	}
+	memset (data + instride, 0, stride - instride);
     } else {
 #ifndef WORDS_BIGENDIAN
 	switch (format) {
@@ -2965,6 +3056,14 @@ _image_read_raw (csi_file_t *src,
 	    for (x = 0; x < len; x++) {
 		uint8_t byte = data[x];
 		data[x] = CSI_BITSWAP8_IF_LITTLE_ENDIAN (byte);
+	    }
+	    break;
+	case CAIRO_FORMAT_RGB16_565:
+	    {
+		uint32_t *rgba = (uint32_t *) data;
+		for (x = len/2; x--; rgba++) {
+		    *rgba = bswap_16 (*rgba);
+		}
 	    }
 	    break;
 	case CAIRO_FORMAT_ARGB32:
@@ -2979,13 +3078,16 @@ _image_read_raw (csi_file_t *src,
 	case CAIRO_FORMAT_A8:
 	    break;
 
+	case CAIRO_FORMAT_RGB30:
 	case CAIRO_FORMAT_RGB24:
+	case CAIRO_FORMAT_INVALID:
 	default:
 	    break;
 	}
 #endif
     }
 
+    cairo_surface_mark_dirty (image);
     *image_out = image;
     return CSI_STATUS_SUCCESS;
 }
@@ -3030,6 +3132,22 @@ _image_tag_done (void *closure)
     cairo_script_interpreter_destroy (ctx);
 }
 
+static void
+_image_hash (csi_blob_t *blob,
+	     cairo_surface_t *surface)
+{
+    uint32_t  value;
+
+    value = cairo_image_surface_get_width (surface);
+    _csi_blob_hash (blob, &value, 1);
+
+    value = cairo_image_surface_get_height (surface);
+    _csi_blob_hash (blob, &value, 1);
+
+    value = cairo_image_surface_get_format (surface);
+    _csi_blob_hash (blob, &value, 1);
+}
+
 static cairo_surface_t *
 _image_cached (csi_t *ctx, cairo_surface_t *surface)
 {
@@ -3045,6 +3163,7 @@ _image_cached (csi_t *ctx, cairo_surface_t *surface)
     stride = cairo_image_surface_get_stride (surface);
     height = cairo_image_surface_get_height (surface);
     _csi_blob_init (&tmpl, data, stride * height);
+    _image_hash (&tmpl, surface);
     link = _csi_list_find (ctx->_images, _csi_blob_equal, &tmpl);
     if (link) {
 	cairo_surface_destroy (surface);
@@ -3312,8 +3431,9 @@ static csi_status_t
 _line_to (csi_t *ctx)
 {
     csi_status_t status;
+    csi_object_t *obj;
+    int type;
     double x, y;
-    cairo_t *cr;
 
     check (3);
 
@@ -3323,14 +3443,21 @@ _line_to (csi_t *ctx)
     status = _csi_ostack_get_number (ctx, 1, &x);
     if (_csi_unlikely (status))
 	return status;
-    status = _csi_ostack_get_context (ctx, 2, &cr);
-    if (_csi_unlikely (status))
-	return status;
 
     /* XXX path object */
 
+    obj = _csi_peek_ostack (ctx, 2);
+    type = csi_object_get_type (obj);
+    switch (type) {
+    case CSI_OBJECT_TYPE_CONTEXT:
+	cairo_line_to (obj->datum.cr, x, y);
+	break;
+    case CSI_OBJECT_TYPE_PATTERN:
+	cairo_mesh_pattern_line_to (obj->datum.pattern, x, y);
+	break;
+    }
+
     pop (2);
-    cairo_line_to (cr, x, y);
     return CSI_STATUS_SUCCESS;
 }
 
@@ -3514,6 +3641,173 @@ _matrix (csi_t *ctx)
 }
 
 static csi_status_t
+_map_to_image (csi_t *ctx)
+{
+    csi_object_t obj;
+    csi_array_t *array;
+    csi_status_t status;
+    cairo_rectangle_int_t extents, *r;
+    cairo_surface_t *surface;
+
+    check (2);
+
+    status = _csi_ostack_get_array (ctx, 0, &array);
+    if (_csi_unlikely (status))
+	return status;
+
+    status = _csi_ostack_get_surface (ctx, 1, &surface);
+    if (_csi_unlikely (status))
+	return status;
+
+    switch (array->stack.len) {
+    case 0:
+	r = NULL;
+	break;
+    case 4:
+	extents.x = floor (_csi_object_as_real (&array->stack.objects[0]));
+	extents.y = floor (_csi_object_as_real (&array->stack.objects[1]));
+	extents.width = ceil (_csi_object_as_real (&array->stack.objects[2]));
+	extents.height = ceil (_csi_object_as_real (&array->stack.objects[3]));
+	r = &extents;
+	break;
+    default:
+	return _csi_error (CSI_STATUS_INVALID_SCRIPT);
+    }
+
+    obj.type = CSI_OBJECT_TYPE_SURFACE;
+    obj.datum.surface = cairo_surface_map_to_image (surface, r);
+    pop (2);
+    return push (&obj);
+}
+
+static csi_status_t
+_unmap_image (csi_t *ctx)
+{
+    cairo_surface_t *surface, *image;
+    csi_status_t status;
+
+    check (2);
+
+    status = _csi_ostack_get_surface (ctx, 0, &image);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_surface (ctx, 1, &surface);
+    if (_csi_unlikely (status))
+	return status;
+
+    cairo_surface_unmap_image (surface, image);
+
+    pop (2);
+    return CSI_STATUS_SUCCESS;
+}
+
+static csi_status_t
+_mesh (csi_t *ctx)
+{
+    csi_object_t obj;
+
+    obj.type = CSI_OBJECT_TYPE_PATTERN;
+    obj.datum.pattern = cairo_pattern_create_mesh ();
+    return push (&obj);
+}
+
+static csi_status_t
+_mesh_begin_patch (csi_t *ctx)
+{
+    csi_status_t status;
+    cairo_pattern_t *pattern = NULL; /* silence the compiler */
+
+    check (1);
+
+    status = _csi_ostack_get_pattern (ctx, 0, &pattern);
+    if (_csi_unlikely (status))
+	return status;
+
+    cairo_mesh_pattern_begin_patch (pattern);
+    return CSI_STATUS_SUCCESS;
+}
+
+static csi_status_t
+_mesh_end_patch (csi_t *ctx)
+{
+    csi_status_t status;
+    cairo_pattern_t *pattern = NULL; /* silence the compiler */
+
+    check (1);
+
+    status = _csi_ostack_get_pattern (ctx, 0, &pattern);
+    if (_csi_unlikely (status))
+	return status;
+
+    cairo_mesh_pattern_end_patch (pattern);
+    return CSI_STATUS_SUCCESS;
+}
+
+static csi_status_t
+_mesh_set_control_point (csi_t *ctx)
+{
+    csi_status_t status;
+    double x, y;
+    csi_integer_t point;
+    cairo_pattern_t *pattern = NULL; /* silence the compiler */
+
+    check (4);
+
+    status = _csi_ostack_get_number (ctx, 0, &y);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 1, &x);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_integer (ctx, 2, &point);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_pattern (ctx, 3, &pattern);
+    if (_csi_unlikely (status))
+	return status;
+
+    cairo_mesh_pattern_set_control_point (pattern, point, x, y);
+
+    pop (3);
+    return CSI_STATUS_SUCCESS;
+}
+
+static csi_status_t
+_mesh_set_corner_color (csi_t *ctx)
+{
+    csi_status_t status;
+    double r, g, b, a;
+    csi_integer_t corner;
+    cairo_pattern_t *pattern = NULL; /* silence the compiler */
+
+    check (6);
+
+    status = _csi_ostack_get_number (ctx, 0, &a);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 1, &b);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 2, &g);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 3, &r);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_integer (ctx, 4, &corner);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_pattern (ctx, 5, &pattern);
+    if (_csi_unlikely (status))
+	return status;
+
+    cairo_mesh_pattern_set_corner_color_rgba (pattern, corner, r, g, b, a);
+
+    pop (5);
+    return CSI_STATUS_SUCCESS;
+}
+
+static csi_status_t
 _mod (csi_t *ctx)
 {
     csi_integer_t x, y;
@@ -3536,8 +3830,9 @@ static csi_status_t
 _move_to (csi_t *ctx)
 {
     csi_status_t status;
+    csi_object_t *obj;
+    int type;
     double x, y;
-    cairo_t *cr;
 
     check (3);
 
@@ -3547,14 +3842,21 @@ _move_to (csi_t *ctx)
     status = _csi_ostack_get_number (ctx, 1, &x);
     if (_csi_unlikely (status))
 	return status;
-    status = _csi_ostack_get_context (ctx, 2, &cr);
-    if (_csi_unlikely (status))
-	return status;
 
-    /* XXX path object */
+    obj = _csi_peek_ostack (ctx, 2);
+    type = csi_object_get_type (obj);
+    switch (type) {
+    case CSI_OBJECT_TYPE_CONTEXT:
+	cairo_move_to (obj->datum.cr, x, y);
+	break;
+    case CSI_OBJECT_TYPE_PATTERN:
+	cairo_mesh_pattern_move_to (obj->datum.pattern, x, y);
+	break;
+
+	/* XXX path object */
+    }
 
     pop (2);
-    cairo_move_to (cr, x, y);
     return CSI_STATUS_SUCCESS;
 }
 
@@ -4953,9 +5255,11 @@ _set_source_image (csi_t *ctx)
      * principally to remove the pixman ops from the profiles.
      */
     if (_csi_likely (_matching_images (surface, source))) {
+	cairo_surface_flush (surface);
 	memcpy (cairo_image_surface_get_data (surface),
 		cairo_image_surface_get_data (source),
 		cairo_image_surface_get_height (source) * cairo_image_surface_get_stride (source));
+	cairo_surface_mark_dirty (surface);
     } else {
 	cairo_t *cr;
 
@@ -5201,6 +5505,7 @@ _similar (csi_t *ctx)
 	case CAIRO_FORMAT_ARGB32:
 	    content = CAIRO_CONTENT_COLOR_ALPHA;
 	    break;
+	case CAIRO_FORMAT_RGB16_565:
 	case CAIRO_FORMAT_RGB24:
 	    content = CAIRO_CONTENT_COLOR;
 	    break;
@@ -5215,6 +5520,70 @@ _similar (csi_t *ctx)
     obj.datum.surface = cairo_surface_create_similar (other,
 						      content, width, height);
     pop (4);
+    return push (&obj);
+}
+
+static csi_status_t
+_similar_image (csi_t *ctx)
+{
+    csi_object_t obj;
+    long format;
+    double width, height;
+    cairo_surface_t *other;
+    csi_status_t status;
+
+    check (4);
+
+    status = _csi_ostack_get_number (ctx, 0, &height);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 1, &width);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_integer (ctx, 2, &format);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_surface (ctx, 3, &other);
+    if (_csi_unlikely (status))
+	return status;
+
+    obj.type = CSI_OBJECT_TYPE_SURFACE;
+    obj.datum.surface = cairo_surface_create_similar_image (other,
+							    format,
+							    width, height);
+    pop (4);
+    return push (&obj);
+}
+
+static csi_status_t
+_subsurface (csi_t *ctx)
+{
+    csi_object_t obj;
+    double x, y, width, height;
+    cairo_surface_t *target;
+    csi_status_t status;
+
+    check (5);
+
+    status = _csi_ostack_get_number (ctx, 0, &height);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 1, &width);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 2, &y);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_number (ctx, 3, &x);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_surface (ctx, 4, &target);
+    if (_csi_unlikely (status))
+	return status;
+
+    obj.type = CSI_OBJECT_TYPE_SURFACE;
+    obj.datum.surface = cairo_surface_create_for_rectangle (target, x, y, width, height);
+    pop (5);
     return push (&obj);
 }
 
@@ -5279,6 +5648,7 @@ _show_glyphs (csi_t *ctx)
     if (nglyphs > ARRAY_LENGTH (stack_glyphs)) {
 	if (_csi_unlikely ((unsigned) nglyphs >= INT_MAX / sizeof (cairo_glyph_t)))
 	    return _csi_error (CSI_STATUS_NO_MEMORY);
+
 	glyphs = _csi_alloc (ctx, sizeof (cairo_glyph_t) * nglyphs);
 	if (_csi_unlikely (glyphs == NULL))
 	    return _csi_error (CSI_STATUS_NO_MEMORY);
@@ -5286,12 +5656,6 @@ _show_glyphs (csi_t *ctx)
 	glyphs = stack_glyphs;
 
     nglyphs = _glyph_string (ctx, array, cairo_get_scaled_font (cr), glyphs);
-    if (_csi_unlikely (nglyphs < 0)) {
-	if (glyphs != stack_glyphs)
-	    _csi_free (ctx, glyphs);
-	return _csi_error (CSI_STATUS_NO_MEMORY);
-    }
-
     cairo_show_glyphs (cr, glyphs, nglyphs);
 
     if (glyphs != stack_glyphs)
@@ -5389,30 +5753,22 @@ _show_text_glyphs (csi_t *ctx)
 	    break;
 	}
     }
-    if (nglyphs == 0)
+    if (nglyphs == 0) {
+	pop (4);
 	return CSI_STATUS_SUCCESS;
+    }
 
     if (nglyphs > ARRAY_LENGTH (stack_glyphs)) {
-	    if (_csi_unlikely ((unsigned) nglyphs >= INT_MAX / sizeof (cairo_glyph_t)))
-		return _csi_error (CSI_STATUS_NO_MEMORY);
-	glyphs = _csi_alloc (ctx, sizeof (cairo_glyph_t) * nglyphs);
-	if (_csi_unlikely (glyphs == NULL)) {
+	if (_csi_unlikely ((unsigned) nglyphs >= INT_MAX / sizeof (cairo_glyph_t)))
 	    return _csi_error (CSI_STATUS_NO_MEMORY);
-	}
+
+	glyphs = _csi_alloc (ctx, sizeof (cairo_glyph_t) * nglyphs);
+	if (_csi_unlikely (glyphs == NULL))
+	    return _csi_error (CSI_STATUS_NO_MEMORY);
     } else
 	glyphs = stack_glyphs;
 
     nglyphs = _glyph_string (ctx, array, cairo_get_scaled_font (cr), glyphs);
-    if (_csi_unlikely (nglyphs < 0)) {
-	if (clusters != stack_clusters)
-	    _csi_free (ctx, clusters);
-
-	if (glyphs != stack_glyphs)
-	    _csi_free (ctx, glyphs);
-
-	return _csi_error (CSI_STATUS_NO_MEMORY);
-    }
-
     cairo_show_text_glyphs (cr,
 			    utf8_string->string, utf8_string->len,
 			    glyphs, nglyphs,
@@ -5509,6 +5865,7 @@ _surface (csi_t *ctx)
     csi_surface_create_func_t hook;
     long content;
     cairo_surface_t *surface;
+    long uid;
     csi_status_t status;
 
     check (1);
@@ -5529,10 +5886,20 @@ _surface (csi_t *ctx)
     if (_csi_unlikely (status))
 	return status;
 
+    uid = 0;
+    status = _csi_dictionary_get_integer (ctx, dict, "uid", TRUE, &uid);
+    if (_csi_unlikely (status))
+	return status;
+    if (uid == 0) {
+	status = _csi_dictionary_get_integer (ctx, dict, "drawable", TRUE, &uid);
+	if (_csi_unlikely (status))
+	    return status;
+    }
+
     hook = ctx->hooks.surface_create;
     assert (hook != NULL);
 
-    surface = hook (ctx->hooks.closure, content, width, height);
+    surface = hook (ctx->hooks.closure, content, width, height, uid);
     if (_csi_unlikely (surface == NULL)) {
 	return _csi_error (CSI_STATUS_NULL_POINTER);
     }
@@ -5633,6 +6000,53 @@ _surface (csi_t *ctx)
 }
 
 static csi_status_t
+_record (csi_t *ctx)
+{
+    csi_object_t obj;
+    long content;
+    csi_array_t *array;
+    csi_status_t status;
+    cairo_rectangle_t extents;
+    cairo_rectangle_t *r;
+
+    check (2);
+
+    status = _csi_ostack_get_array (ctx, 0, &array);
+    if (_csi_unlikely (status))
+	return status;
+
+    status = _csi_ostack_get_integer (ctx, 1, &content);
+    if (_csi_unlikely (status))
+	return status;
+
+    switch (array->stack.len) {
+    case 0:
+	r = NULL;
+	break;
+    case 2:
+	extents.x = extents.y = 0;
+	extents.width = _csi_object_as_real (&array->stack.objects[0]);
+	extents.height = _csi_object_as_real (&array->stack.objects[1]);
+	r = &extents;
+	break;
+    case 4:
+	extents.x = _csi_object_as_real (&array->stack.objects[0]);
+	extents.y = _csi_object_as_real (&array->stack.objects[1]);
+	extents.width = _csi_object_as_real (&array->stack.objects[2]);
+	extents.height = _csi_object_as_real (&array->stack.objects[3]);
+	r = &extents;
+	break;
+    default:
+	return _csi_error (CSI_STATUS_INVALID_SCRIPT);
+    }
+
+    obj.type = CSI_OBJECT_TYPE_SURFACE;
+    obj.datum.surface = cairo_recording_surface_create (content, r);
+    pop (2);
+    return push (&obj);
+}
+
+static csi_status_t
 _text_path (csi_t *ctx)
 {
     csi_status_t status;
@@ -5723,6 +6137,43 @@ _write_to_png (csi_t *ctx)
     status = cairo_surface_write_to_png (surface, filename->string);
     if (_csi_unlikely (status))
 	return status;
+#else
+    return CAIRO_STATUS_WRITE_ERROR;
+#endif
+
+    pop (1);
+    return CSI_STATUS_SUCCESS;
+}
+
+static csi_status_t
+_write_to_script (csi_t *ctx)
+{
+    csi_status_t status;
+    csi_string_t *filename;
+    cairo_surface_t *record;
+
+    check (2);
+
+    status = _csi_ostack_get_string (ctx, 0, &filename);
+    if (_csi_unlikely (status))
+	return status;
+    status = _csi_ostack_get_surface (ctx, 1, &record);
+    if (_csi_unlikely (status))
+	return status;
+
+    if (cairo_surface_get_type (record) != CAIRO_SURFACE_TYPE_RECORDING)
+	return CAIRO_STATUS_SURFACE_TYPE_MISMATCH;
+
+#if CAIRO_HAS_SCRIPT_SURFACE
+    {
+	cairo_device_t *script;
+
+	script = cairo_script_create (filename->string);
+	status = cairo_script_from_recording_surface (script, record);
+	cairo_device_destroy (script);
+	if (_csi_unlikely (status))
+	    return status;
+    }
 #else
     return CAIRO_STATUS_WRITE_ERROR;
 #endif
@@ -5924,9 +6375,17 @@ _defs[] = {
     { "lt", _lt },
     { "m", _move_to },
     { "M", _rel_move_to },
+    { "map-to-image", _map_to_image },
     { "mark", _mark },
     { "mask", _mask },
     { "matrix", _matrix },
+
+    { "mesh", _mesh },
+    { "begin-patch", _mesh_begin_patch },
+    { "end-patch", _mesh_end_patch },
+    { "set-control-point", _mesh_set_control_point },
+    { "set-corner-color", _mesh_set_corner_color },
+
     { "mod", _mod },
     { "move-to", _move_to },
     { "mul", _mul },
@@ -5948,6 +6407,7 @@ _defs[] = {
     { "push-group", _push_group },
     { "radial", _radial },
     { "rand", NULL },
+    { "record", _record },
     { "rectangle", _rectangle },
     { "repeat", _repeat },
     { "restore", _restore },
@@ -5995,9 +6455,11 @@ _defs[] = {
     { "show-text-glyphs", _show_text_glyphs },
     { "show-page", _show_page },
     { "similar", _similar },
+    { "similar-image", _similar_image },
     { "sin", NULL },
     { "sqrt", NULL },
     { "sub", _sub },
+    { "subsurface", _subsurface },
     { "surface", _surface },
     { "string", NULL },
     { "stroke", _stroke },
@@ -6012,11 +6474,13 @@ _defs[] = {
     { "true", _true },
     { "type", NULL },
     { "undef", _undef },
+    { "unmap-image", _unmap_image },
     { "unset", _unset },
     { "user-to-device", NULL },
     { "user-to-device-distance", NULL },
     { "where", NULL },
     { "write-to-png", _write_to_png },
+    { "write-to-script", _write_to_script },
     { "xor", _xor },
 
     { "=", _debug_print },
@@ -6046,7 +6510,6 @@ _integer_constants[] = {
     { "XOR",		CAIRO_OPERATOR_XOR },
     { "ADD",		CAIRO_OPERATOR_ADD },
     { "SATURATE",	CAIRO_OPERATOR_SATURATE },
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 9, 4)
     { "MULTIPLY",	CAIRO_OPERATOR_MULTIPLY },
     { "SCREEN",		CAIRO_OPERATOR_SCREEN },
     { "OVERLAY",	CAIRO_OPERATOR_OVERLAY },
@@ -6062,7 +6525,6 @@ _integer_constants[] = {
     { "HSL_SATURATION", CAIRO_OPERATOR_HSL_SATURATION },
     { "HSL_COLOR",	CAIRO_OPERATOR_HSL_COLOR },
     { "HSL_LUMINOSITY", CAIRO_OPERATOR_HSL_LUMINOSITY },
-#endif
 
     { "WINDING",	CAIRO_FILL_RULE_WINDING },
     { "EVEN_ODD",	CAIRO_FILL_RULE_EVEN_ODD },
@@ -6071,6 +6533,9 @@ _integer_constants[] = {
     { "ANTIALIAS_NONE",		CAIRO_ANTIALIAS_NONE },
     { "ANTIALIAS_GRAY",		CAIRO_ANTIALIAS_GRAY },
     { "ANTIALIAS_SUBPIXEL",	CAIRO_ANTIALIAS_SUBPIXEL },
+    { "ANTIALIAS_FAST",		CAIRO_ANTIALIAS_FAST },
+    { "ANTIALIAS_GOOD",		CAIRO_ANTIALIAS_GOOD },
+    { "ANTIALIAS_BEST",		CAIRO_ANTIALIAS_BEST },
 
     { "LINE_CAP_BUTT",		CAIRO_LINE_CAP_BUTT },
     { "LINE_CAP_ROUND",		CAIRO_LINE_CAP_ROUND },
@@ -6124,8 +6589,10 @@ _integer_constants[] = {
 
     { "A1",			CAIRO_FORMAT_A1 },
     { "A8",			CAIRO_FORMAT_A8 },
+    { "RGB16_565",		CAIRO_FORMAT_RGB16_565 },
     { "RGB24",			CAIRO_FORMAT_RGB24 },
     { "ARGB32",			CAIRO_FORMAT_ARGB32 },
+    { "INVALID",		CAIRO_FORMAT_INVALID },
 
     { NULL, 0 }
 };

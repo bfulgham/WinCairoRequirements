@@ -1,4 +1,696 @@
-Snapshot 1.9.4 (2009-07-xx)
+Release 1.12.2 (2012-04-29 Chris Wilson <chris@chris-wilson.co.uk>)
+===================================================================
+After such a long gestation period for the release of Cairo 1.12, we
+inevitably accumulated a few bugs that were flushed out by broadening the
+test base. Thanks to everybody who tried the release, apologies to any one
+unfortunate enough to encounter a bug and many thanks for reporting it. As
+a result Adrian Johnson, Alexandros Frantzis, Andrea Canciani, Kalev
+Lember, Maarten Bosman, Marcus Meissner, Nis Martensen and Uli Schlachter
+have squashed many more bugs and improved the documentation. I would
+strongly recommend everyone to upgrade to cairo-1.12.2.
+-Chris
+
+Bug fixes
+---------
+
+ Allow applications to create 0x0 xlib surfaces, such as used by LibreOffice.
+ https://bugs.freedesktop.org/show_bug.cgi?id=49118
+ 
+ Trim composite extents for SOURCE/CLEAR operators to the mask.
+
+ Use fallback fonts in PDF for unhandled computed glyph widths
+ https://bugs.freedesktop.org/show_bug.cgi?id=48349
+
+ Handle snapshots of recording surfaces for analysing pattern extents.
+ Fixes a regression of reporting the PDF bounding box as being the page size.
+
+ Fix allocation size for PDF pattern ids.
+ Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=49089
+
+ Fix emission of rectilinear dashed segments, with and without scaling, and
+ application of degenerate line joins.
+
+ Clamp unbounded fixup polygons to the clip extents.
+
+ Prevent infinite loop due to rounding errors whilst incrementing along dashes.
+
+ Prevent overflow for inline a8 span filling.
+
+ Miscellaneous build fixes for Cygwin on Windows and Solaris.
+
+Release 1.12.0 (2012-03-23 Chris Wilson <chris@chris-wilson.co.uk>)
+===================================================================
+It's taken over 18 months, but the wait is finally over. A new cairo release!
+We are pleased to annouce a new stable release of Cairo that brings many
+new features and performance improvements, all whilst maintaining
+compatibility with cairo-1.0 and all releases since. We recommend anyone
+using a previous release of Cairo to upgrade to 1.12.0.
+
+The major feature of this release is the introduction of a new procedural
+pattern; the mesh gradient. This, albeit complex, gradient is constructed
+from a set of cubic Bezier patches and is a superset of all other gradient
+surfaces which allows for the construction of incredibily detailed patterns.
+In PDF parlance, the mesh gradient corresponds with type 7 patterns. Many
+thanks to Andrea Canciani for bringing this to Cairo, and for his work on
+making gradient handling robust.
+
+Not content with just adding another procedural pattern, Cairo 1.12 also
+adds new API to create a callback pattern,
+cairo_pattern_create_raster_source, that allows the application to
+provide the pixel data for the region of interest at the time of
+rendering. This can be used for instance, by an application to decode
+compressed images on demand and to keep a cache of those decompressed
+images, independently of Cairo. When combined with the recording
+surface, it should form a useful basis for a deferred renderer.
+
+With the release of cairo-1.12, we also introduce a new supported
+backend for interoperating with X using XCB. Uli Schlachter, also
+maintainer of awesome and contributor to libxcb, has volunteered to
+maintain cairo-xcb for us. Thanks Uli!
+
+For cairo-1.12, we have also added some common API to address any
+surface as an image and so allow direct modification of the raster data.
+Previously, only the Quartz and Win32 backends supported a very narrow
+interface to allow for efficient pixel upload. Now with
+cairo_surface_create_similar_image, cairo_surface_map_to_image, and
+cairo_surface_unmap_image, Cairo exports a consistent method for
+treating those surfaces as an image and so allow modification inplace.
+These are the same routines used internally, and should support
+efficient transfer or direct mapping of the target surfaces as
+applicable.
+
+Another focus over the past year has been to address many performance
+issues, without sacrificing the composition model. To accomplish the
+goal, once again the rasterisation pipeline was overhauled and made
+explicit, giving the backends the freedom to implement their own
+specific pipeline whilst also providing a library of common routines
+from which to build the pipeline. For instance, this allows the image
+backend and the gl backend to composite scan line primitives inplace,
+and to then implement custom fallbacks to catch the corner cases that do
+not map onto their fastest paths. Similarly, this allows for the Xlib
+backend to implement trapezoidation without compromising the other
+backends, yet still allow for the pipeline to be used elsewhere for
+testing and fallbacks. Clipping was once again overhauled, so that the
+common cases for the raster pipelines could be captured and processed
+with fast paths with the emphasis on performing geometric clipping to
+reduce the frequency of using multi-pass clipmasks. Stroking was made
+faster, both by providing specialised fast-paths for simple, yet frequent,
+cases (such as stroking around a rectangle) and by reducing the number
+of edges generated by the general stroker.
+
+As part of the focus on performance, Cairo 1.12 introduces some
+antialias hints (NONE,FAST, GOOD, BEST) that are interpolated by the
+raserisers to fine tune their performance versus quality. Cairo 1.12
+also introduces a new observation architecture,
+cairo_surface_observer_t, which can be used to analyse the amount of
+time consumed by drawing commands and help identify inefficiencies in
+both Cairo and the application.
+
+Last, but by no means least, the OpenGL backend has seen significant
+work including the port to GLESv2 and the exploitation of advanced
+hardware features. Interesting times.
+
+As always, I would like to thank everyone who contributed to Cairo,
+not only through writing code, but also submitting documentation, bug
+reports, suggestions and generally having fun with Cairo! In particular
+though this release could not have happened without the efforts of
+Adrian Johnson, Alexandros Frantiz, Andrea Canicani, Martin Robinson,
+Nis Martensen, and Uli Schlachter. Thanks.
+-Chris
+
+Snapshot 1.11.4 (2012-13-12)
+============================
+The cairo community is pleased to finally announce the long aniticpated
+release candidate for 1.12, 1.11.4, of the cairo graphics library. This
+is the first major update to cairo in over a year and brings a large
+number of new features; undoubtably a few bugs as well.
+
+While many people have contributed and have helped to test the release,
+providing feedback on 1.10 and suggesting improvements, this release
+is the result of a few persevering souls who deserve recognition for their
+outstanding contributions: Andrea Canciani (all round bug fixing,
+performance tuning and master of the gradients), Adrian Johnson (PDF
+supremo) and Uli Schlachter (who stepped forward as maintainer for the
+XCB backend).
+
+Major additions since 1.11.2:
+
+ * cairo_surface_map_to_image API for pixel level access to any surface
+
+ * New antialias hints to control the trade-off between speed and quality
+
+ * A callback pattern, cairo_pattern_create_raster_source, for lazy
+   decoding of image data.
+
+ * cairo_surface_observer_t, a new type of surface to gather performance
+   statistics
+
+ * XCB as a supported backend
+
+ * A rewritten compositor pipeline for performance improvements for, but not
+   limited to, the xlib and image backends.
+   From ION and PineView through to SandyBridge, every machine I have shows
+   across the board performance improvement on the cairo-traces:
+
+   i5-2520m	gnome-system-monitor:	5.97x speedup
+   pnv		gnome-system-monitor:	4.86x speedup
+   i5-2520m	firefox-asteroids:	4.66x speedup
+   pnv		firefox-asteroids:	4.43x speedup
+   image	firefox-canvas:		3.82x speedup
+   i5-2520m	firefox-canvas-alpha:	3.49x speedup
+   image	firefox-asteroids:	2.87x speedup
+   pnv		firefox-talos-svg:	2.83x speedup
+   ion		grads-heat-map:		2.75x speedup
+   pnv		firefox-canvas-alpha:	2.66x speedup
+   image	gnome-system-monitor:	2.66x speedup
+   image	swfdec-giant-steps:	2.46x speedup
+   image	firefox-canvas-alpha:	2.14x speedup
+   i5-2520m	firefox-talos-svg:	2.03x speedup
+   image	grads-heat-map:		2.02x speedup
+   ion		gnome-system-monitor:	2.00x speedup
+   pnv		firefox-particles:	1.99x speedup
+   i5-2520m	grads-heat-map:		1.96x speedup
+   pnv		firefox-canvas:		1.92x speedup
+   ion		firefox-particles:	1.80x speedup
+   image	poppler-reseau:		1.77x speedup
+   pnv		xfce4-terminal-a1:	1.72x speedup
+   image	firefox-talos-svg:	1.65x speedup
+   pnv		grads-heat-map:		1.63x speedup
+   i5-2520m	firefox-canvas:		1.63x speedup
+   pnv		swfdec-youtube:		1.62x speedup
+   image	ocitysmap:		1.59x speedup
+   i5-2520m	firefox-fishbowl:	1.56x speedup
+   i5-2520m	poppler-reseau:		1.50x speedup
+   i5-2520m	evolution:		1.50x speedup
+   i5-2520m	midori-zoomed:		1.43x speedup
+   pnv		firefox-planet-gnome:	1.42x speedup
+   i5-2520m	firefox-talos-gfx:	1.41x speedup
+   i5-2520m	gvim:			1.41x speedup
+   pnv		ocitysmap:		1.37x speedup
+   image	poppler:		1.31x speedup
+   ion		firefox-canvas-alpha:	1.35x speedup
+   ion          firefox-talos-svg:	1.34x speedup
+   i5-2520m	ocitysmap:		1.32x speedup
+   pnv		poppler-reseau:		1.31x speedup
+   i5-2520m	firefox-planet-gnome:	1.31x speedup
+   pnv		firefox-fishbowl:	1.30x speedup
+   pnv		evolution:		1.28x speedup
+   image	gvim:			1.27x speedup
+   i5-2520m	swfdec-youtube:		1.25x speedup
+   pnv		gnome-terminal-vim:	1.27x speedup
+   pnv		gvim:			1.25x speedup
+   image	firefox-planet-gnome:	1.25x speedup
+   image	swfdec-youtube:		1.25x speedup
+   ...
+
+And a plethora of minor improvements everywhere!
+-Chris
+
+Snapshot 1.11.2 (2011-01-23)
+===========================
+
+In this first snapshot along the way to cairo-1.12.0, we are very excited
+to announce the introduction of Bezier surface gradients, known as type
+6/7 gradients in PS/PDF parlance. This is the culmination of much work by
+the dynamic duo: Adrian Johnson and Andrea Canciani. Thanks guys!
+
+Also, I want to warmly welcome Uli Schlachter who recently joined the
+Cairo community on a mission. That mission is to make cairo-xcb a
+supported backend for 1.12. And for this snapshot he has made great
+strides in fixing all the bugs I had left behind. Thanks Uli!
+
+And we have also seen a new contributor, Alexandros Frantzis, who has
+begun bringing up cairo-gl for GLESv2 devices. Thanks Alex!
+
+And lastly, I must also thank Adrian and Andrea for the vast numbers of
+bugs that they have tackled between them, fixing all those little corner
+cases that lie hidden until too late.
+
+API additions:
+
+The ability to construct piece-wise Bezier surface gradients:
+
+	cairo_pattern_create_mesh
+
+	constructs a pattern of type CAIRO_PATTERN_TYPE_MESH using
+
+	cairo_pattern_mesh_begin_patch
+	cairo_pattern_mesh_end_patch
+	cairo_pattern_mesh_curve_to
+	cairo_pattern_mesh_line_to
+	cairo_pattern_mesh_move_to
+	cairo_pattern_mesh_set_control_point
+	cairo_pattern_mesh_set_corner_color_rgb
+	cairo_pattern_mesh_set_corner_color_rgba
+	cairo_pattern_mesh_get_patch_count
+	cairo_pattern_mesh_get_path
+	cairo_pattern_mesh_get_corner_color_rgba
+	cairo_pattern_mesh_get_control_point
+
+The introduction of a unique ID accessible via the mime data type:
+	CAIRO_MIME_TYPE_UNIQUE_ID
+
+
+
+
+
+Release 1.10.2 (2010-12-25 Chris Wilson <chris@chris-wilson.co.uk>)
+===================================================================
+The cairo community is pleased to announce the 1.10.2 release of the
+cairo graphics library. This is the first update to cairo's stable 1.10
+series and contains a large number of bug fixes.
+
+While many people have contributed and have help to test the release,
+2 people deserve special recognition for their efforts in tracking down
+and fixing bugs, Andrea Canciani and Adrian Johnson. Thanks to their
+tremendous efforts, and of all cairo contributors, it is much
+appreciated.
+
+We recommend everyone upgrade to cairo 1.10.2 and hope that everyone
+will continue to have lots of fun with cairo!
+
+-Chris
+
+Bug fixes
+---------
+
+  Fix embedding of grayscale jpegs in PS.
+  https://bugs.freedesktop.org/show_bug.cgi?id=31632
+
+  Fix the reported path of extents containing a curve.
+
+  Fix the compositing of unaligned boxes.
+
+  Reset the clipper in PDF upon finish.
+
+  Fix degenerates arcs to become a degenerate line.
+
+  Build support for autoconf 2.67
+
+  Fix painting of transformed patterns in PS
+
+  Fix the EPS bounding box for PS
+  https://bugs.freedesktop.org/show_bug.cgi?id=24688
+
+  Fix the missing content for EPS
+  https://bugs.freedesktop.org/show_bug.cgi?id=24688
+
+  Fix regression upon changing page size in PS/PDF
+  https://bugs.freedesktop.org/show_bug.cgi?id=24691
+
+  Only use ActualText with PDF-1.5 documents
+
+  Fix the bbox for type1 fallbacks.
+
+  Reset the color after ending the context in PDF
+  https://bugs.freedesktop.org/show_bug.cgi?id=31140
+
+  Fix the advance of subsetted type1 fonts
+  https://bugs.freedesktop.org/show_bug.cgi?id=31062
+
+  Fix handling of EXTEND_NONE gradients for PDF
+
+  Restrict in-place optimisation for a8 image masks with SOURCE
+
+
+Release 1.10.0 (2010-09-06 Chris Wilson <chris@chris-wilson.co.uk>)
+===================================================================
+The cairo community is astounded (and flabbergast) to finally announce
+the 1.10.0 release of the cairo graphics library. This is a major update
+to cairo, with new features and enhanced functionality which maintains
+compatibility for applications written using any previous major cairo
+release, (1.8, 1.6, 1.4, 1.2, or 1.0). We recommend that anybody using
+a previous version of cairo upgrade to cairo 1.10.0.
+
+One of the more interesting departures for cairo for this release is the
+inclusion of a tracing utility, cairo-trace. cairo-trace generates a
+human-readable, replayable, compact representation of the sequences of
+drawing commands made by an application. This can be used to inspecting
+applications to understand issues and as a means for profiling
+real-world usage of cairo.
+
+The traces generated by cairo-trace have been collected in 
+
+  git://git.cairographics.org/git/cairo-traces
+
+and have driven the performance tuning of cairo over the last couple of
+years. In particular, the image backend is much faster with a new
+polygon rasterisation and a complete overhaul of the tessellator. Not
+only is this faster, but also eliminates visual artifacts from
+self-intersecting strokes. Not only has cairo-trace been driving
+performance improvements within cairo, but as a repeatable means of
+driving complex graphics it has been used to tune OpenGL, DDX, and
+pixman.
+
+Cairo's API has been extended to better support printing, notably
+through the ability to include a single compressed representation of an
+image for patterns used throughout a document, leading to dramatic file
+size reductions. Also the meta-surface used to record the vector
+commands compromising a drawing sequence is now exposed as a
+CAIRO_SURFACE_TYPE_RECORDING, along with a new surface that is a child of a
+larger surface, CAIRO_SURFACE_TYPE_SUBSURFACE. One typical usage of a
+subsurface would be as a source glyph in a texture atlas, or as a
+restricted subwindow within a canvas.
+
+Cairo's API has also resurrected the RGB16 format from the past as
+the prevalence of 16-bit framebuffers has not diminished and is a
+fore-taste of the extended format support we anticipate in the future.
+Increasing cairo's utility, we introduce the cairo_region_t for handling
+sets of pixel aligned rectangles commonly used in graphics applications.
+This is a merger of the GdkRegion and the pixman_region_t, hopefully
+providing the utility of the former with the speed of the latter.
+
+Furthermore cairo has been reworked to interoperate more closely with
+various acceleration architectures, gaining the ability to share
+those hardware resources through the new cairo_device_t. For instance,
+with the new OpenGL backend that supersedes the Glitz backend, hardware
+and rendering operations can be shared between a classic OpenGL
+application mixing libVA for the hardware assisted video decode with
+cairo for high quality overlays all within the same OpenGL canvas.
+
+Many thanks for the hard work of Adrian Johnson, Andrea Canciani, Behdad
+Esfahbod, Benjamin Otte, Carl Worth, Carlos Garcia Campos, Chris Wilson,
+Eric Anholt, Jeff Muizelaar, Karl Tomlinson, M Joonas Pihlaja, Søren
+Sandmann Pedersen and many others that have contributed over the last
+couple of years to cairo. Thank you all!
+
+Snapshot 1.9.14 (2010-07-26)
+============================
+
+  A quiet couple of weeks, hopefully Cairo is seeing widescale deployment and
+  we are being to see the results of the stabilisation effort. Clipping bugs
+  seems to have been the order of the last couple of weeks, with a couple
+  reported and duly fixed. Thank you Igor Nikitin and Karl Tomlinsion for
+  finding those regressions. At this point all that seems to remain to do is
+  to fix the outstanding regressions in the PDF backend...
+
+Bugs fixes
+----------
+
+    Clip doesn't work for text on the image backend
+    https://bugs.freedesktop.org/show_bug.cgi?id=29008
+
+    Add explicit dependency for cxx
+    https://bugs.freedesktop.org/show_bug.cgi?id=29114
+
+    Fix regressions in reporting clip extents
+    https://bugs.freedesktop.org/show_bug.cgi?id=29120
+    https://bugs.freedesktop.org/show_bug.cgi?id=29121
+    https://bugs.freedesktop.org/show_bug.cgi?id=29122
+    https://bugs.freedesktop.org/show_bug.cgi?id=29124
+    https://bugs.freedesktop.org/show_bug.cgi?id=29125
+
+
+Snapshot 1.9.12 (2010-07-12)
+============================
+
+  A couple of weeks spent fixing those annoying bugs and cleaning up the build
+  system; the list of outstanding tasks to complete for the stable release is
+  finally shrinking. The chief bug fixer has been Benjamin Otte who not only
+  made sure that the public API is consistent and being tested for its
+  consistency, but also ensured that the documentation was up-to-date and
+  spent time clarifying cases where even the Cairo developers have come
+  unstuck in the past. Many thanks, Benjamin. However, he was not alone,
+  as Andrea Canciani continued his fine work in isolating broken corner cases
+  and proceeding to fix them, and tidying up the quartz backend. And last, but
+  definitely not least, M Joonas Pihlaja tried building Cairo across a
+  perverse range of systems and fixed up all the loose bits of code that came
+  unravelled. Thanks everybody!
+
+API Changes
+-----------
+
+  cairo_surface_set_mime_data, cairo_surface_get_mime_data:
+
+    The length parameter is now an unsigned long (as opposed to an unsigned
+    int). The parameter is intended to be an equivalent to a size_t without
+    requiring POSIX types and be large enough to store the size of the
+    largest possible allocation.
+
+  cairo_gl_surface_create_for_texture:
+
+    This a new surface constructor for cairo-gl that explicitly enables
+    render-to-texture for foreign, i.e. application, textures.
+
+  cairo_region_xor, cairo_region_xor_rectangle
+
+    A couple of utility routines add to the region handling interface for
+    the purpose of replacing existing GdkRegion functionality.
+
+Bugs fixes
+----------
+
+  https://bugs.launchpad.net/ubuntu/+source/cairo/+bug/600622
+
+    Inkscape was caught in the act of attempting to modify a finished surface.
+    Unfortunately, we had the ordering of our guards and assertions wrong and
+    so an ordinary application error was triggering an assert in Cairo. This
+    lead Benjamin to add a test case to ensure that the entire public API
+    could handle erroneous input and then proceeded to fix a whole slew of
+    uncovered bugs.
+
+
+  https://bugs.freedesktop.org/show_bug.cgi?id=28888
+
+    A regression introduced by the special casing of uploading images to an
+    xlib surface in-place which was ignoring the translation applied to the
+    image.
+
+
+Snapshot 1.9.10 (2010-06-26)
+============================
+
+   The first "quick" snapshot in the run up to the stable release.  The
+   last snapshot was picked up by the bleeding edge distributions and so the
+   bug reports have to started to roll in.  The most frequent of these are the
+   introduction of rendering errors by applications that modify a surface
+   without subsequently calling cairo_surface_mark_dirty(). Make sure the
+   application developers are aware of increased reliance on strict use of the
+   Cairo API before 1.10 is released!
+
+   The usual slew of bugs reported and we would like to thank Zoxc for
+   contributing the WGL interface for cairo-gl, and finding more build
+   failures on win32.  And it just wouldn't be a 1.9 snapshot unless
+   Benjamin Otte improved the error handling within cairo-gl, as well as
+   isolating and fixing some more errors in the test suite. The biggest bug of
+   the snapshot turned out to be a major sign extension issue that had lain
+   hidden for many years and was suddenly exposed by incorrectly rounding
+   rectangles when performing non-antialiased rendering.  Also to the relief
+   of many we have included the downstream patch to honour the user's LCD
+   filtering preferences for subpixel rendering of fonts.  The interface
+   remains private for the time being, whilst the proposed public API is
+   finalized.
+
+API changes
+-----------
+   None.
+
+Snapshot 1.9.8 (2010-06-12)
+===========================
+
+   One major API changes since the last snapshot, and a whole slew of bugs
+   fixed and inconsistencies eliminated. Far too many bugs fixed to
+   individually identify. We need to thank Benjamin Otte for his fantastic
+   work on the cairo-gl backend making it faster and more robust, Andrea
+   Canciani for finding so many bugs and developing test cases for them, as
+   well fixing them. And last but not least we must all thank Adrian Johnson for
+   continuing to eliminate bugs and improving the PostScript and PDF backends.
+
+   This snapshot represents almost 4 months of bug fixing, bringing Cairo to
+   a point where we consider it almost ready to be a candidate for release.
+   There are a few known bugs left to be fixed, being tracked in
+   https://bugs.freedesktop.org/show_bug.cgi?id=24384, so please give Cairo a
+   whirl and report any regressions. The plan is to release a new snapshot
+   every other week leading to a 1.10 release with a target date of
+   2010-08-16.
+
+API additions
+-------------
+  CAIRO_FORMAT_RGB16_565
+
+    16 bit devices still remain popular, and so with great demand,
+    CAIRO_FORMAT_RGB16_565 has been restored enabling applications to create
+    and use 16 bit images as sources and render targets.
+
+  cairo_surface_create_for_rectangle()
+
+    It is common practice to cut an image up into many smaller pieces and use
+    each of those as a source - a technique called texture atlasing.
+    cairo_surface_create_for_rectangle() extends Cairo to directly support use
+    of these subregions of another cairo_surface_t both as a source and as a
+    render target.
+
+  cairo_region_create()
+  cairo_region_create_rectangle()
+  cairo_region_create_rectangles()
+  cairo_region_copy()
+  cairo_region_reference()
+  cairo_region_destroy()
+  cairo_region_equal()
+  cairo_region_status()
+  cairo_region_get_extents()
+  cairo_region_num_rectangles()
+  cairo_region_get_rectangle()
+  cairo_region_is_empty()
+  cairo_region_contains_rectangle()
+  cairo_region_contains_point()
+  cairo_region_translate()
+  cairo_region_subtract()
+  cairo_region_subtract_rectangle()
+  cairo_region_intersect()
+  cairo_region_intersect_rectangle()
+  cairo_region_union()
+  cairo_region_union_rectangle()
+
+    The Cairo region API was actually added a couple of snapshots ago, but we
+    forgot to mention it at the time. A simple API for the handling of
+    rectangular pixel-aligned regions by Soeren Sandmann.
+  
+
+Backend-specific improvements
+-----------------------------
+cairo-gl
+
+  Benjamin Otte made more than 200 commits in which he refactored the cairo-gl
+  backend, reducing a lot of code duplication and enabled him to begin working
+  on improving performance by reducing state changes and associated overhead.
+
+cairo-xlib
+
+  Access to the underlying connection to the Display is now thread-safe
+  enabling cairo-xlib to be used in a multi-threaded application without fear
+  of random corruption. Thanks Benjamin Otte!
+
+  cairo-xlib will now attempt to use PolyModeImprecise when compositing
+  trapezoids (i.e. a fill or a stroke operation with a non-trivial path) which
+  should allow hardware drivers more scope for accelerating the operation at
+  the cost of potentially incurring minute rendering errors. The mode can be
+  forced back to PolyModePrecise by setting the antialias parameter to
+  CAIRO_ANTIALIAS_SUBPIXEL.
+
+cairo-svg
+
+  A notable improvement was contributed by Alexander Shulgin to enable SVG to
+  reference external image through the use an extended MIME data type.
+
+Snapshot 1.9.6 (2010-02-19)
+===========================
+API additions
+-------------
+    Add cairo_device_t
+
+    The device is a generic method for accessing the underlying interface
+    with the native graphics subsystem, typically the X connection or
+    perhaps the GL context. By exposing a cairo_device_t on a surface and
+    its various methods we enable finer control over interoperability with
+    external interactions of the device by applications. The use case in
+    mind is, for example, a multi-threaded gstreamer which needs to serialise
+    its own direct access to the device along with Cairo's across many
+    threads.
+
+    Secondly, the cairo_device_t is a unifying API for the mismash of
+    backend specific methods for controlling creation of surfaces with
+    explicit devices and a convenient hook for debugging and introspection.
+
+    The principal components of the API are the memory management of:
+
+      cairo_device_reference(),
+      cairo_device_finish() and
+      cairo_device_destroy();
+
+    along with a pair of routines for serialising interaction:
+
+      cairo_device_acquire() and
+      cairo_device_release()
+
+    and a method to flush any outstanding accesses:
+
+      cairo_device_flush().
+
+    The device for a particular surface may be retrieved using:
+
+      cairo_surface_get_device().
+
+    The device returned is owned by the surface.
+
+API changes (to API new in the cairo 1.9.x series)
+--------------------------------------------------
+  cairo_recording_surface_create()
+  cairo_recording_surface_ink_extents()
+
+    These are the replacement names for the functions previously named
+    cairo_meta_surface_create and cairo_meta_surface_ink_extents.
+
+  cairo_surface_set_mime_data
+
+    This interface is now changed such that the MIME data will be
+    detached if the surface is modified at all. This guarantees that
+    the MIME data will not become out of synch due to surface
+    modifications, and also means that for the MIME data to be useful,
+    it must be set after all modifications to the surface are
+    complete.
+
+API removal (of experiment API)
+-------------------------------
+  The cairo-glitz backend is removed entirely, (in favor of the new
+  cairo-gl backend). See below for more on cairo-gl.
+
+Generic fixes
+-------------
+
+  Many improvements for drawing of dashed strokes
+
+	Fix incorrect handling of negative offset
+	Faster computation of first dash (avoids near-infinite looping)
+	Approximate extremely fine dash patterns with appropriate alpha value
+
+  Optimize spans-based renderers for repeated rows, (such as in a rounded rectangle)
+
+Backend-specific improvements
+-----------------------------
+cairo-drm
+
+  This is a new, direct-rendering backend that supports Intel graphics
+  chipsets in the i915 and i965 families. It's still experimental and
+  will likely remain that way for a while. It's already got extremely
+  good performance on the hardware it supports, so if nothing else
+  provides a working proof and performance target for the cairo-gl
+  work for Intel graphics.
+
+cairo-gl
+
+  Start using GLSL to accelerate many operations. Many thanks to Eric
+  Anholt and T. Zachary Laine for this work. For the first time, we
+  have what looks like what will be a very compelling OpenGL-based
+  backend for cairo (in terms of both quality and performance).
+
+  See this writeup from Eric for more details on recent progress of
+  cairo-gl (which he presented at FOSDEM 2010):
+
+	http://anholt.livejournal.com/42146.html
+
+cairo-image
+
+  The image backend is made dramatically faster (3-5 times faster for
+  benchmarks consisting primarily of glyph rendering).
+
+cairo-quartz fixes:
+
+  Many fixes from Robert O'Callahan and Andrea Canciani including:
+
+	Fixed gradient pattern painting
+	Improved A8 image handling
+	Fixes for "unbounded" and other compositing operators
+
+cairo-pdf fixes:
+
+  Improvements to embedding of JPEG and JPEG2000 data.
+
+cairo-ps fixes:
+
+  Fix printing of rotated user fonts.
+
+Snapshot 1.9.4 (2009-10-15)
 ===========================
 API additions:
 
@@ -90,7 +782,6 @@ Special thanks:
 
    To the AuroraUX team for providing access to one of their OpenSolaris
    machines for cairo and pixman development.  http://www.auroraux.org/
-
 
 Snapshot 1.9.2 (2009-06-12)
 ===========================

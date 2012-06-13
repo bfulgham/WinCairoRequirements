@@ -152,6 +152,7 @@ struct _xmlTextReader {
     /* Handling of RelaxNG validation */
     xmlRelaxNGPtr          rngSchemas;	/* The Relax NG schemas */
     xmlRelaxNGValidCtxtPtr rngValidCtxt;/* The Relax NG validation context */
+    int                    rngPreserveCtxt; /* 1 if the context was provided by the user */
     int                    rngValidErrors;/* The number of errors detected */
     xmlNodePtr             rngFullNode;	/* the node if RNG not progressive */
     /* Handling of Schemas validation */
@@ -854,16 +855,18 @@ xmlTextReaderPushData(xmlTextReaderPtr reader) {
 		          (const char *) &inbuf->content[reader->cur],
 			  CHUNK_SIZE, 0);
 	    reader->cur += CHUNK_SIZE;
-	    if ((val != 0) || (reader->ctxt->wellFormed == 0))
-		return(-1);
+	    if (val != 0)
+		reader->ctxt->wellFormed = 0;
+	    if (reader->ctxt->wellFormed == 0)
+		break;
 	} else {
 	    s = inbuf->use - reader->cur;
 	    val = xmlParseChunk(reader->ctxt,
 		          (const char *) &inbuf->content[reader->cur],
 			  s, 0);
 	    reader->cur += s;
-	    if ((val != 0) || (reader->ctxt->wellFormed == 0))
-		return(-1);
+	    if (val != 0)
+		reader->ctxt->wellFormed = 0;
 	    break;
 	}
     }
@@ -895,11 +898,17 @@ xmlTextReaderPushData(xmlTextReaderPtr reader) {
 		    s, 1);
 	    reader->cur = inbuf->use;
 	    reader->state  = XML_TEXTREADER_DONE;
-	    if ((val != 0) || (reader->ctxt->wellFormed == 0))
-	        return(-1);
+	    if (val != 0) {
+	        if (reader->ctxt->wellFormed)
+		    reader->ctxt->wellFormed = 0;
+		else
+		    return(-1);
+	    }
 	}
     }
     reader->state = oldstate;
+    if (reader->ctxt->wellFormed == 0)
+	reader->mode = XML_TEXTREADER_MODE_EOF;
     return(0);
 }
 
@@ -1263,8 +1272,6 @@ xmlTextReaderRead(xmlTextReaderPtr reader) {
     if (reader->doc != NULL)
         return(xmlTextReaderReadTree(reader));
     if (reader->ctxt == NULL)
-	return(-1);
-    if (reader->ctxt->wellFormed != 1)
 	return(-1);
 
 #ifdef DEBUG_READER
@@ -1709,9 +1716,9 @@ xmlTextReaderReadInnerXml(xmlTextReaderPtr reader ATTRIBUTE_UNUSED)
  *
  * Reads the contents of the current node, including child nodes and markup.
  *
- * Returns a string containing the XML content, or NULL if the current node
- *         is neither an element nor attribute, or has no child nodes. The
- *         string must be deallocated by the caller.
+ * Returns a string containing the node and any XML content, or NULL if the 
+ *         current node cannot be serialized. The string must be deallocated 
+ *         by the caller.
  */
 xmlChar *
 xmlTextReaderReadOuterXml(xmlTextReaderPtr reader ATTRIBUTE_UNUSED)
@@ -1726,7 +1733,11 @@ xmlTextReaderReadOuterXml(xmlTextReaderPtr reader ATTRIBUTE_UNUSED)
     if (xmlTextReaderExpand(reader) == NULL) {
         return NULL;
     }
-    node = xmlDocCopyNode(node, doc, 1);
+	if (node->type == XML_DTD_NODE) {
+		node = (xmlNodePtr) xmlCopyDtd((xmlDtdPtr) node);
+	} else {
+		node = xmlDocCopyNode(node, doc, 1);
+	}
     buff = xmlBufferCreate();
     if (xmlNodeDump(buff, doc, node, 0, 0) == -1) {
         xmlFreeNode(node);
@@ -2183,7 +2194,8 @@ xmlFreeTextReader(xmlTextReaderPtr reader) {
 	reader->rngSchemas = NULL;
     }
     if (reader->rngValidCtxt != NULL) {
-	xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
+	if (! reader->rngPreserveCtxt)
+	    xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
 	reader->rngValidCtxt = NULL;
     }
     if (reader->xsdPlug != NULL) {
@@ -4091,9 +4103,11 @@ xmlTextReaderRelaxNGSetSchema(xmlTextReaderPtr reader, xmlRelaxNGPtr schema) {
 	    reader->rngSchemas = NULL;
 	}
         if (reader->rngValidCtxt != NULL) {
-	    xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
+	    if (! reader->rngPreserveCtxt)
+		xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
 	    reader->rngValidCtxt = NULL;
         }
+	reader->rngPreserveCtxt = 0;
 	return(0);
     }
     if (reader->mode != XML_TEXTREADER_MODE_INITIAL)
@@ -4103,9 +4117,11 @@ xmlTextReaderRelaxNGSetSchema(xmlTextReaderPtr reader, xmlRelaxNGPtr schema) {
 	reader->rngSchemas = NULL;
     }
     if (reader->rngValidCtxt != NULL) {
-	xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
+	if (! reader->rngPreserveCtxt)
+	    xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
 	reader->rngValidCtxt = NULL;
     }
+    reader->rngPreserveCtxt = 0;
     reader->rngValidCtxt = xmlRelaxNGNewValidCtxt(schema);
     if (reader->rngValidCtxt == NULL)
         return(-1);
@@ -4210,67 +4226,91 @@ xmlTextReaderSetSchema(xmlTextReaderPtr reader, xmlSchemaPtr schema) {
 }
 
 /**
- * xmlTextReaderRelaxNGValidate:
+ * xmlTextReaderRelaxNGValidateInternal:
  * @reader:  the xmlTextReaderPtr used
  * @rng:  the path to a RelaxNG schema or NULL
+ * @ctxt: the RelaxNG schema validation context or NULL
+ * @options: options (not yet used)
  *
  * Use RelaxNG to validate the document as it is processed.
  * Activation is only possible before the first Read().
- * if @rng is NULL, then RelaxNG validation is deactivated.
+ * If both @rng and @ctxt are NULL, then RelaxNG validation is deactivated.
  *
  * Returns 0 in case the RelaxNG validation could be (de)activated and
- *         -1 in case of error.
+ *	   -1 in case of error.
  */
-int
-xmlTextReaderRelaxNGValidate(xmlTextReaderPtr reader, const char *rng) {
-    xmlRelaxNGParserCtxtPtr ctxt;
-
+static int
+xmlTextReaderRelaxNGValidateInternal(xmlTextReaderPtr reader,
+				     const char *rng,
+				     xmlRelaxNGValidCtxtPtr ctxt,
+				     int options ATTRIBUTE_UNUSED)
+{
     if (reader == NULL)
-        return(-1);
-
-    if (rng == NULL) {
-        if (reader->rngValidCtxt != NULL) {
-	    xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
-	    reader->rngValidCtxt = NULL;
-        }
-        if (reader->rngSchemas != NULL) {
-	    xmlRelaxNGFree(reader->rngSchemas);
-	    reader->rngSchemas = NULL;
-	}
-	return(0);
-    }
-    if (reader->mode != XML_TEXTREADER_MODE_INITIAL)
 	return(-1);
+
+    if ((rng != NULL) && (ctxt != NULL))
+	return (-1);
+
+    if (((rng != NULL) || (ctxt != NULL)) &&
+	((reader->mode != XML_TEXTREADER_MODE_INITIAL) ||
+	 (reader->ctxt == NULL)))
+	return(-1);
+
+    /* Cleanup previous validation stuff. */
+    if (reader->rngValidCtxt != NULL) {
+	if ( !reader->rngPreserveCtxt)
+	    xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
+	reader->rngValidCtxt = NULL;
+    }
+    reader->rngPreserveCtxt = 0;
     if (reader->rngSchemas != NULL) {
 	xmlRelaxNGFree(reader->rngSchemas);
 	reader->rngSchemas = NULL;
     }
-    if (reader->rngValidCtxt != NULL) {
-	xmlRelaxNGFreeValidCtxt(reader->rngValidCtxt);
-	reader->rngValidCtxt = NULL;
+
+    if ((rng == NULL) && (ctxt == NULL)) {
+	/* We just want to deactivate the validation, so get out. */
+	return(0);
     }
-    ctxt = xmlRelaxNGNewParserCtxt(rng);
-    if (reader->errorFunc != NULL) {
-	xmlRelaxNGSetParserErrors(ctxt,
-			 xmlTextReaderValidityErrorRelay,
-			 xmlTextReaderValidityWarningRelay,
-			 reader);
+
+
+    if (rng != NULL) {
+	xmlRelaxNGParserCtxtPtr pctxt;
+	/* Parse the schema and create validation environment. */
+
+	pctxt = xmlRelaxNGNewParserCtxt(rng);
+	if (reader->errorFunc != NULL) {
+	    xmlRelaxNGSetParserErrors(pctxt,
+		xmlTextReaderValidityErrorRelay,
+		xmlTextReaderValidityWarningRelay,
+		reader);
+	}
+	if (reader->sErrorFunc != NULL) {
+	    xmlRelaxNGSetValidStructuredErrors(reader->rngValidCtxt,
+		xmlTextReaderValidityStructuredRelay,
+		reader);
+	}
+	reader->rngSchemas = xmlRelaxNGParse(pctxt);
+	xmlRelaxNGFreeParserCtxt(pctxt);
+	if (reader->rngSchemas == NULL)
+	    return(-1);
+	reader->rngValidCtxt = xmlRelaxNGNewValidCtxt(reader->rngSchemas);
+	if (reader->rngValidCtxt == NULL) {
+	    xmlRelaxNGFree(reader->rngSchemas);
+	    reader->rngSchemas = NULL;
+	    return(-1);
+	}
+    } else {
+	/* Use the given validation context. */
+	reader->rngValidCtxt = ctxt;
+	reader->rngPreserveCtxt = 1;
     }
-    if (reader->sErrorFunc != NULL) {
-	xmlRelaxNGSetValidStructuredErrors(reader->rngValidCtxt,
-			xmlTextReaderValidityStructuredRelay,
-			reader);
-    }
-    reader->rngSchemas = xmlRelaxNGParse(ctxt);
-    xmlRelaxNGFreeParserCtxt(ctxt);
-    if (reader->rngSchemas == NULL)
-        return(-1);
-    reader->rngValidCtxt = xmlRelaxNGNewValidCtxt(reader->rngSchemas);
-    if (reader->rngValidCtxt == NULL) {
-	xmlRelaxNGFree(reader->rngSchemas);
-	reader->rngSchemas = NULL;
-        return(-1);
-    }
+    /*
+    * Redirect the validation context's error channels to use
+    * the reader channels.
+    * TODO: In case the user provides the validation context we
+    *	could make this redirection optional.
+    */
     if (reader->errorFunc != NULL) {
 	xmlRelaxNGSetValidErrors(reader->rngValidCtxt,
 			 xmlTextReaderValidityErrorRelay,
@@ -4443,6 +4483,46 @@ xmlTextReaderSchemaValidate(xmlTextReaderPtr reader, const char *xsd)
 {
     return(xmlTextReaderSchemaValidateInternal(reader, xsd, NULL, 0));
 }
+
+/**
+ * xmlTextReaderRelaxNGValidateCtxt:
+ * @reader:  the xmlTextReaderPtr used
+ * @ctxt: the RelaxNG schema validation context or NULL
+ * @options: options (not used yet)
+ *
+ * Use RelaxNG schema context to validate the document as it is processed.
+ * Activation is only possible before the first Read().
+ * If @ctxt is NULL, then RelaxNG schema validation is deactivated.
+ *
+ * Returns 0 in case the schemas validation could be (de)activated and
+ *         -1 in case of error.
+ */
+int
+xmlTextReaderRelaxNGValidateCtxt(xmlTextReaderPtr reader,
+				 xmlRelaxNGValidCtxtPtr ctxt,
+				 int options)
+{
+    return(xmlTextReaderRelaxNGValidateInternal(reader, NULL, ctxt, options));
+}
+
+/**
+ * xmlTextReaderRelaxNGValidate:
+ * @reader:  the xmlTextReaderPtr used
+ * @rng:  the path to a RelaxNG schema or NULL
+ *
+ * Use RelaxNG schema to validate the document as it is processed.
+ * Activation is only possible before the first Read().
+ * If @rng is NULL, then RelaxNG schema validation is deactivated.
+ *
+ * Returns 0 in case the schemas validation could be (de)activated and
+ *         -1 in case of error.
+ */
+int
+xmlTextReaderRelaxNGValidate(xmlTextReaderPtr reader, const char *rng)
+{
+    return(xmlTextReaderRelaxNGValidateInternal(reader, rng, NULL, 0));
+}
+
 #endif
 
 /**
@@ -5327,8 +5407,11 @@ xmlReaderForIO(xmlInputReadCallback ioread, xmlInputCloseCallback ioclose,
 
     input = xmlParserInputBufferCreateIO(ioread, ioclose, ioctx,
                                          XML_CHAR_ENCODING_NONE);
-    if (input == NULL)
+    if (input == NULL) {
+        if (ioclose != NULL)
+            ioclose(ioctx);
         return (NULL);
+    }
     reader = xmlNewTextReader(input, URL);
     if (reader == NULL) {
         xmlFreeParserInputBuffer(input);
@@ -5545,10 +5628,14 @@ xmlReaderNewIO(xmlTextReaderPtr reader, xmlInputReadCallback ioread,
 
     input = xmlParserInputBufferCreateIO(ioread, ioclose, ioctx,
                                          XML_CHAR_ENCODING_NONE);
-    if (input == NULL)
+    if (input == NULL) {
+        if (ioclose != NULL)
+            ioclose(ioctx);
         return (-1);
+    }
     return (xmlTextReaderSetup(reader, input, URL, encoding, options));
 }
+
 /************************************************************************
  *									*
  *			Utilities					*

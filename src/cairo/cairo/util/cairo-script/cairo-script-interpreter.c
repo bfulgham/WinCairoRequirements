@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -396,6 +396,7 @@ _csi_init (csi_t *ctx)
 
     ctx->status = CSI_STATUS_SUCCESS;
     ctx->ref_count = 1;
+    ctx->scanner.line_number = -1;
 
     status = _csi_hash_table_init (&ctx->strings, _intern_string_equal);
     if (status)

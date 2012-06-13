@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -40,6 +40,9 @@
 
 #include "cairo-beos.h"
 
+#include "cairo-error-private.h"
+#include "cairo-image-surface-inline.h"
+
 #include <new>
 
 #include <Bitmap.h>
@@ -50,6 +53,16 @@
 #include <Screen.h>
 #include <Window.h>
 #include <Locker.h>
+
+/**
+ * SECTION:beos-surface
+ * @Title: BeOS Surfaces
+ * @Short_Description: BeOS surface support
+ * @See_Also: #cairo_surface_t
+ *
+ * The BeOS surface is used to render cairo graphics to BeOS views 
+ * and bitmaps.
+ **/
 
 #define CAIRO_INT_STATUS_SUCCESS (cairo_int_status_t)(CAIRO_STATUS_SUCCESS)
 
@@ -306,7 +319,7 @@ _cairo_beos_surface_set_clip_region (cairo_beos_surface_t *surface,
 	cairo_rectangle_int_t rect;
 
 	cairo_region_get_rectangle (region, i, &rect);
-	// Have to substract one, because for pixman, the second coordinate
+	// Have to subtract one, because for pixman, the second coordinate
 	// lies outside the rectangle.
 	bregion.Include (_cairo_rectangle_to_brect (&rect));
     }
@@ -913,7 +926,10 @@ _cairo_beos_surface_create_internal (BView*   view,
     cairo_content_t content = CAIRO_CONTENT_COLOR;
     if (bmp && (bmp->ColorSpace() == B_RGBA32 || bmp->ColorSpace() == B_RGBA15))
 	content = CAIRO_CONTENT_COLOR_ALPHA;
-    _cairo_surface_init(&surface->base, &cairo_beos_surface_backend, content);
+    _cairo_surface_init (&surface->base,
+			 &cairo_beos_surface_backend,
+			 NULL, /* device */
+			 content);
 
     surface->view = view;
     surface->bitmap = bmp;
@@ -932,6 +948,8 @@ _cairo_beos_surface_create_internal (BView*   view,
  * The caller must ensure that the view does not get deleted before the surface.
  * If the view is attached to a bitmap rather than an on-screen window, use
  * cairo_beos_surface_create_for_bitmap() instead of this function.
+ *
+ * Since: TBD
  **/
 cairo_surface_t *
 cairo_beos_surface_create (BView* view)
@@ -955,6 +973,8 @@ cairo_beos_surface_create (BView* view)
  *
  * For now, only views that draw to the entire area of bmp are supported.
  * The view must already be attached to the bitmap.
+ *
+ * Since: TBD
  **/
 cairo_surface_t *
 cairo_beos_surface_create_for_bitmap (BView*   view,

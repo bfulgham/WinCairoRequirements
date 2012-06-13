@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -49,7 +49,10 @@
 
 #include "test-paginated-surface.h"
 
+#include "cairo-default-context-private.h"
+#include "cairo-error-private.h"
 #include "cairo-paginated-private.h"
+#include "cairo-surface-backend-private.h"
 
 typedef struct _test_paginated_surface {
     cairo_surface_t base;
@@ -75,7 +78,9 @@ _cairo_test_paginated_surface_create (cairo_surface_t *target)
     if (unlikely (surface == NULL))
 	return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_NO_MEMORY));
 
-    _cairo_surface_init (&surface->base, &test_paginated_surface_backend,
+    _cairo_surface_init (&surface->base,
+			 &test_paginated_surface_backend,
+			 NULL, /* device */
 			 target->content);
 
     surface->target = cairo_surface_reference (target);
@@ -118,7 +123,7 @@ static cairo_int_status_t
 _test_paginated_surface_paint (void		*abstract_surface,
 			       cairo_operator_t	 op,
 			       const cairo_pattern_t	*source,
-			       cairo_clip_t		*clip)
+			       const cairo_clip_t	*clip)
 {
     test_paginated_surface_t *surface = abstract_surface;
 
@@ -133,7 +138,7 @@ _test_paginated_surface_mask (void		*abstract_surface,
 			      cairo_operator_t	 op,
 			      const cairo_pattern_t	*source,
 			      const cairo_pattern_t	*mask,
-			      cairo_clip_t		*clip)
+			      const cairo_clip_t	*clip)
 {
     test_paginated_surface_t *surface = abstract_surface;
 
@@ -148,13 +153,13 @@ static cairo_int_status_t
 _test_paginated_surface_stroke (void				*abstract_surface,
 				cairo_operator_t		 op,
 				const cairo_pattern_t		*source,
-				cairo_path_fixed_t		*path,
-				cairo_stroke_style_t		*style,
-				cairo_matrix_t			*ctm,
-				cairo_matrix_t			*ctm_inverse,
+				const cairo_path_fixed_t		*path,
+				const cairo_stroke_style_t		*style,
+				const cairo_matrix_t			*ctm,
+				const cairo_matrix_t			*ctm_inverse,
 				double				 tolerance,
 				cairo_antialias_t		 antialias,
-				cairo_clip_t			*clip)
+				const cairo_clip_t		*clip)
 {
     test_paginated_surface_t *surface = abstract_surface;
 
@@ -172,11 +177,11 @@ static cairo_int_status_t
 _test_paginated_surface_fill (void				*abstract_surface,
 			      cairo_operator_t			 op,
 			      const cairo_pattern_t		*source,
-			      cairo_path_fixed_t		*path,
+			      const cairo_path_fixed_t		*path,
 			      cairo_fill_rule_t			 fill_rule,
 			      double				 tolerance,
 			      cairo_antialias_t			 antialias,
-			      cairo_clip_t			*clip)
+			      const cairo_clip_t		*clip)
 {
     test_paginated_surface_t *surface = abstract_surface;
 
@@ -209,7 +214,7 @@ _test_paginated_surface_show_text_glyphs (void			    *abstract_surface,
 					  int			     num_clusters,
 					  cairo_text_cluster_flags_t cluster_flags,
 					  cairo_scaled_font_t	    *scaled_font,
-					  cairo_clip_t		    *clip)
+					  const cairo_clip_t	    *clip)
 {
     test_paginated_surface_t *surface = abstract_surface;
 
@@ -237,31 +242,30 @@ _test_paginated_surface_set_paginated_mode (void			*abstract_surface,
 
 static const cairo_surface_backend_t test_paginated_surface_backend = {
     CAIRO_INTERNAL_SURFACE_TYPE_TEST_PAGINATED,
+    _test_paginated_surface_finish,
+    _cairo_default_context_create,
 
     /* Since we are a paginated user, we get to regard most of the
      * surface backend interface as historical cruft and ignore it. */
 
     NULL, /* create_similar */
-    _test_paginated_surface_finish,
+    NULL, /* create similar image */
+    NULL, /* map to image */
+    NULL, /* unmap image */
+
+    _cairo_surface_default_source,
     NULL, /* acquire_source_image */
     NULL, /* release_source_image */
-    NULL, /* acquire_dest_image */
-    NULL, /* release_dest_image */
-    NULL, /* clone_similar */
-    NULL, /* composite */
-    NULL, /* fill_rectangles */
-    NULL, /* composite_trapezoids */
-    NULL, /* create_span_renderer */
-    NULL, /* check_span_renderer */
+    NULL, /* snapshot */
+
     NULL, /* copy_page */
     NULL, /* show_page */
+
     _test_paginated_surface_get_extents,
-    NULL, /* old_show_glyphs */
     NULL, /* get_font_options */
+
     NULL, /* flush */
     NULL, /* mark_dirty_rectangle */
-    NULL, /* scaled_font_fini */
-    NULL, /* scaled_glyph_fini */
 
     /* Here is the more "modern" section of the surface backend
      * interface which is mostly just drawing functions */
@@ -270,14 +274,8 @@ static const cairo_surface_backend_t test_paginated_surface_backend = {
     _test_paginated_surface_mask,
     _test_paginated_surface_stroke,
     _test_paginated_surface_fill,
+    NULL, /* fill-stroke */
     NULL, /* replaced by show_text_glyphs */
-
-    NULL, /* snapshot */
-    NULL, /* is_similar */
-    NULL, /* fill_stroke */
-    NULL, /* create_solid_pattern_surface */
-    NULL, /* can_repaint_solid_pattern_surface */
-
     _test_paginated_surface_has_show_text_glyphs,
     _test_paginated_surface_show_text_glyphs
 };

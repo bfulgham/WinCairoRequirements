@@ -74,7 +74,8 @@ typedef enum {
     XML_BUFFER_ALLOC_DOUBLEIT,	/* double each time one need to grow */
     XML_BUFFER_ALLOC_EXACT,	/* grow only to the minimal size */
     XML_BUFFER_ALLOC_IMMUTABLE, /* immutable buffer */
-    XML_BUFFER_ALLOC_IO		/* special allocation scheme used for I/O */
+    XML_BUFFER_ALLOC_IO,	/* special allocation scheme used for I/O */
+    XML_BUFFER_ALLOC_HYBRID	/* exact up to a threshold, and doubleit thereafter */
 } xmlBufferAllocationScheme;
 
 /**
@@ -694,6 +695,8 @@ XMLPUBFUN void XMLCALL
 		xmlBufferEmpty		(xmlBufferPtr buf);
 XMLPUBFUN const xmlChar* XMLCALL	
 		xmlBufferContent	(const xmlBufferPtr buf);
+XMLPUBFUN xmlChar* XMLCALL
+		xmlBufferDetach         (const xmlBufferPtr buf);
 XMLPUBFUN void XMLCALL		
 		xmlBufferSetAllocationScheme(xmlBufferPtr buf,
 					 xmlBufferAllocationScheme scheme);

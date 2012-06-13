@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -49,13 +49,15 @@ CAIRO_BEGIN_DECLS
 
 /**
  * cairo_ps_level_t:
- * @CAIRO_PS_LEVEL_2: The language level 2 of the PostScript specification.
- * @CAIRO_PS_LEVEL_3: The language level 3 of the PostScript specification.
+ * @CAIRO_PS_LEVEL_2: The language level 2 of the PostScript specification. (Since 1.6)
+ * @CAIRO_PS_LEVEL_3: The language level 3 of the PostScript specification. (Since 1.6)
  *
  * #cairo_ps_level_t is used to describe the language level of the
  * PostScript Language Reference that a generated PostScript file will
  * conform to.
- */
+ *
+ * Since: 1.6
+ **/
 typedef enum _cairo_ps_level {
     CAIRO_PS_LEVEL_2,
     CAIRO_PS_LEVEL_3

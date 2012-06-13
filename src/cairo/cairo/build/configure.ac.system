@@ -53,9 +53,7 @@ dnl ====================================================================
 AC_CHECK_LIBM
 LIBS="$LIBS $LIBM"
 
-AC_CHECK_LIB(rt, sched_yield, [RT_LIBS=-lrt], [RT_LIBS=])
-CAIROPERF_LIBS=$RT_LIBS
-AC_SUBST(CAIROPERF_LIBS)
+AC_CHECK_LIB(rt, sched_yield)
 
 has_shm_open=
 AC_CHECK_LIB(rt, shm_open, [
@@ -102,18 +100,15 @@ dnl check for mmap support
 AC_CHECK_HEADERS([sys/mman.h], [AC_CHECK_FUNCS([mmap])])
 
 dnl check for clock_gettime() support
-save_LIBS="$LIBS"
-LIBS="$LIBS $RT_LIBS"
 AC_CHECK_HEADERS([time.h], [AC_CHECK_FUNCS([clock_gettime])])
-LIBS="$save_LIBS"
 
 dnl check for GNU-extensions to fenv
 AC_CHECK_HEADER(fenv.h,
 	[AC_CHECK_FUNCS(feenableexcept fedisableexcept feclearexcept)])
 
 dnl check for misc headers and functions
-AC_CHECK_HEADERS([libgen.h byteswap.h signal.h setjmp.h fenv.h])
-AC_CHECK_FUNCS([vasnprintf link ctime_r drand48 flockfile ffs])
+AC_CHECK_HEADERS([libgen.h byteswap.h signal.h setjmp.h fenv.h sys/wait.h])
+AC_CHECK_FUNCS([ctime_r drand48 flockfile funlockfile getline link strndup])
 
 dnl check for win32 headers (this detects mingw as well)
 AC_CHECK_HEADERS([windows.h], have_windows=yes, have_windows=no)

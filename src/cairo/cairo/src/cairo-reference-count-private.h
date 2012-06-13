@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -45,12 +45,12 @@ typedef struct {
 } cairo_reference_count_t;
 
 #define _cairo_reference_count_inc(RC) _cairo_atomic_int_inc (&(RC)->ref_count)
+#define _cairo_reference_count_dec(RC) _cairo_atomic_int_dec (&(RC)->ref_count)
 #define _cairo_reference_count_dec_and_test(RC) _cairo_atomic_int_dec_and_test (&(RC)->ref_count)
 
 #define CAIRO_REFERENCE_COUNT_INIT(RC, VALUE) ((RC)->ref_count = (VALUE))
 
 #define CAIRO_REFERENCE_COUNT_GET_VALUE(RC) _cairo_atomic_int_get (&(RC)->ref_count)
-#define CAIRO_REFERENCE_COUNT_SET_VALUE(RC, VALUE) _cairo_atomic_int_set (&(RC)->ref_count, (VALUE))
 
 #define CAIRO_REFERENCE_COUNT_INVALID_VALUE ((cairo_atomic_int_t) -1)
 #define CAIRO_REFERENCE_COUNT_INVALID {CAIRO_REFERENCE_COUNT_INVALID_VALUE}

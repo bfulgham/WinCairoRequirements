@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -55,6 +55,13 @@ _cairo_slope_equal (const cairo_slope_t *a, const cairo_slope_t *b)
 {
     return _cairo_int64_eq (_cairo_int32x32_64_mul (a->dy, b->dx),
 			    _cairo_int32x32_64_mul (b->dy, a->dx));
+}
+
+static inline cairo_bool_t
+_cairo_slope_backwards (const cairo_slope_t *a, const cairo_slope_t *b)
+{
+    return _cairo_int64_negative (_cairo_int64_add (_cairo_int32x32_64_mul (a->dx, b->dx),
+						    _cairo_int32x32_64_mul (a->dy, b->dy)));
 }
 
 cairo_private int

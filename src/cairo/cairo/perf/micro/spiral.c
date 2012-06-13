@@ -39,7 +39,7 @@ typedef enum {
     DIAGCLOSE                   /* forces a diagonal */
 } close_t;
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral (cairo_t *cr,
              cairo_fill_rule_t fill_rule,
              align_t align,
@@ -106,7 +106,7 @@ draw_spiral (cairo_t *cr,
     return cairo_perf_timer_elapsed ();
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_box (cairo_t *cr,
 		 cairo_fill_rule_t fill_rule,
 		 align_t align,
@@ -142,7 +142,7 @@ draw_spiral_box (cairo_t *cr,
     return cairo_perf_timer_elapsed ();
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_stroke (cairo_t *cr,
 		    align_t align,
 		    int width, int height, int loops)
@@ -197,7 +197,7 @@ draw_spiral_stroke (cairo_t *cr,
     return cairo_perf_timer_elapsed ();
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_eo_pa_re (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -207,7 +207,7 @@ draw_spiral_eo_pa_re (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_nz_pa_re (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -217,7 +217,7 @@ draw_spiral_nz_pa_re (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_eo_na_re (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -227,7 +227,7 @@ draw_spiral_eo_na_re (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_nz_na_re (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -237,7 +237,7 @@ draw_spiral_nz_na_re (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_eo_pa_di (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -247,7 +247,7 @@ draw_spiral_eo_pa_di (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_nz_pa_di (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -257,7 +257,7 @@ draw_spiral_nz_pa_di (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_eo_na_di (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -267,7 +267,7 @@ draw_spiral_eo_na_di (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_nz_na_di (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral (cr,
@@ -277,7 +277,7 @@ draw_spiral_nz_na_di (cairo_t *cr, int width, int height, int loops)
                         width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_nz_pa_box (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral_box (cr,
@@ -285,7 +285,7 @@ draw_spiral_nz_pa_box (cairo_t *cr, int width, int height, int loops)
 			    width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_nz_na_box (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral_box (cr,
@@ -294,7 +294,7 @@ draw_spiral_nz_na_box (cairo_t *cr, int width, int height, int loops)
 }
 
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_eo_pa_box (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral_box (cr,
@@ -302,7 +302,7 @@ draw_spiral_eo_pa_box (cairo_t *cr, int width, int height, int loops)
 			    width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_eo_na_box (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral_box (cr,
@@ -310,7 +310,7 @@ draw_spiral_eo_na_box (cairo_t *cr, int width, int height, int loops)
 			    width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_stroke_pa (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral_stroke (cr,
@@ -318,7 +318,7 @@ draw_spiral_stroke_pa (cairo_t *cr, int width, int height, int loops)
 			       width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 draw_spiral_stroke_na (cairo_t *cr, int width, int height, int loops)
 {
     return draw_spiral_stroke (cr,
@@ -326,24 +326,27 @@ draw_spiral_stroke_na (cairo_t *cr, int width, int height, int loops)
 			       width, height, loops);
 }
 
+cairo_bool_t
+spiral_enabled (cairo_perf_t *perf)
+{
+    return cairo_perf_can_run (perf, "spiral", NULL);
+}
+
 void
 spiral (cairo_perf_t *perf, cairo_t *cr, int width, int height)
 {
-    if (! cairo_perf_can_run (perf, "spiral", NULL))
-	return;
-
-    cairo_perf_run (perf, "spiral-box-nonalign-evenodd-fill", draw_spiral_eo_na_box);
-    cairo_perf_run (perf, "spiral-box-nonalign-nonzero-fill", draw_spiral_nz_na_box);
-    cairo_perf_run (perf, "spiral-box-pixalign-evenodd-fill", draw_spiral_eo_pa_box);
-    cairo_perf_run (perf, "spiral-box-pixalign-nonzero-fill", draw_spiral_nz_pa_box);
-    cairo_perf_run (perf, "spiral-diag-nonalign-evenodd-fill", draw_spiral_eo_na_di);
-    cairo_perf_run (perf, "spiral-diag-nonalign-nonzero-fill", draw_spiral_nz_na_di);
-    cairo_perf_run (perf, "spiral-diag-pixalign-evenodd-fill", draw_spiral_eo_pa_di);
-    cairo_perf_run (perf, "spiral-diag-pixalign-nonzero-fill", draw_spiral_nz_pa_di);
-    cairo_perf_run (perf, "spiral-rect-nonalign-evenodd-fill", draw_spiral_eo_na_re);
-    cairo_perf_run (perf, "spiral-rect-nonalign-nonzero-fill", draw_spiral_nz_na_re);
-    cairo_perf_run (perf, "spiral-rect-pixalign-evenodd-fill", draw_spiral_eo_pa_re);
-    cairo_perf_run (perf, "spiral-rect-pixalign-nonzero-fill", draw_spiral_nz_pa_re);
-    cairo_perf_run (perf, "spiral-nonalign-stroke", draw_spiral_stroke_na);
-    cairo_perf_run (perf, "spiral-pixalign-stroke", draw_spiral_stroke_pa);
+    cairo_perf_run (perf, "spiral-box-nonalign-evenodd-fill", draw_spiral_eo_na_box, NULL);
+    cairo_perf_run (perf, "spiral-box-nonalign-nonzero-fill", draw_spiral_nz_na_box, NULL);
+    cairo_perf_run (perf, "spiral-box-pixalign-evenodd-fill", draw_spiral_eo_pa_box, NULL);
+    cairo_perf_run (perf, "spiral-box-pixalign-nonzero-fill", draw_spiral_nz_pa_box, NULL);
+    cairo_perf_run (perf, "spiral-diag-nonalign-evenodd-fill", draw_spiral_eo_na_di, NULL);
+    cairo_perf_run (perf, "spiral-diag-nonalign-nonzero-fill", draw_spiral_nz_na_di, NULL);
+    cairo_perf_run (perf, "spiral-diag-pixalign-evenodd-fill", draw_spiral_eo_pa_di, NULL);
+    cairo_perf_run (perf, "spiral-diag-pixalign-nonzero-fill", draw_spiral_nz_pa_di, NULL);
+    cairo_perf_run (perf, "spiral-rect-nonalign-evenodd-fill", draw_spiral_eo_na_re, NULL);
+    cairo_perf_run (perf, "spiral-rect-nonalign-nonzero-fill", draw_spiral_nz_na_re, NULL);
+    cairo_perf_run (perf, "spiral-rect-pixalign-evenodd-fill", draw_spiral_eo_pa_re, NULL);
+    cairo_perf_run (perf, "spiral-rect-pixalign-nonzero-fill", draw_spiral_nz_pa_re, NULL);
+    cairo_perf_run (perf, "spiral-nonalign-stroke", draw_spiral_stroke_na, NULL);
+    cairo_perf_run (perf, "spiral-pixalign-stroke", draw_spiral_stroke_pa, NULL);
 }

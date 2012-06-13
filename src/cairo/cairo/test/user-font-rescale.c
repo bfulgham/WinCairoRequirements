@@ -258,10 +258,11 @@ get_user_font_face (cairo_font_face_t *substitute_font,
 					       &glyphs, &num_glyphs,
 					       NULL, NULL, NULL);
     cairo_font_options_destroy (options);
-    cairo_scaled_font_destroy (measure);
 
-    if (status)
+    if (status) {
+	cairo_scaled_font_destroy (measure);
 	return status;
+    }
 
     /* find the glyph range the text covers */
     max_index = glyphs[0].index;
@@ -282,11 +283,16 @@ get_user_font_face (cairo_font_face_t *substitute_font,
 	widths[glyphs[i].index - min_index] = extents.x_advance;
     }
 
+    status = cairo_scaled_font_status (measure);
+    cairo_scaled_font_destroy (measure);
     cairo_glyph_free (glyphs);
 
-    status = create_rescaled_font (substitute_font,
-				   min_index, count, widths,
-				   out);
+    if (status == CAIRO_STATUS_SUCCESS) {
+	status = create_rescaled_font (substitute_font,
+				       min_index, count, widths,
+				       out);
+    }
+
     free (widths);
     return status;
 }
@@ -306,7 +312,7 @@ draw (cairo_t *cr, int width, int height)
     cairo_paint (cr);
 
     cairo_select_font_face (cr,
-			    "Bitstream Vera Sans",
+			    CAIRO_TEST_FONT_FAMILY " Sans",
 			    CAIRO_FONT_SLANT_NORMAL,
 			    CAIRO_FONT_WEIGHT_NORMAL);
 
@@ -322,7 +328,7 @@ draw (cairo_t *cr, int width, int height)
     /* same text in 'mono' with widths that match the 'sans' version */
     old = cairo_font_face_reference (cairo_get_font_face (cr));
     cairo_select_font_face (cr,
-			    "Bitstream Vera Sans Mono",
+			    CAIRO_TEST_FONT_FAMILY " Sans Mono",
 			    CAIRO_FONT_SLANT_NORMAL,
 			    CAIRO_FONT_WEIGHT_NORMAL);
     substitute = cairo_get_font_face (cr);
@@ -343,7 +349,7 @@ draw (cairo_t *cr, int width, int height)
 
     /* mono text */
     cairo_select_font_face (cr,
-			    "Bitstream Vera Sans Mono",
+			    CAIRO_TEST_FONT_FAMILY " Sans Mono",
 			    CAIRO_FONT_SLANT_NORMAL,
 			    CAIRO_FONT_WEIGHT_NORMAL);
 

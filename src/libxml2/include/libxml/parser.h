@@ -302,6 +302,14 @@ struct _xmlParserCtxt {
     xmlParserMode     parseMode;    /* the parser mode */
     unsigned long    nbentities;    /* number of entities references */
     unsigned long  sizeentities;    /* size of parsed entities */
+
+    /* for use by HTML non-recursive parser */
+    xmlParserNodeInfo *nodeInfo;      /* Current NodeInfo */
+    int                nodeInfoNr;    /* Depth of the parsing stack */
+    int                nodeInfoMax;   /* Max depth of the parsing stack */
+    xmlParserNodeInfo *nodeInfoTab;   /* array of nodeInfos */
+
+    int                input_id;      /* we need to label inputs */
 };
 
 /**
@@ -1099,8 +1107,9 @@ typedef enum {
 				   crash if you try to modify the tree) */
     XML_PARSE_OLD10	= 1<<17,/* parse using XML-1.0 before update 5 */
     XML_PARSE_NOBASEFIX = 1<<18,/* do not fixup XINCLUDE xml:base uris */
-    XML_PARSE_HUGE      = 1<<19, /* relax any hardcoded limit from the parser */
-    XML_PARSE_OLDSAX    = 1<<20 /* parse using SAX2 interface from before 2.7.0 */
+    XML_PARSE_HUGE      = 1<<19,/* relax any hardcoded limit from the parser */
+    XML_PARSE_OLDSAX    = 1<<20,/* parse using SAX2 interface before 2.7.0 */
+    XML_PARSE_IGNORE_ENC= 1<<21 /* ignore internal document encoding hint */
 } xmlParserOption;
 
 XMLPUBFUN void XMLCALL
@@ -1216,6 +1225,8 @@ typedef enum {
     XML_WITH_DEBUG_MEM = 29,
     XML_WITH_DEBUG_RUN = 30,
     XML_WITH_ZLIB = 31,
+    XML_WITH_ICU = 32,
+    XML_WITH_LZMA = 33,
     XML_WITH_NONE = 99999 /* just to be sure of allocation size */
 } xmlFeature;
 
@@ -1226,4 +1237,3 @@ XMLPUBFUN int XMLCALL
 }
 #endif
 #endif /* __XML_PARSER_H__ */
-

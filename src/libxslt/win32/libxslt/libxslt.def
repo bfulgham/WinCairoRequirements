@@ -33,6 +33,7 @@ EXPORTS
   	xsltRegisterExtElement
   	xsltFreeCtxtExts
   	xsltFreeExts
+	xsltUnregisterAllExtModules
 	xsltGetExtData
 	xsltShutdownCtxtExts
 	xsltXPathGetTransformContext

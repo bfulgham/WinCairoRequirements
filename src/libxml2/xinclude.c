@@ -1796,6 +1796,8 @@ xmlXIncludeLoadTxt(xmlXIncludeCtxtPtr ctxt, const xmlChar *url, int nr) {
     int i;
     xmlChar *encoding = NULL;
     xmlCharEncoding enc = (xmlCharEncoding) 0;
+    xmlParserCtxtPtr pctxt;
+    xmlParserInputPtr inputStream;
 
     /*
      * Check the URL and remove any fragment identifier
@@ -1870,11 +1872,23 @@ xmlXIncludeLoadTxt(xmlXIncludeCtxtPtr ctxt, const xmlChar *url, int nr) {
     /*
      * Load it.
      */
-    buf = xmlParserInputBufferCreateFilename((const char *)URL, enc);
-    if (buf == NULL) {
+    pctxt = xmlNewParserCtxt();
+    inputStream = xmlLoadExternalEntity((const char*)URL, NULL, pctxt);
+    if(inputStream == NULL) {
+	xmlFreeParserCtxt(pctxt);
 	xmlFree(URL);
 	return(-1);
     }
+    buf = inputStream->buf;
+    if (buf == NULL) {
+	xmlFreeInputStream (inputStream);
+	xmlFreeParserCtxt(pctxt);
+	xmlFree(URL);
+	return(-1);
+    }
+    if (buf->encoder)
+	xmlCharEncCloseFunc(buf->encoder);
+    buf->encoder = xmlGetCharEncodingHandler(enc);
     node = xmlNewText(NULL);
 
     /*
@@ -1905,8 +1919,9 @@ xmlXIncludeLoadTxt(xmlXIncludeCtxtPtr ctxt, const xmlChar *url, int nr) {
 	}
 	xmlBufferShrink(buf->buffer, len);
     }
-    xmlFreeParserInputBuffer(buf);
+    xmlFreeParserCtxt(pctxt);
     xmlXIncludeAddTxt(ctxt, node, URL);
+    xmlFreeInputStream(inputStream);
 
 loaded:
     /*
@@ -2479,7 +2494,6 @@ xmlXIncludeProcessTreeFlagsData(xmlNodePtr tree, int flags, void *data) {
  */
 int
 xmlXIncludeProcessFlagsData(xmlDocPtr doc, int flags, void *data) {
-    xmlXIncludeCtxtPtr ctxt;
     xmlNodePtr tree;
 
     if (doc == NULL)

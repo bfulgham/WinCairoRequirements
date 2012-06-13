@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -21,7 +29,18 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -36,7 +55,19 @@
     <Import Project="..\..\..\..\props\dll.props" />
     <Import Project="..\..\..\..\props\debug.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\debug.props" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\dll.props" />
+    <Import Project="..\..\..\..\props\release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\props\common.props" />
     <Import Project="..\..\..\..\props\dll.props" />
@@ -46,11 +77,33 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(ProjectDir)\..\..\libxml2;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)\..\..\libxml2;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)\libxml2\include;$(SolutionDir)\libiconv\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)\libxml2\include;$(SolutionDir)\libiconv\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H;NOLIBTOOL</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\libxml"
+xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxml"</Command>
+      <Message>Install Headers</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PreprocessorDefinitions>LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -66,6 +119,22 @@ xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxm
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H;NOLIBTOOL</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include\libxml"
+xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxml"</Command>
+      <Message>Install Headers</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PreprocessorDefinitions>LIBXML2_EXPORTS;_REENTRANT;_CRT_SECURE_NO_WARNINGS;LIBXML_MAJOR_VERSION=2;LIBXML_MINOR_VERSION=7;LIBXML_MICRO_VERSION=6;LIBXML_MICRO_VERSION_SUFFIX=;XML_SRCDIR=..;UTILS_SRCDIR=..;WITH_TRIO=0;WITH_THREADS=native;HAVE_WIN32_THREADS;WITH_FTP=1;WITH_HTTP=1;WITH_HTML=1;WITH_C14N=1;WITH_CATALOG=1;WITH_DOCB=1;WITH_XPATH=1;WITH_XPTR=1;WITH_XINCLUDE=1;WITH_ICONV=1;WITH_ISO8859X=0;WITH_ZLIB=1;HAVE_ZLIB_H;WITH_DEBUG=1;WITH_MEM_DEBUG=0;WITH_RUN_DEBUG=0;WITH_SCHEMAS=1;WITH_SCHEMATRON=1;WITH_REGEXPS=1;WITH_MODULES=1;WITH_TREE=1;WITH_READER=1;WITH_WRITER=1;WITH_WALKER=1;WITH_PATTERN=1;WITH_PUSH=1;WITH_VALID=1;WITH_SAX1=1;WITH_LEGACY=1;WITH_OUTPUT=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NULL=0;HAVE_STDINT_H</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -38,11 +38,18 @@
 #define __STDC_LIMIT_MACROS
 
 #include "cairoint.h"
-#include "cairo-types-private.h"
-#include "cairo-clip-private.h"
-#include "cairo-surface-clipper-private.h"
-#include "cairo-region-private.h"
 
+#include "cairo-clip-private.h"
+#include "cairo-default-context-private.h"
+#include "cairo-error-private.h"
+#include "cairo-region-private.h"
+#include "cairo-surface-clipper-private.h"
+#include "cairo-types-private.h"
+#include "cairo-image-surface-private.h"
+#include "cairo-pattern-private.h"
+#include "cairo-surface-backend-private.h"
+
+#include "cairo-ft.h"
 #include "cairo-qt.h"
 
 #include <memory>
@@ -54,16 +61,11 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QBrush>
 #include <QtGui/QPen>
-#include <QtGui/QWidget>
-#include <QtGui/QX11Info>
+#include <QWidget>
+#include <QtCore/QVarLengthArray>
 
-#if CAIRO_HAS_XLIB_XRENDER_SURFACE
-#include "cairo-xlib.h"
-#include "cairo-xlib-xrender.h"
-// I hate X
-#undef Status
-#undef CursorShape
-#undef Bool
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)) || defined(QT_GLYPHS_API_BACKPORT)
+extern void qt_draw_glyphs(QPainter *, const quint32 *glyphs, const QPointF *positions, int count);
 #endif
 
 #include <sys/time.h>
@@ -116,15 +118,6 @@ struct cairo_qt_surface_t {
 
     cairo_bool_t supports_porter_duff;
 
-#if defined(Q_WS_X11) && CAIRO_HAS_XLIB_XRENDER_SURFACE
-    /* temporary, so that we can share the xlib surface's glyphs code */
-    bool xlib_has_clipping;
-    cairo_surface_t *xlib_equiv;
-    QRect xlib_clip_bounds;
-    int xlib_clip_serial;
-    QPoint redir_offset;
-#endif
-
     QPainter *p;
 
     /* The pixmap/image constructors will store their objects here */
@@ -143,14 +136,9 @@ struct cairo_qt_surface_t {
  */
 static cairo_bool_t _qpixmaps_have_no_alpha = FALSE;
 
-#if defined(Q_WS_X11) && CAIRO_HAS_XLIB_XRENDER_SURFACE
-slim_hidden_proto (cairo_xlib_surface_create);
-slim_hidden_proto (cairo_xlib_surface_create_with_xrender_format);
-#endif
-
-/**
- ** Helper methods
- **/
+/*
+ * Helper methods
+ */
 
 static QPainter::CompositionMode
 _qpainter_compositionmode_from_cairo_op (cairo_operator_t op)
@@ -298,10 +286,14 @@ static QImage::Format
 _qimage_format_from_cairo_format (cairo_format_t fmt)
 {
     switch (fmt) {
+    case CAIRO_FORMAT_INVALID:
+	ASSERT_NOT_REACHED;
     case CAIRO_FORMAT_ARGB32:
         return QImage::Format_ARGB32_Premultiplied;
     case CAIRO_FORMAT_RGB24:
         return QImage::Format_RGB32;
+    case CAIRO_FORMAT_RGB16_565:
+        return QImage::Format_RGB16;
     case CAIRO_FORMAT_A8:
         return QImage::Format_Indexed8; // XXX not quite
     case CAIRO_FORMAT_A1:
@@ -321,10 +313,10 @@ _qmatrix_from_cairo_matrix (const cairo_matrix_t& m)
     return QMatrix(m.xx, m.yx, m.xy, m.yy, m.x0, m.y0);
 }
 
-/** Path conversion **/
+/* Path conversion */
 typedef struct _qpainter_path_transform {
     QPainterPath path;
-    cairo_matrix_t *ctm_inverse;
+    const cairo_matrix_t *ctm_inverse;
 } qpainter_path_data;
 
 /* cairo path -> execute in context */
@@ -391,8 +383,8 @@ _cairo_path_to_qpainterpath_close_path (void *closure)
 }
 
 static inline QPainterPath
-path_to_qt (cairo_path_fixed_t *path,
-	    cairo_matrix_t *ctm_inverse = NULL)
+path_to_qt (const cairo_path_fixed_t *path,
+	    const cairo_matrix_t *ctm_inverse = NULL)
 {
     qpainter_path_data data;
     cairo_status_t status;
@@ -402,7 +394,6 @@ path_to_qt (cairo_path_fixed_t *path,
     data.ctm_inverse = ctm_inverse;
 
     status = _cairo_path_fixed_interpret (path,
-					  CAIRO_DIRECTION_FORWARD,
 					  _cairo_path_to_qpainterpath_move_to,
 					  _cairo_path_to_qpainterpath_line_to,
 					  _cairo_path_to_qpainterpath_curve_to,
@@ -414,7 +405,7 @@ path_to_qt (cairo_path_fixed_t *path,
 }
 
 static inline QPainterPath
-path_to_qt (cairo_path_fixed_t *path,
+path_to_qt (const cairo_path_fixed_t *path,
 	    cairo_fill_rule_t fill_rule,
 	    cairo_matrix_t *ctm_inverse = NULL)
 {
@@ -427,9 +418,9 @@ path_to_qt (cairo_path_fixed_t *path,
     return qpath;
 }
 
-/**
- ** Surface backend methods
- **/
+/*
+ * Surface backend methods
+ */
 static cairo_surface_t *
 _cairo_qt_surface_create_similar (void *abstract_surface,
 				  cairo_content_t content,
@@ -485,17 +476,12 @@ _cairo_qt_surface_finish (void *abstract_surface)
     if (qs->image || qs->pixmap)
         delete qs->p;
     else
-        qs->p->restore();
+	qs->p->restore ();
 
     if (qs->image_equiv)
         cairo_surface_destroy (qs->image_equiv);
 
     _cairo_surface_clipper_reset (&qs->clipper);
-
-#if defined(Q_WS_X11) && CAIRO_HAS_XLIB_XRENDER_SURFACE
-    if (qs->xlib_equiv)
-        cairo_surface_destroy (qs->xlib_equiv);
-#endif
 
     if (qs->image)
         delete qs->image;
@@ -665,30 +651,6 @@ _cairo_qt_surface_release_dest_image (void *abstract_surface,
     }
 }
 
-static cairo_status_t
-_cairo_qt_surface_clone_similar (void *abstract_surface,
-				 cairo_surface_t *src,
-				 cairo_content_t  content,
-				 int              src_x,
-				 int              src_y,
-				 int              width,
-				 int              height,
-				 int              *clone_offset_x,
-				 int              *clone_offset_y,
-				 cairo_surface_t **clone_out)
-{
-    cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
-
-    if (src->backend == qs->base.backend) {
-	*clone_offset_x = 0;
-	*clone_offset_y = 0;
-	*clone_out = cairo_surface_reference (src);
-	return CAIRO_STATUS_SUCCESS;
-    }
-
-    return (cairo_status_t) CAIRO_INT_STATUS_UNSUPPORTED;
-}
-
 static cairo_bool_t
 _cairo_qt_surface_get_extents (void *abstract_surface,
 			       cairo_rectangle_int_t *extents)
@@ -697,7 +659,7 @@ _cairo_qt_surface_get_extents (void *abstract_surface,
 
     extents->x = qs->window.x();
     extents->y = qs->window.y();
-    extents->width = qs->window.width();
+    extents->width  = qs->window.width();
     extents->height = qs->window.height();
 
     return TRUE;
@@ -732,7 +694,7 @@ _cairo_qt_surface_clipper_intersect_clip_path (cairo_surface_clipper_t *clipper,
 
 static void
 _cairo_qt_surface_set_clip_region (cairo_qt_surface_t *qs,
-				   cairo_region_t *clip_region)
+				   const cairo_region_t *clip_region)
 {
     _cairo_surface_clipper_reset (&qs->clipper);
 
@@ -763,7 +725,7 @@ _cairo_qt_surface_set_clip_region (cairo_qt_surface_t *qs,
 
 static cairo_int_status_t
 _cairo_qt_surface_set_clip (cairo_qt_surface_t *qs,
-			    cairo_clip_t *clip)
+			    const cairo_clip_t *clip)
 {
     cairo_int_status_t status;
 
@@ -813,9 +775,9 @@ _cairo_qt_surface_set_clip (cairo_qt_surface_t *qs,
     return status;
 }
 
-/**
- ** Brush conversion
- **/
+/*
+ * Brush conversion
+ */
 
 struct PatternToBrushConverter {
     PatternToBrushConverter (const cairo_pattern_t *pattern) :
@@ -888,40 +850,34 @@ struct PatternToBrushConverter {
 
 	    if (pattern->type == CAIRO_PATTERN_TYPE_LINEAR) {
 		cairo_linear_pattern_t *lpat = (cairo_linear_pattern_t *) pattern;
-		grad = new QLinearGradient (_cairo_fixed_to_double (lpat->p1.x),
-					    _cairo_fixed_to_double (lpat->p1.y),
-					    _cairo_fixed_to_double (lpat->p2.x),
-					    _cairo_fixed_to_double (lpat->p2.y));
+		grad = new QLinearGradient (lpat->pd1.x, lpat->pd1.y,
+					    lpat->pd2.x, lpat->pd2.y);
 	    } else if (pattern->type == CAIRO_PATTERN_TYPE_RADIAL) {
 		cairo_radial_pattern_t *rpat = (cairo_radial_pattern_t *) pattern;
 
 		/* Based on the SVG surface code */
 
-		cairo_point_t *c0, *c1;
-		cairo_fixed_t radius0, radius1;
+		cairo_circle_double_t *c0, *c1;
+		double x0, y0, r0, x1, y1, r1;
 
-		if (rpat->r1 < rpat->r2) {
-		    c0 = &rpat->c1;
-		    c1 = &rpat->c2;
-		    radius0 = rpat->r1;
-		    radius1 = rpat->r2;
+		if (rpat->cd1.radius < rpat->cd2.radius) {
+		    c0 = &rpat->cd1;
+		    c1 = &rpat->cd2;
 		    reverse_stops = FALSE;
 		} else {
-		    c0 = &rpat->c2;
-		    c1 = &rpat->c1;
-		    radius0 = rpat->r2;
-		    radius1 = rpat->r1;
+		    c0 = &rpat->cd2;
+		    c1 = &rpat->cd1;
 		    reverse_stops = TRUE;
 		}
 
-		double x0 = _cairo_fixed_to_double (c0->x);
-		double y0 = _cairo_fixed_to_double (c0->y);
-		double r0 = _cairo_fixed_to_double (radius0);
-		double x1 = _cairo_fixed_to_double (c1->x);
-		double y1 = _cairo_fixed_to_double (c1->y);
-		double r1 = _cairo_fixed_to_double (radius1);
+		x0 = c0->center.x;
+		y0 = c0->center.y;
+		r0 = c0->radius;
+		x1 = c1->center.x;
+		y1 = c1->center.y;
+		r1 = c1->radius;
 
-		if (rpat->r1 == rpat->r2) {
+		if (r0 == r1) {
 		    grad = new QRadialGradient (x1, y1, r1, x1, y1);
 		} else {
 		    double fx = (r1 * x0 - r0 * x1) / (r1 - r0);
@@ -1042,7 +998,7 @@ struct PatternToBrushConverter {
 
 struct PatternToPenConverter {
     PatternToPenConverter (const cairo_pattern_t *source,
-                           cairo_stroke_style_t *style) :
+                           const cairo_stroke_style_t *style) :
         mBrushConverter(source)
     {
         Qt::PenJoinStyle join = Qt::MiterJoin;
@@ -1126,14 +1082,14 @@ struct PatternToPenConverter {
     PatternToBrushConverter mBrushConverter;
 };
 
-/**
- ** Core drawing operations
- **/
+/*
+ * Core drawing operations
+ */
 
 static bool
 _cairo_qt_fast_fill (cairo_qt_surface_t *qs,
 		     const cairo_pattern_t *source,
-		     cairo_path_fixed_t *path = NULL,
+		     const cairo_path_fixed_t *path = NULL,
 		     cairo_fill_rule_t fill_rule = CAIRO_FILL_RULE_WINDING,
 		     double tolerance = 0.0,
 		     cairo_antialias_t antialias = CAIRO_ANTIALIAS_NONE)
@@ -1249,7 +1205,7 @@ static cairo_int_status_t
 _cairo_qt_surface_paint (void *abstract_surface,
 			 cairo_operator_t op,
 			 const cairo_pattern_t *source,
-			 cairo_clip_t	       *clip)
+			 const cairo_clip_t	       *clip)
 {
     cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
     cairo_int_status_t status;
@@ -1284,11 +1240,11 @@ static cairo_int_status_t
 _cairo_qt_surface_fill (void *abstract_surface,
 			cairo_operator_t op,
 			const cairo_pattern_t *source,
-			cairo_path_fixed_t *path,
+			const cairo_path_fixed_t *path,
 			cairo_fill_rule_t fill_rule,
 			double tolerance,
 			cairo_antialias_t antialias,
-			cairo_clip_t *clip)
+			const cairo_clip_t *clip)
 {
     cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
 
@@ -1329,13 +1285,13 @@ static cairo_int_status_t
 _cairo_qt_surface_stroke (void *abstract_surface,
 			  cairo_operator_t op,
 			  const cairo_pattern_t *source,
-			  cairo_path_fixed_t *path,
-			  cairo_stroke_style_t *style,
-			  cairo_matrix_t *ctm,
-			  cairo_matrix_t *ctm_inverse,
+			  const cairo_path_fixed_t *path,
+			  const cairo_stroke_style_t *style,
+			  const cairo_matrix_t *ctm,
+			  const cairo_matrix_t *ctm_inverse,
 			  double tolerance,
 			  cairo_antialias_t antialias,
-			  cairo_clip_t *clip)
+			  const cairo_clip_t *clip)
 {
     cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
 
@@ -1384,36 +1340,42 @@ _cairo_qt_surface_show_glyphs (void *abstract_surface,
 			       cairo_glyph_t *glyphs,
 			       int num_glyphs,
 			       cairo_scaled_font_t *scaled_font,
-			       cairo_clip_t *clip,
-			       int *remaining_glyphs)
+			       const cairo_clip_t *clip)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)) || defined(QT_GLYPHS_API_BACKPORT)
     cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
 
-#if defined(Q_WS_X11) && CAIRO_HAS_XLIB_XRENDER_SURFACE
-    /* If we have an equivalent X surface, let the xlib surface handle this
-     * until we figure out how to do this natively with Qt.
-     */
-    if (qs->xlib_equiv) {
-	D(fprintf(stderr, "q[%p] show_glyphs (x11 equiv) op:%s nglyphs: %d\n", abstract_surface, _opstr(op), num_glyphs));
+    // pick out the colour to use from the cairo source
+    cairo_solid_pattern_t *solid = (cairo_solid_pattern_t*) source;
+    cairo_scaled_glyph_t* glyph;
+    // documentation says you have to freeze the cache, but I don't believe it
+    _cairo_scaled_font_freeze_cache(scaled_font);
 
-	for (int i = 0; i < num_glyphs; i++) {
-	    glyphs[i].x -= qs->redir_offset.x();
-	    glyphs[i].y -= qs->redir_offset.y();
-	}
-
-        return (cairo_int_status_t)
-               _cairo_surface_show_text_glyphs (qs->xlib_equiv,
-						op, source,
-						NULL, 0,
-						glyphs, num_glyphs,
-						NULL, 0,
-						(cairo_text_cluster_flags_t) 0,
-						scaled_font,
-						clip);
+    QColor tempColour(solid->color.red * 255, solid->color.green * 255, solid->color.blue * 255);
+    QVarLengthArray<QPointF> positions(num_glyphs);
+    QVarLengthArray<unsigned int> glyphss(num_glyphs);
+    FT_Face face = cairo_ft_scaled_font_lock_face (scaled_font);
+    const FT_Size_Metrics& ftMetrics = face->size->metrics;
+    QFont font(face->family_name);
+    font.setStyleStrategy(QFont::NoFontMerging);
+    font.setBold(face->style_flags & FT_STYLE_FLAG_BOLD);
+    font.setItalic(face->style_flags & FT_STYLE_FLAG_ITALIC);
+    font.setKerning(face->face_flags & FT_FACE_FLAG_KERNING);
+    font.setPixelSize(ftMetrics.y_ppem);
+    cairo_ft_scaled_font_unlock_face(scaled_font);
+    qs->p->setFont(font);
+    qs->p->setPen(tempColour);
+    for (int currentGlyph = 0; currentGlyph < num_glyphs; currentGlyph++) {
+        positions[currentGlyph].setX(glyphs[currentGlyph].x);
+        positions[currentGlyph].setY(glyphs[currentGlyph].y);
+        glyphss[currentGlyph] = glyphs[currentGlyph].index;
     }
-#endif
-
+    qt_draw_glyphs(qs->p, glyphss.data(), positions.data(), num_glyphs);
+    _cairo_scaled_font_thaw_cache(scaled_font);
+    return CAIRO_INT_STATUS_SUCCESS;
+#else
     return CAIRO_INT_STATUS_UNSUPPORTED;
+#endif
 }
 
 static cairo_int_status_t
@@ -1421,7 +1383,7 @@ _cairo_qt_surface_mask (void *abstract_surface,
 			cairo_operator_t op,
 			const cairo_pattern_t *source,
 			const cairo_pattern_t *mask,
-			cairo_clip_t	    *clip)
+			const cairo_clip_t	    *clip)
 {
     cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
 
@@ -1447,221 +1409,48 @@ _cairo_qt_surface_mask (void *abstract_surface,
     return CAIRO_INT_STATUS_UNSUPPORTED;
 }
 
-static cairo_int_status_t
-_cairo_qt_surface_composite (cairo_operator_t op,
-			     const cairo_pattern_t *pattern,
-			     const cairo_pattern_t *mask_pattern,
-			     void *abstract_surface,
-			     int src_x,
-			     int src_y,
-			     int mask_x,
-			     int mask_y,
-			     int dst_x,
-			     int dst_y,
-			     unsigned int width,
-			     unsigned int height,
-			     cairo_region_t *clip_region)
-{
-    cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
-
-    if (mask_pattern)
-        return CAIRO_INT_STATUS_UNSUPPORTED;
-
-    if (! _op_is_supported (qs, op))
-	return CAIRO_INT_STATUS_UNSUPPORTED;
-
-    _cairo_qt_surface_set_clip_region (qs, clip_region);
-
-    D(fprintf(stderr, "q[%p] composite op:%s src:%p [%d %d] dst [%d %d] dim [%d %d]\n",
-              abstract_surface, _opstr(op), (void*)pattern,
-              src_x, src_y, dst_x, dst_y, width, height));
-
-    if (pattern->type == CAIRO_PATTERN_TYPE_SOLID) {
-        cairo_solid_pattern_t *solid = (cairo_solid_pattern_t*) pattern;
-
-        QColor color;
-        color.setRgbF(solid->color.red,
-                      solid->color.green,
-                      solid->color.blue,
-                      solid->color.alpha);
-
-        if (qs->supports_porter_duff)
-            qs->p->setCompositionMode (_qpainter_compositionmode_from_cairo_op (op));
-
-        qs->p->fillRect (dst_x, dst_y, width, height, color);
-
-        if (qs->supports_porter_duff)
-            qs->p->setCompositionMode (QPainter::CompositionMode_SourceOver);
-    } else if (pattern->type == CAIRO_PATTERN_TYPE_SURFACE) {
-        cairo_surface_pattern_t *spattern = (cairo_surface_pattern_t*) pattern;
-        cairo_surface_t *surface = spattern->surface;
-
-        QImage *qimg = NULL;
-        QPixmap *qpixmap = NULL;
-        std::auto_ptr<QImage> qimg_d;
-
-        if (surface->type == CAIRO_SURFACE_TYPE_IMAGE) {
-            cairo_image_surface_t *isurf = (cairo_image_surface_t*) surface;
-            qimg = new QImage ((const uchar *) isurf->data,
-                               isurf->width,
-                               isurf->height,
-                               isurf->stride,
-                               _qimage_format_from_cairo_format (isurf->format));
-            qimg_d.reset(qimg);
-        }
-
-        if (surface->type == CAIRO_SURFACE_TYPE_QT) {
-            cairo_qt_surface_t *qsrc = (cairo_qt_surface_t*) surface;
-
-            if (qsrc->image)
-                qimg = qsrc->image;
-            else if (qsrc->pixmap)
-                qpixmap = qsrc->pixmap;
-        }
-
-        if (!qimg && !qpixmap)
-            return CAIRO_INT_STATUS_UNSUPPORTED;
-
-        QMatrix savedMatrix = qs->p->worldMatrix();
-        if (! _cairo_matrix_is_identity (&pattern->matrix)) {
-            cairo_matrix_t pm = pattern->matrix;
-	    cairo_status_t status;
-
-            status = cairo_matrix_invert (&pm);
-	    assert (status == CAIRO_STATUS_SUCCESS);
-	    qs->p->setWorldMatrix(_qmatrix_from_cairo_matrix (pm), true);
-        }
-
-        if (qs->supports_porter_duff)
-            qs->p->setCompositionMode (_qpainter_compositionmode_from_cairo_op (op));
-
-        if (qimg)
-            qs->p->drawImage (dst_x, dst_y, *qimg, src_x, src_y, width, height);
-        else if (qpixmap)
-            qs->p->drawPixmap (dst_x, dst_y, *qpixmap, src_x, src_y, width, height);
-
-        if (qs->supports_porter_duff)
-            qs->p->setCompositionMode (QPainter::CompositionMode_SourceOver);
-    } else {
-        return CAIRO_INT_STATUS_UNSUPPORTED;
-    }
-
-    return CAIRO_INT_STATUS_SUCCESS;
-}
-
 static cairo_status_t
-_cairo_qt_surface_flush (void *abstract_surface)
+_cairo_qt_surface_mark_dirty (void *abstract_surface,
+			      int x, int y,
+			      int width, int height)
 {
     cairo_qt_surface_t *qs = (cairo_qt_surface_t *) abstract_surface;
-    
-    QPaintDevice * dev = qs->p->device();
-    qs->p->end();
-    qs->p->begin(dev);
-    
+
+    if (qs->p && !(qs->image || qs->pixmap))
+	qs->p->save ();
+
     return CAIRO_STATUS_SUCCESS;
 }
 
-/**
- ** Backend struct
- **/
+/*
+ * Backend struct
+ */
 
 static const cairo_surface_backend_t cairo_qt_surface_backend = {
     CAIRO_SURFACE_TYPE_QT,
-    _cairo_qt_surface_create_similar,
     _cairo_qt_surface_finish,
+    _cairo_default_context_create, /* XXX */
+    _cairo_qt_surface_create_similar,
+    NULL, /* similar image */
+    NULL, /* map to image */
+    NULL, /* unmap image */
+    _cairo_surface_default_source,
     _cairo_qt_surface_acquire_source_image,
     _cairo_qt_surface_release_source_image,
-    _cairo_qt_surface_acquire_dest_image,
-    _cairo_qt_surface_release_dest_image,
-    _cairo_qt_surface_clone_similar,
-
-    _cairo_qt_surface_composite,
-    NULL, /* fill_rectangles */
-    NULL, /* composite_trapezoids */
-    NULL, /* create_span_renderer */
-    NULL, /* check_span_renderer */
+    NULL, /* snapshot */
     NULL, /* copy_page */
     NULL, /* show_page */
     _cairo_qt_surface_get_extents,
-    NULL, /* old_show_glyphs */
     NULL, /* get_font_options */
-    _cairo_qt_surface_flush,
-    NULL, /* mark_dirty_rectangle */
-    NULL, /* scaled_font_fini */
-    NULL, /* scaled_glyph_fini */
-
+    NULL, /* flush */
+    _cairo_qt_surface_mark_dirty,
     _cairo_qt_surface_paint,
     _cairo_qt_surface_mask,
     _cairo_qt_surface_stroke,
     _cairo_qt_surface_fill,
-    _cairo_qt_surface_show_glyphs,
-
-    NULL, /* snapshot */
-    NULL, /* is_similar */
     NULL, /* fill_stroke */
-    NULL, /* create_solid_pattern_surface */
-    NULL, /* can_repaint_solid_pattern_surface */
-    NULL, /* has_show_text_glyphs */
-    NULL, /* show_text_glyphs */
+    _cairo_qt_surface_show_glyphs
 };
-
-#if defined(Q_WS_X11) && CAIRO_HAS_XLIB_XRENDER_SURFACE
-static cairo_surface_t *
-_cairo_qt_create_xlib_surface (cairo_qt_surface_t *qs)
-{
-    if (!qs->p)
-	return NULL;
-
-    QPaintDevice *pd = qs->p->device();
-    if (!pd)
-	return NULL;
-
-    QPoint offs;
-    QPaintDevice *rpd = QPainter::redirected(pd, &offs);
-    if (rpd) {
-	pd = rpd;
-	qs->redir_offset = offs;
-    }
-
-    if (pd->devType() == QInternal::Widget) {
-	QWidget *w = (QWidget*) pd;
-	QX11Info xinfo = w->x11Info();
-
-	return cairo_xlib_surface_create (xinfo.display(),
-					  (Drawable) w->handle (),
-					  (Visual *) xinfo.visual (),
-					  w->width (), w->height ());
-    } else if (pd->devType() == QInternal::Pixmap) {
-	QPixmap *pixmap = (QPixmap*) pd;
-	QX11Info xinfo = pixmap->x11Info ();
-	XRenderPictFormat *xrender_format;
-	int pict_format;
-
-	switch (pixmap->depth ()) {
-	case 1:
-	    pict_format = PictStandardA1; break;
-	case 8:
-	    pict_format = PictStandardA8; break;
-	case 24:
-	    pict_format = PictStandardRGB24; break;
-	default:
-	    ASSERT_NOT_REACHED;
-	case 32:
-	    pict_format = PictStandardARGB32; break;
-	}
-	xrender_format = XRenderFindStandardFormat (xinfo.display (),
-		                                    pict_format);
-
-	return cairo_xlib_surface_create_with_xrender_format (xinfo.display(),
-					  (Drawable) pixmap->handle (),
-					  ScreenOfDisplay (xinfo.display (),
-							   xinfo.screen ()),
-					  xrender_format,
-					  pixmap->width (), pixmap->height ());
-    } else
-	return NULL;
-}
-#endif
 
 cairo_surface_t *
 cairo_qt_surface_create (QPainter *painter)
@@ -1676,6 +1465,7 @@ cairo_qt_surface_create (QPainter *painter)
 
     _cairo_surface_init (&qs->base,
 			 &cairo_qt_surface_backend,
+			 NULL, /* device */
 			 CAIRO_CONTENT_COLOR_ALPHA);
 
     _cairo_surface_clipper_init (&qs->clipper,
@@ -1691,10 +1481,6 @@ cairo_qt_surface_create (QPainter *painter)
     qs->p->save();
 
     qs->window = painter->window();
-
-#if defined(Q_WS_X11) && CAIRO_HAS_XLIB_XRENDER_SURFACE
-    qs->xlib_equiv = _cairo_qt_create_xlib_surface (qs);
-#endif
 
     D(fprintf(stderr, "qpainter_surface_create: window: [%d %d %d %d] pd:%d\n",
               qs->window.x(), qs->window.y(), qs->window.width(), qs->window.height(),
@@ -1718,6 +1504,7 @@ cairo_qt_surface_create_with_qimage (cairo_format_t format,
 
     _cairo_surface_init (&qs->base,
 			 &cairo_qt_surface_backend,
+			 NULL, /* device */
 			 _cairo_content_from_format (format));
 
     _cairo_surface_clipper_init (&qs->clipper,
@@ -1776,7 +1563,10 @@ cairo_qt_surface_create_with_qpixmap (cairo_content_t content,
     if (content == CAIRO_CONTENT_COLOR_ALPHA)
 	pixmap->fill(Qt::transparent);
 
-    _cairo_surface_init (&qs->base, &cairo_qt_surface_backend, content);
+    _cairo_surface_init (&qs->base,
+			 &cairo_qt_surface_backend,
+			 NULL, /* device */
+			 content);
 
     _cairo_surface_clipper_init (&qs->clipper,
 				 _cairo_qt_surface_clipper_intersect_clip_path);
@@ -1789,10 +1579,6 @@ cairo_qt_surface_create_with_qpixmap (cairo_content_t content,
     }
 
     qs->window = QRect(0, 0, width, height);
-
-#if defined(Q_WS_X11) && CAIRO_HAS_XLIB_XRENDER_SURFACE
-    qs->xlib_equiv = _cairo_qt_create_xlib_surface (qs);
-#endif
 
     D(fprintf(stderr, "qpainter_surface_create: qpixmap: [%d %d %d %d] pd:%d\n",
               qs->window.x(), qs->window.y(), qs->window.width(), qs->window.height(),

@@ -28,9 +28,9 @@
 #include "libxml_wrap.h"
 #include "libxml2-py.h"
 
-#if (defined(_MSC_VER) || defined(__MINGW32__)) && !defined(vsnprintf)
+#if defined(_MSC_VER) && !defined(vsnprintf)
 #define vsnprintf(b,c,f,a) _vsnprintf(b,c,f,a)
-#elif defined(WITH_TRIO)
+#elif defined(WITH_TRIO) && !defined(vsnprintf)
 #include "trio.h"
 #define vsnprintf trio_vsnprintf
 #endif
@@ -1745,7 +1745,7 @@ typedef struct
 typedef xmlValidCtxtPyCtxt *xmlValidCtxtPyCtxtPtr;
 
 static void
-libxml_xmlValidCtxtGenericErrorFuncHandler(void *ctx, int severity, char *str) 
+libxml_xmlValidCtxtGenericErrorFuncHandler(void *ctx, ATTRIBUTE_UNUSED int severity, char *str)
 {
     PyObject *list;
     PyObject *result;
@@ -1772,7 +1772,7 @@ libxml_xmlValidCtxtGenericErrorFuncHandler(void *ctx, int severity, char *str)
 }
 
 static void
-libxml_xmlValidCtxtGenericWarningFuncHandler(void *ctx, int severity, char *str) 
+libxml_xmlValidCtxtGenericWarningFuncHandler(void *ctx, ATTRIBUTE_UNUSED int severity, char *str)
 {
     PyObject *list;
     PyObject *result;
@@ -2762,7 +2762,6 @@ libxml_serializeNode(ATTRIBUTE_UNUSED PyObject * self, PyObject * args)
     xmlDocPtr doc;
     const char *encoding;
     int format;
-    int len;
     xmlSaveCtxtPtr ctxt;
     xmlBufferPtr buf;
     int options = 0;

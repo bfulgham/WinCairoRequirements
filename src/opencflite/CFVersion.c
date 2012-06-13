@@ -9,7 +9,7 @@
  *
  * The original license information is as follows:
  * 
- * Copyright (c) 2011 Apple Inc. All rights reserved.
+ * Copyright (c) 2012 Apple Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
  * 
@@ -35,5 +35,5 @@
     Copyright 2009-2011, Apple Inc. All rights reserved.
     Responsibility: CFLite Team
 */
-const unsigned char kCFCoreFoundationVersionString[] = "@(#)PROGRAM:CoreFoundation  PROJECT:CoreFoundation-635.15  SYSTEM:Darwin  DEVELOPER:unknown  BUILT:" __DATE__ " " __TIME__ "\n";
-double kCFCoreFoundationVersionNumber = (double)635.15;
+const unsigned char kCFCoreFoundationVersionString[] = "@(#)PROGRAM:CoreFoundation  PROJECT:CoreFoundation-635.21  SYSTEM:Darwin  DEVELOPER:unknown  BUILT:" __DATE__ " " __TIME__ "\n";
+double kCFCoreFoundationVersionNumber = (double)635.21;

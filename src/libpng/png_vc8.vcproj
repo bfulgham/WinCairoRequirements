@@ -70,7 +70,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install headers"
-				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;"
+				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pnglibconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install headers"
-				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;"
+				CommandLine="xcopy /Y /R &quot;$(ProjectDir)png.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pngconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)pnglibconf.h&quot; &quot;$(SolutionDir)include&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -230,6 +230,10 @@
 			</File>
 			<File
 				RelativePath="pngconf.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pnglibconf.h"
 				>
 			</File>
 		</Filter>

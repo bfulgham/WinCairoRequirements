@@ -22,20 +22,19 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  * Authors: Vladimir Vukicevic <vladimir@pobox.com>
- *          Carl Worth <cworth@cworth.org>
+ *	    Carl Worth <cworth@cworth.org>
  */
 
 #ifndef _CAIRO_PERF_H_
 #define _CAIRO_PERF_H_
 
 #include "cairo-boilerplate.h"
+#include "../src/cairo-time-private.h"
 #include <stdio.h>
 
-typedef uint64_t cairo_perf_ticks_t;
-
 typedef struct _cairo_stats {
-    cairo_perf_ticks_t min_ticks;
-    cairo_perf_ticks_t median_ticks;
+    cairo_time_t min_ticks;
+    cairo_time_t median_ticks;
     double ticks_per_ms;
     double std_dev;
     int iterations;
@@ -53,14 +52,11 @@ typedef void
 (*cairo_perf_timer_synchronize_t) (void *closure);
 
 void
-cairo_perf_timer_set_synchronize (cairo_perf_timer_synchronize_t	 synchronize,
-				  void					*closure);
+cairo_perf_timer_set_synchronize (cairo_perf_timer_synchronize_t  synchronize,
+				  void				 *closure);
 
-cairo_perf_ticks_t
+cairo_time_t
 cairo_perf_timer_elapsed (void);
-
-cairo_perf_ticks_t
-cairo_perf_ticks_per_second (void);
 
 /* yield */
 
@@ -77,6 +73,7 @@ typedef struct _cairo_perf {
     cairo_bool_t exact_iterations;
     cairo_bool_t raw;
     cairo_bool_t list_only;
+    cairo_bool_t observe;
     char **names;
     unsigned int num_names;
     char **exclude_names;
@@ -86,38 +83,47 @@ typedef struct _cairo_perf {
     double ms_per_iteration;
     cairo_bool_t fast_and_sloppy;
 
+    unsigned int tile_size;
+
     /* Stuff used internally */
-    cairo_perf_ticks_t *times;
+    cairo_time_t *times;
     const cairo_boilerplate_target_t **targets;
     int num_targets;
     const cairo_boilerplate_target_t *target;
+    cairo_bool_t has_described_backend;
     unsigned int test_number;
     unsigned int size;
     cairo_t *cr;
 } cairo_perf_t;
 
-typedef cairo_perf_ticks_t
+typedef cairo_time_t
 (*cairo_perf_func_t) (cairo_t *cr, int width, int height, int loops);
 
+typedef double
+(*cairo_count_func_t) (cairo_t *cr, int width, int height);
+
 cairo_bool_t
-cairo_perf_can_run (cairo_perf_t	*perf,
-		    const char		*name,
-		    cairo_bool_t	*is_explicit);
+cairo_perf_can_run (cairo_perf_t *perf,
+		    const char	 *name,
+		    cairo_bool_t *is_explicit);
 
 void
-cairo_perf_run (cairo_perf_t		*perf,
-		const char		*name,
-		cairo_perf_func_t	 perf_func);
+cairo_perf_run (cairo_perf_t	   *perf,
+		const char	   *name,
+		cairo_perf_func_t   perf_func,
+		cairo_count_func_t  count_func);
 
 void
-cairo_perf_cover_sources_and_operators (cairo_perf_t		*perf,
-					const char		*name,
-					cairo_perf_func_t	 perf_func);
+cairo_perf_cover_sources_and_operators (cairo_perf_t	   *perf,
+					const char	   *name,
+					cairo_perf_func_t   perf_func,
+					cairo_count_func_t  count_func);
 
 /* reporter convenience routines */
 
 typedef struct _test_report {
     int id;
+    int fileno;
     const char *configuration;
     char *backend;
     char *content;
@@ -125,7 +131,7 @@ typedef struct _test_report {
     int size;
 
     /* The samples only exists for "raw" reports */
-    cairo_perf_ticks_t *samples;
+    cairo_time_t *samples;
     unsigned int samples_size;
     unsigned int samples_count;
 
@@ -146,6 +152,7 @@ typedef struct _test_diff {
 typedef struct _cairo_perf_report {
     char *configuration;
     const char *name;
+    int fileno;
     test_report_t *tests;
     int tests_size;
     int tests_count;
@@ -159,20 +166,25 @@ typedef enum {
 
 void
 cairo_perf_report_load (cairo_perf_report_t *report,
-	                const char *filename,
+			const char *filename, int id,
 			int (*cmp) (const void *, const void *));
 
 void
 cairo_perf_report_sort_and_compute_stats (cairo_perf_report_t *report,
-	                                  int (*cmp) (const void *, const void *));
+					  int (*cmp) (const void *, const void *));
 
 int
-test_report_cmp_backend_then_name (const void *a, const void *b);
+test_report_cmp_backend_then_name (const void *a,
+				   const void *b);
 
 int
-test_report_cmp_name (const void *a, const void *b);
+test_report_cmp_name (const void *a,
+		      const void *b);
 
-#define CAIRO_PERF_DECL(func) void (func) (cairo_perf_t *perf, cairo_t *cr, int width, int height)
+#define CAIRO_PERF_ENABLED_DECL(func) cairo_bool_t (func ## _enabled) (cairo_perf_t *perf)
+#define CAIRO_PERF_RUN_DECL(func) void (func) (cairo_perf_t *perf, cairo_t *cr, int width, int height)
+
+#define CAIRO_PERF_DECL(func) CAIRO_PERF_RUN_DECL(func); CAIRO_PERF_ENABLED_DECL(func)
 
 CAIRO_PERF_DECL (fill);
 CAIRO_PERF_DECL (paint);
@@ -180,9 +192,12 @@ CAIRO_PERF_DECL (paint_with_alpha);
 CAIRO_PERF_DECL (mask);
 CAIRO_PERF_DECL (stroke);
 CAIRO_PERF_DECL (subimage_copy);
+CAIRO_PERF_DECL (disjoint);
+CAIRO_PERF_DECL (hatching);
 CAIRO_PERF_DECL (tessellate);
 CAIRO_PERF_DECL (text);
 CAIRO_PERF_DECL (glyphs);
+CAIRO_PERF_DECL (hash_table);
 CAIRO_PERF_DECL (pattern_create_radial);
 CAIRO_PERF_DECL (zrusin);
 CAIRO_PERF_DECL (world_map);
@@ -199,5 +214,20 @@ CAIRO_PERF_DECL (dragon);
 CAIRO_PERF_DECL (pythagoras_tree);
 CAIRO_PERF_DECL (intersections);
 CAIRO_PERF_DECL (spiral);
+CAIRO_PERF_DECL (wave);
+CAIRO_PERF_DECL (many_strokes);
+CAIRO_PERF_DECL (wide_strokes);
+CAIRO_PERF_DECL (many_fills);
+CAIRO_PERF_DECL (wide_fills);
+CAIRO_PERF_DECL (many_curves);
+CAIRO_PERF_DECL (curve);
+CAIRO_PERF_DECL (a1_curve);
+CAIRO_PERF_DECL (line);
+CAIRO_PERF_DECL (a1_line);
+CAIRO_PERF_DECL (pixel);
+CAIRO_PERF_DECL (a1_pixel);
+CAIRO_PERF_DECL (sierpinski);
+CAIRO_PERF_DECL (fill_clip);
+CAIRO_PERF_DECL (tiger);
 
 #endif

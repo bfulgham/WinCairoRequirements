@@ -64,9 +64,6 @@
 #ifdef HAVE_STRINGS_H
 #include <strings.h>
 #endif
-#ifdef SUPPORT_IP6
-#include <resolv.h>
-#endif
 #ifdef HAVE_ZLIB_H
 #include <zlib.h>
 #endif
@@ -75,17 +72,17 @@
 #ifdef VMS
 #include <stropts>
 #define XML_SOCKLEN_T unsigned int
-#define SOCKET int
 #endif
 
 #if defined(__MINGW32__) || defined(_WIN32_WCE)
+#ifndef _WINSOCKAPI_
 #define _WINSOCKAPI_
+#endif
 #include <wsockcompat.h>
 #include <winsock2.h>
 #undef XML_SOCKLEN_T
 #define XML_SOCKLEN_T unsigned int
 #endif
-
 
 #include <libxml/globals.h>
 #include <libxml/xmlerror.h>
@@ -103,6 +100,7 @@
 #define closesocket(s) close(s)
 #endif
 #define SOCKET int
+#define INVALID_SOCKET (-1)
 #endif
 
 #ifdef __BEOS__
@@ -113,9 +111,6 @@
 
 #ifndef XML_SOCKLEN_T
 #define XML_SOCKLEN_T unsigned int
-#endif
-#ifndef SOCKET
-#define SOCKET int
 #endif
 
 #ifdef STANDALONE
@@ -196,10 +191,10 @@ static int socket_errno(void) {
 #ifdef SUPPORT_IP6
 static
 int have_ipv6(void) {
-    int s;
+    SOCKET s;
 
     s = socket (AF_INET6, SOCK_STREAM, 0);
-    if (s != -1) {
+    if (s != INVALID_SOCKET) {
 	close (s);
 	return (1);
     }
@@ -393,7 +388,7 @@ xmlNanoHTTPNewCtxt(const char *URL) {
     memset(ret, 0, sizeof(xmlNanoHTTPCtxt));
     ret->port = 80;
     ret->returnValue = 0;
-    ret->fd = -1;
+    ret->fd = INVALID_SOCKET;
     ret->ContentLength = -1;
 
     xmlNanoHTTPScanURL(ret, URL);
@@ -430,8 +425,8 @@ xmlNanoHTTPFreeCtxt(xmlNanoHTTPCtxtPtr ctxt) {
 #endif
 
     ctxt->state = XML_NANO_HTTP_NONE;
-    if (ctxt->fd >= 0) closesocket(ctxt->fd);
-    ctxt->fd = -1;
+    if (ctxt->fd != INVALID_SOCKET) closesocket(ctxt->fd);
+    ctxt->fd = INVALID_SOCKET;
     xmlFree(ctxt);
 }
 
@@ -478,8 +473,10 @@ xmlNanoHTTPSend(xmlNanoHTTPCtxtPtr ctxt, const char *xmt_ptr, int outlen)
                  * to retrying.
                  */
 #ifndef HAVE_POLL_H
+#ifndef _WINSOCKAPI_
                 if (ctxt->fd > FD_SETSIZE)
                     return -1;
+#endif
 
                 tv.tv_sec = timeout;
                 tv.tv_usec = 0;
@@ -600,8 +597,10 @@ xmlNanoHTTPRecv(xmlNanoHTTPCtxtPtr ctxt)
             )
             return (0);
 #else /* !HAVE_POLL_H */
+#ifndef _WINSOCKAPI_
         if (ctxt->fd > FD_SETSIZE)
             return 0;
+#endif
 
         tv.tv_sec = timeout;
         tv.tv_usec = 0;
@@ -838,7 +837,7 @@ xmlNanoHTTPScanAnswer(xmlNanoHTTPCtxtPtr ctxt, const char *line) {
  * Returns -1 in case of failure, the file descriptor number otherwise
  */
 
-static int
+static SOCKET
 xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
 {
 #ifndef HAVE_POLL_H
@@ -866,12 +865,12 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
         s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
         addrlen = sizeof(struct sockaddr_in);
     }
-    if (s == -1) {
+    if (s == INVALID_SOCKET) {
 #ifdef DEBUG_HTTP
         perror("socket");
 #endif
         __xmlIOErr(XML_FROM_HTTP, 0, "socket failed\n");
-        return (-1);
+        return INVALID_SOCKET;
     }
 #ifdef _WINSOCKAPI_
     {
@@ -912,7 +911,7 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
 #endif
         __xmlIOErr(XML_FROM_HTTP, 0, "error setting non-blocking IO\n");
         closesocket(s);
-        return (-1);
+        return INVALID_SOCKET;
     }
 #endif /* !__BEOS__ */
 #endif /* !VMS */
@@ -927,7 +926,7 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
                 __xmlIOErr(XML_FROM_HTTP, 0,
                            "error connecting to HTTP server");
                 closesocket(s);
-                return (-1);
+                return INVALID_SOCKET;
         }
     }
 #ifndef HAVE_POLL_H
@@ -938,8 +937,10 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
 #pragma warning(push)
 #pragma warning(disable: 4018)
 #endif
+#ifndef _WINSOCKAPI_
     if (s > FD_SETSIZE)
-        return -1;
+        return INVALID_SOCKET;
+#endif
     FD_ZERO(&wfd);
     FD_SET(s, &wfd);
 
@@ -966,12 +967,12 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
             /* Time out */
             __xmlIOErr(XML_FROM_HTTP, 0, "Connect attempt timed out");
             closesocket(s);
-            return (-1);
+            return INVALID_SOCKET;
         case -1:
             /* Ermm.. ?? */
             __xmlIOErr(XML_FROM_HTTP, 0, "Connect failed");
             closesocket(s);
-            return (-1);
+            return INVALID_SOCKET;
     }
 
 #ifndef HAVE_POLL_H
@@ -992,7 +993,7 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
             0) {
             /* Solaris error code */
             __xmlIOErr(XML_FROM_HTTP, 0, "getsockopt failed\n");
-            return (-1);
+            return INVALID_SOCKET;
         }
 #endif
         if (status) {
@@ -1000,13 +1001,13 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
                        "Error connecting to remote host");
             closesocket(s);
             errno = status;
-            return (-1);
+            return INVALID_SOCKET;
         }
     } else {
         /* pbm */
         __xmlIOErr(XML_FROM_HTTP, 0, "select failed\n");
         closesocket(s);
-        return (-1);
+        return INVALID_SOCKET;
     }
 
     return (s);
@@ -1023,7 +1024,7 @@ xmlNanoHTTPConnectAttempt(struct sockaddr *addr)
  * Returns -1 in case of failure, the file descriptor number otherwise
  */
 
-static int
+static SOCKET
 xmlNanoHTTPConnectHost(const char *host, int port)
 {
     struct hostent *h;
@@ -1036,7 +1037,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
     struct sockaddr_in6 sockin6;
 #endif
     int i;
-    int s;
+    SOCKET s;
 
     memset (&sockin, 0, sizeof(sockin));
 #ifdef SUPPORT_IP6
@@ -1067,7 +1068,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 	status = getaddrinfo (host, NULL, &hints, &result);
 	if (status) {
 	    __xmlIOErr(XML_FROM_HTTP, 0, "getaddrinfo failed\n");
-	    return (-1);
+	    return INVALID_SOCKET;
 	}
 
 	for (res = result; res; res = res->ai_next) {
@@ -1075,7 +1076,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 		if (res->ai_addrlen > sizeof(sockin)) {
 		    __xmlIOErr(XML_FROM_HTTP, 0, "address size mismatch\n");
 		    freeaddrinfo (result);
-		    return (-1);
+		    return INVALID_SOCKET;
 		}
 		memcpy (&sockin, res->ai_addr, res->ai_addrlen);
 		sockin.sin_port = htons (port);
@@ -1085,7 +1086,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 		if (res->ai_addrlen > sizeof(sockin6)) {
 		    __xmlIOErr(XML_FROM_HTTP, 0, "address size mismatch\n");
 		    freeaddrinfo (result);
-		    return (-1);
+		    return INVALID_SOCKET;
 		}
 		memcpy (&sockin6, res->ai_addr, res->ai_addrlen);
 		sockin6.sin6_port = htons (port);
@@ -1095,7 +1096,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 		continue;              /* for */
 
 	    s = xmlNanoHTTPConnectAttempt (addr);
-	    if (s != -1) {
+	    if (s != INVALID_SOCKET) {
 		freeaddrinfo (result);
 		return (s);
 	    }
@@ -1136,10 +1137,12 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 			"Non-recoverable errors:  FORMERR, REFUSED, or NOTIMP.";
 		    break;
 
+#ifdef NO_ADDRESS
 		case NO_ADDRESS:
 		    h_err_txt =
 			"Valid name, no data record of requested type.";
 		    break;
+#endif
 
 		default:
 		    h_err_txt = "No error text defined.";
@@ -1149,7 +1152,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 #else
 	    __xmlIOErr(XML_FROM_HTTP, 0, "Failed to resolve host");
 #endif
-	    return (-1);
+	    return INVALID_SOCKET;
 	}
 
 	for (i = 0; h->h_addr_list[i]; i++) {
@@ -1157,19 +1160,19 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 		/* A records (IPv4) */
 		if ((unsigned int) h->h_length > sizeof(ia)) {
 		    __xmlIOErr(XML_FROM_HTTP, 0, "address size mismatch\n");
-		    return (-1);
+		    return INVALID_SOCKET;
 		}
 		memcpy (&ia, h->h_addr_list[i], h->h_length);
 		sockin.sin_family = h->h_addrtype;
 		sockin.sin_addr = ia;
-		sockin.sin_port = (u_short)htons ((unsigned short)port);
+		sockin.sin_port = (unsigned short)htons ((unsigned short)port);
 		addr = (struct sockaddr *) &sockin;
 #ifdef SUPPORT_IP6
 	    } else if (have_ipv6 () && (h->h_addrtype == AF_INET6)) {
 		/* AAAA records (IPv6) */
 		if ((unsigned int) h->h_length > sizeof(ia6)) {
 		    __xmlIOErr(XML_FROM_HTTP, 0, "address size mismatch\n");
-		    return (-1);
+		    return INVALID_SOCKET;
 		}
 		memcpy (&ia6, h->h_addr_list[i], h->h_length);
 		sockin6.sin6_family = h->h_addrtype;
@@ -1181,7 +1184,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
 		break;              /* for */
 
 	    s = xmlNanoHTTPConnectAttempt (addr);
-	    if (s != -1)
+	    if (s != INVALID_SOCKET)
 		return (s);
 	}
     }
@@ -1192,7 +1195,7 @@ xmlNanoHTTPConnectHost(const char *host, int port)
                     "xmlNanoHTTPConnectHost:  unable to connect to '%s'.\n",
                     host);
 #endif
-    return (-1);
+    return INVALID_SOCKET;
 }
 
 
@@ -1336,7 +1339,8 @@ xmlNanoHTTPMethodRedir(const char *URL, const char *method, const char *input,
 		  const char *headers, int ilen ) {
     xmlNanoHTTPCtxtPtr ctxt;
     char *bp, *p;
-    int blen, ret;
+    int blen;
+    SOCKET ret;
     int nbRedirects = 0;
     char *redirURL = NULL;
 #ifdef DEBUG_HTTP
@@ -1380,7 +1384,7 @@ retry:
 	blen = strlen(ctxt->hostname);
 	ret = xmlNanoHTTPConnectHost(ctxt->hostname, ctxt->port);
     }
-    if (ret < 0) {
+    if (ret == INVALID_SOCKET) {
         xmlNanoHTTPFreeCtxt(ctxt);
 	if (redirURL != NULL) xmlFree(redirURL);
         return(NULL);
@@ -1610,7 +1614,8 @@ xmlNanoHTTPFetch(const char *URL, const char *filename, char **contentType) {
     char *buf = NULL;
     int fd;
     int len;
-    
+    int ret = 0;
+
     if (filename == NULL) return(-1);
     ctxt = xmlNanoHTTPOpen(URL, contentType);
     if (ctxt == NULL) return(-1);
@@ -1631,12 +1636,14 @@ xmlNanoHTTPFetch(const char *URL, const char *filename, char **contentType) {
 
     xmlNanoHTTPFetchContent( ctxt, &buf, &len );
     if ( len > 0 ) {
-	write(fd, buf, len);
+	if (write(fd, buf, len) == -1) {
+	    ret = -1;
+	}
     }
 
     xmlNanoHTTPClose(ctxt);
     close(fd);
-    return(0);
+    return(ret);
 }
 
 #ifdef LIBXML_OUTPUT_ENABLED
@@ -1655,7 +1662,8 @@ xmlNanoHTTPSave(void *ctxt, const char *filename) {
     char *buf = NULL;
     int fd;
     int len;
-    
+    int ret = 0;
+
     if ((ctxt == NULL) || (filename == NULL)) return(-1);
 
     if (!strcmp(filename, "-")) 
@@ -1670,12 +1678,14 @@ xmlNanoHTTPSave(void *ctxt, const char *filename) {
 
     xmlNanoHTTPFetchContent( ctxt, &buf, &len );
     if ( len > 0 ) {
-	write(fd, buf, len);
+	if (write(fd, buf, len) == -1) {
+	    ret = -1;
+	}
     }
 
     xmlNanoHTTPClose(ctxt);
     close(fd);
-    return(0);
+    return(ret);
 }
 #endif /* LIBXML_OUTPUT_ENABLED */
 

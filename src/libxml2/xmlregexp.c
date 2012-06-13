@@ -44,6 +44,9 @@
 
 #define MAX_PUSH 10000000
 
+#ifdef ERROR
+#undef ERROR
+#endif
 #define ERROR(str)							\
     ctxt->error = XML_REGEXP_COMPILE_ERROR;				\
     xmlRegexpErrCompile(ctxt, str);
@@ -4892,6 +4895,17 @@ xmlFAParseCharClassEsc(xmlRegParserCtxtPtr ctxt) {
 		}
 	    }
 	} else if (ctxt->atom->type == XML_REGEXP_RANGES) {
+            switch (cur) {
+                case 'n':
+                    cur = '\n';
+                    break;
+                case 'r':
+                    cur = '\r';
+                    break;
+                case 't':
+                    cur = '\t';
+                    break;
+            }
 	    xmlRegAtomAddRange(ctxt, ctxt->atom, ctxt->neg,
 			       XML_REGEXP_CHARVAL, cur, cur, NULL);
 	}

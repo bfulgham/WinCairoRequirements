@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -32,6 +32,8 @@
 #include "cairo-drm-private.h"
 #include "cairo-drm-radeon-private.h"
 #include "cairo-drm-ioctl-private.h"
+
+#include "cairo-error-private.h"
 
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -370,7 +372,7 @@ radeon_bo_create_for_name (radeon_device_t *device,
     return &bo->base;
 }
 
-void
+static void
 radeon_bo_release (void *_dev, void *_bo)
 {
     radeon_device_t *device = _dev;
@@ -429,6 +431,8 @@ cairo_status_t
 radeon_device_init (radeon_device_t *device, int fd)
 {
     _radeon_device_init_bo_cache (device);
+
+    device->base.bo.release = radeon_bo_release;
 
     return CAIRO_STATUS_SUCCESS;
 }

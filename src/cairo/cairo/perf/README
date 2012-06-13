@@ -22,19 +22,19 @@ feel as to whether cairo is faster for everyday use.
 Running the micro-benchmarks
 ----------------------------
 The micro-benchmarks are compiled into a single executable called
-cairo-perf, which is what "make perf" executes. Some
+cairo-perf-micro, which is what "make perf" executes. Some
 examples of running it:
 
     # Report on all tests with default number of iterations:
-    ./cairo-perf
+    ./cairo-perf-micro
 
     # Report on 100 iterations of all gradient tests:
-    ./cairo-perf -i 100 gradient
+    ./cairo-perf-micro -i 100 gradient
 
     # Generate raw results for 10 iterations into cairo.perf
-    ./cairo-perf -r -i 10 > cairo.perf
+    ./cairo-perf-micro -r -i 10 > cairo.perf
     # Append 10 more iterations of the paint test
-    ./cairo-perf -r -i 10 paint >> cairo.perf
+    ./cairo-perf-micro -r -i 10 paint >> cairo.perf
 
 Raw results aren't useful for reading directly, but are quite useful
 when using cairo-perf-diff to compare separate runs (see more
@@ -47,7 +47,7 @@ The macro-benchmarks are run by a single program called
 cairo-perf-trace, which is also executed by "make perf".
 cairo-perf-trace loops over the series of traces stored beneath
 cairo-traces/. cairo-perf-trace produces the same output and takes the
-same arguments as cairo-perf.  Some examples of running it:
+same arguments as cairo-perf-micro.  Some examples of running it:
 
     # Report on all tests with default number of iterations:
     ./cairo-perf-trace
@@ -92,7 +92,7 @@ cairo-perf-diff:
 
 As a convenience, this common desire to measure a single commit is
 supported by passing a single revision to cairo-perf-diff, in which
-case it will compare it to the immediately preceeding commit. So for
+case it will compare it to the immediately preceding commit. So for
 example:
 
     # Measure the impact of the latest commit
@@ -117,7 +117,7 @@ what has been cached:
 
 And finally, the -f mode is most useful in conjunction with the --
 option to cairo-perf-diff which allows you to pass options to the
-underlying cairo-perf runs. This allows you to restrict the additonal
+underlying cairo-perf runs. This allows you to restrict the additional
 test runs to a limited subset of the tests.
 
 For example, a frequently used trick is to first generate a chart with
@@ -166,7 +166,7 @@ Here is the basic structure of a performance test file:
 
     #include "cairo-perf.h"
 
-    static cairo_perf_ticks_t
+    static cairo_time_t
     do_my_new_test (cairo_t *cr, int width, int height)
     {
 	cairo_perf_timer_start ();
@@ -214,8 +214,8 @@ added:
  2. cairo-perf.h: Add a new CAIRO_PERF_DECL line with the name of your
     function, (my_new_test in the example above)
 
- 3. cairo-perf.c: Add a new row to the list at the end of the file. A
-    typical entry would look like:
+ 3. cairo-perf-micro.c: Add a new row to the list at the end of the
+    file. A typical entry would look like:
 
 	{ my_new_test, 16, 64 }
 

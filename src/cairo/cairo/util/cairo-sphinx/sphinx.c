@@ -23,6 +23,10 @@
 
 #include <glib.h> /* for checksumming */
 
+#ifndef CAIRO_HAS_REAL_PTHREAD
+# error "cairo-sphinx needs real pthreads"
+#endif
+
 #define DATA_SIZE (256 << 20)
 #define SHM_PATH_XXX "/shmem-cairo-sphinx"
 
@@ -135,7 +139,7 @@ daemonize (void)
     /* Let the parent go. */
     switch (fork ()) {
     case -1: return -1;
-    case 0: break;
+    case  0: break;
     default: _exit (0);
     }
 
@@ -145,13 +149,11 @@ daemonize (void)
 
     /* Refork to yield session leadership. */
     oldhup = signal (SIGHUP, SIG_IGN);
-
-    switch (fork ()) {		/* refork to yield session leadership. */
+    switch (fork ()) {
     case -1: return -1;
-    case 0: break;
+    case  0: break;
     default: _exit (0);
     }
-
     signal (SIGHUP, oldhup);
 
     /* Establish stdio. */
@@ -217,7 +219,7 @@ struct clients {
     int count, size;
     int complete;
 
-    cairo_surface_t *meta;
+    cairo_surface_t *recording;
     unsigned long serial;
 
     struct client_info {
@@ -274,7 +276,7 @@ clients_init (struct clients *clients)
 	return -1;
     clients->offset = 0;
 
-    clients->meta = NULL;
+    clients->recording = NULL;
     clients->serial = 0;
 
     return 0;
@@ -427,6 +429,7 @@ u8_cmp (const void *A, const void *B)
 static uint8_t
 median (uint8_t *values, int count)
 {
+    /* XXX could use a fast median here if we cared */
     qsort (values, count, 1, u8_cmp);
     return values[count/2];
 }
@@ -619,6 +622,10 @@ compare_images (cairo_surface_t *a,
 	    bb += stride;
 	}
 	break;
+
+    case CAIRO_FORMAT_INVALID:
+    case CAIRO_FORMAT_RGB16_565: /* XXX */
+	break;
     }
 
     return TRUE;
@@ -667,16 +674,16 @@ checksum (const char *filename)
 static void
 write_trace (struct clients *clients)
 {
-    cairo_script_context_t *ctx;
+    cairo_device_t *ctx;
     gchar *csum;
     char buf[4096];
     int i;
 
     mkdir ("output", 0777);
 
-    ctx = cairo_script_context_create ("output/cairo-sphinx.trace");
-    cairo_script_from_meta_surface (ctx, clients->meta);
-    cairo_script_context_destroy (ctx);
+    ctx = cairo_script_create ("output/cairo-sphinx.trace");
+    cairo_script_from_recording_surface (ctx, clients->recording);
+    cairo_device_destroy (ctx);
 
     csum = checksum ("output/cairo-sphinx.trace");
 
@@ -684,8 +691,8 @@ write_trace (struct clients *clients)
     if (! g_file_test (buf, G_FILE_TEST_EXISTS)) {
 	rename ("output/cairo-sphinx.trace", buf);
 
-	sprintf (buf, "output/%s.meta.png", csum);
-	cairo_surface_write_to_png (clients->meta, buf);
+	sprintf (buf, "output/%s.recording.png", csum);
+	cairo_surface_write_to_png (clients->recording, buf);
 
 	for (i = 0; i < clients->count; i++) {
 	    struct client_info *c = &clients->clients[i];
@@ -732,14 +739,14 @@ clients_complete (struct clients *clients, int fd)
 	c->image_serial = 0;
     }
 
-    clients->meta = NULL;
+    clients->recording = NULL;
     clients->serial = 0;
 }
 
 static void
-clients_meta (struct clients *clients, int fd, char *info)
+clients_recording (struct clients *clients, int fd, char *info)
 {
-    sscanf (info, "%p %lu", &clients->meta, &clients->serial);
+    sscanf (info, "%p %lu", &clients->recording, &clients->serial);
     clients_complete (clients, fd);
 }
 
@@ -832,7 +839,7 @@ request_image (struct client *c,
     unsigned long offset = -1;
     int len;
 
-    assert (format != (cairo_format_t) -1);
+    assert (format != CAIRO_FORMAT_INVALID);
 
     len = sprintf (buf, ".image %lu %d %d %d %d\n",
 		   closure->id, format, width, height, stride);
@@ -901,14 +908,14 @@ send_surface (struct client *c,
 {
     cairo_surface_t *source = closure->surface;
     cairo_surface_t *image;
-    cairo_format_t format = (cairo_format_t) -1;
+    cairo_format_t format = CAIRO_FORMAT_INVALID;
     cairo_t *cr;
     int width, height, stride;
     void *data;
     unsigned long serial;
 
     get_surface_size (source, &width, &height, &format);
-    if (format == (cairo_format_t) -1)
+    if (format == CAIRO_FORMAT_INVALID)
 	format = format_for_content (cairo_surface_get_content (source));
 
     stride = cairo_format_stride_for_width (format, width);
@@ -940,16 +947,16 @@ send_surface (struct client *c,
 }
 
 static void
-send_meta (struct client *c,
-	   struct context_closure *closure)
+send_recording (struct client *c,
+		struct context_closure *closure)
 {
     cairo_surface_t *source = closure->surface;
     char buf[1024];
     int len;
     unsigned long serial;
 
-    assert (cairo_surface_get_type (source) == CAIRO_SURFACE_TYPE_META);
-    len = sprintf (buf, ".meta %p %lu\n", source, closure->id);
+    assert (cairo_surface_get_type (source) == CAIRO_SURFACE_TYPE_RECORDING);
+    len = sprintf (buf, ".recording %p %lu\n", source, closure->id);
     writen (c->sk, buf, len);
 
     /* wait for image check */
@@ -963,7 +970,8 @@ send_meta (struct client *c,
 static cairo_surface_t *
 _surface_create (void *closure,
 		 cairo_content_t content,
-		 double width, double height)
+		 double width, double height,
+		 long uid)
 {
     struct client *c = closure;
     cairo_surface_t *surface;
@@ -1001,7 +1009,7 @@ _context_create (void *closure, cairo_surface_t *surface)
 
     /* record everything, including writes to images */
     if (c->target == NULL) {
-	if (cairo_surface_get_type (surface) != CAIRO_SURFACE_TYPE_META) {
+	if (cairo_surface_get_type (surface) != CAIRO_SURFACE_TYPE_RECORDING) {
 	    cairo_format_t format;
 	    int width, height;
 
@@ -1032,7 +1040,7 @@ _context_destroy (void *closure, void *ptr)
 	if (l->context == ptr) {
 	    if (cairo_surface_status (l->surface) == CAIRO_STATUS_SUCCESS) {
 		if (c->target == NULL)
-		    send_meta (c, l);
+		    send_recording (c, l);
 		else
 		    send_surface (c, l);
             } else {
@@ -1071,7 +1079,7 @@ recorder (void *arg)
     buf_size = 65536;
     buf = xmalloc (buf_size);
 
-    len = sprintf (buf, "client-command target=meta name=.recorder\n");
+    len = sprintf (buf, "client-command target=recording name=.recorder\n");
     if (! writen (client.sk, buf, len))
 	return NULL;
 
@@ -1086,8 +1094,8 @@ recorder (void *arg)
     if (! writen (pfd.fd, buf, len))
 	return NULL;
 
-    client.surface = cairo_meta_surface_create (CAIRO_CONTENT_COLOR_ALPHA,
-						NULL);
+    client.surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA,
+						     NULL);
 
     client.context_id = 0;
     client.csi = cairo_script_interpreter_create ();
@@ -1261,8 +1269,8 @@ do_server (const char *path)
 		    }
 		} else if (strncmp (line, ".complete", 9) == 0) {
 		    clients_complete (&clients, pfd[n].fd);
-		} else if (strncmp (line, ".meta", 5) == 0) {
-		    clients_meta (&clients, pfd[n].fd, line + 6);
+		} else if (strncmp (line, ".recording", 10) == 0) {
+		    clients_recording (&clients, pfd[n].fd, line + 6);
 		} else {
 		    printf ("do_command (%s)\n", line);
 		}
@@ -1370,7 +1378,7 @@ do_client (int fd,
 
     client.surface = client.target->create_surface (NULL, content, 1, 1, 1, 1,
 						    CAIRO_BOILERPLATE_MODE_TEST,
-						    0, &closure);
+						    &closure);
     if (client.surface == NULL) {
 	fprintf (stderr, "Failed to create target surface: %s.\n",
 		 client.target->name);

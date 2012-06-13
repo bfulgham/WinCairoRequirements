@@ -1,62 +1,28 @@
+include $(top_srcdir)/pixman/Makefile.sources
+
 lib_LTLIBRARIES = libpixman-1.la
+
 libpixman_1_la_LDFLAGS = -version-info $(LT_VERSION_INFO) -no-undefined @PTHREAD_LDFLAGS@ 
 libpixman_1_la_LIBADD = @PTHREAD_LIBS@ @DEP_LIBS@ -lm
-libpixman_1_la_SOURCES =			\
-	pixman.h				\
-	pixman-accessor.h			\
-	pixman-access.c				\
-	pixman-access-accessors.c		\
-	pixman-cpu.c				\
-	pixman-gradient-walker.c		\
-	pixman-region16.c			\
-	pixman-region32.c			\
-	pixman-compiler.h			\
-	pixman-private.h			\
-	pixman-image.c				\
-	pixman-implementation.c			\
-	pixman-combine32.c			\
-	pixman-combine32.h			\
-	pixman-combine64.c			\
-	pixman-combine64.h			\
-	pixman-general.c			\
-	pixman.c				\
-	pixman-fast-path.c			\
-	pixman-fast-path.h			\
-	pixman-solid-fill.c			\
-	pixman-conical-gradient.c		\
-	pixman-linear-gradient.c		\
-	pixman-radial-gradient.c		\
-	pixman-bits-image.c			\
-	pixman-utils.c				\
-	pixman-edge.c				\
-	pixman-edge-accessors.c			\
-	pixman-edge-imp.h			\
-	pixman-trap.c				\
-	pixman-timer.c				\
-	pixman-matrix.c
+libpixman_1_la_SOURCES = $(libpixman_sources) $(libpixman_headers)
 
 libpixmanincludedir = $(includedir)/pixman-1
 libpixmaninclude_HEADERS = pixman.h pixman-version.h
 noinst_LTLIBRARIES = 
 
-BUILT_SOURCES = pixman-combine32.h pixman-combine32.c pixman-combine64.h pixman-combine64.c
+EXTRA_DIST =				\
+	Makefile.win32			\
+	make-combine.pl			\
+	pixman-combine.c.template	\
+	pixman-combine.h.template	\
+	pixman-region.c			\
+	solaris-hwcap.mapfile		\
+	$(NULL)
 
-pixman-combine32.c : pixman-combine.c.template pixman-combine32.h make-combine.pl
-	$(PERL) $(srcdir)/make-combine.pl 8 < $(srcdir)/pixman-combine.c.template > $@ || ($(RM) $@; exit 1)
-pixman-combine32.h : pixman-combine.h.template make-combine.pl
-	$(PERL) $(srcdir)/make-combine.pl 8 < $(srcdir)/pixman-combine.h.template > $@ || ($(RM) $@; exit 1)
-
-pixman-combine64.c : pixman-combine.c.template pixman-combine64.h make-combine.pl
-	$(PERL) $(srcdir)/make-combine.pl 16 < $(srcdir)/pixman-combine.c.template > $@ || ($(RM) $@; exit 1)
-pixman-combine64.h : pixman-combine.h.template make-combine.pl
-	$(PERL) $(srcdir)/make-combine.pl 16 < $(srcdir)/pixman-combine.h.template > $@ || ($(RM) $@; exit 1)
-
-EXTRA_DIST = Makefile.win32 pixman-combine.c.template make-combine.pl pixman-region.c \
-	pixman-combine.h.template solaris-hwcap.mapfile
-CLEANFILES = pixman-combine32.c pixman-combine64.c pixman-combine32.h pixman-combine64.h
+DISTCLEANFILES = $(BUILT_SOURCES)
 
 # mmx code
-if USE_MMX
+if USE_X86_MMX
 noinst_LTLIBRARIES += libpixman-mmx.la
 libpixman_mmx_la_SOURCES = \
 	pixman-mmx.c
@@ -122,6 +88,46 @@ libpixman_arm_neon_la_LIBADD = $(DEP_LIBS)
 libpixman_1_la_LIBADD += libpixman-arm-neon.la
 
 ASM_CFLAGS_arm_neon=
+endif
+
+# iwmmxt code
+if USE_ARM_IWMMXT
+noinst_LTLIBRARIES += libpixman-iwmmxt.la
+libpixman_iwmmxt_la_SOURCES = pixman-mmx.c
+libpixman_iwmmxt_la_CFLAGS = $(DEP_CFLAGS) $(IWMMXT_CFLAGS)
+libpixman_iwmmxt_la_LIBADD = $(DEP_LIBS)
+libpixman_1_la_LDFLAGS += $(IWMMXT_LDFLAGS)
+libpixman_1_la_LIBADD += libpixman-iwmmxt.la
+
+ASM_CFLAGS_IWMMXT=$(IWMMXT_CFLAGS)
+endif
+
+# mips dspr2 code
+if USE_MIPS_DSPR2
+noinst_LTLIBRARIES += libpixman-mips-dspr2.la
+libpixman_mips_dspr2_la_SOURCES = \
+        pixman-mips-dspr2.c \
+        pixman-mips-dspr2.h \
+        pixman-mips-dspr2-asm.S \
+        pixman-mips-dspr2-asm.h \
+        pixman-mips-memcpy-asm.S
+libpixman_mips_dspr2_la_CFLAGS = $(DEP_CFLAGS)
+libpixman_mips_dspr2_la_LIBADD = $(DEP_LIBS)
+libpixman_1_la_LIBADD += libpixman-mips-dspr2.la
+
+ASM_CFLAGS_mips_dspr2=
+endif
+
+# loongson code
+if USE_LOONGSON_MMI
+noinst_LTLIBRARIES += libpixman-loongson-mmi.la
+libpixman_loongson_mmi_la_SOURCES = pixman-mmx.c loongson-mmintrin.h
+libpixman_loongson_mmi_la_CFLAGS = $(DEP_CFLAGS) $(LS_CFLAGS)
+libpixman_loongson_mmi_la_LIBADD = $(DEP_LIBS)
+libpixman_1_la_LDFLAGS += $(LS_LDFLAGS)
+libpixman_1_la_LIBADD += libpixman-loongson-mmi.la
+
+ASM_CFLAGS_ls=$(LS_CFLAGS)
 endif
 
 .c.s : $(libpixmaninclude_HEADERS) $(BUILT_SOURCES)

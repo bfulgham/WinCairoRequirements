@@ -24,6 +24,7 @@
 
 #include <cairo.h>
 #include <cairo-script.h>
+#include <cairo-tee.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <signal.h>
@@ -52,21 +53,21 @@ static int fdr_dump;
 static const cairo_user_data_key_t fdr_key;
 
 static void
-fdr_replay_to_script (cairo_surface_t *meta, cairo_script_context_t *ctx)
+fdr_replay_to_script (cairo_surface_t *recording, cairo_device_t *ctx)
 {
-    if (meta != NULL) {
-	DLCALL (cairo_script_context_write_comment, ctx, "--- fdr ---", -1);
-	DLCALL (cairo_script_from_meta_surface, ctx, meta);
+    if (recording != NULL) {
+	DLCALL (cairo_script_write_comment, ctx, "--- fdr ---", -1);
+	DLCALL (cairo_script_from_recording_surface, ctx, recording);
     }
 }
 
 static void
 fdr_dump_ringbuffer (void)
 {
-    cairo_script_context_t *ctx;
+    cairo_device_t *ctx;
     int n;
 
-    ctx = DLCALL (cairo_script_context_create, "/tmp/fdr.trace");
+    ctx = DLCALL (cairo_script_create, "/tmp/fdr.trace");
 
     for (n = fdr_position; n < RINGBUFFER_SIZE; n++)
 	fdr_replay_to_script (fdr_ringbuffer[n], ctx);
@@ -74,13 +75,19 @@ fdr_dump_ringbuffer (void)
     for (n = 0; n < fdr_position; n++)
 	fdr_replay_to_script (fdr_ringbuffer[n], ctx);
 
-    DLCALL (cairo_script_context_destroy, ctx);
+    DLCALL (cairo_device_destroy, ctx);
 }
 
 static void
 fdr_sighandler (int sig)
 {
     fdr_dump = 1;
+}
+
+static void
+fdr_urgent_sighandler (int sig)
+{
+    fdr_dump_ringbuffer ();
 }
 
 static void
@@ -99,6 +106,9 @@ fdr_pending_signals (void)
 	initialized = 1;
 
 	signal (SIGUSR1, fdr_sighandler);
+
+	signal (SIGSEGV, fdr_urgent_sighandler);
+	signal (SIGABRT, fdr_urgent_sighandler);
 	atexit (fdr_atexit);
     }
 
@@ -163,7 +173,7 @@ cairo_create (cairo_surface_t *surface)
 	content = DLCALL (cairo_surface_get_content, surface);
 
 	tee = DLCALL (cairo_tee_surface_create, surface);
-	record = DLCALL (cairo_meta_surface_create, content, &extents);
+	record = DLCALL (cairo_recording_surface_create, content, &extents);
 	DLCALL (cairo_tee_surface_add, tee, record);
 
 	DLCALL (cairo_surface_set_user_data, surface,
@@ -301,4 +311,21 @@ cairo_surface_create_similar (cairo_surface_t *surface,
 
     return DLCALL (cairo_surface_create_similar,
 		   surface, content, width, height);
+}
+
+cairo_surface_t *
+cairo_surface_create_for_rectangle (cairo_surface_t *surface,
+                                    double		 x,
+                                    double		 y,
+                                    double		 width,
+                                    double		 height)
+{
+    cairo_surface_t *tee;
+
+    tee = fdr_surface_get_tee (surface);
+    if (tee != NULL)
+	surface = tee;
+
+    return DLCALL (cairo_surface_create_for_rectangle,
+		   surface, x, y, width, height);
 }

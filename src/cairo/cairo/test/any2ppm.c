@@ -77,6 +77,8 @@
 #include <libspectre/spectre.h>
 #endif
 
+#include <errno.h>
+
 #if HAVE_UNISTD_H && HAVE_FCNTL_H && HAVE_SIGNAL_H && HAVE_SYS_STAT_H && HAVE_SYS_SOCKET_H && HAVE_SYS_POLL_H && HAVE_SYS_UN_H
 #include <fcntl.h>
 #include <signal.h>
@@ -84,7 +86,6 @@
 #include <sys/socket.h>
 #include <sys/poll.h>
 #include <sys/un.h>
-#include <errno.h>
 
 #define SOCKET_PATH "./.any2ppm"
 #define TIMEOUT 60000 /* 60 seconds */
@@ -95,7 +96,7 @@
 #define ARRAY_LENGTH(A) (sizeof (A) / sizeof (A[0]))
 
 static int
-_writen (int fd, char *buf, int len)
+_cairo_writen (int fd, char *buf, int len)
 {
     while (len) {
 	int ret;
@@ -119,7 +120,7 @@ _writen (int fd, char *buf, int len)
 }
 
 static int
-_write (int fd,
+_cairo_write (int fd,
 	char *buf, int maxlen, int buflen,
 	const unsigned char *src, int srclen)
 {
@@ -140,7 +141,7 @@ _write (int fd,
 	src += len;
 
 	if (buflen == maxlen) {
-	    if (! _writen (fd, buf, buflen))
+	    if (! _cairo_writen (fd, buf, buflen))
 		return -1;
 
 	    buflen = 0;
@@ -191,6 +192,9 @@ write_ppm (cairo_surface_t *surface, int fd)
 	format_str = "P5";
 	break;
     case CAIRO_FORMAT_A1:
+    case CAIRO_FORMAT_RGB16_565:
+    case CAIRO_FORMAT_RGB30:
+    case CAIRO_FORMAT_INVALID:
     default:
 	return "unhandled image format";
     }
@@ -201,7 +205,7 @@ write_ppm (cairo_surface_t *surface, int fd)
 
 	switch ((int) format) {
 	case CAIRO_FORMAT_ARGB32:
-	    len = _write (fd,
+	    len = _cairo_write (fd,
 			  buf, sizeof (buf), len,
 			  (unsigned char *) row, 4 * width);
 	    break;
@@ -212,13 +216,13 @@ write_ppm (cairo_surface_t *surface, int fd)
 		rgb[0] = (p & 0xff0000) >> 16;
 		rgb[1] = (p & 0x00ff00) >> 8;
 		rgb[2] = (p & 0x0000ff) >> 0;
-		len = _write (fd,
+		len = _cairo_write (fd,
 			      buf, sizeof (buf), len,
 			      rgb, 3);
 	    }
 	    break;
 	case CAIRO_FORMAT_A8:
-	    len = _write (fd,
+	    len = _cairo_write (fd,
 			  buf, sizeof (buf), len,
 			  (unsigned char *) row, width);
 	    break;
@@ -227,7 +231,7 @@ write_ppm (cairo_surface_t *surface, int fd)
 	    return "write failed";
     }
 
-    if (len && ! _writen (fd, buf, len))
+    if (len && ! _cairo_writen (fd, buf, len))
 	return "write failed";
 
     return NULL;
@@ -236,8 +240,8 @@ write_ppm (cairo_surface_t *surface, int fd)
 static cairo_surface_t *
 _create_image (void *closure,
 	       cairo_content_t content,
-	       double width, double height)
-	       //csi_object_t *dictionary)
+	       double width, double height,
+	       long uid)
 {
     cairo_surface_t **out = closure;
     cairo_format_t format;
@@ -266,17 +270,25 @@ _cairo_script_render_page (const char *filename,
     cairo_surface_t *surface = NULL;
     cairo_status_t status;
     const cairo_script_interpreter_hooks_t hooks = {
-	.closure = &surface,
-	.surface_create = _create_image,
+	&surface,
+	_create_image,
+	NULL, /* surface_destroy */
+	NULL, /* context_create */
+	NULL, /* context_destroy */
+	NULL, /* show_page */
+	NULL  /* copy_page */
     };
 
     csi = cairo_script_interpreter_create ();
     cairo_script_interpreter_install_hooks (csi, &hooks);
-    cairo_script_interpreter_run (csi, filename);
-    status = cairo_script_interpreter_destroy (csi);
-    if (surface == NULL) {
-	return "cairo-script interpreter failed";
+    status = cairo_script_interpreter_run (csi, filename);
+    if (status) {
+	cairo_surface_destroy (surface);
+	surface = NULL;
     }
+    status = cairo_script_interpreter_destroy (csi);
+    if (surface == NULL)
+	return "cairo-script interpreter failed";
 
     if (status == CAIRO_STATUS_SUCCESS)
 	status = cairo_surface_status (surface);
@@ -353,14 +365,17 @@ _poppler_render_page (const char *filename,
 
     poppler_page_get_size (page, &width, &height);
 
-    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+    surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, width, height);
     cr = cairo_create (surface);
+
+    cairo_set_source_rgb (cr, 1., 1., 1.);
+    cairo_paint (cr);
+    cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
 
     poppler_page_render (page, cr);
     g_object_unref (page);
 
-    cairo_set_operator (cr, CAIRO_OPERATOR_DEST_OVER);
-    cairo_set_source_rgb (cr, 1., 1., 1.);
+    cairo_pop_group_to_source (cr);
     cairo_paint (cr);
 
     status = cairo_status (cr);

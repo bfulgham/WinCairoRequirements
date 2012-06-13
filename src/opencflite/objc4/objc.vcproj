@@ -24,8 +24,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Install Headers"
-				CommandLine="xcopy /Y /R &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
+				Description="prebuild.bat..."
+				CommandLine="call prebuild&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-class.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;%SolutionDir%include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -50,6 +50,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				ResourceOutputFileName="$(IntDir)/version.res"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -58,7 +59,6 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/dynamicbase"
 				OutputFile="$(OutDir)\$(ProjectName)_debug.dll"
-				IgnoreAllDefaultLibraries="false"
 				ModuleDefinitionFile=""
 				SubSystem="2"
 			/>
@@ -82,7 +82,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&#x0D;&#x0A;"
+				Description=""
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -94,8 +95,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Install Headers"
-				CommandLine="xcopy /Y /R &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
+				Description="prebuild.bat..."
+				CommandLine="call prebuild&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-api.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-auto.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-class.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\objc-exception.h&quot; &quot;%SolutionDir%include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\message.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\runtime.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\hashtable2.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y &quot;$(ProjectDir)runtime\maptable.h&quot; &quot;$(SolutionDir)include\objc\&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -111,9 +112,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;;&quot;$(SolutionDir)\dist\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\include\c99&quot;;&quot;$(ProjectDir)..\include&quot;;&quot;$(ProjectDir)\runtime&quot;;&quot;$(SolutionDir)\include&quot;"
 				PreprocessorDefinitions="OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE"
-				UsePrecompiledHeader="0"
 				CompileAs="2"
 			/>
 			<Tool
@@ -121,6 +121,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				ResourceOutputFileName="$(IntDir)/version.res"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -151,7 +152,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&#x0D;&#x0A;"
+				Description=""
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -304,7 +306,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\runtime\objc-file.m"
+				RelativePath=".\runtime\objc-file-old.m"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -320,6 +322,34 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DebugDLL|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="1"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\runtime\objc-file.mm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
@@ -471,6 +501,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -478,18 +509,19 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\runtime\objc-runtime-new.m"
+				RelativePath=".\runtime\objc-runtime-new.mm"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						CompileAs="1"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -497,7 +529,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						CompileAs="1"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
@@ -569,6 +601,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -576,6 +609,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						CompileAs="2"
 					/>
 				</FileConfiguration>
 			</File>
@@ -666,6 +700,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\runtime\objc-file-old.h"
+				>
+			</File>
+			<File
+				RelativePath=".\runtime\objc-file.h"
+				>
+			</File>
+			<File
 				RelativePath=".\runtime\objc-initialize.h"
 				>
 			</File>
@@ -731,6 +773,26 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\version.rc"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						AdditionalIncludeDirectories="$(OBJROOT)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						AdditionalIncludeDirectories="$(OBJROOT)"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

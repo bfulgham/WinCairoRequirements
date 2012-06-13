@@ -38,8 +38,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir)"
-				PreprocessorDefinitions="PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include/pthreads&quot;;&quot;$(ProjectDir)&quot;"
+				PreprocessorDefinitions="PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1;HAVE_PTHREAD_SETSPECIFIC"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -94,8 +94,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(ProjectDir)"
-				PreprocessorDefinitions="PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include/pthreads&quot;;&quot;$(ProjectDir)&quot;"
+				PreprocessorDefinitions="PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1;HAVE_PTHREAD_SETSPECIFIC"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -196,6 +196,10 @@
 		</File>
 		<File
 			RelativePath=".\pixman-mmx.c"
+			>
+		</File>
+		<File
+			RelativePath=".\pixman-noop.c"
 			>
 		</File>
 		<File

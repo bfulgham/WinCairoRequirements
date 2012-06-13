@@ -1,49 +1,63 @@
 <!-- ##### SECTION Title ##### -->
-cairo_surface_t
+cairo-surface
 
 <!-- ##### SECTION Short_Description ##### -->
-Base class for surfaces
+
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-#cairo_surface_t is the abstract type representing all different drawing
-targets that cairo can render to.  The actual drawings are
-performed using a cairo <firstterm>context</firstterm>.
-</para>
-<para>
-A cairo surface is created by using <firstterm>backend</firstterm>-specific
-constructors, typically of the form
-cairo_<emphasis>backend</emphasis>_surface_create().
+
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-<itemizedlist>
-<listitem>#cairo_t()</listitem>
-<listitem>#cairo_pattern_t()</listitem>
-</itemizedlist>
+
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### MACRO CAIRO_HAS_MIME_SURFACE ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO CAIRO_MIME_TYPE_JP2 ##### -->
 <para>
-The Joint Photographic Experts Group (JPEG) 2000 image coding standard (ISO/IEC 15444-1). Since 1.10
+
 </para>
 
 
 
 <!-- ##### MACRO CAIRO_MIME_TYPE_JPEG ##### -->
 <para>
-The Joint Photographic Experts Group (JPEG) image coding standard (ISO/IEC 10918-1). Since 1.10
+
 </para>
 
 
 
 <!-- ##### MACRO CAIRO_MIME_TYPE_PNG ##### -->
 <para>
-The Portable Network Graphics image file format (ISO/IEC 15948). Since 1.10
+
+</para>
+
+
+
+<!-- ##### MACRO CAIRO_MIME_TYPE_URI ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO CAIRO_MIME_TYPE_UNIQUE_ID ##### -->
+<para>
+
 </para>
 
 
@@ -70,6 +84,31 @@ The Portable Network Graphics image file format (ISO/IEC 15948). Since 1.10
 
 @other: 
 @content: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_surface_create_similar_image ##### -->
+<para>
+
+</para>
+
+@other: 
+@format: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_surface_create_for_rectangle ##### -->
+<para>
+
+</para>
+
+@target: 
+@x: 
+@y: 
 @width: 
 @height: 
 @Returns: 
@@ -115,6 +154,15 @@ The Portable Network Graphics image file format (ISO/IEC 15948). Since 1.10
 </para>
 
 @surface: 
+
+
+<!-- ##### FUNCTION cairo_surface_get_device ##### -->
+<para>
+
+</para>
+
+@surface: 
+@Returns: 
 
 
 <!-- ##### FUNCTION cairo_surface_get_font_options ##### -->
@@ -216,7 +264,15 @@ The Portable Network Graphics image file format (ISO/IEC 15948). Since 1.10
 @CAIRO_SURFACE_TYPE_QUARTZ_IMAGE: 
 @CAIRO_SURFACE_TYPE_SCRIPT: 
 @CAIRO_SURFACE_TYPE_QT: 
-@CAIRO_SURFACE_TYPE_META: 
+@CAIRO_SURFACE_TYPE_RECORDING: 
+@CAIRO_SURFACE_TYPE_VG: 
+@CAIRO_SURFACE_TYPE_GL: 
+@CAIRO_SURFACE_TYPE_DRM: 
+@CAIRO_SURFACE_TYPE_TEE: 
+@CAIRO_SURFACE_TYPE_XML: 
+@CAIRO_SURFACE_TYPE_SKIA: 
+@CAIRO_SURFACE_TYPE_SUBSURFACE: 
+@CAIRO_SURFACE_TYPE_COGL: 
 
 <!-- ##### FUNCTION cairo_surface_get_type ##### -->
 <para>
@@ -306,5 +362,34 @@ The Portable Network Graphics image file format (ISO/IEC 15948). Since 1.10
 @mime_type: 
 @data: 
 @length: 
+
+
+<!-- ##### FUNCTION cairo_surface_supports_mime_type ##### -->
+<para>
+
+</para>
+
+@surface: 
+@mime_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_surface_map_to_image ##### -->
+<para>
+
+</para>
+
+@surface: 
+@extents: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_surface_unmap_image ##### -->
+<para>
+
+</para>
+
+@surface: 
+@image: 
 
 

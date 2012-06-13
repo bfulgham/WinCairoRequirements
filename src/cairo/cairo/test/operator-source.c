@@ -22,6 +22,7 @@
  *
  * Authors: Kristian Høgsberg <krh@redhat.com>
  *          Owen Taylor <otaylor@redhat.com>
+ *          Uli Schlachter <psychon@znc.in>
  */
 
 #include <math.h>
@@ -145,11 +146,14 @@ draw_polygon (cairo_t *cr, int x, int y)
 }
 
 static void
-draw_rects (cairo_t *cr, int x, int y)
+draw_rects (cairo_t *cr, int x, int y, double offset)
 {
-    double block_width = (int)(0.33 * WIDTH + 0.5);
-    double block_height = (int)(0.33 * HEIGHT + 0.5);
+    double block_width = (int)(0.33 * WIDTH + 0.5) - offset/3;
+    double block_height = (int)(0.33 * HEIGHT + 0.5) - offset/3;
     int i, j;
+
+    x += offset/2;
+    y += offset/2;
 
     for (i = 0; i < 3; i++)
 	for (j = 0; j < 3; j++)
@@ -159,6 +163,18 @@ draw_rects (cairo_t *cr, int x, int y)
 				 block_width,         block_height);
 
     cairo_fill (cr);
+}
+
+static void
+draw_aligned_rects (cairo_t *cr, int x, int y)
+{
+    draw_rects (cr, x, y, 0);
+}
+
+static void
+draw_unaligned_rects (cairo_t *cr, int x, int y)
+{
+    draw_rects (cr, x, y, 2.1);
 }
 
 static void (* const pattern_funcs[])(cairo_t *cr, int x, int y) = {
@@ -172,12 +188,12 @@ static void (* const draw_funcs[])(cairo_t *cr, int x, int y) = {
     draw_mask,
     draw_glyphs,
     draw_polygon,
-    draw_rects
+    draw_aligned_rects,
+    draw_unaligned_rects
 };
 
-#define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
-#define IMAGE_WIDTH (ARRAY_SIZE (pattern_funcs) * (WIDTH + PAD) + PAD)
-#define IMAGE_HEIGHT (ARRAY_SIZE (draw_funcs) * (HEIGHT + PAD) + PAD)
+#define IMAGE_WIDTH (ARRAY_LENGTH (pattern_funcs) * (WIDTH + PAD) + PAD)
+#define IMAGE_HEIGHT (ARRAY_LENGTH (draw_funcs) * (HEIGHT + PAD) + PAD)
 
 static cairo_test_status_t
 draw (cairo_t *cr, int width, int height)
@@ -186,12 +202,12 @@ draw (cairo_t *cr, int width, int height)
     size_t i, j, x, y;
     cairo_pattern_t *pattern;
 
-    cairo_select_font_face (cr, "Bitstream Vera Sans",
+    cairo_select_font_face (cr, CAIRO_TEST_FONT_FAMILY " Sans",
 			    CAIRO_FONT_SLANT_NORMAL,
 			    CAIRO_FONT_WEIGHT_NORMAL);
 
-    for (j = 0; j < ARRAY_SIZE (draw_funcs); j++) {
-	for (i = 0; i < ARRAY_SIZE (pattern_funcs); i++) {
+    for (j = 0; j < ARRAY_LENGTH (draw_funcs); j++) {
+	for (i = 0; i < ARRAY_LENGTH (pattern_funcs); i++) {
 	    x = i * (WIDTH + PAD) + PAD;
 	    y = j * (HEIGHT + PAD) + PAD;
 

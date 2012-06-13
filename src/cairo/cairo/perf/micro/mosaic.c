@@ -92,7 +92,7 @@ mosaic_next_path (cairo_t *cr, struct mosaic_region_iter *iter)
     return 1;
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 mosaic_perform(cairo_t *cr, unsigned flags, int width, int height, int loops)
 {
     struct mosaic_region_iter iter;
@@ -136,38 +136,41 @@ mosaic_perform(cairo_t *cr, unsigned flags, int width, int height, int loops)
     return cairo_perf_timer_elapsed ();
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 mosaic_fill_curves (cairo_t *cr, int width, int height, int loops)
 {
     return mosaic_perform (cr, MOSAIC_FILL | MOSAIC_CURVE_TO, width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 mosaic_fill_lines (cairo_t *cr, int width, int height, int loops)
 {
     return mosaic_perform (cr, MOSAIC_FILL | MOSAIC_LINE_TO, width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 mosaic_tessellate_lines (cairo_t *cr, int width, int height, int loops)
 {
     return mosaic_perform (cr, MOSAIC_TESSELLATE | MOSAIC_LINE_TO, width, height, loops);
 }
 
-static cairo_perf_ticks_t
+static cairo_time_t
 mosaic_tessellate_curves (cairo_t *cr, int width, int height, int loops)
 {
     return mosaic_perform (cr, MOSAIC_TESSELLATE | MOSAIC_CURVE_TO, width, height, loops);
 }
 
+cairo_bool_t
+mosaic_enabled (cairo_perf_t *perf)
+{
+    return cairo_perf_can_run (perf, "mosaic", NULL);
+}
+
 void
 mosaic (cairo_perf_t *perf, cairo_t *cr, int width, int height)
 {
-    if (! cairo_perf_can_run (perf, "mosaic", NULL))
-	return;
-
-    cairo_perf_run (perf, "mosaic-fill-curves", mosaic_fill_curves);
-    cairo_perf_run (perf, "mosaic-fill-lines", mosaic_fill_lines);
-    cairo_perf_run (perf, "mosaic-tessellate-curves", mosaic_tessellate_curves);
-    cairo_perf_run (perf, "mosaic-tessellate-lines", mosaic_tessellate_lines);
+    cairo_perf_run (perf, "mosaic-fill-curves", mosaic_fill_curves, NULL);
+    cairo_perf_run (perf, "mosaic-fill-lines", mosaic_fill_lines, NULL);
+    cairo_perf_run (perf, "mosaic-tessellate-curves", mosaic_tessellate_curves, NULL);
+    cairo_perf_run (perf, "mosaic-tessellate-lines", mosaic_tessellate_lines, NULL);
 }

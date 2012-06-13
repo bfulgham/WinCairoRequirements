@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -39,7 +39,7 @@
 
 #include "cairo.h"
 
-#ifdef CAIRO_HAS_SKIA_SURFACE
+#if CAIRO_HAS_SKIA_SURFACE
 
 CAIRO_BEGIN_DECLS
 
@@ -54,24 +54,6 @@ cairo_skia_surface_create_for_data (unsigned char *data,
 				    int width,
 				    int height,
 				    int stride);
-
-cairo_public unsigned char *
-cairo_skia_surface_get_data (cairo_surface_t *surface);
-
-cairo_public cairo_format_t
-cairo_skia_surface_get_format (cairo_surface_t *surface);
-
-cairo_public int
-cairo_skia_surface_get_width (cairo_surface_t *surface);
-
-cairo_public int
-cairo_skia_surface_get_height (cairo_surface_t *surface);
-
-cairo_public int
-cairo_skia_surface_get_stride (cairo_surface_t *surface);
-
-cairo_public cairo_surface_t *
-cairo_skia_surface_get_image (cairo_surface_t *surface);
 
 CAIRO_END_DECLS
 

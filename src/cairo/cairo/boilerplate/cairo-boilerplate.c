@@ -29,6 +29,8 @@
 #include "cairo-boilerplate-private.h"
 #include "cairo-boilerplate-scaled-font.h"
 
+#include <pixman.h>
+
 #include <cairo-types-private.h>
 #include <cairo-scaled-font-private.h>
 
@@ -115,7 +117,7 @@ cairo_boilerplate_format_from_content (cairo_content_t content)
 	case CAIRO_CONTENT_ALPHA: format = CAIRO_FORMAT_A8; break;
 	default:
 	    assert (0); /* not reached */
-	    format = (cairo_format_t) -1;
+	    format = CAIRO_FORMAT_INVALID;
 	    break;
     }
 
@@ -123,15 +125,14 @@ cairo_boilerplate_format_from_content (cairo_content_t content)
 }
 
 static cairo_surface_t *
-_cairo_boilerplate_image_create_surface (const char			 *name,
-					 cairo_content_t		  content,
-					 double				  width,
-					 double				  height,
-					 double				  max_width,
-					 double				  max_height,
-					 cairo_boilerplate_mode_t	  mode,
-					 int                              id,
-					 void				**closure)
+_cairo_boilerplate_image_create_surface (const char		   *name,
+					 cairo_content_t	    content,
+					 double 		    width,
+					 double 		    height,
+					 double 		    max_width,
+					 double 		    max_height,
+					 cairo_boilerplate_mode_t   mode,
+					 void			  **closure)
 {
     cairo_format_t format;
 
@@ -149,27 +150,113 @@ _cairo_boilerplate_image_create_surface (const char			 *name,
     return cairo_image_surface_create (format, ceil (width), ceil (height));
 }
 
-#if CAIRO_HAS_META_SURFACE
+static const cairo_user_data_key_t key;
+
 static cairo_surface_t *
-_cairo_boilerplate_meta_create_surface (const char	     *name,
-					cairo_content_t	      content,
-					double		      width,
-					double		      height,
-					double		      max_width,
-					double		      max_height,
-					cairo_boilerplate_mode_t mode,
-					int		      id,
-					void		    **closure)
+_cairo_boilerplate_image_create_similar (cairo_surface_t *other,
+					 cairo_content_t content,
+					 int width, int height)
+{
+    cairo_format_t format;
+    cairo_surface_t *surface;
+    int stride;
+    void *ptr;
+
+    switch (content) {
+    case CAIRO_CONTENT_ALPHA: format = CAIRO_FORMAT_A8; break;
+    case CAIRO_CONTENT_COLOR: format = CAIRO_FORMAT_RGB24; break;
+    default:
+    case CAIRO_CONTENT_COLOR_ALPHA: format = CAIRO_FORMAT_ARGB32; break;
+    }
+
+    stride = cairo_format_stride_for_width(format, width);
+    ptr = malloc (stride* height);
+
+    surface = cairo_image_surface_create_for_data (ptr, format,
+						   width, height, stride);
+    cairo_surface_set_user_data (surface, &key, ptr, free);
+
+    return surface;
+}
+
+static cairo_surface_t *
+_cairo_boilerplate_image16_create_surface (const char		     *name,
+					   cairo_content_t	      content,
+					   double		      width,
+					   double		      height,
+					   double		      max_width,
+					   double		      max_height,
+					   cairo_boilerplate_mode_t   mode,
+					   void			    **closure)
+{
+    *closure = NULL;
+
+    /* XXX force CAIRO_CONTENT_COLOR */
+    return cairo_image_surface_create (CAIRO_FORMAT_RGB16_565, ceil (width), ceil (height));
+}
+
+static cairo_surface_t *
+_cairo_boilerplate_image16_create_similar (cairo_surface_t *other,
+					   cairo_content_t content,
+					   int width, int height)
+{
+    cairo_format_t format;
+    cairo_surface_t *surface;
+    int stride;
+    void *ptr;
+
+    switch (content) {
+    case CAIRO_CONTENT_ALPHA: format = CAIRO_FORMAT_A8; break;
+    case CAIRO_CONTENT_COLOR: format = CAIRO_FORMAT_RGB16_565; break;
+    default:
+    case CAIRO_CONTENT_COLOR_ALPHA: format = CAIRO_FORMAT_ARGB32; break;
+    }
+
+    stride = cairo_format_stride_for_width(format, width);
+    ptr = malloc (stride* height);
+
+    surface = cairo_image_surface_create_for_data (ptr, format,
+						   width, height, stride);
+    cairo_surface_set_user_data (surface, &key, ptr, free);
+
+    return surface;
+}
+
+static char *
+_cairo_boilerplate_image_describe (void *closure)
+{
+    char *s;
+  
+    xasprintf (&s, "pixman %s", pixman_version_string ());
+
+    return s;
+}
+
+#if CAIRO_HAS_RECORDING_SURFACE
+static cairo_surface_t *
+_cairo_boilerplate_recording_create_surface (const char 	       *name,
+					     cairo_content_t		content,
+					     double			width,
+					     double			height,
+					     double			max_width,
+					     double			max_height,
+					     cairo_boilerplate_mode_t	mode,
+					     void		      **closure)
 {
     cairo_rectangle_t extents;
-
-    *closure = NULL;
 
     extents.x = 0;
     extents.y = 0;
     extents.width = width;
     extents.height = height;
-    return cairo_meta_surface_create (content, &extents);
+    return *closure = cairo_surface_reference (cairo_recording_surface_create (content, &extents));
+}
+
+static void
+_cairo_boilerplate_recording_surface_cleanup (void *closure)
+{
+    cairo_surface_finish (closure);
+    cairo_surface_destroy (closure);
 }
 #endif
 
@@ -177,13 +264,14 @@ const cairo_user_data_key_t cairo_boilerplate_output_basename_key;
 
 cairo_surface_t *
 _cairo_boilerplate_get_image_surface (cairo_surface_t *src,
-				      int page,
-				      int width,
-				      int height)
+				      int	       page,
+				      int	       width,
+				      int	       height)
 {
     cairo_surface_t *surface, *image;
     cairo_t *cr;
     cairo_status_t status;
+    cairo_format_t format;
 
     if (cairo_surface_status (src))
 	return cairo_surface_reference (src);
@@ -192,24 +280,39 @@ _cairo_boilerplate_get_image_surface (cairo_surface_t *src,
 	return cairo_boilerplate_surface_create_in_error (CAIRO_STATUS_SURFACE_TYPE_MISMATCH);
 
     /* extract sub-surface */
-    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+    switch (cairo_surface_get_content (src)) {
+    case CAIRO_CONTENT_ALPHA:
+	format = CAIRO_FORMAT_A8;
+	break;
+    case CAIRO_CONTENT_COLOR:
+	format = CAIRO_FORMAT_RGB24;
+	break;
+    default:
+    case CAIRO_CONTENT_COLOR_ALPHA:
+	format = CAIRO_FORMAT_ARGB32;
+	break;
+    }
+    surface = cairo_image_surface_create (format, width, height);
+    assert (cairo_surface_get_content (surface) == cairo_surface_get_content (src));
     image = cairo_surface_reference (surface);
 
-    /* open a logging channel (only interesting for meta surfaces) */
-#if CAIRO_HAS_SCRIPT_SURFACE && CAIRO_HAS_META_SURFACE
-    if (cairo_surface_get_type (src) == CAIRO_SURFACE_TYPE_META) {
+    /* open a logging channel (only interesting for recording surfaces) */
+#if CAIRO_HAS_SCRIPT_SURFACE && CAIRO_HAS_RECORDING_SURFACE
+    if (cairo_surface_get_type (src) == CAIRO_SURFACE_TYPE_RECORDING) {
 	const char *test_name;
 
 	test_name = cairo_surface_get_user_data (src,
 						 &cairo_boilerplate_output_basename_key);
 	if (test_name != NULL) {
-	    cairo_script_context_t *ctx;
+	    cairo_device_t *ctx;
 	    char *filename;
 
+	    cairo_surface_destroy (surface);
+
 	    xasprintf (&filename, "%s.out.trace", test_name);
-	    ctx = cairo_script_context_create (filename);
+	    ctx = cairo_script_create (filename);
 	    surface = cairo_script_surface_create_for_target (ctx, image);
-	    cairo_script_context_destroy (ctx);
+	    cairo_device_destroy (ctx);
 	    free (filename);
 	}
     }
@@ -217,9 +320,7 @@ _cairo_boilerplate_get_image_surface (cairo_surface_t *src,
 
     cr = cairo_create (surface);
     cairo_surface_destroy (surface);
-
     cairo_set_source_surface (cr, src, 0, 0);
-    cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
     cairo_paint (cr);
 
     status = cairo_status (cr);
@@ -233,10 +334,10 @@ _cairo_boilerplate_get_image_surface (cairo_surface_t *src,
 }
 
 cairo_surface_t *
-cairo_boilerplate_get_image_surface_from_png (const char *filename,
-					      int width,
-					      int height,
-					      cairo_bool_t flatten)
+cairo_boilerplate_get_image_surface_from_png (const char   *filename,
+					      int	    width,
+					      int	    height,
+					      cairo_bool_t  flatten)
 {
     cairo_surface_t *surface;
 
@@ -298,41 +399,68 @@ static const cairo_boilerplate_target_t builtin_targets[] = {
     {
 	"image", "image", NULL, NULL,
 	CAIRO_SURFACE_TYPE_IMAGE, CAIRO_CONTENT_COLOR_ALPHA, 0,
-	NULL, _cairo_boilerplate_image_create_surface,
+	NULL,
+	_cairo_boilerplate_image_create_surface,
+	_cairo_boilerplate_image_create_similar,
 	NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
-	cairo_surface_write_to_png
+	cairo_surface_write_to_png,
+	NULL, NULL,
+        _cairo_boilerplate_image_describe,
+	TRUE, FALSE, FALSE
     },
     {
 	"image", "image", NULL, NULL,
 	CAIRO_SURFACE_TYPE_IMAGE, CAIRO_CONTENT_COLOR, 0,
-	NULL, _cairo_boilerplate_image_create_surface,
-	NULL, NULL,
-	_cairo_boilerplate_get_image_surface,
-	cairo_surface_write_to_png
-    },
-#if CAIRO_HAS_META_SURFACE
-    {
-	"meta", "image", NULL, NULL,
-	CAIRO_SURFACE_TYPE_META, CAIRO_CONTENT_COLOR_ALPHA, 0,
-	"cairo_meta_surface_create",
-	_cairo_boilerplate_meta_create_surface,
+	NULL,
+	_cairo_boilerplate_image_create_surface,
+	_cairo_boilerplate_image_create_similar,
 	NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	NULL, NULL,
-	FALSE, TRUE
+        _cairo_boilerplate_image_describe,
+	FALSE, FALSE, FALSE
     },
     {
-	"meta", "image", NULL, NULL,
-	CAIRO_SURFACE_TYPE_META, CAIRO_CONTENT_COLOR, 0,
-	"cairo_meta_surface_create",
-	_cairo_boilerplate_meta_create_surface,
+	"image16", "image", NULL, NULL,
+	CAIRO_SURFACE_TYPE_IMAGE, CAIRO_CONTENT_COLOR, 0,
+	NULL,
+	_cairo_boilerplate_image16_create_surface,
+	_cairo_boilerplate_image16_create_similar,
 	NULL, NULL,
 	_cairo_boilerplate_get_image_surface,
 	cairo_surface_write_to_png,
 	NULL, NULL,
-	FALSE, TRUE
+        _cairo_boilerplate_image_describe,
+	TRUE, FALSE, FALSE
+    },
+#if CAIRO_HAS_RECORDING_SURFACE
+    {
+	"recording", "image", NULL, NULL,
+	CAIRO_SURFACE_TYPE_RECORDING, CAIRO_CONTENT_COLOR_ALPHA, 0,
+	"cairo_recording_surface_create",
+	_cairo_boilerplate_recording_create_surface,
+	cairo_surface_create_similar,
+	NULL, NULL,
+	_cairo_boilerplate_get_image_surface,
+	cairo_surface_write_to_png,
+	_cairo_boilerplate_recording_surface_cleanup,
+	NULL, NULL,
+	FALSE, FALSE, TRUE
+    },
+    {
+	"recording", "image", NULL, NULL,
+	CAIRO_SURFACE_TYPE_RECORDING, CAIRO_CONTENT_COLOR, 0,
+	"cairo_recording_surface_create",
+	_cairo_boilerplate_recording_create_surface,
+	cairo_surface_create_similar,
+	NULL, NULL,
+	_cairo_boilerplate_get_image_surface,
+	cairo_surface_write_to_png,
+	_cairo_boilerplate_recording_surface_cleanup,
+	NULL, NULL,
+	FALSE, FALSE, TRUE
     },
 #endif
 };
@@ -358,7 +486,7 @@ probe_target (const cairo_boilerplate_target_t *target)
 
 void
 _cairo_boilerplate_register_backend (const cairo_boilerplate_target_t *targets,
-				     unsigned int count)
+				     unsigned int		       count)
 {
     targets += count;
     while (count--) {
@@ -377,8 +505,8 @@ _cairo_boilerplate_register_backend (const cairo_boilerplate_target_t *targets,
 
 static cairo_bool_t
 _cairo_boilerplate_target_matches_name (const cairo_boilerplate_target_t *target,
-					const char                       *tname,
-					const char                       *end)
+					const char			 *tname,
+					const char			 *end)
 {
     char const *content_name;
     const char *content_start = strpbrk (tname, ".");
@@ -415,7 +543,8 @@ _cairo_boilerplate_target_matches_name (const cairo_boilerplate_target_t *target
 }
 
 const cairo_boilerplate_target_t **
-cairo_boilerplate_get_targets (int *pnum_targets, cairo_bool_t *plimited_targets)
+cairo_boilerplate_get_targets (int	    *pnum_targets,
+			       cairo_bool_t *plimited_targets)
 {
     size_t i, num_targets;
     cairo_bool_t limited_targets = FALSE;
@@ -437,7 +566,7 @@ cairo_boilerplate_get_targets (int *pnum_targets, cairo_bool_t *plimited_targets
 	    int found = 0;
 	    const char *end = strpbrk (tname, " \t\r\n;:,");
 	    if (!end)
-	        end = tname + strlen (tname);
+		end = tname + strlen (tname);
 
 	    if (end == tname) {
 		tname = end + 1;
@@ -511,7 +640,7 @@ cairo_boilerplate_get_targets (int *pnum_targets, cairo_bool_t *plimited_targets
 	    int j;
 	    const char *end = strpbrk (tname, " \t\r\n;:,");
 	    if (!end)
-	        end = tname + strlen (tname);
+		end = tname + strlen (tname);
 
 	    if (end == tname) {
 		tname = end + 1;
@@ -546,26 +675,20 @@ cairo_boilerplate_get_targets (int *pnum_targets, cairo_bool_t *plimited_targets
 const cairo_boilerplate_target_t *
 cairo_boilerplate_get_image_target (cairo_content_t content)
 {
-    struct cairo_boilerplate_target_list *list;
-
     if (cairo_boilerplate_targets == NULL)
 	_cairo_boilerplate_register_all ();
 
-    for (list = cairo_boilerplate_targets; list != NULL; list = list->next) {
-	const cairo_boilerplate_target_t *target = list->target;
-	if (target->expected_type == CAIRO_SURFACE_TYPE_IMAGE &&
-	    target->content == content)
-	{
-	    return target;
-	}
+    switch (content) {
+    default:
+    case CAIRO_CONTENT_ALPHA: return NULL;
+    case CAIRO_CONTENT_COLOR: return &builtin_targets[1];
+    case CAIRO_CONTENT_COLOR_ALPHA: return &builtin_targets[0];
     }
-
-    return NULL;
 }
 
 const cairo_boilerplate_target_t *
-cairo_boilerplate_get_target_by_name (const char *name,
-				      cairo_content_t content)
+cairo_boilerplate_get_target_by_name (const char      *name,
+				      cairo_content_t  content)
 {
     struct cairo_boilerplate_target_list *list;
 
@@ -626,7 +749,7 @@ cairo_boilerplate_surface_create_in_error (cairo_status_t status)
 
 void
 cairo_boilerplate_scaled_font_set_max_glyphs_cached (cairo_scaled_font_t *scaled_font,
-						     int max_glyphs)
+						     int		  max_glyphs)
 {
     /* XXX CAIRO_DEBUG */
 }
@@ -661,21 +784,29 @@ any2ppm_daemon_exists (void)
 #endif
 
 FILE *
-cairo_boilerplate_open_any2ppm (const char *filename,
-				int page,
-				unsigned int flags)
+cairo_boilerplate_open_any2ppm (const char   *filename,
+				int	      page,
+				unsigned int  flags,
+				int        (**close_cb) (FILE *))
 {
     char command[4096];
+    const char *any2ppm;
 #if HAS_DAEMON
     int sk;
     struct sockaddr_un addr;
     int len;
+#endif
 
+    any2ppm = getenv ("ANY2PPM");
+    if (any2ppm == NULL)
+	any2ppm = "./any2ppm";
+
+#if HAS_DAEMON
     if (flags & CAIRO_BOILERPLATE_OPEN_NO_DAEMON)
 	goto POPEN;
 
     if (! any2ppm_daemon_exists ()) {
-	if (system ("./any2ppm") != 0)
+	if (system (any2ppm) != 0)
 	    goto POPEN;
     }
 
@@ -698,16 +829,21 @@ cairo_boilerplate_open_any2ppm (const char *filename,
 	goto POPEN;
     }
 
+    *close_cb = fclose;
     return fdopen (sk, "r");
 
 POPEN:
 #endif
-    sprintf (command, "./any2ppm %s %d", filename, page);
+
+    *close_cb = pclose;
+    sprintf (command, "%s %s %d", any2ppm, filename, page);
     return popen (command, "r");
 }
 
 static cairo_bool_t
-freadn (unsigned char *buf, int len, FILE *file)
+freadn (unsigned char *buf,
+	int	       len,
+	FILE	      *file)
 {
     int ret;
 
@@ -777,6 +913,7 @@ cairo_boilerplate_image_surface_create_from_ppm_stream (FILE *file)
 	    break;
 	}
     }
+    cairo_surface_mark_dirty (image);
 
     return image;
 
@@ -786,15 +923,17 @@ FAIL:
 }
 
 cairo_surface_t *
-cairo_boilerplate_convert_to_image (const char *filename, int page)
+cairo_boilerplate_convert_to_image (const char *filename,
+				    int 	page)
 {
     FILE *file;
     unsigned int flags = 0;
     cairo_surface_t *image;
+    int (*close_cb) (FILE *);
     int ret;
 
   RETRY:
-    file = cairo_boilerplate_open_any2ppm (filename, page, flags);
+    file = cairo_boilerplate_open_any2ppm (filename, page, flags, &close_cb);
     if (file == NULL) {
 	switch (errno) {
 	case ENOMEM:
@@ -805,7 +944,7 @@ cairo_boilerplate_convert_to_image (const char *filename, int page)
     }
 
     image = cairo_boilerplate_image_surface_create_from_ppm_stream (file);
-    ret = pclose (file);
+    ret = close_cb (file);
     /* check for fatal errors from the interpreter */
     if (ret) { /* any2pmm should never die... */
 	cairo_surface_destroy (image);
@@ -834,4 +973,17 @@ const char*
 cairo_boilerplate_version_string (void)
 {
     return CAIRO_VERSION_STRING;
+}
+
+void
+cairo_boilerplate_fini (void)
+{
+    while (cairo_boilerplate_targets != NULL) {
+	struct cairo_boilerplate_target_list *next;
+
+	next = cairo_boilerplate_targets->next;
+
+	free (cairo_boilerplate_targets);
+	cairo_boilerplate_targets = next;
+    }
 }

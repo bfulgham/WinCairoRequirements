@@ -37,18 +37,17 @@ typedef struct _script_target_closure {
 } script_target_closure_t;
 
 static cairo_surface_t *
-_cairo_boilerplate_script_create_surface (const char		 *name,
-					  cairo_content_t	  content,
-					  double			  width,
-					  double			  height,
-					  double			  max_width,
-					  double			  max_height,
-					  cairo_boilerplate_mode_t	  mode,
-					  int                        id,
-					  void			**closure)
+_cairo_boilerplate_script_create_surface (const char		    *name,
+					  cairo_content_t	     content,
+					  double		     width,
+					  double		     height,
+					  double		     max_width,
+					  double		     max_height,
+					  cairo_boilerplate_mode_t   mode,
+					  void			   **closure)
 {
     script_target_closure_t *ptc;
-    cairo_script_context_t *ctx;
+    cairo_device_t *ctx;
     cairo_surface_t *surface;
     cairo_status_t status;
 
@@ -60,9 +59,9 @@ _cairo_boilerplate_script_create_surface (const char		 *name,
     xasprintf (&ptc->filename, "%s.out.cs", name);
     xunlink (ptc->filename);
 
-    ctx = cairo_script_context_create (ptc->filename);
+    ctx = cairo_script_create (ptc->filename);
     surface = cairo_script_surface_create (ctx, content, width, height);
-    cairo_script_context_destroy (ctx);
+    cairo_device_destroy (ctx);
 
     status = cairo_surface_set_user_data (surface,
 					  &script_closure_key, ptc, NULL);
@@ -78,7 +77,7 @@ _cairo_boilerplate_script_create_surface (const char		 *name,
 }
 
 static cairo_status_t
-_cairo_boilerplate_script_finish_surface (cairo_surface_t		*surface)
+_cairo_boilerplate_script_finish_surface (cairo_surface_t *surface)
 {
     cairo_surface_finish (surface);
     return cairo_surface_status (surface);
@@ -86,14 +85,14 @@ _cairo_boilerplate_script_finish_surface (cairo_surface_t		*surface)
 
 static cairo_status_t
 _cairo_boilerplate_script_surface_write_to_png (cairo_surface_t *surface,
-						const char *filename)
+						const char	*filename)
 {
     return CAIRO_STATUS_WRITE_ERROR;
 }
 
 static cairo_surface_t *
 _cairo_boilerplate_script_convert_to_image (cairo_surface_t *surface,
-					    int page)
+					    int 	     page)
 {
     script_target_closure_t *ptc = cairo_surface_get_user_data (surface,
 								&script_closure_key);
@@ -102,9 +101,9 @@ _cairo_boilerplate_script_convert_to_image (cairo_surface_t *surface,
 
 static cairo_surface_t *
 _cairo_boilerplate_script_get_image_surface (cairo_surface_t *surface,
-					     int page,
-					     int width,
-					     int height)
+					     int	      page,
+					     int	      width,
+					     int	      height)
 {
     cairo_surface_t *image;
 
@@ -131,11 +130,12 @@ static const cairo_boilerplate_target_t target[] = {{
     CAIRO_SURFACE_TYPE_SCRIPT, CAIRO_CONTENT_COLOR_ALPHA, 0,
     "cairo_script_surface_create",
     _cairo_boilerplate_script_create_surface,
+    cairo_surface_create_similar,
     NULL,
     _cairo_boilerplate_script_finish_surface,
     _cairo_boilerplate_script_get_image_surface,
     _cairo_boilerplate_script_surface_write_to_png,
     _cairo_boilerplate_script_cleanup,
-    NULL, FALSE
+    NULL, NULL, FALSE, FALSE, FALSE
 }};
 CAIRO_BOILERPLATE (script, target)

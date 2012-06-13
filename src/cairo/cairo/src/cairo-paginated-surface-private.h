@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -51,13 +51,12 @@ typedef struct _cairo_paginated_surface {
     /* Paginated-surface specific functions for the target */
     const cairo_paginated_surface_backend_t *backend;
 
-    /* A cairo_meta_surface to record all operations. To be replayed
+    /* A cairo_recording_surface to record all operations. To be replayed
      * against target, and also against image surface as necessary for
      * fallbacks. */
-    cairo_surface_t *meta;
+    cairo_surface_t *recording_surface;
 
     int page_num;
-    cairo_bool_t page_is_blank;
 } cairo_paginated_surface_t;
 
 #endif /* CAIRO_PAGINATED_SURFACE_H */

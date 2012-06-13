@@ -1561,8 +1561,8 @@ xmlRelaxNGRemoveRedefine(xmlRelaxNGParserCtxtPtr ctxt,
                     href = xmlGetProp(tmp, BAD_CAST "href");
 #endif
                     if (xmlRelaxNGRemoveRedefine(ctxt, href,
-                                                 inc->doc->children->
-                                                 children, name) == 1) {
+                                                 xmlDocGetRootElement(inc->doc)->children,
+                                                 name) == 1) {
                         found = 1;
                     }
 #ifdef DEBUG_INCLUDE
@@ -3059,8 +3059,8 @@ xmlRelaxNGCompile(xmlRelaxNGParserCtxtPtr ctxt, xmlRelaxNGDefinePtr def)
                     list = list->next;
                 }
                 xmlAutomataSetFinalState(ctxt->am, ctxt->state);
-                def->contModel = xmlAutomataCompile(ctxt->am);
-                xmlRegexpIsDeterminist(def->contModel);
+                if (xmlAutomataIsDeterminist(ctxt->am))
+                    def->contModel = xmlAutomataCompile(ctxt->am);
 
                 xmlFreeAutomata(ctxt->am);
                 ctxt->state = oldstate;
@@ -5369,7 +5369,8 @@ xmlRelaxNGParseNameClass(xmlRelaxNGParserCtxtPtr ctxt, xmlNodePtr node,
     } else {
         xmlRngPErr(ctxt, node, XML_RNGP_CHOICE_CONTENT,
                    "expecting name, anyName, nsName or choice : got %s\n",
-                   (node == NULL ? "nothing" : node->name), NULL);
+                   (node == NULL ? (const xmlChar *) "nothing" : node->name),
+		   NULL);
         return (NULL);
     }
     if (ret != def) {
@@ -8883,6 +8884,11 @@ xmlRelaxNGValidateValue(xmlRelaxNGValidCtxtPtr ctxt,
         case XML_RELAXNG_ZEROORMORE:{
                 xmlChar *cur, *temp;
 
+                if ((ctxt->state->value == NULL) ||
+                    (*ctxt->state->value == 0)) {
+                    ret = 0;
+                    break;
+                }
                 oldflags = ctxt->flags;
                 ctxt->flags |= FLAGS_IGNORABLE;
                 cur = ctxt->state->value;
@@ -8900,6 +8906,30 @@ xmlRelaxNGValidateValue(xmlRelaxNGValidCtxtPtr ctxt,
                     cur = ctxt->state->value;
                 }
                 ctxt->flags = oldflags;
+		if (ctxt->errNr > 0)
+		    xmlRelaxNGPopErrors(ctxt, 0);
+                break;
+            }
+        case XML_RELAXNG_OPTIONAL:{
+                xmlChar *temp;
+
+                if ((ctxt->state->value == NULL) ||
+                    (*ctxt->state->value == 0)) {
+                    ret = 0;
+                    break;
+                }
+                oldflags = ctxt->flags;
+                ctxt->flags |= FLAGS_IGNORABLE;
+                temp = ctxt->state->value;
+                ret = xmlRelaxNGValidateValue(ctxt, define->content);
+                ctxt->flags = oldflags;
+                if (ret != 0) {
+                    ctxt->state->value = temp;
+                    if (ctxt->errNr > 0)
+                        xmlRelaxNGPopErrors(ctxt, 0);
+                    ret = 0;
+                    break;
+                }
 		if (ctxt->errNr > 0)
 		    xmlRelaxNGPopErrors(ctxt, 0);
                 break;
@@ -9459,7 +9489,8 @@ xmlRelaxNGValidateInterleave(xmlRelaxNGValidCtxtPtr ctxt,
             ctxt->states = NULL;
             if (found == 0) {
                 if (cur == NULL) {
-                    VALID_ERR2(XML_RELAXNG_ERR_INTEREXTRA, "noname");
+		    VALID_ERR2(XML_RELAXNG_ERR_INTEREXTRA,
+			       (const xmlChar *) "noname");
                 } else {
                     VALID_ERR2(XML_RELAXNG_ERR_INTEREXTRA, cur->name);
                 }

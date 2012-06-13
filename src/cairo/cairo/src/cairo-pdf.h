@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the LGPL along with this library
  * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA 02110-1335, USA
  * You should have received a copy of the MPL along with this library
  * in the file COPYING-MPL-1.1
  *
@@ -45,14 +45,14 @@ CAIRO_BEGIN_DECLS
 
 /**
  * cairo_pdf_version_t:
- * @CAIRO_PDF_VERSION_1_4: The version 1.4 of the PDF specification.
- * @CAIRO_PDF_VERSION_1_5: The version 1.5 of the PDF specification.
+ * @CAIRO_PDF_VERSION_1_4: The version 1.4 of the PDF specification. (Since 1.10)
+ * @CAIRO_PDF_VERSION_1_5: The version 1.5 of the PDF specification. (Since 1.10)
  *
  * #cairo_pdf_version_t is used to describe the version number of the PDF
  * specification that a generated PDF file will conform to.
  *
- * Since 1.10
- */
+ * Since: 1.10
+ **/
 typedef enum _cairo_pdf_version {
     CAIRO_PDF_VERSION_1_4,
     CAIRO_PDF_VERSION_1_5

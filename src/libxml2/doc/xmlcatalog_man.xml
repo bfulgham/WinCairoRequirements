@@ -26,7 +26,7 @@
 		</affiliation>
 	</author>
 	<!-- date should be the date of the latest change or the release version -->
-	<date>$Date: Tuesday, November 03, 2009 11:37:18 AM$</date>
+	<date>$Date$</date>
 	<!-- still a bit buggy output, will talk to docbook-xsl upstream to fix this -->
 	<!-- <releaseinfo>This is release 0.3 of the xmlcatalog Manual.</releaseinfo> -->
 	<!-- <edition>0.3</edition> -->
@@ -118,10 +118,12 @@
 			indicates the type of entry. Possible types are: <simplelist type="inline">
 				<member><parameter>public</parameter></member>
 				<member><parameter>system</parameter></member>
+				<member><parameter>uri</parameter></member>
 				<member><parameter>rewriteSystem</parameter></member>
 				<member><parameter>rewriteURI</parameter></member>
 				<member><parameter>delegatePublic</parameter></member>
 				<member><parameter>delegateSystem</parameter></member>
+				<member><parameter>delegateURI</parameter></member>
 				<member><parameter>nextCatalog</parameter></member>
 			</simplelist>. <replaceable>ORIG</replaceable> is the original
 			reference to be replaced, and <replaceable>REPLACE</replaceable>
@@ -257,10 +259,12 @@
 			indicates the type of entry. Possible types are: <simplelist type="inline">
 				<member><parameter>public</parameter></member>
 				<member><parameter>system</parameter></member>
+				<member><parameter>uri</parameter></member>
 				<member><parameter>rewriteSystem</parameter></member>
 				<member><parameter>rewriteURI</parameter></member>
 				<member><parameter>delegatePublic</parameter></member>
 				<member><parameter>delegateSystem</parameter></member>
+				<member><parameter>delegateURI</parameter></member>
 				<member><parameter>nextCatalog</parameter></member>
 			</simplelist>. <replaceable>ORIG</replaceable> is the original
 			reference to be replaced, and <replaceable>REPLACE</replaceable>
