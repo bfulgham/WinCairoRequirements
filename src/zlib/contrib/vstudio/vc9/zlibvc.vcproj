@@ -79,7 +79,7 @@
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
-				ImportLibrary="$(OutDir)/zlibwapi.lib"
+				ImportLibrary="$(SolutionDir)Lib/zdll.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -221,6 +221,7 @@
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
+				ImportLibrary="$(SolutionDir)Lib/zdll.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
