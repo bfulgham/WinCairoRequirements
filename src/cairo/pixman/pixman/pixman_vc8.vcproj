@@ -94,7 +94,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)include/pthreads&quot;;&quot;$(ProjectDir)&quot;"
-				PreprocessorDefinitions="PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1;HAVE_PTHREAD_SETSPECIFIC"
+				PreprocessorDefinitions="PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
