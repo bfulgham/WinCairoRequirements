@@ -28,13 +28,13 @@ PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
 
 CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
 ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
-LIBPNG_CFLAGS += -I$(top_srcdir)/../libpng/
-CAIRO_LIBS +=  $(top_builddir)/../libpng/libpng.lib
+LIBPNG_CFLAGS += -I$(top_srcdir)/../../libpng/
+CAIRO_LIBS +=  $(top_builddir)/../../libpng/libpng.lib
 endif
 ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
 else
-ZLIB_CFLAGS += -I$(top_srcdir)/../zlib/
-CAIRO_LIBS += $(top_builddir)/../zlib/zdll.lib
+ZLIB_CFLAGS += -I$(top_srcdir)/../../zlib/
+CAIRO_LIBS += $(top_builddir)/../../zlib/zdll.lib
 endif
 
 DEFAULT_CFLAGS = -nologo $(CFG_CFLAGS)

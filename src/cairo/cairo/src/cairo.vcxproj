@@ -327,6 +327,7 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClCompile Include="cairo-rtree.c" />
     <ClCompile Include="cairo-scaled-font-subsets.c" />
     <ClCompile Include="cairo-scaled-font.c" />
+    <ClCompile Include="cairo-script-surface.c" />
     <ClCompile Include="cairo-shape-mask-compositor.c" />
     <ClCompile Include="cairo-slope.c" />
     <ClCompile Include="cairo-spans-compositor.c" />
@@ -363,7 +364,6 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="cairo-wideint.c" />
-    <ClCompile Include="cairo-xml-surface.c" />
     <ClCompile Include="cairo.c" />
     <ClCompile Include="win32\cairo-win32-debug.c" />
     <ClCompile Include="win32\cairo-win32-device.c" />

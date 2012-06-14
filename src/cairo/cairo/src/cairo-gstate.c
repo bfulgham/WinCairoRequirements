@@ -198,6 +198,9 @@ _cairo_gstate_init_copy (cairo_gstate_t *gstate, cairo_gstate_t *other)
 void
 _cairo_gstate_fini (cairo_gstate_t *gstate)
 {
+   if (!gstate)
+      return;
+
     _cairo_stroke_style_fini (&gstate->stroke_style);
 
     cairo_font_face_destroy (gstate->font_face);

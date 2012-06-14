@@ -473,6 +473,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-script-surface.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-shape-mask-compositor.c"
 				>
 			</File>
@@ -574,10 +578,6 @@
 			</File>
 			<File
 				RelativePath=".\cairo-wideint.c"
-				>
-			</File>
-			<File
-				RelativePath=".\cairo-xml-surface.c"
 				>
 			</File>
 			<File
