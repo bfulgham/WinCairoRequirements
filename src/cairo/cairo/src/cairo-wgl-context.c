@@ -63,6 +63,9 @@ typedef struct _cairo_wgl_surface {
     HDC dc;
 } cairo_wgl_surface_t;
 
+PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL;
+PFNGLBLENDFUNCSEPARATEPROC _glBlendFuncSeparate = NULL;
+
 static void
 _wgl_acquire (void *abstract_ctx)
 {
@@ -173,6 +176,19 @@ _wgl_dummy_ctx (cairo_wgl_context_t *ctx)
     return CAIRO_STATUS_SUCCESS;
 }
 
+cairo_gl_generic_func_t getProcAddrWrapper (const char *procname)
+{
+/*
+WINGDIAPI PROC  WINAPI wglGetProcAddress(LPCSTR);
+#define DECLSPEC_IMPORT __declspec(dllimport)
+typedef int (WINAPI *PROC)();
+#define WINAPI      __stdcall
+*/
+return (cairo_gl_generic_func_t)wglGetProcAddress (procname);
+
+//extern void WINAPI glBindBuffer (GLenum target, GLuint buffer);
+}
+
 cairo_device_t *
 cairo_wgl_device_create (HGLRC rc)
 {
@@ -258,4 +274,20 @@ cairo_gl_surface_create_for_dc (cairo_device_t	*device,
     surface->dc = dc;
 
     return &surface->base.base;
+}
+
+void InitWGLStuff ()
+{
+    _glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress((LPCSTR)"glActiveTextureARB");
+    _glBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)wglGetProcAddress((LPCSTR)"glBlendFuncSeparate");
+}
+
+GLAPI void APIENTRY glActiveTexture (GLenum texture)
+{
+    (*_glActiveTextureARB)(texture);
+}
+
+GLAPI void APIENTRY glBlendFuncSeparate (GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
+{
+    (*_glBlendFuncSeparate)(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
 }
