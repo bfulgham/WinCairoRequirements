@@ -89,14 +89,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)win32;$(ProjectDir);$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CAIRO_EXPORTS;__STDC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\cairo"
@@ -104,6 +104,7 @@ xcopy /Y /R "$(ProjectDir)..\cairo-version.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-deprecated.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-features.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-gl.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-pdf.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-ps.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"
@@ -141,11 +142,11 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)win32;$(ProjectDir);$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CAIRO_EXPORTS;__STDC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
@@ -156,6 +157,7 @@ xcopy /Y /R "$(ProjectDir)..\cairo-version.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-deprecated.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-features.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-gl.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-pdf.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-ps.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"
@@ -230,58 +232,19 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClCompile Include="cairo-font-options.c" />
     <ClCompile Include="cairo-freed-pool.c" />
     <ClCompile Include="cairo-freelist.c" />
-    <ClCompile Include="cairo-gl-composite.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-device.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-dispatch.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-glyphs.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-gradient.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-info.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-msaa-compositor.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-operand.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-shaders.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-source.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-spans-compositor.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-surface.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="cairo-gl-traps-compositor.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="cairo-gl-composite.c" />
+    <ClCompile Include="cairo-gl-device.c" />
+    <ClCompile Include="cairo-gl-dispatch.c" />
+    <ClCompile Include="cairo-gl-glyphs.c" />
+    <ClCompile Include="cairo-gl-gradient.c" />
+    <ClCompile Include="cairo-gl-info.c" />
+    <ClCompile Include="cairo-gl-msaa-compositor.c" />
+    <ClCompile Include="cairo-gl-operand.c" />
+    <ClCompile Include="cairo-gl-shaders.c" />
+    <ClCompile Include="cairo-gl-source.c" />
+    <ClCompile Include="cairo-gl-spans-compositor.c" />
+    <ClCompile Include="cairo-gl-surface.c" />
+    <ClCompile Include="cairo-gl-traps-compositor.c" />
     <ClCompile Include="cairo-gstate.c" />
     <ClCompile Include="cairo-hash.c" />
     <ClCompile Include="cairo-hull.c" />
@@ -359,10 +322,7 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClCompile Include="cairo-unicode.c" />
     <ClCompile Include="cairo-user-font.c" />
     <ClCompile Include="cairo-version.c" />
-    <ClCompile Include="cairo-wgl-context.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="cairo-wgl-context.c" />
     <ClCompile Include="cairo-wideint.c" />
     <ClCompile Include="cairo.c" />
     <ClCompile Include="win32\cairo-win32-debug.c" />

@@ -59,7 +59,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpstrCm
 {
      // TODO: Place code here.
     MSG msg = {0};
-    HACCEL hAccelTable;
 
     INITCOMMONCONTROLSEX InitCtrlEx;
 
@@ -117,7 +116,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpstrCm
     if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
        printf("cairo failed with %s\n", cairo_status_to_string(cairo_status(cr)));
  
-    ShowWindow(hMainWnd, SW_SHOWNORMAL);
+    ShowWindow(hMainWnd, nCmdShow);
 
     bool running = true;
     LastUpdate = GetTickCount();
@@ -146,7 +145,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpstrCm
         }
     }
 
-exit:
 #ifdef _CRTDBG_MAP_ALLOC
     _CrtDumpMemoryLeaks();
 #endif
@@ -155,8 +153,6 @@ exit:
     OleUninitialize();
     
     return static_cast<int>(msg.wParam);
-
-    return 0;
 }
 
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -182,7 +178,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
 static const int dragBarHeight = 30;
 
-LRESULT OnClose(HWND hwnd, WPARAM wParam, LPARAM lParam)
+LRESULT OnClose(HWND, WPARAM, LPARAM)
 {
   PostQuitMessage(0);
   return 0;
@@ -234,7 +230,7 @@ void SetClientSize(HWND hwnd, int clientWidth, int clientHeight)
 /**
   Handles WM_PAINT.
 */
-LRESULT OnPaint(HWND hwnd, WPARAM wParam, LPARAM lParam)
+LRESULT OnPaint(HWND hwnd, WPARAM, LPARAM)
 {
   PAINTSTRUCT ps;
   HDC hdc = BeginPaint (hwnd, &ps);

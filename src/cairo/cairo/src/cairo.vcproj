@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="cairo"
 	ProjectGUID="{A02A055B-7676-4A0F-A81E-573030C69571}"
 	RootNamespace="cairo"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -76,9 +77,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Install Headers"
 				CommandLine="mkdir &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\cairo-version.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-deprecated.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-features.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-gl.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-pdf.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-ps.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-svg.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-win32.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)cairo-xml.h&quot; &quot;$(SolutionDir)include\cairo&quot;&#x0D;&#x0A;"
@@ -145,9 +143,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <tchar.h>
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 
 // TODO: reference additional headers your program requires here
