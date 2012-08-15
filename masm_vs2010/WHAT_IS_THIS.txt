@@ -1,0 +1,20 @@
+NASM (http://www.nasm.us/) is required to build parts of OpenSSL.
+
+Until NASM's Windows installer provides a property sheet and build
+rules for VS2010 (it already does so for VS2008), we need to manually
+teach VS2010 about NASM.
+
+These settings were created by 'perilbrain' on the Code Project site
+in a very informative article:
+
+http://www.codeproject.com/Articles/410776/Integrating-a-compiler-assembler-in-VS-Using-NASM
+
+The property sheets and XML files are licensed under the "Code Project
+Open License (CPOL) 1.02" (see http://www.codeproject.com/info/cpol10.aspx
+or the file CPOL.html).
+
+INSTALLATION
+1. Install NASM.
+2. Add the NASM installation path to the PATH variable.
+3. Copy nasm.prop, nasm.targets, and nasm.xml to "C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\BuildCustomizations\",
+   alongside the existing masm versions.
