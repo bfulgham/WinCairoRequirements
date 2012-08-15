@@ -518,9 +518,6 @@
     <ClInclude Include="currfmt.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="unicode\currpinf.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <ClInclude Include="decContext.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -963,5 +960,6 @@
     <CustomBuild Include="unicode\uspoof.h">
       <Filter>spoof</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\currpinf.h" />
   </ItemGroup>
 </Project>

@@ -55,7 +55,14 @@ ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
 
 ICUTOOLS=$(DISTOUT)Bin
+!if "$(PLATFORM)" == "x64"
+ICUTOOLS=$(DISTOUT)Bin\x64
+PATH = $(DISTOUT)Bin\x64;$(PATH)
+!ELSE
 PATH = $(DISTOUT)Bin;$(PATH)
+!ENDIF
+
+!MESSAGE ICUTOOLS path is $(ICUTOOLS)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
@@ -75,11 +82,20 @@ RESOURCESDIR=
 # This target should build all the data files
 !IF "$(PKGMODE)" == "dll"
 DLL_OUTPUT=$(DISTOUT)Bin
+!if "$(PLATFORM)" == "x64"
+DLL_OUTPUT=$(DISTOUT)Bin\x64
+!ENDIF
 OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).dll"
 !ELSE
 DLL_OUTPUT=$(DISTOUT)Lib
+!if "$(PLATFORM)" == "x64"
+DLL_OUTPUT=$(DISTOUT)Lib\x64
+!ENDIF
 OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).lib"
 !ENDIF
+
+!MESSAGE DLL_OUTPUT path is $(DLL_OUTPUT)
+!MESSAGE OUTPUT path is $(OUTPUT)
 
 ALL : $(OUTPUT)
 	@echo All targets are up to date (mode $(PKGMODE))

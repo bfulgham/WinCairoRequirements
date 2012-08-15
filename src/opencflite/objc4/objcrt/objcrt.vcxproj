@@ -51,7 +51,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\props\release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
@@ -61,7 +61,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\props\debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -85,7 +85,7 @@
       <Command>cl /nologo /c /MDd /D_DEBUG /D_BIND_TO_CURRENT_VCLIBS_VERSION /Od /Zl /DYNAMICBASE /GS /I"$(ProjectDir)\runtime" /I"$(SolutionDir)\include" /I"$(SolutionDir)\dist\include" /I"$(ProjectDir)\runtime" /D"_WINDOWS" /Dnil=0 ..\runtime\objcrt.c /Fo"$(OutDir)objcrt_debug.obj</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R "$(OutDir)objcrt_debug.obj" "$(SolutionDir)lib"</Command>
+      <Command>xcopy /Y /R "$(OutDir)objcrt_debug.obj" "$(SolutionDir)lib\x64"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -101,7 +101,7 @@
       <Command>cl /nologo /c /MD /O1 /Zi /MP2 /D_BIND_TO_CURRENT_VCLIBS_VERSION /DYNAMICBASE /GS /I"$(ProjectDir)\runtime" /I"$(SolutionDir)\include" /I"$(SolutionDir)\dist\include" /I"$(ProjectDir)\..\runtime" /D"_WINDOWS" /Dnil=0 ..\runtime\objcrt.c /Fo"$(OutDir)objcrt.obj</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R "$(OutDir)objcrt.obj" "$(SolutionDir)lib"</Command>
+      <Command>xcopy /Y /R "$(OutDir)objcrt.obj" "$(SolutionDir)lib\x64"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

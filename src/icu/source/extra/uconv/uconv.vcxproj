@@ -50,7 +50,7 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="..\..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\..\props\debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
@@ -62,7 +62,7 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="..\..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\..\props\release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -166,16 +166,16 @@
     <CustomBuild Include="makedata.mak">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Debug DISTOUT="$(SolutionDir)\"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Debug DISTOUT="$(SolutionDir)\"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Debug DISTOUT="$(SolutionDir)\" PLATFORM="x64"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)Lib\uconvmsg.lib;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)Lib\uconvmsg.lib;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)Lib\x64\uconvmsg.lib;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Release DISTOUT="$(SolutionDir)\" 
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Release DISTOUT="$(SolutionDir)\" 
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nmake /nologo /f %(Filename).mak icup="$(ProjectDir)..\..\.." CFG=Release DISTOUT="$(SolutionDir)\" PLATFORM="x64" 
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Lib\uconvmsg.lib;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)Lib\uconvmsg.lib;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)Lib\x64\uconvmsg.lib;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="resfiles.mk" />
   </ItemGroup>

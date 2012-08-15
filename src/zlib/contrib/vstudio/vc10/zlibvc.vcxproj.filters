@@ -122,5 +122,11 @@
     <MASM Include="..\..\masmx86\match686.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="..\..\masmx64\gvmat64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="..\..\masmx64\inffasx64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
 </Project>

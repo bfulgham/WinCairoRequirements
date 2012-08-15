@@ -988,8 +988,10 @@ extern void __HALT() {
 #if defined(__ppc__)
     __asm__("trap");
 #elif defined(__i386__) || defined(__x86_64__)
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && defined(__i386)
     __asm int 3;
+#elif defined(_MSC_VER) && defined(__x86_64__)
+    __debugbreak();
 #else
     __asm__("int3");
 #endif

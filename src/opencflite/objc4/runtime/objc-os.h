@@ -186,8 +186,13 @@ static inline void ARRSpinLockUnlock(ARRSpinLock *l)
 /* Use this for functions that are intended to be breakpoint hooks.
    If you do not, the compiler may optimize them away.
    BREAKPOINT_FUNCTION( void MyBreakpointFunction(void) ); */
+#ifdef _WIN64
+#   define BREAKPOINT_FUNCTION(prototype) \
+    __declspec(noinline) prototype { ; }
+#else
 #   define BREAKPOINT_FUNCTION(prototype) \
     __declspec(noinline) prototype { __asm { } }
+#endif
 
 /* stub out dtrace probes */
 #   define OBJC_RUNTIME_OBJC_EXCEPTION_RETHROW() do {} while(0)  

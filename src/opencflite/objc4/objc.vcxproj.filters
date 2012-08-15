@@ -170,6 +170,9 @@
     <ClCompile Include="runtime\objc-file.mm">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="runtime\Messengers.subproj\objc-msg-win32-x64.m">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="version.rc">

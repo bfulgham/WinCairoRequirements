@@ -38,8 +38,8 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\props\common.props" />
-    <Import Project="..\..\props\lib.props" />
+    <Import Project="..\..\props\common_x64.props" />
+    <Import Project="..\..\props\lib_x64.props" />
     <Import Project="..\..\props\release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />

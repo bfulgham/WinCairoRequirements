@@ -5,7 +5,7 @@
     <DevPartner_Instrumented_Type> /NMbcOn</DevPartner_Instrumented_Type>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <DevPartner_IsInstrumented>0</DevPartner_IsInstrumented>
+    <DevPartner_IsInstrumented>1</DevPartner_IsInstrumented>
     <DevPartner_Instrumented_Type> /NMbcOn</DevPartner_Instrumented_Type>
   </PropertyGroup>
 </Project>

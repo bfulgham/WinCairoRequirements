@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ssl\d1_srtp.c" />
     <ClCompile Include="..\ssl\s2_meth.c" />
     <ClCompile Include="..\ssl\s2_srvr.c" />
     <ClCompile Include="..\ssl\s2_clnt.c" />
@@ -63,6 +64,7 @@
     <ClCompile Include="..\ssl\ssl_err.c" />
     <ClCompile Include="..\ssl\kssl.c" />
     <ClCompile Include="..\ssl\t1_reneg.c" />
+    <ClCompile Include="..\ssl\tls_srp.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\ms\version32.rc" />
@@ -115,7 +117,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\props\common.props" />
+    <Import Project="..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\props\dll.props" />
     <Import Project="..\..\..\props\debug.props" />
   </ImportGroup>
@@ -127,7 +129,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\props\common.props" />
+    <Import Project="..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\props\dll.props" />
     <Import Project="..\..\..\props\release.props" />
   </ImportGroup>
@@ -138,42 +140,46 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBSSL;OPENSSL_THREADS;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_IA32_SSE2;AES_ASM;BSAES_ASM;GHASH_ASM;OPENSSL_BN_ASM_MONT;OPENSSL_BN_ASM_MONT5;OPENSSL_BN_ASM_GF2m;MD5_ASM;SHA1_ASM;SHA256_ASM;SHA512_ASM;VPAES_ASM;WHIRLPOOL_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_RC5;OPENSSL_NO_MD2;OPENSSL_NO_JPAKE;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\crypto;$(ProjectDir)..;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>wsock32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>"$(ProjectDir)$(ProjectName)_x86.def"</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBSSL;OPENSSL_THREADS;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_IA32_SSE2;AES_ASM;BSAES_ASM;GHASH_ASM;OPENSSL_BN_ASM_MONT;OPENSSL_BN_ASM_MONT5;OPENSSL_BN_ASM_GF2m;MD5_ASM;SHA1_ASM;SHA256_ASM;SHA512_ASM;VPAES_ASM;WHIRLPOOL_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_RC5;OPENSSL_NO_MD2;OPENSSL_NO_JPAKE;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\crypto;$(ProjectDir)..;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>wsock32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>"$(ProjectDir)$(ProjectName)_x64.def"</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBSSL;OPENSSL_THREADS;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_IA32_SSE2;AES_ASM;BSAES_ASM;GHASH_ASM;OPENSSL_BN_ASM_MONT;OPENSSL_BN_ASM_MONT5;OPENSSL_BN_ASM_GF2m;MD5_ASM;SHA1_ASM;SHA256_ASM;SHA512_ASM;VPAES_ASM;WHIRLPOOL_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_RC5;OPENSSL_NO_MD2;OPENSSL_NO_JPAKE;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\crypto;$(ProjectDir)..;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>wsock32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>"$(ProjectDir)$(ProjectName)_x86.def"</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPENSSL_BUILD_SHLIBSSL;OPENSSL_THREADS;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_IA32_SSE2;AES_ASM;BSAES_ASM;GHASH_ASM;OPENSSL_BN_ASM_MONT;OPENSSL_BN_ASM_MONT5;OPENSSL_BN_ASM_GF2m;MD5_ASM;SHA1_ASM;SHA256_ASM;SHA512_ASM;VPAES_ASM;WHIRLPOOL_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_RC5;OPENSSL_NO_MD2;OPENSSL_NO_JPAKE;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\crypto;$(ProjectDir)..;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>wsock32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>"$(ProjectDir)$(ProjectName)_x64.def"</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

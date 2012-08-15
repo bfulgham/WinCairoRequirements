@@ -53,7 +53,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\props\dll.props" />
     <Import Project="..\..\..\..\props\release.props" />
   </ImportGroup>
@@ -65,7 +65,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\props\dll.props" />
     <Import Project="..\..\..\..\props\debug.props" />
   </ImportGroup>
@@ -116,14 +116,14 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)win32;$(ProjectDir);$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CAIRO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\cairo"
@@ -131,6 +131,7 @@ xcopy /Y /R "$(ProjectDir)..\cairo-version.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-deprecated.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-features.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-gl.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-pdf.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-ps.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"
@@ -169,11 +170,11 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)win32;$(ProjectDir);$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CAIRO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
@@ -184,6 +185,7 @@ xcopy /Y /R "$(ProjectDir)..\cairo-version.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-deprecated.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-features.h" "$(SolutionDir)include\cairo"
+xcopy /Y /R "$(ProjectDir)cairo-gl.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-pdf.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-ps.h" "$(SolutionDir)include\cairo"
 xcopy /Y /R "$(ProjectDir)cairo-svg.h" "$(SolutionDir)include\cairo"

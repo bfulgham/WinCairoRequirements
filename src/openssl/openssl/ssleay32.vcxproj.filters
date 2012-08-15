@@ -144,6 +144,12 @@
     <ClCompile Include="..\ssl\t1_reneg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ssl\d1_srtp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ssl\tls_srp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\ms\version32.rc">

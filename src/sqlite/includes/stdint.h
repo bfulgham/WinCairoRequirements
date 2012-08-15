@@ -54,8 +54,13 @@ typedef __int64  int_fast64_t;
 typedef unsigned __int64   uint_fast64_t;
 
 /* 7.18.1.4  Integer types capable of holding object pointers */
+#ifdef _WIN64
+typedef __int64 intptr_t;
+typedef unsigned __int64 uintptr_t;
+#else
 typedef int intptr_t;
 typedef unsigned uintptr_t;
+#endif
 
 /* 7.18.1.5  Greatest-width integer types */
 typedef __int64  intmax_t;

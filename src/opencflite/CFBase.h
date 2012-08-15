@@ -45,8 +45,8 @@
 #define __WIN32__ 1
 #endif
 
-#if defined(_MSC_VER) && defined(_M_IX86)
-#define __i386__ 1
+#if defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64))
+#define __x86_64__ 1
 #endif
 
 #if (defined(__i386__) || defined(__x86_64__)) && !defined(__LITTLE_ENDIAN__)

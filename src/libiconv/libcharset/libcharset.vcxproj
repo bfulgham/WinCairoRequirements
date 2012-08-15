@@ -57,8 +57,8 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\props\common.props" />
-    <Import Project="..\..\..\props\lib.props" />
+    <Import Project="..\..\..\props\common_x64.props" />
+    <Import Project="..\..\..\props\lib_x64.props" />
     <Import Project="..\..\..\props\debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,8 +69,8 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\props\common.props" />
-    <Import Project="..\..\..\props\lib.props" />
+    <Import Project="..\..\..\props\common_x64.props" />
+    <Import Project="..\..\..\props\lib_x64.props" />
     <Import Project="..\..\..\props\release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -171,6 +171,9 @@ xcopy /Y /R $(ProjectDir)include\localcharset.h.in $(ProjectDir)include\localcha
 xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
       <Message>Install Headers</Message>
     </PostBuildEvent>
+    <Lib />
+    <Lib />
+    <Lib />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="lib\localcharset.c" />

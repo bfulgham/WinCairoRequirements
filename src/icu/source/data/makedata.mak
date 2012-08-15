@@ -131,6 +131,8 @@ ICUDATA=$(ICUP)\source\data
 #!ENDIF
 DLL_OUTPUT=$(DISTOUT)
 
+!MESSAGE DLL_OUTPUT path is $(DLL_OUTPUT)
+
 #
 #  TESTDATA
 #     The source directory for data needed for test programs.

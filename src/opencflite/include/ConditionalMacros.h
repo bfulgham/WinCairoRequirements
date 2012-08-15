@@ -1100,6 +1100,55 @@
      #undef pascal
       #define pascal
 
+    #elif defined(_M_X64) || defined(_M_AMD64) /* Visual Studio with Intel x64 target */
+      #define TARGET_CPU_PPC              0
+      #define TARGET_CPU_68K              0
+      #define TARGET_CPU_X86              1
+      #define TARGET_CPU_MIPS             0
+      #define TARGET_CPU_SPARC            0
+      #define TARGET_CPU_ALPHA            0
+      #define TARGET_OS_MAC               0
+      #define TARGET_OS_WIN32             1
+      #define TARGET_OS_UNIX              0
+      #define TARGET_RT_LITTLE_ENDIAN     1
+      #define TARGET_RT_BIG_ENDIAN        0
+      #define __COREAUDIO_USE_FLAT_INCLUDES__ 1
+      #define PRAGMA_IMPORT               0
+      #define PRAGMA_STRUCT_ALIGN         0
+      #define PRAGMA_ONCE                 0
+      #define PRAGMA_STRUCT_PACK          1
+      #define PRAGMA_STRUCT_PACKPUSH      1
+      #define PRAGMA_ENUM_PACK            0
+      #define PRAGMA_ENUM_ALWAYSINT       0
+      #define PRAGMA_ENUM_OPTIONS         0
+      #define FOUR_CHAR_CODE(x)           (x) 
+       #define TYPE_LONGDOUBLE_IS_DOUBLE   1
+      #define TYPE_EXTENDED               0
+      #define TYPE_LONGLONG               1   /* note: uses __int64 instead of long long */
+      #define LONGLONG_TYPENAME           __int64
+
+       #define LONGLONG_SIGNED_MAX         (9223372036854775807i64)
+       #define LONGLONG_SIGNED_MIN         (-9223372036854775807i64 - 1)
+      #define LONGLONG_UNSIGNED_MAX       (0xffffffffffffffffui64)
+
+       #if defined(__cplusplus) && (_MSC_VER >= 1100)
+         #define TYPE_BOOL               1
+      #else
+          #define TYPE_BOOL               0
+      #endif
+     #define FUNCTION_PASCAL             0
+      #ifndef FUNCTION_DECLSPEC               /* allow use of __declspec(dllimport) to be enabled */
+         #define FUNCTION_DECLSPEC       0   /* QuickTime for Windows cannot use dllimport */
+       #endif
+     #ifndef FUNCTION_WIN32CC                /* allow calling convention to be overriddden */
+           #define FUNCTION_WIN32CC        1   
+       #endif
+     /* Warning:  This macros away the pascal word in source code. */
+       /* Very useful for code that needs to compile on Mac 68k and Windows */
+        /* but can silently change code */
+     #undef pascal
+      #define pascal
+
         #elif defined(_M_ALPHA)     /* Visual C++ with Dec Alpha target */
      #define TARGET_CPU_PPC              0
       #define TARGET_CPU_68K              0

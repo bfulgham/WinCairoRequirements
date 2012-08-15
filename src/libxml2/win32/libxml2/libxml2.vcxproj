@@ -57,7 +57,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\props\dll.props" />
     <Import Project="..\..\..\..\props\debug.props" />
   </ImportGroup>
@@ -69,7 +69,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\props\common.props" />
+    <Import Project="..\..\..\..\props\common_x64.props" />
     <Import Project="..\..\..\..\props\dll.props" />
     <Import Project="..\..\..\..\props\release.props" />
   </ImportGroup>
@@ -125,7 +125,6 @@ xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxm
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>wsock32.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -141,7 +140,6 @@ xcopy /Y /R "$(ProjectDir)..\..\include\libxml\*.h" "$(SolutionDir)include\libxm
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>wsock32.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
