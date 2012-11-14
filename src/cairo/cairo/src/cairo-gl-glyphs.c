@@ -220,12 +220,13 @@ cairo_gl_context_get_glyph_cache (cairo_gl_context_t *ctx,
 }
 
 static cairo_status_t
-render_glyphs (cairo_gl_surface_t	*dst,
+render_glyphs (cairo_gl_surface_t *dst,
 	       int dst_x, int dst_y,
-	       cairo_operator_t	 op,
-	       cairo_surface_t	*source,
+	       cairo_operator_t op,
+	       cairo_surface_t *source,
 	       cairo_composite_glyphs_info_t *info,
-	       cairo_bool_t		*has_component_alpha)
+	       cairo_bool_t *has_component_alpha,
+	       cairo_clip_t *clip)
 {
     cairo_format_t last_format = CAIRO_FORMAT_INVALID;
     cairo_gl_glyph_cache_t *cache = NULL;
@@ -255,6 +256,9 @@ render_glyphs (cairo_gl_surface_t	*dst,
 						    source_to_operand (source));
 
     }
+
+    _cairo_gl_composite_set_clip (&setup, clip);
+
     for (i = 0; i < info->num_glyphs; i++) {
 	cairo_scaled_glyph_t *scaled_glyph;
 	cairo_gl_glyph_t *glyph;
@@ -344,7 +348,8 @@ render_glyphs_via_mask (cairo_gl_surface_t *dst,
 			int dst_x, int dst_y,
 			cairo_operator_t  op,
 			cairo_surface_t *source,
-			cairo_composite_glyphs_info_t *info)
+			cairo_composite_glyphs_info_t *info,
+			cairo_clip_t *clip)
 {
     cairo_surface_t *mask;
     cairo_status_t status;
@@ -363,10 +368,11 @@ render_glyphs_via_mask (cairo_gl_surface_t *dst,
     status = render_glyphs ((cairo_gl_surface_t *) mask,
 			    info->extents.x, info->extents.y,
 			    CAIRO_OPERATOR_ADD, NULL,
-			    info, &has_component_alpha);
+			    info, &has_component_alpha, NULL);
     if (likely (status == CAIRO_STATUS_SUCCESS)) {
 	cairo_surface_pattern_t mask_pattern;
 	cairo_surface_pattern_t source_pattern;
+	cairo_rectangle_int_t clip_extents;
 
 	mask->is_clear = FALSE;
 	_cairo_pattern_init_for_surface (&mask_pattern, mask);
@@ -381,10 +387,19 @@ render_glyphs_via_mask (cairo_gl_surface_t *dst,
 	cairo_matrix_init_translate (&source_pattern.base.matrix,
 		                     dst_x-info->extents.x, dst_y-info->extents.y);
 
+	clip = _cairo_clip_copy (clip);
+	clip_extents.x = info->extents.x - dst_x;
+	clip_extents.y = info->extents.y - dst_y;
+	clip_extents.width = info->extents.width;
+	clip_extents.height = info->extents.height;
+	clip = _cairo_clip_intersect_rectangle (clip, &clip_extents);
+
 	status = _cairo_surface_mask (&dst->base, op,
 		                      &source_pattern.base,
 				      &mask_pattern.base,
-				      NULL);
+				      clip);
+
+	_cairo_clip_destroy (clip);
 
 	_cairo_pattern_fini (&mask_pattern.base);
 	_cairo_pattern_fini (&source_pattern.base);
@@ -412,18 +427,18 @@ _cairo_gl_check_composite_glyphs (const cairo_composite_rectangles_t *extents,
 }
 
 cairo_int_status_t
-_cairo_gl_composite_glyphs (void			*_dst,
-			    cairo_operator_t		 op,
-			    cairo_surface_t		*_src,
-			    int				 src_x,
-			    int				 src_y,
-			    int				 dst_x,
-			    int				 dst_y,
-			    cairo_composite_glyphs_info_t *info)
+_cairo_gl_composite_glyphs_with_clip (void			    *_dst,
+				      cairo_operator_t		     op,
+				      cairo_surface_t		    *_src,
+				      int			     src_x,
+				      int			     src_y,
+				      int			     dst_x,
+				      int			     dst_y,
+				      cairo_composite_glyphs_info_t *info,
+				      cairo_clip_t		    *clip)
 {
     cairo_gl_surface_t *dst = _dst;
     cairo_bool_t has_component_alpha;
-    int i;
 
     TRACE ((stderr, "%s\n", __FUNCTION__));
 
@@ -440,12 +455,28 @@ _cairo_gl_composite_glyphs (void			*_dst,
 
     if (info->use_mask) {
 	return render_glyphs_via_mask (dst, dst_x, dst_y,
-				       op, _src, info);
+				       op, _src, info, clip);
     } else {
 	return render_glyphs (dst, dst_x, dst_y,
 			      op, _src, info,
-			      &has_component_alpha);
+			      &has_component_alpha,
+			      clip);
     }
+
+}
+
+cairo_int_status_t
+_cairo_gl_composite_glyphs (void			*_dst,
+			    cairo_operator_t		 op,
+			    cairo_surface_t		*_src,
+			    int				 src_x,
+			    int				 src_y,
+			    int				 dst_x,
+			    int				 dst_y,
+			    cairo_composite_glyphs_info_t *info)
+{
+    return _cairo_gl_composite_glyphs_with_clip (_dst, op, _src, src_x, src_y,
+						 dst_x, dst_y, info, NULL);
 }
 
 void

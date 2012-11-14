@@ -21,10 +21,13 @@ test_sources = \
 	big-empty-triangle.c				\
 	big-little-box.c				\
 	big-little-triangle.c				\
+	bug-spline.c					\
 	big-trap.c					\
 	bilevel-image.c					\
 	bug-40410.c					\
+	bug-51910.c					\
 	bug-bo-rectangular.c				\
+	bug-bo-collins.c				\
 	bug-bo-ricotz.c					\
 	bug-source-cu.c					\
 	bug-extents.c					\
@@ -43,6 +46,7 @@ test_sources = \
 	clip-complex-shape.c				\
 	clip-disjoint.c					\
 	clip-disjoint-hatching.c			\
+	clip-disjoint-quad.c				\
 	clip-device-offset.c				\
 	clip-double-free.c				\
 	clip-draw-unbounded.c				\
@@ -221,6 +225,7 @@ test_sources = \
 	operator-alpha-alpha.c				\
 	operator-clear.c				\
 	operator-source.c				\
+	outline-tolerance.c				\
 	over-above-source.c				\
 	over-around-source.c				\
 	over-below-source.c				\
@@ -278,12 +283,14 @@ test_sources = \
 	rotated-clip.c					\
 	rounded-rectangle-fill.c			\
 	rounded-rectangle-stroke.c			\
+	sample.c					\
 	scale-down-source-surface-paint.c		\
 	scale-offset-image.c				\
 	scale-offset-similar.c				\
 	scale-source-surface-paint.c			\
 	scaled-font-zero-matrix.c			\
 	stroke-ctm-caps.c				\
+	stroke-clipped.c			        \
 	stroke-image.c				        \
 	stroke-open-box.c				\
 	select-font-face.c				\

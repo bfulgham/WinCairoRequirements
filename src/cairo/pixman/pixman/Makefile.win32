@@ -40,7 +40,7 @@ PIXMAN_CFLAGS += $(SSE2_CFLAGS)
 libpixman_sources += pixman-sse2.c
 endif
 
-OBJECTS     = $(patsubst %.c, $(CFG_VAR)/%.obj, $(libpixman_sources))
+OBJECTS = $(patsubst %.c, $(CFG_VAR)/%.obj, $(libpixman_sources))
 
 # targets
 all: inform informMMX informSSE2 $(CFG_VAR)/$(LIBRARY).lib
@@ -71,8 +71,7 @@ ifneq ($(MMX),on)
 ifneq ($(MMX),)
 	@echo "Invalid specified MMX option : "$(MMX_VAR)"."
 	@echo
-	@echo -n "Possible choices for MMX are 'on' or 'off'"
-	@echo ""
+	@echo "Possible choices for MMX are 'on' or 'off'"
 	@exit 1
 endif
 	@echo "Setting MMX flag to default value 'on'... (use MMX=on or MMX=off)"
@@ -85,8 +84,7 @@ ifneq ($(SSE2),on)
 ifneq ($(SSE2),)
 	@echo "Invalid specified SSE option : "$(SSE2)"."
 	@echo
-	@echo -n "Possible choices for SSE2 are 'on' or 'off'"
-	@echo ""
+	@echo "Possible choices for SSE2 are 'on' or 'off'"
 	@exit 1
 endif
 	@echo "Setting SSE2 flag to default value 'on'... (use SSE2=on or SSE2=off)"
@@ -105,3 +103,5 @@ $(CFG_VAR)/$(LIBRARY).lib: $(OBJECTS)
 clean_r:
 	@rm -f $(CFG_VAR)/*.obj $(CFG_VAR)/*.lib $(CFG_VAR)/*.pdb $(CFG)/*.ilk || exit 0
 	@rm -f $(CFG)/*.obj $(CFG)/*.lib $(CFG)/*.pdb $(CFG)/*.ilk $(BUILT_SOURCES) || exit 0
+
+.PHONY: all informMMX informSSE2

@@ -115,6 +115,13 @@ _cairo_gl_composite_set_clip_region (cairo_gl_composite_t *setup,
     setup->clip_region = clip_region;
 }
 
+void
+_cairo_gl_composite_set_clip (cairo_gl_composite_t *setup,
+			      cairo_clip_t *clip)
+{
+    setup->clip = clip;
+}
+
 static void
 _cairo_gl_composite_bind_to_shader (cairo_gl_context_t   *ctx,
 				    cairo_gl_composite_t *setup)
@@ -153,32 +160,39 @@ _cairo_gl_texture_set_extend (cairo_gl_context_t *ctx,
                               GLuint              target,
                               cairo_extend_t      extend)
 {
+    GLint wrap_mode;
     assert (! _cairo_gl_device_requires_power_of_two_textures (&ctx->base) ||
             (extend != CAIRO_EXTEND_REPEAT && extend != CAIRO_EXTEND_REFLECT));
 
     switch (extend) {
     case CAIRO_EXTEND_NONE:
-	if (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES) {
-	    glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	    glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	}
-	else {
-	    glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	    glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	}
+	if (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES)
+	    wrap_mode = GL_CLAMP_TO_EDGE;
+	else
+	    wrap_mode = GL_CLAMP_TO_BORDER;
 	break;
     case CAIRO_EXTEND_PAD:
-	glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	wrap_mode = GL_CLAMP_TO_EDGE;
 	break;
     case CAIRO_EXTEND_REPEAT:
-	glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	if (ctx->has_npot_repeat)
+	    wrap_mode = GL_REPEAT;
+	else
+	    wrap_mode = GL_CLAMP_TO_EDGE;
 	break;
     case CAIRO_EXTEND_REFLECT:
-	glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	if (ctx->has_npot_repeat)
+	    wrap_mode = GL_MIRRORED_REPEAT;
+	else
+	    wrap_mode = GL_CLAMP_TO_EDGE;
 	break;
+    default:
+	wrap_mode = 0;
+    }
+
+    if (likely (wrap_mode)) {
+	glTexParameteri (target, GL_TEXTURE_WRAP_S, wrap_mode);
+	glTexParameteri (target, GL_TEXTURE_WRAP_T, wrap_mode);
     }
 }
 
@@ -230,7 +244,7 @@ _cairo_gl_context_setup_operand (cairo_gl_context_t *ctx,
 
 	dispatch->VertexAttribPointer (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit, 2,
 					GL_FLOAT, GL_FALSE, vertex_size,
-					(void *) (uintptr_t) vertex_offset);
+					ctx->vb + vertex_offset);
 	dispatch->EnableVertexAttribArray (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit);
         break;
     case CAIRO_GL_OPERAND_LINEAR_GRADIENT:
@@ -244,7 +258,7 @@ _cairo_gl_context_setup_operand (cairo_gl_context_t *ctx,
 
 	dispatch->VertexAttribPointer (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit, 2,
 				       GL_FLOAT, GL_FALSE, vertex_size,
-				       (void *) (uintptr_t) vertex_offset);
+				       ctx->vb + vertex_offset);
 	dispatch->EnableVertexAttribArray (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit);
 	break;
     }
@@ -259,7 +273,7 @@ _cairo_gl_context_setup_spans (cairo_gl_context_t *ctx,
 
     dispatch->VertexAttribPointer (CAIRO_GL_COLOR_ATTRIB_INDEX, 4,
 				   GL_UNSIGNED_BYTE, GL_TRUE, vertex_size,
-				   (void *) (uintptr_t) vertex_offset);
+				   ctx->vb + vertex_offset);
     dispatch->EnableVertexAttribArray (CAIRO_GL_COLOR_ATTRIB_INDEX);
     ctx->spans = TRUE;
 }
@@ -460,9 +474,151 @@ _cairo_gl_composite_begin_component_alpha  (cairo_gl_context_t *ctx,
     return CAIRO_STATUS_SUCCESS;
 }
 
+static void
+_scissor_to_doubles (cairo_gl_surface_t	*surface,
+		     double x1, double y1,
+		     double x2, double y2)
+{
+    double height;
+
+    height = y2 - y1;
+    if (_cairo_gl_surface_is_texture (surface) == FALSE)
+	y1 = surface->height - (y1 + height);
+    glScissor (x1, y1, x2 - x1, height);
+    glEnable (GL_SCISSOR_TEST);
+}
+
+static void
+_scissor_to_rectangle (cairo_gl_surface_t *surface,
+		       const cairo_rectangle_int_t *r)
+{
+    _scissor_to_doubles (surface, r->x, r->y, r->x+r->width, r->y+r->height);
+}
+
+static void
+_scissor_to_box (cairo_gl_surface_t	*surface,
+		 const cairo_box_t	*box)
+{
+    double x1, y1, x2, y2;
+    _cairo_box_to_doubles (box, &x1, &y1, &x2, &y2);
+    _scissor_to_doubles (surface, x1, y1, x2, y2);
+}
+
+static void
+_cairo_gl_composite_setup_vbo (cairo_gl_context_t *ctx,
+			       unsigned int size_per_vertex)
+{
+    if (ctx->vertex_size != size_per_vertex)
+        _cairo_gl_composite_flush (ctx);
+
+    if (_cairo_gl_context_is_flushed (ctx)) {
+	ctx->dispatch.VertexAttribPointer (CAIRO_GL_VERTEX_ATTRIB_INDEX, 2,
+					   GL_FLOAT, GL_FALSE, size_per_vertex,
+					   ctx->vb);
+	ctx->dispatch.EnableVertexAttribArray (CAIRO_GL_VERTEX_ATTRIB_INDEX);
+    }
+    ctx->vertex_size = size_per_vertex;
+}
+
+static void
+_disable_stencil_buffer (void)
+{
+    glDisable (GL_STENCIL_TEST);
+    glDepthMask (GL_FALSE);
+}
+
+static cairo_int_status_t
+_cairo_gl_composite_setup_painted_clipping (cairo_gl_composite_t *setup,
+					    cairo_gl_context_t *ctx,
+					    int vertex_size)
+{
+    cairo_int_status_t status = CAIRO_INT_STATUS_SUCCESS;
+
+    cairo_gl_surface_t *dst = setup->dst;
+    cairo_clip_t *clip = setup->clip;
+
+    if (clip->num_boxes == 1 && clip->path == NULL) {
+	_scissor_to_box (dst, &clip->boxes[0]);
+	goto disable_stencil_buffer_and_return;
+    }
+
+    /* If we cannot reduce the clip to a rectangular region,
+       we clip using the stencil buffer. */
+    glDisable (GL_SCISSOR_TEST);
+
+    if (! _cairo_gl_ensure_stencil (ctx, setup->dst)) {
+	status = CAIRO_INT_STATUS_UNSUPPORTED;
+	goto disable_stencil_buffer_and_return;
+    }
+
+    glDepthMask (GL_TRUE);
+    glEnable (GL_STENCIL_TEST);
+    glClearStencil (0);
+    glClear (GL_STENCIL_BUFFER_BIT);
+    glStencilOp (GL_REPLACE, GL_REPLACE, GL_REPLACE);
+    glStencilFunc (GL_EQUAL, 1, 0xffffffff);
+    glColorMask (0, 0, 0, 0);
+
+    status = _cairo_gl_msaa_compositor_draw_clip (ctx, setup, clip);
+
+    if (unlikely (status)) {
+	glColorMask (1, 1, 1, 1);
+	goto disable_stencil_buffer_and_return;
+    }
+
+    /* We want to only render to the stencil buffer, so draw everything now.
+       Flushing also unbinds the VBO, which we want to rebind for regular
+       drawing. */
+    _cairo_gl_composite_flush (ctx);
+    _cairo_gl_composite_setup_vbo (ctx, vertex_size);
+
+    glColorMask (1, 1, 1, 1);
+    glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc (GL_EQUAL, 1, 0xffffffff);
+    return CAIRO_INT_STATUS_SUCCESS;
+
+disable_stencil_buffer_and_return:
+    _disable_stencil_buffer ();
+    return status;
+}
+
+static cairo_int_status_t
+_cairo_gl_composite_setup_clipping (cairo_gl_composite_t *setup,
+				    cairo_gl_context_t *ctx,
+				    int vertex_size)
+{
+
+    if (! _cairo_gl_context_is_flushed (ctx) &&
+	(! cairo_region_equal (ctx->clip_region, setup->clip_region) ||
+	 ! _cairo_clip_equal (ctx->clip, setup->clip)))
+	_cairo_gl_composite_flush (ctx);
+
+    cairo_region_destroy (ctx->clip_region);
+    ctx->clip_region = cairo_region_reference (setup->clip_region);
+    _cairo_clip_destroy (ctx->clip);
+    ctx->clip = _cairo_clip_copy (setup->clip);
+
+    assert (!setup->clip_region || !setup->clip);
+
+    if (ctx->clip_region) {
+	_disable_stencil_buffer ();
+	glEnable (GL_SCISSOR_TEST);
+	return CAIRO_INT_STATUS_SUCCESS;
+    }
+
+    if (ctx->clip)
+	return _cairo_gl_composite_setup_painted_clipping (setup, ctx,
+							   vertex_size);
+
+    _disable_stencil_buffer ();
+    glDisable (GL_SCISSOR_TEST);
+    return CAIRO_INT_STATUS_SUCCESS;
+}
+
 cairo_status_t
-_cairo_gl_composite_begin (cairo_gl_composite_t *setup,
-                           cairo_gl_context_t **ctx_out)
+_cairo_gl_composite_begin_multisample (cairo_gl_composite_t *setup,
+				       cairo_gl_context_t **ctx_out,
+				       cairo_bool_t multisampling)
 {
     unsigned int dst_size, src_size, mask_size, vertex_size;
     cairo_gl_context_t *ctx;
@@ -475,6 +631,8 @@ _cairo_gl_composite_begin (cairo_gl_composite_t *setup,
     status = _cairo_gl_context_acquire (setup->dst->base.device, &ctx);
     if (unlikely (status))
 	return status;
+
+    _cairo_gl_context_set_destination (ctx, setup->dst, multisampling);
 
     glEnable (GL_BLEND);
 
@@ -514,23 +672,12 @@ _cairo_gl_composite_begin (cairo_gl_composite_t *setup,
     dst_size  = 2 * sizeof (GLfloat);
     src_size  = _cairo_gl_operand_get_vertex_size (setup->src.type);
     mask_size = _cairo_gl_operand_get_vertex_size (setup->mask.type);
-
     vertex_size = dst_size + src_size + mask_size;
+
     if (setup->spans)
 	    vertex_size += sizeof (GLfloat);
 
-    if (ctx->vertex_size != vertex_size)
-        _cairo_gl_composite_flush (ctx);
-
-    _cairo_gl_context_set_destination (ctx, setup->dst);
-
-    if (_cairo_gl_context_is_flushed (ctx)) {
-        ctx->dispatch.BindBuffer (GL_ARRAY_BUFFER, ctx->vbo);
-
-	ctx->dispatch.VertexAttribPointer (CAIRO_GL_VERTEX_ATTRIB_INDEX, 2,
-					   GL_FLOAT, GL_FALSE, vertex_size, NULL);
-	ctx->dispatch.EnableVertexAttribArray (CAIRO_GL_VERTEX_ATTRIB_INDEX);
-    }
+    _cairo_gl_composite_setup_vbo (ctx, vertex_size);
 
     _cairo_gl_context_setup_operand (ctx, CAIRO_GL_TEX_SOURCE, &setup->src, vertex_size, dst_size);
     _cairo_gl_context_setup_operand (ctx, CAIRO_GL_TEX_MASK, &setup->mask, vertex_size, dst_size + src_size);
@@ -541,8 +688,6 @@ _cairo_gl_composite_begin (cairo_gl_composite_t *setup,
 
     _cairo_gl_set_operator (ctx, setup->op, component_alpha);
 
-    ctx->vertex_size = vertex_size;
-
     if (_cairo_gl_context_is_flushed (ctx)) {
         if (ctx->pre_shader) {
             _cairo_gl_set_shader (ctx, ctx->pre_shader);
@@ -552,15 +697,9 @@ _cairo_gl_composite_begin (cairo_gl_composite_t *setup,
         _cairo_gl_composite_bind_to_shader (ctx, setup);
     }
 
-    if (! _cairo_gl_context_is_flushed (ctx) &&
-        ! cairo_region_equal (ctx->clip_region, setup->clip_region))
-        _cairo_gl_composite_flush (ctx);
-    cairo_region_destroy (ctx->clip_region);
-    ctx->clip_region = cairo_region_reference (setup->clip_region);
-    if (ctx->clip_region)
-	glEnable (GL_SCISSOR_TEST);
-    else
-	glDisable (GL_SCISSOR_TEST);
+    status = _cairo_gl_composite_setup_clipping (setup, ctx, vertex_size);
+    if (unlikely (status))
+	goto FAIL;
 
     *ctx_out = ctx;
 
@@ -571,18 +710,37 @@ FAIL:
     return status;
 }
 
+cairo_status_t
+_cairo_gl_composite_begin (cairo_gl_composite_t *setup,
+                           cairo_gl_context_t **ctx_out)
+{
+    return _cairo_gl_composite_begin_multisample (setup, ctx_out, FALSE);
+}
+
 static inline void
 _cairo_gl_composite_draw_tristrip (cairo_gl_context_t *ctx)
 {
     cairo_array_t* indices = &ctx->tristrip_indices;
-    const int *indices_array = _cairo_array_index_const (indices, 0);
-    glDrawElements (GL_TRIANGLE_STRIP, _cairo_array_num_elements (indices), GL_UNSIGNED_INT, indices_array);
+    const unsigned short *indices_array = _cairo_array_index_const (indices, 0);
+
+    if (ctx->pre_shader) {
+	cairo_gl_shader_t *prev_shader = ctx->current_shader;
+
+	_cairo_gl_set_shader (ctx, ctx->pre_shader);
+	_cairo_gl_set_operator (ctx, CAIRO_OPERATOR_DEST_OUT, TRUE);
+	glDrawElements (GL_TRIANGLE_STRIP, _cairo_array_num_elements (indices), GL_UNSIGNED_SHORT, indices_array);
+
+	_cairo_gl_set_shader (ctx, prev_shader);
+	_cairo_gl_set_operator (ctx, CAIRO_OPERATOR_ADD, TRUE);
+    }
+
+    glDrawElements (GL_TRIANGLE_STRIP, _cairo_array_num_elements (indices), GL_UNSIGNED_SHORT, indices_array);
     _cairo_array_truncate (indices, 0);
 }
 
 static inline void
-_cairo_gl_composite_draw (cairo_gl_context_t *ctx,
-			  unsigned int count)
+_cairo_gl_composite_draw_triangles (cairo_gl_context_t *ctx,
+				    unsigned int count)
 {
     if (! ctx->pre_shader) {
         glDrawArrays (GL_TRIANGLES, 0, count);
@@ -600,15 +758,30 @@ _cairo_gl_composite_draw (cairo_gl_context_t *ctx,
 }
 
 static void
+_cairo_gl_composite_draw_triangles_with_clip_region (cairo_gl_context_t *ctx,
+						     unsigned int count)
+{
+    int i, num_rectangles;
+
+    if (!ctx->clip_region) {
+	_cairo_gl_composite_draw_triangles (ctx, count);
+	return;
+    }
+
+    num_rectangles = cairo_region_num_rectangles (ctx->clip_region);
+    for (i = 0; i < num_rectangles; i++) {
+	cairo_rectangle_int_t rect;
+
+	cairo_region_get_rectangle (ctx->clip_region, i, &rect);
+
+	_scissor_to_rectangle (ctx->current_target, &rect);
+	_cairo_gl_composite_draw_triangles (ctx, count);
+    }
+}
+
+static void
 _cairo_gl_composite_unmap_vertex_buffer (cairo_gl_context_t *ctx)
 {
-    if (ctx->has_map_buffer)
-	ctx->dispatch.UnmapBuffer (GL_ARRAY_BUFFER);
-    else
-	ctx->dispatch.BufferData (GL_ARRAY_BUFFER, ctx->vb_offset,
-				  ctx->vb, GL_DYNAMIC_DRAW);
-
-    ctx->vb = NULL;
     ctx->vb_offset = 0;
 }
 
@@ -624,21 +797,11 @@ _cairo_gl_composite_flush (cairo_gl_context_t *ctx)
     count = ctx->vb_offset / ctx->vertex_size;
     _cairo_gl_composite_unmap_vertex_buffer (ctx);
 
-    if ( _cairo_array_num_elements (&ctx->tristrip_indices) > 0) {
+    if (ctx->primitive_type == CAIRO_GL_PRIMITIVE_TYPE_TRISTRIPS) {
 	_cairo_gl_composite_draw_tristrip (ctx);
-    } else if (ctx->clip_region) {
-	int i, num_rectangles = cairo_region_num_rectangles (ctx->clip_region);
-
-	for (i = 0; i < num_rectangles; i++) {
-	    cairo_rectangle_int_t rect;
-
-	    cairo_region_get_rectangle (ctx->clip_region, i, &rect);
-
-	    glScissor (rect.x, rect.y, rect.width, rect.height);
-            _cairo_gl_composite_draw (ctx, count);
-	}
     } else {
-        _cairo_gl_composite_draw (ctx, count);
+	assert (ctx->primitive_type == CAIRO_GL_PRIMITIVE_TYPE_TRIANGLES);
+	_cairo_gl_composite_draw_triangles_with_clip_region (ctx, count);
     }
 
     for (i = 0; i < ARRAY_LENGTH (&ctx->glyph_cache); i++)
@@ -647,23 +810,16 @@ _cairo_gl_composite_flush (cairo_gl_context_t *ctx)
 
 static void
 _cairo_gl_composite_prepare_buffer (cairo_gl_context_t *ctx,
-                                    unsigned int n_vertices)
+				    unsigned int n_vertices,
+				    cairo_gl_primitive_type_t primitive_type)
 {
-    cairo_gl_dispatch_t *dispatch = &ctx->dispatch;
+    if (ctx->primitive_type != primitive_type) {
+	_cairo_gl_composite_flush (ctx);
+	ctx->primitive_type = primitive_type;
+    }
 
     if (ctx->vb_offset + n_vertices * ctx->vertex_size > CAIRO_GL_VBO_SIZE)
 	_cairo_gl_composite_flush (ctx);
-
-    if (ctx->vb == NULL) {
-	if (ctx->has_map_buffer) {
-	    dispatch->BufferData (GL_ARRAY_BUFFER, CAIRO_GL_VBO_SIZE,
-				  NULL, GL_DYNAMIC_DRAW);
-	    ctx->vb = dispatch->MapBuffer (GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-	}
-	else {
-	    ctx->vb = ctx->vb_mem;
-	}
-    }
 }
 
 static inline void
@@ -696,6 +852,17 @@ _cairo_gl_composite_emit_vertex (cairo_gl_context_t *ctx,
     ctx->vb_offset += ctx->vertex_size;
 }
 
+static void
+_cairo_gl_composite_emit_point (cairo_gl_context_t	*ctx,
+				const cairo_point_t	*point,
+				uint8_t alpha)
+{
+    _cairo_gl_composite_emit_vertex (ctx,
+				     _cairo_fixed_to_double (point->x),
+				     _cairo_fixed_to_double (point->y),
+				     alpha);
+}
+
 void
 _cairo_gl_composite_emit_rect (cairo_gl_context_t *ctx,
                                GLfloat x1,
@@ -704,7 +871,8 @@ _cairo_gl_composite_emit_rect (cairo_gl_context_t *ctx,
                                GLfloat y2,
                                uint8_t alpha)
 {
-    _cairo_gl_composite_prepare_buffer (ctx, 6);
+    _cairo_gl_composite_prepare_buffer (ctx, 6,
+					CAIRO_GL_PRIMITIVE_TYPE_TRIANGLES);
 
     _cairo_gl_composite_emit_vertex (ctx, x1, y1, alpha);
     _cairo_gl_composite_emit_vertex (ctx, x2, y1, alpha);
@@ -746,7 +914,8 @@ _cairo_gl_composite_emit_glyph (cairo_gl_context_t *ctx,
                                 GLfloat glyph_x2,
                                 GLfloat glyph_y2)
 {
-    _cairo_gl_composite_prepare_buffer (ctx, 6);
+    _cairo_gl_composite_prepare_buffer (ctx, 6,
+					CAIRO_GL_PRIMITIVE_TYPE_TRIANGLES);
 
     _cairo_gl_composite_emit_glyph_vertex (ctx, x1, y1, glyph_x1, glyph_y1);
     _cairo_gl_composite_emit_glyph_vertex (ctx, x2, y1, glyph_x2, glyph_y1);
@@ -789,18 +958,6 @@ _cairo_gl_composite_init (cairo_gl_composite_t *setup,
     return CAIRO_STATUS_SUCCESS;
 }
 
-static void
-_cairo_gl_composite_emit_tristrip_vertex (cairo_gl_context_t	*ctx,
-					  const cairo_point_t	*point)
-{
-    GLfloat *vb = (GLfloat *) (void *) &ctx->vb[ctx->vb_offset];
-
-    *vb++ = _cairo_fixed_to_double (point->x);
-    *vb++ = _cairo_fixed_to_double (point->y);
-
-    ctx->vb_offset += ctx->vertex_size;
-}
-
 static cairo_int_status_t
 _cairo_gl_composite_append_vertex_indices (cairo_gl_context_t	*ctx,
 					   int			 number_of_new_indices)
@@ -808,7 +965,7 @@ _cairo_gl_composite_append_vertex_indices (cairo_gl_context_t	*ctx,
     cairo_int_status_t status = CAIRO_INT_STATUS_SUCCESS;
     cairo_array_t *indices = &ctx->tristrip_indices;
     int number_of_indices = _cairo_array_num_elements (indices);
-    int current_vertex_index = 0;
+    unsigned short current_vertex_index = 0;
     int i;
 
     assert (number_of_new_indices > 0);
@@ -817,7 +974,7 @@ _cairo_gl_composite_append_vertex_indices (cairo_gl_context_t	*ctx,
        context, we insert a set of degenerate triangles from the last
        preexisting vertex to our first one. */
     if (number_of_indices > 0) {
-	const int *indices_array = _cairo_array_index_const (indices, 0);
+	const unsigned short *indices_array = _cairo_array_index_const (indices, 0);
 	current_vertex_index = indices_array[number_of_indices - 1];
 
 	status = _cairo_array_append (indices, &current_vertex_index);
@@ -845,16 +1002,17 @@ _cairo_gl_composite_emit_quad_as_tristrip (cairo_gl_context_t	*ctx,
 					   cairo_gl_composite_t	*setup,
 					   const cairo_point_t	quad[4])
 {
-    _cairo_gl_composite_prepare_buffer (ctx, 4);
+    _cairo_gl_composite_prepare_buffer (ctx, 4,
+					CAIRO_GL_PRIMITIVE_TYPE_TRISTRIPS);
 
-    _cairo_gl_composite_emit_tristrip_vertex (ctx, &quad[0]);
-    _cairo_gl_composite_emit_tristrip_vertex (ctx, &quad[1]);
+    _cairo_gl_composite_emit_point (ctx, &quad[0], 0);
+    _cairo_gl_composite_emit_point (ctx, &quad[1], 0);
 
     /* Cairo stores quad vertices in counter-clockwise order, but we need to
        emit them from top to bottom in the triangle strip, so we need to reverse
        the order of the last two vertices. */
-    _cairo_gl_composite_emit_tristrip_vertex (ctx, &quad[3]);
-    _cairo_gl_composite_emit_tristrip_vertex (ctx, &quad[2]);
+    _cairo_gl_composite_emit_point (ctx, &quad[3], 0);
+    _cairo_gl_composite_emit_point (ctx, &quad[2], 0);
 
     return _cairo_gl_composite_append_vertex_indices (ctx, 4);
 }
@@ -864,68 +1022,11 @@ _cairo_gl_composite_emit_triangle_as_tristrip (cairo_gl_context_t	*ctx,
 					       cairo_gl_composite_t	*setup,
 					       const cairo_point_t	 triangle[3])
 {
-    _cairo_gl_composite_prepare_buffer (ctx, 3);
+    _cairo_gl_composite_prepare_buffer (ctx, 3,
+					CAIRO_GL_PRIMITIVE_TYPE_TRISTRIPS);
 
-    _cairo_gl_composite_emit_tristrip_vertex (ctx, &triangle[0]);
-    _cairo_gl_composite_emit_tristrip_vertex (ctx, &triangle[1]);
-    _cairo_gl_composite_emit_tristrip_vertex (ctx, &triangle[2]);
+    _cairo_gl_composite_emit_point (ctx, &triangle[0], 0);
+    _cairo_gl_composite_emit_point (ctx, &triangle[1], 0);
+    _cairo_gl_composite_emit_point (ctx, &triangle[2], 0);
     return _cairo_gl_composite_append_vertex_indices (ctx, 3);
-}
-
-cairo_status_t
-_cairo_gl_composite_begin_tristrip (cairo_gl_composite_t	*setup,
-				    cairo_gl_context_t		**ctx_out)
-{
-    cairo_gl_context_t *ctx;
-    cairo_status_t status;
-    cairo_gl_shader_t *shader;
-    int src_size, dst_size;
-
-    cairo_gl_operand_t default_mask;
-    memset (&default_mask, 0, sizeof (cairo_gl_operand_t));
-
-    assert (setup->dst);
-
-    status = _cairo_gl_context_acquire (setup->dst->base.device, &ctx);
-    if (unlikely (status))
-	return status;
-    *ctx_out = ctx;
-
-    /* Finish any pending operations from other GL compositors. */
-    if (! _cairo_gl_context_is_flushed (ctx))
-	_cairo_gl_composite_flush (ctx);
-
-    glEnable (GL_BLEND);
-
-    status = _cairo_gl_get_shader_by_type (ctx,
-					   &setup->src,
-					   &default_mask,
-					   setup->spans,
-					   CAIRO_GL_SHADER_IN_NORMAL,
-                                           &shader);
-    if (unlikely (status)) {
-	status = _cairo_gl_context_release (ctx, status);
-	return status;
-    }
-
-    _cairo_gl_context_set_destination (ctx, setup->dst);
-
-    _cairo_gl_set_operator (ctx, setup->op, FALSE);
-    _cairo_gl_set_shader (ctx, shader);
-    _cairo_gl_composite_bind_to_shader (ctx, setup);
-
-    dst_size  = 2 * sizeof (GLfloat);
-    src_size  = _cairo_gl_operand_get_vertex_size (setup->src.type);
-
-    ctx->vertex_size = dst_size + src_size;
-
-    ctx->dispatch.BindBuffer (GL_ARRAY_BUFFER, ctx->vbo);
-    ctx->dispatch.VertexAttribPointer (CAIRO_GL_VERTEX_ATTRIB_INDEX, 2,
-				       GL_FLOAT, GL_FALSE, ctx->vertex_size, NULL);
-    ctx->dispatch.EnableVertexAttribArray (CAIRO_GL_VERTEX_ATTRIB_INDEX);
-
-    _cairo_gl_context_setup_operand (ctx, CAIRO_GL_TEX_SOURCE, &setup->src,
-				     ctx->vertex_size, dst_size);
-
-    return status;
 }

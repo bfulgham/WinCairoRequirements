@@ -1051,10 +1051,13 @@ modifying the backing store of the target surface. The region retrieved
 may be limited to the <parameter>extents</parameter> or <link linkend="NULL:CAPS"><literal>NULL</literal></link> for the whole surface
 </para>
 <para>
-Note, the use of the original surface as a target or source whilst it is
-mapped is undefined. The result of mapping the surface multiple times is
-undefined. Calling <link linkend="cairo-surface-destroy"><function>cairo_surface_destroy()</function></link> or <link linkend="cairo-surface-finish"><function>cairo_surface_finish()</function></link> on the
-resulting image surface results in undefined behavior.
+Note, the use of the original surface as a target or source whilst
+it is mapped is undefined. The result of mapping the surface
+multiple times is undefined. Calling <link linkend="cairo-surface-destroy"><function>cairo_surface_destroy()</function></link> or
+<link linkend="cairo-surface-finish"><function>cairo_surface_finish()</function></link> on the resulting image surface results in
+undefined behavior. Changing the device transform of the image
+surface or of <parameter>surface</parameter> before the image surface is unmapped results
+in undefined behavior.
 </para><variablelist role="params">
 <varlistentry><term><parameter>surface</parameter>&#160;:</term>
 <listitem><simpara>an existing surface used to extract the image from</simpara></listitem></varlistentry>
@@ -1064,7 +1067,9 @@ resulting image surface results in undefined behavior.
 must use <link linkend="cairo-surface-unmap-image"><function>cairo_surface_unmap_image()</function></link> to destroy this image surface.
 This function always returns a valid pointer, but it will return a
 pointer to a "nil" surface if <parameter>other</parameter> is already in an error state
-or any other error occurs.</simpara></listitem></varlistentry>
+or any other error occurs. If the returned pointer does not have an
+error status, it is guaranteed to be an image surface whose format
+is not <link linkend="CAIRO-FORMAT-INVALID:CAPS"><literal>CAIRO_FORMAT_INVALID</literal></link>.</simpara></listitem></varlistentry>
 </variablelist><para role="since">Since 1.12</para></refsect2>
 <refsect2 id="cairo-surface-unmap-image" role="function" condition="since:1.12">
 <title>cairo_surface_unmap_image ()</title>

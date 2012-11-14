@@ -257,6 +257,7 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClCompile Include="cairo-lzw.c" />
     <ClCompile Include="cairo-mask-compositor.c" />
     <ClCompile Include="cairo-matrix.c" />
+    <ClCompile Include="cairo-mempool.c" />
     <ClCompile Include="cairo-mesh-pattern-rasterizer.c" />
     <ClCompile Include="cairo-misc.c" />
     <ClCompile Include="cairo-mono-scan-converter.c" />
@@ -378,6 +379,7 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClInclude Include="cairo-list-inline.h" />
     <ClInclude Include="cairo-list-private.h" />
     <ClInclude Include="cairo-malloc-private.h" />
+    <ClInclude Include="cairo-mempool-private.h" />
     <ClInclude Include="cairo-mutex-impl-private.h" />
     <ClInclude Include="cairo-mutex-list-private.h" />
     <ClInclude Include="cairo-mutex-private.h" />

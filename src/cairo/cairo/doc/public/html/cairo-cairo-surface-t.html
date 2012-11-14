@@ -136,7 +136,7 @@ functions. If you do this, keep in mind that it is mandatory that you call
 you must use <a class="link" href="cairo-cairo-surface-t.html#cairo-surface-mark-dirty" title="cairo_surface_mark_dirty ()"><code class="function">cairo_surface_mark_dirty()</code></a> after modifying it.
 </p>
 <div class="example">
-<a name="idp17894848"></a><p class="title"><b>Example 1. Directly modifying an image surface</b></p>
+<a name="idp18723600"></a><p class="title"><b>Example 1. Directly modifying an image surface</b></p>
 <div class="example-contents">
   <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
     <tbody>
@@ -1471,10 +1471,13 @@ modifying the backing store of the target surface. The region retrieved
 may be limited to the <em class="parameter"><code>extents</code></em> or <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> for the whole surface
 </p>
 <p>
-Note, the use of the original surface as a target or source whilst it is
-mapped is undefined. The result of mapping the surface multiple times is
-undefined. Calling <a class="link" href="cairo-cairo-surface-t.html#cairo-surface-destroy" title="cairo_surface_destroy ()"><code class="function">cairo_surface_destroy()</code></a> or <a class="link" href="cairo-cairo-surface-t.html#cairo-surface-finish" title="cairo_surface_finish ()"><code class="function">cairo_surface_finish()</code></a> on the
-resulting image surface results in undefined behavior.
+Note, the use of the original surface as a target or source whilst
+it is mapped is undefined. The result of mapping the surface
+multiple times is undefined. Calling <a class="link" href="cairo-cairo-surface-t.html#cairo-surface-destroy" title="cairo_surface_destroy ()"><code class="function">cairo_surface_destroy()</code></a> or
+<a class="link" href="cairo-cairo-surface-t.html#cairo-surface-finish" title="cairo_surface_finish ()"><code class="function">cairo_surface_finish()</code></a> on the resulting image surface results in
+undefined behavior. Changing the device transform of the image
+surface or of <em class="parameter"><code>surface</code></em> before the image surface is unmapped results
+in undefined behavior.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1493,7 +1496,9 @@ resulting image surface results in undefined behavior.
 must use <a class="link" href="cairo-cairo-surface-t.html#cairo-surface-unmap-image" title="cairo_surface_unmap_image ()"><code class="function">cairo_surface_unmap_image()</code></a> to destroy this image surface.
 This function always returns a valid pointer, but it will return a
 pointer to a "nil" surface if <em class="parameter"><code>other</code></em> is already in an error state
-or any other error occurs.</td>
+or any other error occurs. If the returned pointer does not have an
+error status, it is guaranteed to be an image surface whose format
+is not <a class="link" href="cairo-Image-Surfaces.html#CAIRO-FORMAT-INVALID:CAPS"><code class="literal">CAIRO_FORMAT_INVALID</code></a>.</td>
 </tr>
 </tbody>
 </table></div>

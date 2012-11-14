@@ -38,15 +38,28 @@
 #ifndef CAIRO_IMAGE_SURFACE_INLINE_H
 #define CAIRO_IMAGE_SURFACE_INLINE_H
 
+#include "cairo-surface-private.h"
 #include "cairo-image-surface-private.h"
 
 CAIRO_BEGIN_DECLS
+
+static inline cairo_image_surface_t *
+_cairo_image_surface_create_in_error (cairo_status_t status)
+{
+    return (cairo_image_surface_t *) _cairo_surface_create_in_error (status);
+}
 
 static inline void
 _cairo_image_surface_set_parent (cairo_image_surface_t *image,
 				 cairo_surface_t *parent)
 {
     image->parent = parent;
+}
+
+static inline cairo_bool_t
+_cairo_image_surface_is_clone (cairo_image_surface_t *image)
+{
+    return image->parent != NULL;
 }
 
 /**
@@ -60,7 +73,8 @@ _cairo_image_surface_set_parent (cairo_image_surface_t *image,
 static inline cairo_bool_t
 _cairo_surface_is_image (const cairo_surface_t *surface)
 {
-    return surface->backend == &_cairo_image_surface_backend;
+    /* _cairo_surface_nil sets a NULL backend so be safe */
+    return surface->backend && surface->backend->type == CAIRO_SURFACE_TYPE_IMAGE;
 }
 
 /**

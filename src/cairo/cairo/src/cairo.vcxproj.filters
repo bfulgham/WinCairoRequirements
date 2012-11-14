@@ -471,6 +471,9 @@
     <ClCompile Include="cairo-script-surface.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cairo-mempool.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cairo-deprecated.h">
@@ -774,6 +777,9 @@
       <Filter>Headers %28Private%29\GL</Filter>
     </ClInclude>
     <ClInclude Include="cairo-types-private.h">
+      <Filter>Headers %28Private%29</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo-mempool-private.h">
       <Filter>Headers %28Private%29</Filter>
     </ClInclude>
   </ItemGroup>

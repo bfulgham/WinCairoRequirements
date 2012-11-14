@@ -723,7 +723,7 @@ _cairo_format_bits_per_pixel (cairo_format_t format)
     }
 }
 
-static cairo_surface_t *
+cairo_surface_t *
 _cairo_image_surface_create_similar (void	       *abstract_other,
 				     cairo_content_t	content,
 				     int		width,
@@ -794,7 +794,7 @@ _cairo_image_surface_snapshot (void *abstract_surface)
     return &clone->base;
 }
 
-cairo_surface_t *
+cairo_image_surface_t *
 _cairo_image_surface_map_to_image (void *abstract_other,
 				   const cairo_rectangle_int_t *extents)
 {
@@ -814,13 +814,16 @@ _cairo_image_surface_map_to_image (void *abstract_other,
 							other->stride);
 
     cairo_surface_set_device_offset (surface, -extents->x, -extents->y);
-    return surface;
+    return (cairo_image_surface_t *) surface;
 }
 
 cairo_int_status_t
 _cairo_image_surface_unmap_image (void *abstract_surface,
 				  cairo_image_surface_t *image)
 {
+    cairo_surface_finish (&image->base);
+    cairo_surface_destroy (&image->base);
+
     return CAIRO_INT_STATUS_SUCCESS;
 }
 
@@ -1201,4 +1204,47 @@ _cairo_image_analyze_color (cairo_image_surface_t      *image)
     }
 
     return image->color = CAIRO_IMAGE_IS_COLOR;
+}
+
+cairo_image_surface_t *
+_cairo_image_surface_clone_subimage (cairo_surface_t             *surface,
+				     const cairo_rectangle_int_t *extents)
+{
+    cairo_surface_t *image;
+    cairo_surface_pattern_t pattern;
+    cairo_status_t status;
+
+    image = cairo_surface_create_similar_image (surface,
+						_cairo_format_from_content (surface->content),
+						extents->width,
+						extents->height);
+    if (image->status)
+	return to_image_surface (image);
+
+    /* TODO: check me with non-identity device_transform. Should we
+     * clone the scaling, too? */
+    cairo_surface_set_device_offset (image,
+				     -extents->x,
+				     -extents->y);
+
+    _cairo_pattern_init_for_surface (&pattern, surface);
+    pattern.base.filter = CAIRO_FILTER_NEAREST;
+
+    status = _cairo_surface_paint (image,
+				   CAIRO_OPERATOR_SOURCE,
+				   &pattern.base,
+				   NULL);
+
+    _cairo_pattern_fini (&pattern.base);
+
+    if (unlikely (status))
+	goto error;
+
+    _cairo_image_surface_set_parent (to_image_surface (image), surface);
+
+    return to_image_surface (image);
+
+error:
+    cairo_surface_destroy (image);
+    return to_image_surface (_cairo_surface_create_in_error (status));
 }

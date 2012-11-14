@@ -47,6 +47,7 @@
 #include "cairo-xlib-private.h"
 
 #include "cairo-compositor-private.h"
+#include "cairo-damage-private.h"
 #include "cairo-image-surface-private.h"
 #include "cairo-list-inline.h"
 #include "cairo-pattern-private.h"
@@ -125,14 +126,221 @@ set_clip_region (void *_surface,
 }
 
 static cairo_int_status_t
+copy_image_boxes (void *_dst,
+		  cairo_image_surface_t *image,
+		  cairo_boxes_t *boxes,
+		  int dx, int dy)
+{
+    cairo_xlib_surface_t *dst = _dst;
+    struct _cairo_boxes_chunk *chunk;
+    cairo_int_status_t status;
+    Pixmap src;
+    GC gc;
+    int i, j;
+
+    assert (image->depth == dst->depth);
+
+    status = acquire (dst);
+    if (unlikely (status))
+	return status;
+
+    status = _cairo_xlib_surface_get_gc (dst->display, dst, &gc);
+    if (unlikely (status)) {
+	release (dst);
+	return status;
+    }
+
+    src = _cairo_xlib_shm_surface_get_pixmap (&image->base);
+    if (boxes->num_boxes == 1) {
+	int x1 = _cairo_fixed_integer_part (boxes->chunks.base[0].p1.x);
+	int y1 = _cairo_fixed_integer_part (boxes->chunks.base[0].p1.y);
+	int x2 = _cairo_fixed_integer_part (boxes->chunks.base[0].p2.x);
+	int y2 = _cairo_fixed_integer_part (boxes->chunks.base[0].p2.y);
+
+	XCopyArea (dst->dpy, src, dst->drawable, gc,
+		   x1 + dx, y1 + dy,
+		   x2 - x1, y2 - y1,
+		   x1,      y1);
+    } else {
+	XRectangle stack_rects[CAIRO_STACK_ARRAY_LENGTH (XRectangle)];
+	XRectangle *rects = stack_rects;
+
+	if (boxes->num_boxes > ARRAY_LENGTH (stack_rects)) {
+	    rects = _cairo_malloc_ab (boxes->num_boxes, sizeof (XRectangle));
+	    if (unlikely (rects == NULL))
+		return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+	}
+
+	j = 0;
+	for (chunk = &boxes->chunks; chunk; chunk = chunk->next) {
+	    for (i = 0; i < chunk->count; i++) {
+		int x1 = _cairo_fixed_integer_part (chunk->base[i].p1.x);
+		int y1 = _cairo_fixed_integer_part (chunk->base[i].p1.y);
+		int x2 = _cairo_fixed_integer_part (chunk->base[i].p2.x);
+		int y2 = _cairo_fixed_integer_part (chunk->base[i].p2.y);
+
+		if (x2 > x1 && y2 > y1) {
+		    rects[j].x = x1;
+		    rects[j].y = y1;
+		    rects[j].width  = x2 - x1;
+		    rects[j].height = y2 - y1;
+		    j++;
+		}
+	    }
+	}
+
+	XSetClipRectangles (dst->dpy, gc, 0, 0, rects, j, Unsorted);
+	XCopyArea (dst->dpy, src, dst->drawable, gc,
+		   0, 0, image->width, image->height, -dx, -dy);
+	XSetClipMask (dst->dpy, gc, None);
+
+	if (rects != stack_rects)
+	    free (rects);
+    }
+
+    _cairo_xlib_shm_surface_mark_active (&image->base);
+    _cairo_xlib_surface_put_gc (dst->display, dst, gc);
+    release (dst);
+    return CAIRO_STATUS_SUCCESS;
+}
+
+static cairo_bool_t
+boxes_cover_surface (cairo_boxes_t *boxes,
+		     cairo_xlib_surface_t *surface)
+{
+    cairo_box_t *b;
+
+    if (boxes->num_boxes != 1)
+	    return FALSE;
+
+    b = &boxes->chunks.base[0];
+
+    if (_cairo_fixed_integer_part (b->p1.x) > 0 ||
+	_cairo_fixed_integer_part (b->p1.y) > 0)
+	return FALSE;
+
+    if (_cairo_fixed_integer_part (b->p2.x) < surface->width ||
+	_cairo_fixed_integer_part (b->p2.y) < surface->height)
+	return FALSE;
+
+    return TRUE;
+}
+
+static cairo_int_status_t
 draw_image_boxes (void *_dst,
 		  cairo_image_surface_t *image,
 		  cairo_boxes_t *boxes,
 		  int dx, int dy)
 {
+    cairo_xlib_surface_t *dst = _dst;
     struct _cairo_boxes_chunk *chunk;
+    cairo_image_surface_t *shm;
+    cairo_int_status_t status;
     int i;
 
+    if (image->base.device == dst->base.device &&
+	image->depth == dst->depth &&
+	_cairo_xlib_shm_surface_get_pixmap (&image->base))
+	    return copy_image_boxes (dst, image, boxes, dx, dy);
+
+    shm = NULL;
+    if (boxes_cover_surface (boxes, dst))
+	shm = (cairo_image_surface_t *) _cairo_xlib_surface_get_shm (dst, TRUE);
+    if (shm) {
+	for (chunk = &boxes->chunks; chunk; chunk = chunk->next) {
+	    for (i = 0; i < chunk->count; i++) {
+		cairo_box_t *b = &chunk->base[i];
+		cairo_rectangle_int_t r;
+
+		r.x = _cairo_fixed_integer_part (b->p1.x);
+		r.y = _cairo_fixed_integer_part (b->p1.y);
+		r.width = _cairo_fixed_integer_part (b->p2.x) - r.x;
+		r.height = _cairo_fixed_integer_part (b->p2.y) - r.y;
+
+		if (shm->pixman_format != image->pixman_format ||
+		    ! pixman_blt ((uint32_t *)image->data, (uint32_t *)shm->data,
+				  image->stride / sizeof (uint32_t),
+				  shm->stride / sizeof (uint32_t),
+				  PIXMAN_FORMAT_BPP (image->pixman_format),
+				  PIXMAN_FORMAT_BPP (shm->pixman_format),
+				  r.x + dx, r.y + dy,
+				  r.x, r.y,
+				  r.width, r.height))
+		{
+		    pixman_image_composite32 (PIXMAN_OP_SRC,
+					      image->pixman_image, NULL, shm->pixman_image,
+					      r.x + dx, r.y + dy,
+					      0, 0,
+					      r.x, r.y,
+					      r.width, r.height);
+		}
+
+		shm->base.damage =
+		    _cairo_damage_add_rectangle (shm->base.damage, &r);
+	    }
+	}
+	dst->base.is_clear = FALSE;
+	dst->fallback++;
+	dst->base.serial++;
+	return CAIRO_INT_STATUS_NOTHING_TO_DO;
+    }
+
+    if (image->depth == dst->depth &&
+	((cairo_xlib_display_t *)dst->display)->shm) {
+	cairo_box_t extents;
+	cairo_rectangle_int_t r;
+
+	_cairo_boxes_extents (boxes, &extents);
+	_cairo_box_round_to_rectangle (&extents, &r);
+
+	shm = (cairo_image_surface_t *)
+	    _cairo_xlib_surface_create_shm (dst, image->pixman_format,
+					    r.width, r.height);
+	if (shm) {
+	    int tx = -r.x, ty = -r.y;
+
+	    assert (shm->pixman_format == image->pixman_format);
+	    for (chunk = &boxes->chunks; chunk; chunk = chunk->next) {
+		for (i = 0; i < chunk->count; i++) {
+		    cairo_box_t *b = &chunk->base[i];
+
+		    r.x = _cairo_fixed_integer_part (b->p1.x);
+		    r.y = _cairo_fixed_integer_part (b->p1.y);
+		    r.width  = _cairo_fixed_integer_part (b->p2.x) - r.x;
+		    r.height = _cairo_fixed_integer_part (b->p2.y) - r.y;
+
+		    if (! pixman_blt ((uint32_t *)image->data, (uint32_t *)shm->data,
+				      image->stride / sizeof (uint32_t),
+				      shm->stride / sizeof (uint32_t),
+				      PIXMAN_FORMAT_BPP (image->pixman_format),
+				      PIXMAN_FORMAT_BPP (shm->pixman_format),
+				      r.x + dx, r.y + dy,
+				      r.x + tx, r.y + ty,
+				      r.width, r.height))
+		    {
+			pixman_image_composite32 (PIXMAN_OP_SRC,
+						  image->pixman_image, NULL, shm->pixman_image,
+						  r.x + dx, r.y + dy,
+						  0, 0,
+						  r.x + tx, r.y + ty,
+						  r.width, r.height);
+		    }
+		}
+	    }
+
+	    dx = tx;
+	    dy = ty;
+	    image = shm;
+
+	    if (_cairo_xlib_shm_surface_get_pixmap (&image->base)) {
+		status = copy_image_boxes (dst, image, boxes, dx, dy);
+		if (status != CAIRO_INT_STATUS_UNSUPPORTED)
+		    goto out;
+	    }
+	}
+    }
+
+    status = CAIRO_STATUS_SUCCESS;
     for (chunk = &boxes->chunks; chunk; chunk = chunk->next) {
 	for (i = 0; i < chunk->count; i++) {
 	    cairo_box_t *b = &chunk->base[i];
@@ -140,15 +348,19 @@ draw_image_boxes (void *_dst,
 	    int y1 = _cairo_fixed_integer_part (b->p1.y);
 	    int x2 = _cairo_fixed_integer_part (b->p2.x);
 	    int y2 = _cairo_fixed_integer_part (b->p2.y);
-	    if ( _cairo_xlib_surface_draw_image (_dst, image,
+	    if ( _cairo_xlib_surface_draw_image (dst, image,
 						 x1 + dx, y1 + dy,
 						 x2 - x1, y2 - y1,
-						 x1, y1))
-		return CAIRO_INT_STATUS_UNSUPPORTED;
+						 x1, y1)) {
+		status = CAIRO_INT_STATUS_UNSUPPORTED;
+		goto out;
+	    }
 	}
     }
 
-    return CAIRO_STATUS_SUCCESS;
+out:
+    cairo_surface_destroy (&shm->base);
+    return status;
 }
 
 static cairo_int_status_t
@@ -163,6 +375,7 @@ copy_boxes (void *_dst,
     struct _cairo_boxes_chunk *chunk;
     cairo_int_status_t status;
     GC gc;
+    Drawable d;
     int i, j;
 
     if (! _cairo_xlib_surface_same_screen  (dst, src))
@@ -181,11 +394,18 @@ copy_boxes (void *_dst,
 	return status;
     }
 
-    if (! src->owns_pixmap) {
-	XGCValues gcv;
+    if (src->fallback && src->shm->damage->dirty) {
+	assert (src != dst);
+	d = _cairo_xlib_shm_surface_get_pixmap (src->shm);
+	assert (d != 0);
+    } else {
+	if (! src->owns_pixmap) {
+	    XGCValues gcv;
 
-	gcv.subwindow_mode = IncludeInferiors;
-	XChangeGC (dst->display->display, gc, GCSubwindowMode, &gcv);
+	    gcv.subwindow_mode = IncludeInferiors;
+	    XChangeGC (dst->display->display, gc, GCSubwindowMode, &gcv);
+	}
+	d = src->drawable;
     }
 
     if (boxes->num_boxes == 1) {
@@ -194,7 +414,7 @@ copy_boxes (void *_dst,
 	int x2 = _cairo_fixed_integer_part (boxes->chunks.base[0].p2.x);
 	int y2 = _cairo_fixed_integer_part (boxes->chunks.base[0].p2.y);
 
-	XCopyArea (dst->dpy, src->drawable, dst->drawable, gc,
+	XCopyArea (dst->dpy, d, dst->drawable, gc,
 		   x1 + dx, y1 + dy,
 		   x2 - x1, y2 - y1,
 		   x1,      y1);
@@ -215,7 +435,7 @@ copy_boxes (void *_dst,
 		    int y1 = _cairo_fixed_integer_part (chunk->base[i].p1.y);
 		    int x2 = _cairo_fixed_integer_part (chunk->base[i].p2.x);
 		    int y2 = _cairo_fixed_integer_part (chunk->base[i].p2.y);
-		    XCopyArea (dst->dpy, src->drawable, dst->drawable, gc,
+		    XCopyArea (dst->dpy, d, dst->drawable, gc,
 			       x1 + dx, y1 + dy,
 			       x2 - x1, y2 - y1,
 			       x1,      y1);
@@ -250,7 +470,7 @@ copy_boxes (void *_dst,
 
 	    XSetClipRectangles (dst->dpy, gc, 0, 0, rects, j, Unsorted);
 
-	    XCopyArea (dst->dpy, src->drawable, dst->drawable, gc,
+	    XCopyArea (dst->dpy, d, dst->drawable, gc,
 		       extents->x + dx, extents->y + dy,
 		       extents->width,  extents->height,
 		       extents->x,      extents->y);
@@ -262,7 +482,9 @@ copy_boxes (void *_dst,
 	}
     }
 
-    if (! src->owns_pixmap) {
+    if (src->fallback && src->shm->damage->dirty) {
+	_cairo_xlib_shm_surface_mark_active (src->shm);
+    } else if (! src->owns_pixmap) {
 	XGCValues gcv;
 
 	gcv.subwindow_mode = ClipByChildren;

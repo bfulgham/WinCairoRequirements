@@ -198,9 +198,6 @@ _cairo_gstate_init_copy (cairo_gstate_t *gstate, cairo_gstate_t *other)
 void
 _cairo_gstate_fini (cairo_gstate_t *gstate)
 {
-   if (!gstate)
-      return;
-
     _cairo_stroke_style_fini (&gstate->stroke_style);
 
     cairo_font_face_destroy (gstate->font_face);
@@ -817,10 +814,24 @@ _do_cairo_gstate_user_to_backend (cairo_gstate_t *gstate, double *x, double *y)
 }
 
 void
+_do_cairo_gstate_user_to_backend_distance (cairo_gstate_t *gstate, double *x, double *y)
+{
+    cairo_matrix_transform_distance (&gstate->ctm, x, y);
+    cairo_matrix_transform_distance (&gstate->target->device_transform, x, y);
+}
+
+void
 _do_cairo_gstate_backend_to_user (cairo_gstate_t *gstate, double *x, double *y)
 {
     cairo_matrix_transform_point (&gstate->target->device_transform_inverse, x, y);
     cairo_matrix_transform_point (&gstate->ctm_inverse, x, y);
+}
+
+void
+_do_cairo_gstate_backend_to_user_distance (cairo_gstate_t *gstate, double *x, double *y)
+{
+    cairo_matrix_transform_distance (&gstate->target->device_transform_inverse, x, y);
+    cairo_matrix_transform_distance (&gstate->ctm_inverse, x, y);
 }
 
 void

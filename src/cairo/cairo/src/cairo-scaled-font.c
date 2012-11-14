@@ -212,6 +212,8 @@ _cairo_scaled_glyph_fini (cairo_scaled_font_t *scaled_font,
 	private->destroy (private, scaled_glyph, scaled_font);
     }
 
+    _cairo_image_scaled_glyph_fini (scaled_font, scaled_glyph);
+
     if (scaled_glyph->surface != NULL)
 	cairo_surface_destroy (&scaled_glyph->surface->base);
 
@@ -2252,7 +2254,7 @@ _cairo_scaled_font_glyph_device_extents (cairo_scaled_font_t	 *scaled_font,
     return CAIRO_STATUS_SUCCESS;
 }
 
-void
+cairo_bool_t
 _cairo_scaled_font_glyph_approximate_extents (cairo_scaled_font_t	 *scaled_font,
 					      const cairo_glyph_t	 *glyphs,
 					      int                      num_glyphs,
@@ -2260,6 +2262,14 @@ _cairo_scaled_font_glyph_approximate_extents (cairo_scaled_font_t	 *scaled_font,
 {
     double x0, x1, y0, y1, pad;
     int i;
+
+    /* If any of the factors are suspect (i.e. the font is broken), bail */
+    if (scaled_font->fs_extents.max_x_advance == 0 ||
+	scaled_font->fs_extents.height == 0 ||
+	scaled_font->max_scale == 0)
+    {
+	return FALSE;
+    }
 
     assert (num_glyphs);
 
@@ -2285,6 +2295,7 @@ _cairo_scaled_font_glyph_approximate_extents (cairo_scaled_font_t	 *scaled_font,
     extents->width = ceil (x1 + pad) - extents->x;
     extents->y = floor (y0 - pad);
     extents->height = ceil (y1 + pad) - extents->y;
+    return TRUE;
 }
 
 #if 0
@@ -2861,8 +2872,10 @@ _cairo_scaled_font_free_last_glyph (cairo_scaled_font_t *scaled_font,
     _cairo_scaled_glyph_fini (scaled_font, scaled_glyph);
 
     if (--page->num_glyphs == 0) {
+	CAIRO_MUTEX_LOCK (_cairo_scaled_glyph_page_cache_mutex);
 	_cairo_cache_remove (&cairo_scaled_glyph_page_cache,
 		             &page->cache_entry);
+	CAIRO_MUTEX_UNLOCK (_cairo_scaled_glyph_page_cache_mutex);
     }
 }
 

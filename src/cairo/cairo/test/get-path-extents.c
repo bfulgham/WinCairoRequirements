@@ -110,7 +110,7 @@ draw (cairo_t *cr, int width, int height)
     int              errors = 0;
 
     surface = cairo_surface_create_similar (cairo_get_group_target (cr),
-                                            CAIRO_CONTENT_COLOR, 100, 100);
+                                            CAIRO_CONTENT_COLOR, 1000, 1000);
     /* don't use cr accidentally */
     cr = NULL;
     cr2 = cairo_create (surface);
@@ -126,6 +126,14 @@ draw (cairo_t *cr, int width, int height)
     errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 0, 0, 0, 0);
 
     cairo_save (cr2);
+
+    cairo_new_path (cr2);
+    cairo_move_to (cr2, 200, 400);
+    cairo_close_path (cr2);
+    phase = "Degenerate closed path";
+    errors += !check_extents (ctx, phase, cr2, FILL, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, STROKE, EQUALS, 0, 0, 0, 0);
+    errors += !check_extents (ctx, phase, cr2, PATH, EQUALS, 200, 400, 0, 0);
 
     cairo_new_path (cr2);
     cairo_move_to (cr2, 200, 400);
