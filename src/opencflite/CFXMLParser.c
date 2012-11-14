@@ -32,7 +32,7 @@
  */
 
 /*	CFXMLParser.c
-	Copyright (c) 1999-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1999-2012, Apple Inc. All rights reserved.
 	Responsibility: David Smith
 */
 
@@ -42,6 +42,9 @@
 #include <CoreFoundation/CFUniChar.h>
 #include <CoreFoundation/CoreFoundation_Prefix.h>
 #include "CFInternal.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 struct __CFXMLParser {
     CFRuntimeBase _cfBase;
@@ -2069,4 +2072,4 @@ CFStringRef CFXMLCreateStringByUnescapingEntities(CFAllocatorRef allocator, CFSt
     return newString;
 }
 
-
+#pragma GCC diagnostic pop

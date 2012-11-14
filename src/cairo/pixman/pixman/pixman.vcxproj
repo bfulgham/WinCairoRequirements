@@ -90,6 +90,7 @@
       <PreprocessorDefinitions>PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1;HAVE_PTHREAD_SETSPECIFIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>-w14710 -w14714 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(SolutionDir)include/pthreads;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -112,6 +113,7 @@
       <PreprocessorDefinitions>PACKAGE=pixman-1;PACKAGE_VERSION=;PACKAGE_BUGREPORT;USE_MMX=1;USE_SSE2=1;HAVE_PTHREAD_SETSPECIFIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>-w14710 -w14714 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(SolutionDir)include/pthreads;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

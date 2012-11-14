@@ -143,6 +143,7 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
       <AdditionalIncludeDirectories>$(ProjectDir)..\include\c99;$(ProjectDir)..\include;$(ProjectDir)runtime;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalOptions>/dynamicbase %(AdditionalOptions)</AdditionalOptions>
@@ -212,6 +213,7 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\include\c99;$(ProjectDir)..\include;$(ProjectDir)runtime;$(SolutionDir)include;..\..\include;..\..\include\c99;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalOptions>/dynamicbase %(AdditionalOptions)</AdditionalOptions>
@@ -286,6 +288,7 @@ xcopy /Y /R "$(ProjectDir)runtime\maptable.h" "$(SolutionDir)include\objc\"
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\include\c99;$(ProjectDir)..\include;$(ProjectDir)runtime;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OBJC_EXPORTS;BUILDING_OBJC;__WIN32__;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalOptions>/dynamicbase %(AdditionalOptions)</AdditionalOptions>

@@ -34,7 +34,7 @@
  */
 
 /*	CFLocaleKeys.c
-	Copyright (c) 2008-2011, Apple Inc. All rights reserved.
+	Copyright (c) 2008-2012, Apple Inc. All rights reserved.
 	Responsibility: Christopher Kane
 */
 
@@ -80,6 +80,7 @@ CONST_STRING_DECL(kCFDateFormatterIsLenientKey, "kCFDateFormatterIsLenientKey");
 CONST_STRING_DECL(kCFDateFormatterLongEraSymbolsKey, "kCFDateFormatterLongEraSymbolsKey");
 CONST_STRING_DECL(kCFDateFormatterMonthSymbolsKey, "kCFDateFormatterMonthSymbolsKey");
 CONST_STRING_DECL(kCFDateFormatterPMSymbolKey, "kCFDateFormatterPMSymbolKey");
+CONST_STRING_DECL(kCFDateFormatterAmbiguousYearStrategyKey, "kCFDateFormatterAmbiguousYearStrategyKey");
 CONST_STRING_DECL(kCFDateFormatterQuarterSymbolsKey, "kCFDateFormatterQuarterSymbolsKey");
 CONST_STRING_DECL(kCFDateFormatterShortMonthSymbolsKey, "kCFDateFormatterShortMonthSymbolsKey");
 CONST_STRING_DECL(kCFDateFormatterShortQuarterSymbolsKey, "kCFDateFormatterShortQuarterSymbolsKey");
@@ -151,6 +152,20 @@ CONST_STRING_DECL(kCFCalendarIdentifierISO8601, "");
 CONST_STRING_DECL(kCFCalendarIdentifierCoptic, "coptic");
 CONST_STRING_DECL(kCFCalendarIdentifierEthiopicAmeteMihret, "ethiopic");
 CONST_STRING_DECL(kCFCalendarIdentifierEthiopicAmeteAlem, "ethiopic-amete-alem");
+
+#if defined(_MSC_VER)
+CONST_STRING_DECL(kCFGregorianCalendar, "gregorian");
+CONST_STRING_DECL(kCFBuddhistCalendar, "buddhist");
+CONST_STRING_DECL(kCFJapaneseCalendar, "japanese");
+CONST_STRING_DECL(kCFIslamicCalendar, "islamic");
+CONST_STRING_DECL(kCFIslamicCivilCalendar, "islamic-civil");
+CONST_STRING_DECL(kCFHebrewCalendar, "hebrew");
+CONST_STRING_DECL(kCFChineseCalendar, "chinese");
+CONST_STRING_DECL(kCFRepublicOfChinaCalendar, "roc");
+CONST_STRING_DECL(kCFPersianCalendar, "persian");
+CONST_STRING_DECL(kCFIndianCalendar, "indian");
+CONST_STRING_DECL(kCFISO8601Calendar, "");
+#endif
 
 // Aliases for Linux
 #if DEPLOYMENT_TARGET_LINUX

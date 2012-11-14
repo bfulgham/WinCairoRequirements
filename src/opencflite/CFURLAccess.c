@@ -33,7 +33,7 @@
  */
 
 /*	CFURLAccess.c
-	Copyright (c) 1999-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1999-2012, Apple Inc. All rights reserved.
 	Responsibility: Chris Linn
 */
 
@@ -51,7 +51,7 @@ CFData read/write routines
 #include <CoreFoundation/CFNumber.h>
 #include <string.h>
 #include <ctype.h>
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_EMBEDDED_MINI || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 #include <stdlib.h>
 #include <unistd.h>
 #include <dirent.h>
@@ -60,12 +60,10 @@ CFData read/write routines
 #include <pwd.h>
 #include <fcntl.h>
 #elif DEPLOYMENT_TARGET_WINDOWS
-//#include <winsock2.h>
 #include <io.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <errno.h>
 #include <ctype.h>
 
 #define chmod _chmod
@@ -73,7 +71,7 @@ CFData read/write routines
 #else
 #error Unknown or unspecified DEPLOYMENT_TARGET
 #endif
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_EMBEDDED_MINI
 #include <dlfcn.h>
 #endif
 
@@ -268,7 +266,7 @@ static Boolean _CFFileURLWritePropertiesToResource(CFURLRef url, CFDictionaryRef
                 CFNumberRef modeNum = (CFNumberRef)value;
                 CFNumberGetValue(modeNum, kCFNumberSInt32Type, &mode);
             } else {
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_EMBEDDED_MINI || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
 #define MODE_TYPE mode_t
 #elif DEPLOYMENT_TARGET_WINDOWS
 #define MODE_TYPE uint16_t
@@ -306,7 +304,7 @@ static Boolean _CFFileURLCreateDataAndPropertiesFromResource(CFAllocatorRef allo
             alloc = (CFAllocatorRef)CFRetain(__CFGetDefaultAllocator());
             releaseAlloc = true;
         }
-        if (!_CFReadBytesFromFile(alloc, url, &bytes, &length, 0)) {
+        if (!_CFReadBytesFromFile(alloc, url, &bytes, &length, 0, 0)) {
             if (errorCode) *errorCode = kCFURLUnknownError;
             *fetchedData = NULL;
             success = false;
@@ -792,22 +790,13 @@ Boolean CFURLWriteDataAndPropertiesToResource(CFURLRef url, CFDataRef data, CFDi
         if (data) {
             if (CFURLHasDirectoryPath(url)) {
                 // Create a directory
-#if DEPLOYMENT_TARGET_WINDOWS
-		wchar_t cPath[CFMaxPathSize];
-                if (!_CFURLGetWideFileSystemRepresentation(url, true, cPath, CFMaxPathSize))
-#else
                 char cPath[CFMaxPathSize];
                 if (!CFURLGetFileSystemRepresentation(url, true, (unsigned char *)cPath, CFMaxPathSize))
-#endif
                 {
                     if (errorCode) *errorCode = kCFURLImproperArgumentsError;
                     success = false;
                 } else {
-#if DEPLOYMENT_TARGET_WINDOWS
-                    success = _CFCreateDirectoryWide(cPath);
-#else
                     success = _CFCreateDirectory(cPath);
-#endif
                     if (!success && errorCode) *errorCode = kCFURLUnknownError;
                 }
             } else {

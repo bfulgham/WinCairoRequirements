@@ -32,7 +32,7 @@
  */
 
 /*	CFRunLoop.h
-	Copyright (c) 1998-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1998-2012, Apple Inc. All rights reserved.
 */
 
 #if !defined(__COREFOUNDATION_CFRUNLOOP__)
@@ -67,7 +67,7 @@ enum {
 };
 
 /* Run Loop Observer Activities */
-enum {
+typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
     kCFRunLoopEntry = (1UL << 0),
     kCFRunLoopBeforeTimers = (1UL << 1),
     kCFRunLoopBeforeSources = (1UL << 2),
@@ -76,7 +76,6 @@ enum {
     kCFRunLoopExit = (1UL << 7),
     kCFRunLoopAllActivities = 0x0FFFFFFFU
 };
-typedef CFOptionFlags CFRunLoopActivity;
 
 CF_EXPORT const CFStringRef kCFRunLoopDefaultMode;
 CF_EXPORT const CFStringRef kCFRunLoopCommonModes;

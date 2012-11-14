@@ -32,7 +32,7 @@
  */
 
 /*	CFUUID.c
-	Copyright (c) 1999-2011, Apple Inc.  All rights reserved.
+	Copyright (c) 1999-2012, Apple Inc.  All rights reserved.
 	Responsibility: David Smith
 */
 
@@ -300,6 +300,8 @@ static CFUUIDRef __CFUUIDCreateWithBytesPrimitive(CFAllocatorRef allocator, CFUU
 
 #if DEPLOYMENT_TARGET_WINDOWS
 #include <Rpc.h>
+#elif DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED
+#include <uuid/uuid.h>
 #endif
 
 CFUUIDRef CFUUIDCreate(CFAllocatorRef alloc) {

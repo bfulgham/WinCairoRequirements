@@ -32,7 +32,7 @@
  */
 
 /*	CFStream.c
-	Copyright (c) 2000-2011, Apple Inc. All rights reserved.
+	Copyright (c) 2000-2012, Apple Inc. All rights reserved.
 	Responsibility: John Iarocci
 */
 
@@ -47,6 +47,7 @@
 #if defined(DEBUG)
 #include <assert.h>
 #endif
+
 
 struct CFStreamAux {
 	CFSpinLock_t streamLock;
@@ -731,7 +732,7 @@ static void _wakeUpRunLoop(struct _CFStream *stream) {
     CFArrayRef rlArray = _CFStreamCopyRunLoopsAndModes(stream);
     if (rlArray) {
         CFIndex cnt = CFArrayGetCount(rlArray);
-        CFRunLoopRef rl;
+        CFRunLoopRef rl = NULL;
 
         if (cnt == 2) {
             rl = (CFRunLoopRef)CFArrayGetValueAtIndex(rlArray, 0);
@@ -760,8 +761,8 @@ static void _wakeUpRunLoop(struct _CFStream *stream) {
         }
         if (NULL != rl && CFRunLoopIsWaiting(rl)) 
             CFRunLoopWakeUp(rl);
+        CFRelease(rlArray);
     }
-    CFRelease(rlArray);
 }
 
 __private_extern__ void _CFStreamSignalEvent(struct _CFStream *stream, CFStreamEventType event, CFErrorRef error, Boolean synchronousAllowed) {
@@ -876,12 +877,12 @@ __private_extern__ CFStreamStatus _CFStreamGetStatus(struct _CFStream *stream) {
 }
 
 CF_EXPORT CFStreamStatus CFReadStreamGetStatus(CFReadStreamRef stream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFReadStreamTypeID, CFStreamStatus, stream, "streamStatus");
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, CFStreamStatus, (NSInputStream *)stream, streamStatus);
     return _CFStreamGetStatus((struct _CFStream *)stream);
 }
 
 CF_EXPORT CFStreamStatus CFWriteStreamGetStatus(CFWriteStreamRef stream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFWriteStreamTypeID, CFStreamStatus, stream, "streamStatus");
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, CFStreamStatus, (NSOutputStream *)stream, streamStatus);
     return _CFStreamGetStatus((struct _CFStream *)stream);
 }
 
@@ -901,12 +902,12 @@ static CFStreamError _CFStreamGetStreamError(struct _CFStream *stream) {
 }
 
 CF_EXPORT CFStreamError CFReadStreamGetError(CFReadStreamRef stream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFReadStreamTypeID, CFStreamError, stream, "_cfStreamError");
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, CFStreamError, (NSInputStream *)stream, _cfStreamError);
     return _CFStreamGetStreamError((struct _CFStream *)stream);
 }
 
 CF_EXPORT CFStreamError CFWriteStreamGetError(CFWriteStreamRef stream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFWriteStreamTypeID, CFStreamError, stream, "_cfStreamError");
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, CFStreamError, (NSOutputStream *)stream, _cfStreamError);
     return _CFStreamGetStreamError((struct _CFStream *)stream);
 }
 
@@ -922,13 +923,13 @@ static CFErrorRef _CFStreamCopyError(struct _CFStream *stream) {
 }
 
 CF_EXPORT CFErrorRef CFReadStreamCopyError(CFReadStreamRef stream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFReadStreamTypeID, CFErrorRef, stream, "streamError");
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, CFErrorRef, (NSInputStream *)stream, streamError);
     return _CFStreamCopyError((struct _CFStream *)stream);
 }
 
 CF_EXPORT CFErrorRef CFWriteStreamCopyError(CFWriteStreamRef stream) {
     return _CFStreamCopyError((struct _CFStream *)stream);
-    CF_OBJC_FUNCDISPATCH0(__kCFWriteStreamTypeID, CFErrorRef, stream, "streamError");
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, CFErrorRef, (NSOutputStream *)stream, streamError);
 }
 
 __private_extern__ Boolean _CFStreamOpen(struct _CFStream *stream) {
@@ -972,7 +973,7 @@ __private_extern__ Boolean _CFStreamOpen(struct _CFStream *stream) {
 
 CF_EXPORT Boolean CFReadStreamOpen(CFReadStreamRef stream) {
     if(CF_IS_OBJC(__kCFReadStreamTypeID, stream)) {
-        CF_OBJC_VOIDCALL0(stream, "open");
+        (void)CF_OBJC_CALLV((NSInputStream *)stream, open);
         return TRUE;
     }
     return _CFStreamOpen((struct _CFStream *)stream);
@@ -980,24 +981,24 @@ CF_EXPORT Boolean CFReadStreamOpen(CFReadStreamRef stream) {
 
 CF_EXPORT Boolean CFWriteStreamOpen(CFWriteStreamRef stream) {
     if(CF_IS_OBJC(__kCFWriteStreamTypeID, stream)) {
-        CF_OBJC_VOIDCALL0(stream, "open");
+        (void)CF_OBJC_CALLV((NSOutputStream *)stream, open);
         return TRUE;
     }
     return _CFStreamOpen((struct _CFStream *)stream);
 }
 
 CF_EXPORT void CFReadStreamClose(CFReadStreamRef stream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFReadStreamTypeID, void, stream, "close");
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, void, (NSInputStream *)stream, close);
     _CFStreamClose((struct _CFStream *)stream);
 }
 
 CF_EXPORT void CFWriteStreamClose(CFWriteStreamRef stream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFWriteStreamTypeID, void, stream, "close");
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, void, (NSOutputStream *)stream, close);
     _CFStreamClose((struct _CFStream *)stream);
 }
 
 CF_EXPORT Boolean CFReadStreamHasBytesAvailable(CFReadStreamRef readStream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFReadStreamTypeID, Boolean, readStream, "hasBytesAvailable");
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, Boolean, (NSInputStream *)readStream, hasBytesAvailable);
     struct _CFStream *stream = (struct _CFStream *)readStream;
     CFStreamStatus status = _CFStreamGetStatus(stream);
     const struct _CFStreamCallBacks *cb;
@@ -1026,7 +1027,7 @@ CF_EXPORT Boolean CFReadStreamHasBytesAvailable(CFReadStreamRef readStream) {
 
 static void waitForOpen(struct _CFStream *stream);
 CFIndex CFReadStreamRead(CFReadStreamRef readStream, UInt8 *buffer, CFIndex bufferLength) {
-    CF_OBJC_FUNCDISPATCH2(__kCFReadStreamTypeID, CFIndex, readStream, "read:maxLength:", buffer, bufferLength);
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, CFIndex, (NSInputStream *)readStream, read:(uint8_t *)buffer maxLength:(NSUInteger)bufferLength);
     struct _CFStream *stream = (struct _CFStream *)readStream;
     CFStreamStatus status = _CFStreamGetStatus(stream);
     const struct _CFStreamCallBacks *cb = _CFStreamGetCallBackPtr(stream);
@@ -1074,8 +1075,7 @@ CFIndex CFReadStreamRead(CFReadStreamRef readStream, UInt8 *buffer, CFIndex buff
 CF_EXPORT const UInt8 *CFReadStreamGetBuffer(CFReadStreamRef readStream, CFIndex maxBytesToRead, CFIndex *numBytesRead) {
     if (CF_IS_OBJC(__kCFReadStreamTypeID, readStream)) {
         uint8_t *bufPtr = NULL;
-        Boolean gotBytes;
-        CF_OBJC_CALL2(Boolean, gotBytes, readStream, "getBuffer:length:", &bufPtr, numBytesRead); 
+        Boolean gotBytes = (Boolean) CF_OBJC_CALLV((NSInputStream *)readStream, getBuffer:&bufPtr length:(NSUInteger *)numBytesRead);
         if(gotBytes) {
             return (const UInt8 *)bufPtr;
         } else {
@@ -1133,7 +1133,7 @@ CF_EXPORT const UInt8 *CFReadStreamGetBuffer(CFReadStreamRef readStream, CFIndex
 }
 
 CF_EXPORT Boolean CFWriteStreamCanAcceptBytes(CFWriteStreamRef writeStream) {
-    CF_OBJC_FUNCDISPATCH0(__kCFWriteStreamTypeID, Boolean, writeStream, "hasSpaceAvailable");
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, Boolean, (NSOutputStream *)writeStream, hasSpaceAvailable);
     struct _CFStream *stream = (struct _CFStream *)writeStream;
     CFStreamStatus status = _CFStreamGetStatus(stream);
     const struct _CFStreamCallBacks *cb;
@@ -1161,7 +1161,7 @@ CF_EXPORT Boolean CFWriteStreamCanAcceptBytes(CFWriteStreamRef writeStream) {
 }
 
 CF_EXPORT CFIndex CFWriteStreamWrite(CFWriteStreamRef writeStream, const UInt8 *buffer, CFIndex bufferLength) {
-    CF_OBJC_FUNCDISPATCH2(__kCFWriteStreamTypeID, CFIndex, writeStream, "write:maxLength:", buffer, bufferLength);
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, CFIndex, (NSOutputStream *)writeStream, write:(const uint8_t *)buffer maxLength:(NSUInteger)bufferLength);
     struct _CFStream *stream = (struct _CFStream *)writeStream;
     CFStreamStatus status = _CFStreamGetStatus(stream);
     const struct _CFStreamCallBacks *cb = _CFStreamGetCallBackPtr(stream);
@@ -1215,12 +1215,12 @@ __private_extern__ CFTypeRef _CFStreamCopyProperty(struct _CFStream *stream, CFS
 }
 
 CF_EXPORT CFTypeRef CFReadStreamCopyProperty(CFReadStreamRef stream, CFStringRef propertyName) {
-    CF_OBJC_FUNCDISPATCH1(__kCFReadStreamTypeID, CFTypeRef, stream, "propertyForKey:", propertyName);
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, CFTypeRef, (NSInputStream *)stream, propertyForKey:(NSString *)propertyName);
     return _CFStreamCopyProperty((struct _CFStream *)stream, propertyName);
 }
 
 CF_EXPORT CFTypeRef CFWriteStreamCopyProperty(CFWriteStreamRef stream, CFStringRef propertyName) {
-    CF_OBJC_FUNCDISPATCH1(__kCFWriteStreamTypeID, CFTypeRef, stream, "propertyForKey:", propertyName);
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, CFTypeRef, (NSOutputStream *)stream, propertyForKey:(NSString *)propertyName);
     return _CFStreamCopyProperty((struct _CFStream *)stream, propertyName);
 }
 
@@ -1239,13 +1239,13 @@ __private_extern__ Boolean _CFStreamSetProperty(struct _CFStream *stream, CFStri
 
 CF_EXPORT
 Boolean CFReadStreamSetProperty(CFReadStreamRef stream, CFStringRef propertyName, CFTypeRef propertyValue) {
-    CF_OBJC_FUNCDISPATCH2(__kCFReadStreamTypeID, Boolean, stream, "setProperty:forKey:", propertyValue, propertyName);
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, Boolean, (NSInputStream *)stream, setProperty:(id)propertyValue forKey:(NSString *)propertyName);
     return _CFStreamSetProperty((struct _CFStream *)stream, propertyName, propertyValue);
 }
 
 CF_EXPORT
 Boolean CFWriteStreamSetProperty(CFWriteStreamRef stream, CFStringRef propertyName, CFTypeRef propertyValue) {
-    CF_OBJC_FUNCDISPATCH2(__kCFWriteStreamTypeID, Boolean, stream, "setProperty:forKey:", propertyValue, propertyName);
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, Boolean, (NSOutputStream *)stream, setProperty:(id)propertyValue forKey:(NSString *)propertyName);
     return _CFStreamSetProperty((struct _CFStream *)stream, propertyName, propertyValue);
 }
 
@@ -1304,13 +1304,13 @@ __private_extern__ Boolean _CFStreamSetClient(struct _CFStream *stream, CFOption
 }
 
 CF_EXPORT Boolean CFReadStreamSetClient(CFReadStreamRef readStream, CFOptionFlags streamEvents, CFReadStreamClientCallBack clientCB, CFStreamClientContext *clientContext) {
-    CF_OBJC_FUNCDISPATCH3(__kCFReadStreamTypeID, Boolean, readStream, "_setCFClientFlags:callback:context:", streamEvents, clientCB, clientContext);
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, Boolean, (NSInputStream *)readStream, _setCFClientFlags:streamEvents callback:clientCB context:clientContext);
     streamEvents &= ~kCFStreamEventCanAcceptBytes;
     return _CFStreamSetClient((struct _CFStream *)readStream, streamEvents, (void (*)(struct _CFStream *, CFStreamEventType, void *))clientCB, clientContext);
 }
 
 CF_EXPORT Boolean CFWriteStreamSetClient(CFWriteStreamRef writeStream, CFOptionFlags streamEvents, CFWriteStreamClientCallBack clientCB, CFStreamClientContext *clientContext) {
-    CF_OBJC_FUNCDISPATCH3(__kCFWriteStreamTypeID, Boolean, writeStream, "_setCFClientFlags:callback:context:", streamEvents, clientCB, clientContext);
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, Boolean, (NSOutputStream *)writeStream, _setCFClientFlags:streamEvents callback:clientCB context:clientContext);
     streamEvents &= ~kCFStreamEventHasBytesAvailable;
     return _CFStreamSetClient((struct _CFStream *)writeStream, streamEvents, (void (*)(struct _CFStream *, CFStreamEventType, void *))clientCB, clientContext);
 }
@@ -1489,12 +1489,12 @@ __private_extern__ void _CFStreamScheduleWithRunLoop(struct _CFStream *stream, C
 }
 
 CF_EXPORT void CFReadStreamScheduleWithRunLoop(CFReadStreamRef stream, CFRunLoopRef runLoop, CFStringRef runLoopMode) {
-    CF_OBJC_FUNCDISPATCH2(__kCFReadStreamTypeID, void, stream, "_scheduleInCFRunLoop:forMode:", runLoop, runLoopMode);
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, void, (NSInputStream *)stream, _scheduleInCFRunLoop:runLoop forMode:runLoopMode);
     _CFStreamScheduleWithRunLoop((struct _CFStream *)stream, runLoop, runLoopMode);
 }
 
 CF_EXPORT void CFWriteStreamScheduleWithRunLoop(CFWriteStreamRef stream, CFRunLoopRef runLoop, CFStringRef runLoopMode) {
-    CF_OBJC_FUNCDISPATCH2(__kCFWriteStreamTypeID, void, stream, "_scheduleInCFRunLoop:forMode:", runLoop, runLoopMode);
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, void, (NSOutputStream *)stream, _scheduleInCFRunLoop:runLoop forMode:runLoopMode);
     _CFStreamScheduleWithRunLoop((struct _CFStream *)stream, runLoop, runLoopMode);
 }
 
@@ -1556,12 +1556,12 @@ __private_extern__ void _CFStreamUnscheduleFromRunLoop(struct _CFStream *stream,
 }
 
 CF_EXPORT void CFReadStreamUnscheduleFromRunLoop(CFReadStreamRef stream, CFRunLoopRef runLoop, CFStringRef runLoopMode) {
-    CF_OBJC_FUNCDISPATCH2(__kCFReadStreamTypeID, void, stream, "_unscheduleFromCFRunLoop:forMode:", runLoop, runLoopMode);
+    CF_OBJC_FUNCDISPATCHV(__kCFReadStreamTypeID, void, (NSInputStream *)stream, _unscheduleFromCFRunLoop:runLoop forMode:runLoopMode);
     _CFStreamUnscheduleFromRunLoop((struct _CFStream *)stream, runLoop, runLoopMode);
 }
 
 void CFWriteStreamUnscheduleFromRunLoop(CFWriteStreamRef stream, CFRunLoopRef runLoop, CFStringRef runLoopMode) {
-    CF_OBJC_FUNCDISPATCH2(__kCFWriteStreamTypeID, void, stream, "_unscheduleFromCFRunLoop:forMode:", runLoop, runLoopMode);
+    CF_OBJC_FUNCDISPATCHV(__kCFWriteStreamTypeID, void, (NSOutputStream *)stream, _unscheduleFromCFRunLoop:runLoop forMode:runLoopMode);
     _CFStreamUnscheduleFromRunLoop((struct _CFStream *)stream, runLoop, runLoopMode);
 }
 

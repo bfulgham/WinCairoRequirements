@@ -33,7 +33,7 @@
  */
 
 /*	CFTimeZone.c
-	Copyright (c) 1998-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1998-2012, Apple Inc. All rights reserved.
 	Responsibility: Christopher Kane
 */
 
@@ -1287,7 +1287,7 @@ CFTimeZoneRef CFTimeZoneCreateWithName(CFAllocatorRef allocator, CFStringRef nam
 	if (NULL != tzName) {
 	    tempURL = CFURLCreateCopyAppendingPathComponent(kCFAllocatorSystemDefault, baseURL, tzName, false);
 	    if (NULL != tempURL) {
-		if (_CFReadBytesFromFile(kCFAllocatorSystemDefault, tempURL, &bytes, &length, 0)) {
+		if (_CFReadBytesFromFile(kCFAllocatorSystemDefault, tempURL, &bytes, &length, 0, 0)) {
 		    data = CFDataCreateWithBytesNoCopy(kCFAllocatorSystemDefault, (const UInt8 *)bytes, length, kCFAllocatorSystemDefault);
 		}
 		CFRelease(tempURL);
@@ -1324,7 +1324,7 @@ CFTimeZoneRef CFTimeZoneCreateWithName(CFAllocatorRef allocator, CFStringRef nam
        tzName = name;
        tempURL = CFURLCreateCopyAppendingPathComponent(kCFAllocatorSystemDefault, baseURL, tzName, false);
        if (NULL != tempURL) {
-           if (_CFReadBytesFromFile(kCFAllocatorSystemDefault, tempURL, &bytes, &length, 0)) {
+           if (_CFReadBytesFromFile(kCFAllocatorSystemDefault, tempURL, &bytes, &length, 0, 0)) {
                data = CFDataCreateWithBytesNoCopy(kCFAllocatorSystemDefault, (const UInt8 *)bytes, length, kCFAllocatorSystemDefault);
            }
            CFRelease(tempURL);
@@ -1452,13 +1452,13 @@ CFTimeZoneRef CFTimeZoneCreateWithName(CFAllocatorRef allocator, CFStringRef nam
 #endif
 
 CFStringRef CFTimeZoneGetName(CFTimeZoneRef tz) {
-    CF_OBJC_FUNCDISPATCH0(CFTimeZoneGetTypeID(), CFStringRef, tz, "name");
+    CF_OBJC_FUNCDISPATCHV(CFTimeZoneGetTypeID(), CFStringRef, (NSTimeZone *)tz, name);
     __CFGenericValidateType(tz, CFTimeZoneGetTypeID());
     return tz->_name;
 }
 
 CFDataRef CFTimeZoneGetData(CFTimeZoneRef tz) {
-    CF_OBJC_FUNCDISPATCH0(CFTimeZoneGetTypeID(), CFDataRef, tz, "data");
+    CF_OBJC_FUNCDISPATCHV(CFTimeZoneGetTypeID(), CFDataRef, (NSTimeZone *)tz, data);
     __CFGenericValidateType(tz, CFTimeZoneGetTypeID());
     return tz->_data;
 }
@@ -1503,7 +1503,7 @@ CFTimeInterval CFTimeZoneGetSecondsFromGMT(CFTimeZoneRef tz, CFAbsoluteTime at) 
     CFRange range={0,sizeof(TIME_ZONE_INFORMATION)};
     double result;
 
-    CF_OBJC_FUNCDISPATCH1(CFTimeZoneGetTypeID(), CFTimeInterval, tz, "_secondsFromGMTForAbsoluteTime:", at);
+    CF_OBJC_FUNCDISPATCHV(CFTimeZoneGetTypeID(), CFTimeInterval, (NSTimeZone *)tz, "_nextDaylightSavingTimeTransitionAfterAbsoluteTime:", at);
 
     CFDataGetBytes(tz->_data,range,(UInt8 *)&tzi);
 
@@ -1614,7 +1614,7 @@ Boolean CFTimeZoneIsDaylightSavingTime(CFTimeZoneRef tz, CFAbsoluteTime at) {
 	SYSTEMTIME stime0,stime1,stime2;
     CFRange range={0,sizeof(TIME_ZONE_INFORMATION)};
 
-    CF_OBJC_FUNCDISPATCH1(CFTimeZoneGetTypeID(), Boolean, tz, "_isDaylightSavingTimeForAbsoluteTime:", at);
+    CF_OBJC_FUNCDISPATCHV(CFTimeZoneGetTypeID(), Boolean, (NSTimeZone *)tz, _isDaylightSavingTimeForAbsoluteTime:at);
 
     CFDataGetBytes(tz->_data,range,(UInt8 *)&tzi);
 
@@ -1642,7 +1642,7 @@ Boolean CFTimeZoneIsDaylightSavingTime(CFTimeZoneRef tz, CFAbsoluteTime at) {
 }
 
 CFTimeInterval CFTimeZoneGetDaylightSavingTimeOffset(CFTimeZoneRef tz, CFAbsoluteTime at) {
-    CF_OBJC_FUNCDISPATCH1(CFTimeZoneGetTypeID(), CFTimeInterval, tz, "_daylightSavingTimeOffsetForAbsoluteTime:", at);
+    CF_OBJC_FUNCDISPATCHV(CFTimeZoneGetTypeID(), CFTimeInterval, (NSTimeZone *)tz, _daylightSavingTimeOffsetForAbsoluteTime:at);
     __CFGenericValidateType(tz, CFTimeZoneGetTypeID());
     CFIndex idx = __CFBSearchTZPeriods(tz, at);
     if (__CFTZPeriodIsDST(&(tz->_periods[idx]))) {
@@ -1657,7 +1657,7 @@ CFTimeInterval CFTimeZoneGetDaylightSavingTimeOffset(CFTimeZoneRef tz, CFAbsolut
 }
 
 CFAbsoluteTime CFTimeZoneGetNextDaylightSavingTimeTransition(CFTimeZoneRef tz, CFAbsoluteTime at) {
-    CF_OBJC_FUNCDISPATCH1(CFTimeZoneGetTypeID(), CFTimeInterval, tz, "_nextDaylightSavingTimeTransitionAfterAbsoluteTime:", at);
+    CF_OBJC_FUNCDISPATCHV(CFTimeZoneGetTypeID(), CFTimeInterval, (NSTimeZone *)tz, _nextDaylightSavingTimeTransitionAfterAbsoluteTime:at);
     __CFGenericValidateType(tz, CFTimeZoneGetTypeID());
     CFIndex idx = __CFBSearchTZPeriods(tz, at);
     if (tz->_periodCnt <= idx + 1) {
@@ -1671,7 +1671,7 @@ extern UCalendar *__CFCalendarCreateUCalendar(CFStringRef calendarID, CFStringRe
 #define BUFFER_SIZE 768
 
 CFStringRef CFTimeZoneCopyLocalizedName(CFTimeZoneRef tz, CFTimeZoneNameStyle style, CFLocaleRef locale) {
-    CF_OBJC_FUNCDISPATCH2(CFTimeZoneGetTypeID(), CFStringRef, tz, "localizedName:locale:", style, locale);
+    CF_OBJC_FUNCDISPATCHV(CFTimeZoneGetTypeID(), CFStringRef, (NSTimeZone *)tz, localizedName:(NSTimeZoneNameStyle)style locale:(NSLocale *)locale);
     __CFGenericValidateType(tz, CFTimeZoneGetTypeID());
     __CFGenericValidateType(locale, CFLocaleGetTypeID());
 

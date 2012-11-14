@@ -32,7 +32,7 @@
  */
 
 /*	CFNumber.h
-	Copyright (c) 1999-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1999-2012, Apple Inc. All rights reserved.
 */
 
 #if !defined(__COREFOUNDATION_CFNUMBER__)
@@ -40,6 +40,7 @@
 
 #include <CoreFoundation/CFBase.h>
 
+CF_IMPLICIT_BRIDGING_ENABLED
 CF_EXTERN_C_BEGIN
 
 typedef const struct __CFBoolean * CFBooleanRef;
@@ -55,7 +56,7 @@ CFTypeID CFBooleanGetTypeID(void);
 CF_EXPORT
 Boolean CFBooleanGetValue(CFBooleanRef boolean);
 
-enum {
+typedef CF_ENUM(CFIndex, CFNumberType) {
     /* Fixed-width types */
     kCFNumberSInt8Type = 1,
     kCFNumberSInt16Type = 2,
@@ -73,15 +74,10 @@ enum {
     kCFNumberDoubleType = 13,
     /* Other */
     kCFNumberCFIndexType = 14,
-#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
-    kCFNumberNSIntegerType = 15,
-    kCFNumberCGFloatType = 16,
+    kCFNumberNSIntegerType CF_ENUM_AVAILABLE(10_5, 2_0) = 15,
+    kCFNumberCGFloatType CF_ENUM_AVAILABLE(10_5, 2_0) = 16,
     kCFNumberMaxType = 16
-#else
-    kCFNumberMaxType = 14
-#endif
 };
-typedef CFIndex CFNumberType;
 
 typedef const struct __CFNumber * CFNumberRef;
 
@@ -155,6 +151,7 @@ CF_EXPORT
 CFComparisonResult CFNumberCompare(CFNumberRef number, CFNumberRef otherNumber, void *context);
 
 CF_EXTERN_C_END
+CF_IMPLICIT_BRIDGING_DISABLED
 
 #endif /* ! __COREFOUNDATION_CFNUMBER__ */
 

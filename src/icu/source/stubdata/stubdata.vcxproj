@@ -94,6 +94,7 @@
       <ExceptionHandling>
       </ExceptionHandling>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <ResourceCompile />
     <PreLinkEvent>
@@ -149,6 +150,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <ResourceCompile />
     <PreLinkEvent>

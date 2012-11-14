@@ -107,6 +107,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;INSTALLPREFIX="$(SolutionDir)";INSTALLDIR="$(SolutionDir)Bin";LOCALEDIR="$(SolutionDir)\locale";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\srclib;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

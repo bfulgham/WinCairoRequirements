@@ -83,6 +83,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(ProjectDir)\..\includes\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)\..\includes\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -127,6 +128,7 @@ xcopy /Y /R "$(ProjectDir)..\sqlite3ext.h" "$(SolutionDir)include\SQLite"</Comma
       <PreprocessorDefinitions>SQLITE_EXPORTS;THREADSAFE=1;SQLITE_THREADSAFE=2;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_DEFAULT_CACHE_SIZE=500;SQLITE_DEFAULT_WAL_SAFETYLEVEL=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <ResourceCompile />
     <Link>

@@ -131,6 +131,7 @@ xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>LIBCHARSET_EXPORTS;HAVE_CONFIG_H=1;BUILDING_LIBCHARSET=1;ENABLE_RELOCATABLE=1;NO_XMALLOC=1;IN_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

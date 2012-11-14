@@ -142,6 +142,7 @@ xcopy /Y /R $(ProjectDir)include\iconv.h.msvc-static $(ProjectDir)include\iconv.
     <ClCompile>
       <PreprocessorDefinitions>LIBICONV_EXPORTS;HAVE_CONFIG_H=1;NO_XMALLOC=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)/libcharset/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

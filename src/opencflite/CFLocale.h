@@ -32,7 +32,7 @@
  */
 
 /*	CFLocale.h
-	Copyright (c) 2002-2011, Apple Inc. All rights reserved.
+	Copyright (c) 2002-2012, Apple Inc. All rights reserved.
 */
 
 #if !defined(__COREFOUNDATION_CFLOCALE__)
@@ -42,6 +42,7 @@
 #include <CoreFoundation/CFArray.h>
 #include <CoreFoundation/CFDictionary.h>
 
+CF_IMPLICIT_BRIDGING_ENABLED
 CF_EXTERN_C_BEGIN
 
 typedef const struct __CFLocale *CFLocaleRef;
@@ -118,14 +119,13 @@ CF_EXPORT
 uint32_t CFLocaleGetWindowsLocaleCodeFromLocaleIdentifier(CFStringRef localeIdentifier) CF_AVAILABLE(10_6, 4_0);
 	// Map a locale identifier to a Windows LCID.
 
-enum {
+typedef CF_ENUM(CFIndex, CFLocaleLanguageDirection) {
     kCFLocaleLanguageDirectionUnknown = 0,
     kCFLocaleLanguageDirectionLeftToRight = 1,
     kCFLocaleLanguageDirectionRightToLeft = 2,
     kCFLocaleLanguageDirectionTopToBottom = 3,
     kCFLocaleLanguageDirectionBottomToTop = 4
 };
-typedef CFIndex CFLocaleLanguageDirection;
 
 CF_EXPORT
 CFLocaleLanguageDirection CFLocaleGetLanguageCharacterDirection(CFStringRef isoLangCode) CF_AVAILABLE(10_6, 4_0);
@@ -141,14 +141,14 @@ CFDictionaryRef CFLocaleCreateComponentsFromLocaleIdentifier(CFAllocatorRef allo
 	// will correspond to constants where available.
 	// Example: "en_US@calendar=japanese" yields a dictionary with three
 	// entries: kCFLocaleLanguageCode=en, kCFLocaleCountryCode=US, and
-	// kCFLocaleCalendarIdentifier=kCFCalendarIdentifierJapanese.
+	// kCFLocaleCalendarIdentifier=kCFJapaneseCalendar.
 
 CF_EXPORT
 CFStringRef CFLocaleCreateLocaleIdentifierFromComponents(CFAllocatorRef allocator, CFDictionaryRef dictionary);
 	// Reverses the actions of CFLocaleCreateDictionaryFromLocaleIdentifier,
 	// creating a single string from the data in the dictionary. The
 	// dictionary {kCFLocaleLanguageCode=en, kCFLocaleCountryCode=US,
-	// kCFLocaleCalendarIdentifier=kCFCalendarIdentifierJapanese} becomes
+	// kCFLocaleCalendarIdentifier=kCFJapaneseCalendar} becomes
 	// "en_US@calendar=japanese".
 
 CF_EXPORT
@@ -205,19 +205,20 @@ CF_EXPORT const CFStringRef kCFLocaleAlternateQuotationBeginDelimiterKey CF_AVAI
 CF_EXPORT const CFStringRef kCFLocaleAlternateQuotationEndDelimiterKey CF_AVAILABLE(10_6, 4_0);
 
 // Values for kCFLocaleCalendarIdentifier
-CF_EXPORT const CFStringRef kCFCalendarIdentifierGregorian;
-CF_EXPORT const CFStringRef kCFCalendarIdentifierBuddhist;
-CF_EXPORT const CFStringRef kCFCalendarIdentifierChinese;
-CF_EXPORT const CFStringRef kCFCalendarIdentifierHebrew;
-CF_EXPORT const CFStringRef kCFCalendarIdentifierIslamic;
-CF_EXPORT const CFStringRef kCFCalendarIdentifierIslamicCivil;
-CF_EXPORT const CFStringRef kCFCalendarIdentifierJapanese;
+CF_EXPORT const CFStringRef kCFGregorianCalendar;
+CF_EXPORT const CFStringRef kCFBuddhistCalendar;
+CF_EXPORT const CFStringRef kCFChineseCalendar;
+CF_EXPORT const CFStringRef kCFHebrewCalendar;
+CF_EXPORT const CFStringRef kCFIslamicCalendar;
+CF_EXPORT const CFStringRef kCFIslamicCivilCalendar;
+CF_EXPORT const CFStringRef kCFJapaneseCalendar;
 CF_EXPORT const CFStringRef kCFRepublicOfChinaCalendar CF_AVAILABLE(10_6, 4_0);
 CF_EXPORT const CFStringRef kCFPersianCalendar CF_AVAILABLE(10_6, 4_0);
 CF_EXPORT const CFStringRef kCFIndianCalendar CF_AVAILABLE(10_6, 4_0);
 CF_EXPORT const CFStringRef kCFISO8601Calendar CF_AVAILABLE(10_6, 4_0);
 
 CF_EXTERN_C_END
+CF_IMPLICIT_BRIDGING_DISABLED
 
 #endif /* ! __COREFOUNDATION_CFLOCALE__ */
 

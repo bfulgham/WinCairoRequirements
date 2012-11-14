@@ -32,7 +32,7 @@
  */
 
 /*	CFStringUtilities.c
-	Copyright (c) 1999-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1999-2012, Apple Inc. All rights reserved.
 	Responsibility: Aki Inoue
 */
 
@@ -46,8 +46,10 @@
 #include <CoreFoundation/CFPreferences.h>
 #include <limits.h>
 #include <stdlib.h>
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 #include <unicode/ucol.h>
 #include <unicode/ucoleitr.h>
+#endif
 #include <string.h>
 
 #if  DEPLOYMENT_TARGET_WINDOWS
@@ -116,8 +118,10 @@ CFStringEncoding CFStringConvertIANACharSetNameToEncoding(CFStringRef charsetNam
 
     encoding = __CFStringEncodingGetFromCanonicalName(name);
 
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     if (kCFStringEncodingInvalidId == encoding) encoding = __CFStringEncodingGetFromICUName(name);
-
+#endif
+    
 
     return encoding;
 }
@@ -257,6 +261,7 @@ CFStringEncoding CFStringGetMostCompatibleMacStringEncoding(CFStringEncoding enc
 
 #define kCFStringCompareAllocationIncrement (128)
 
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 
 // -------------------------------------------------------------------------------------------------
 //	CompareSpecials - ignore case & diacritic differences
@@ -526,6 +531,8 @@ static OSStatus __CompareTextDefault(UCollator *collator, CFOptionFlags options,
 	return 0; // noErr
 }
 
+#endif // DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
+
 static inline CFIndex __extendLocationBackward(CFIndex location, CFStringInlineBuffer *str, const uint8_t *nonBaseBMP, const uint8_t *punctBMP) {
     while (location > 0) {
         UTF32Char ch = CFStringGetCharacterFromInlineBuffer(str, location);
@@ -568,11 +575,13 @@ __private_extern__ CFComparisonResult _CFCompareStringsWithLocale(CFStringInline
     CFRange range1 = str1Range;
     CFRange range2 = str2Range;
     SInt32 order;
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
     Boolean isEqual;
     bool forcedOrdering = ((options & kCFCompareForcedOrdering) ? true : false);
 
     UCollator *collator = NULL;
     bool defaultCollator = true;
+#endif
     static const uint8_t *alnumBMP = NULL;
     static const uint8_t *nonBaseBMP = NULL;
     static const uint8_t *punctBMP = NULL;
@@ -600,6 +609,7 @@ __private_extern__ CFComparisonResult _CFCompareStringsWithLocale(CFStringInline
 	range2.location = __extendLocationBackward(range2.location - 1, str2, nonBaseBMP, punctBMP);
     }
     
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED
     // First we try to use the last one used on this thread, if the locale is the same,
     // otherwise we try to check out a default one, or then we create one.
@@ -618,7 +628,8 @@ __private_extern__ CFComparisonResult _CFCompareStringsWithLocale(CFStringInline
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED
     }
 #endif
-
+#endif
+    
     characters1 = CFStringGetCharactersPtrFromInlineBuffer(str1, range1);
     characters2 = CFStringGetCharactersPtrFromInlineBuffer(str2, range2);
 
@@ -626,9 +637,12 @@ __private_extern__ CFComparisonResult _CFCompareStringsWithLocale(CFStringInline
 	range1.length = (str1Range.location + str1Range.length) - range1.location;
 	range2.length = (str2Range.location + str2Range.length) - range2.location;
 
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
         if ((NULL != collator) && (__CompareTextDefault(collator, options, characters1, range1.length, characters2, range2.length, &isEqual, &order) == 0 /* noErr */)) {
             compResult = ((isEqual && !forcedOrdering) ? kCFCompareEqualTo : ((order < 0) ? kCFCompareLessThan : kCFCompareGreaterThan));
-        } else {
+        } else 
+#endif
+        {
             compResult = ((memcmp(characters1, characters2, sizeof(UniChar) * range1.length) < 0) ? kCFCompareLessThan : kCFCompareGreaterThan);
         }
     } else {
@@ -693,12 +707,15 @@ __private_extern__ CFComparisonResult _CFCompareStringsWithLocale(CFStringInline
                 }
             }
 
+#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
             if ((NULL != collator) && (__CompareTextDefault(collator, options, characters1, range1.length, characters2, range2.length, &isEqual, &order) ==  0 /* noErr */)) {
                 if (isEqual) {
                     if (forcedOrdering && (kCFCompareEqualTo == compResult) && (0 != order)) compResult = ((order < 0) ? kCFCompareLessThan : kCFCompareGreaterThan);
                     order = 0;
                 }
-            } else {
+            } else 
+#endif
+            {
                 order = memcmp(characters1, characters2, sizeof(UTF16Char) * ((range1.length < range2.length) ? range1.length : range2.length));
                 if (0 == order) {
                     if (range1.length < range2.length) {
@@ -737,7 +754,7 @@ __private_extern__ CFComparisonResult _CFCompareStringsWithLocale(CFStringInline
 	_CFSetTSD(__CFTSDKeyCollatorLocale, (void *)CFRetain(compareLocale), NULL);
     }
 #endif
-
+    
     return compResult;
 }
 

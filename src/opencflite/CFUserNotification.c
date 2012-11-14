@@ -32,7 +32,7 @@
  */
 
 /*	CFUserNotification.c
-	Copyright (c) 2000-2011, Apple Inc.  All rights reserved.
+	Copyright (c) 2000-2012, Apple Inc.  All rights reserved.
 	Original Author: Doug Davidson
 	Responsibility: Kevin Perry
 */
@@ -53,6 +53,7 @@
 #define getpid _getpid
 #define ERR_SUCCESS 0
 #define MACH_RCV_TIMED_OUT 0
+#define MACH_PORT_NULL 0
 #else
 #include <unistd.h>
 #endif
@@ -264,7 +265,7 @@ static SInt32 _CFUserNotificationSendRequest(CFAllocatorRef allocator, CFStringR
                 if (__CFOASafe) __CFSetLastAllocationEventName(msg, "CFUserNotification (temp)");
                 if (msg) {
                     memset(msg, 0, size);
-                    msg->header.msgh_bits = MACH_MSGH_BITS(MACH_MSG_TYPE_COPY_SEND, MACH_MSG_TYPE_MAKE_SEND_ONCE);
+                    msg->header.msgh_bits = MACH_MSGH_BITS(MACH_MSG_TYPE_COPY_SEND, (replyPort == MACH_PORT_NULL) ? 0 : MACH_MSG_TYPE_MAKE_SEND_ONCE);
                     msg->header.msgh_size = size;
                     msg->header.msgh_remote_port = serverPort;
                     msg->header.msgh_local_port = replyPort;
@@ -429,7 +430,10 @@ SInt32 CFUserNotificationUpdate(CFUserNotificationRef userNotification, CFTimeIn
     CHECK_FOR_FORK();
     SInt32 retval = ERR_SUCCESS;
 #if DEPLOYMENT_TARGET_MACOSX
-    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, userNotification->_replyPort, userNotification->_token, timeout, flags|kCFUserNotificationUpdateFlag, dictionary);
+    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) {
+        // Avoid including a new send-once right with update/cancel messages by passing MACH_PORT_NULL, since the server doesn't need to use them.
+        retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, MACH_PORT_NULL, userNotification->_token, timeout, flags|kCFUserNotificationUpdateFlag, dictionary);
+    }
 #endif
     return retval;
 }
@@ -438,7 +442,10 @@ SInt32 CFUserNotificationCancel(CFUserNotificationRef userNotification) {
     CHECK_FOR_FORK();
     SInt32 retval = ERR_SUCCESS;
 #if DEPLOYMENT_TARGET_MACOSX
-    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, userNotification->_replyPort, userNotification->_token, 0, kCFUserNotificationCancelFlag, NULL);
+    if (userNotification && MACH_PORT_NULL != userNotification->_replyPort) {
+        // Avoid including a new send-once right with update/cancel messages by passing MACH_PORT_NULL, since the server doesn't need to use them.
+        retval = _CFUserNotificationSendRequest(CFGetAllocator(userNotification), userNotification->_sessionID, MACH_PORT_NULL, userNotification->_token, 0, kCFUserNotificationCancelFlag, NULL);
+    }
 #endif
     return retval;
 }
