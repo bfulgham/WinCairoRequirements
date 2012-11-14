@@ -97,34 +97,34 @@ rm /f $(SolutionDir)bin\testzlib.*
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>del /f $(OutDir)cal.*
-del /f $(OutDir)cintltst.*
-del /f $(OutDir)ctestfw.*
-del /f $(OutDir)date.*
-del /f $(OutDir)derb.*
-del /f $(OutDir)gen*.*
-del /f $(OutDir)icupkg.*
-del /f $(OutDir)intltest.*
-del /f $(OutDir)iotest.*
-del /f $(OutDir)letest.*
-del /f $(OutDir)icuio*.*
-del /f $(OutDir)icule*.*
-del /f $(OutDir)iculx*.*
-del /f $(OutDir)pkgdata.*
-del /f $(OutDir)icutu*.*
-del /f $(OutDir)testzlib.*
-del /f $(OutDir)uconv*.*
+      <Command>del /f "$(OutDir)cal.*"
+del /f "$(OutDir)cintltst.*"
+del /f "$(OutDir)ctestfw.*"
+del /f "$(OutDir)date.*"
+del /f "$(OutDir)derb.*"
+del /f "$(OutDir)gen*.*"
+del /f "$(OutDir)icupkg.*"
+del /f "$(OutDir)intltest.*"
+del /f "$(OutDir)iotest.*"
+del /f "$(OutDir)letest.*"
+del /f "$(OutDir)icuio*.*"
+del /f "$(OutDir)icule*.*"
+del /f "$(OutDir)iculx*.*"
+del /f "$(OutDir)pkgdata.*"
+del /f "$(OutDir)icutu*.*"
+del /f "$(OutDir)testzlib.*"
+del /f "$(OutDir)uconv*.*"
 
-del /f $(SolutionDir)lib\ctestfw.*
-del /f $(SolutionDir)lib\gen*.*
-del /f $(SolutionDir)lib\icuio*.*
-del /f $(SolutionDir)lib\icule*.*
-del /f $(SolutionDir)lib\iculx*.*
-del /f $(SolutionDir)lib\icutu*.*
-del /f $(SolutionDir)lib\intltest.*
-del /f $(SolutionDir)lib\letest.*
-del /f $(SolutionDir)lib\pixman-1.*
-del /f $(SolutionDir)lib\uconv*
+del /f "$(SolutionDir)lib\ctestfw.*"
+del /f "$(SolutionDir)lib\gen*.*"
+del /f "$(SolutionDir)lib\icuio*.*"
+del /f "$(SolutionDir)lib\icule*.*"
+del /f "$(SolutionDir)lib\iculx*.*"
+del /f "$(SolutionDir)lib\icutu*.*"
+del /f "$(SolutionDir)lib\intltest.*"
+del /f "$(SolutionDir)lib\letest.*"
+del /f "$(SolutionDir)lib\pixman-1.*"
+del /f "$(SolutionDir)lib\uconv*"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -188,34 +188,34 @@ del /f $(SolutionDir)lib\x64\uconv*
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PostBuildEvent>
-      <Command>del /f $(OutDir)cal.*
-del /f $(OutDir)cintltst.*
-del /f $(OutDir)ctestfw.*
-del /f $(OutDir)date.*
-del /f $(OutDir)derb.*
-del /f $(OutDir)gen*.*
-del /f $(OutDir)icupkg.*
-del /f $(OutDir)intltest.*
-del /f $(OutDir)iotest.*
-del /f $(OutDir)letest.*
-del /f $(OutDir)icuio*.*
-del /f $(OutDir)icule*.*
-del /f $(OutDir)iculx*.*
-del /f $(OutDir)pkgdata.*
-del /f $(OutDir)icutu*.*
-del /f $(OutDir)testzlib.*
-del /f $(OutDir)uconv*.*
+      <Command>del /f "$(OutDir)cal.*"
+del /f "$(OutDir)cintltst.*"
+del /f "$(OutDir)ctestfw.*"
+del /f "$(OutDir)date.*"
+del /f "$(OutDir)derb.*"
+del /f "$(OutDir)gen*.*"
+del /f "$(OutDir)icupkg.*"
+del /f "$(OutDir)intltest.*"
+del /f "$(OutDir)iotest.*"
+del /f "$(OutDir)letest.*"
+del /f "$(OutDir)icuio*.*"
+del /f "$(OutDir)icule*.*"
+del /f "$(OutDir)iculx*.*"
+del /f "$(OutDir)pkgdata.*"
+del /f "$(OutDir)icutu*.*"
+del /f "$(OutDir)testzlib.*"
+del /f "$(OutDir)uconv*.*"
 
-del /f $(SolutionDir)lib\ctestfw.*
-del /f $(SolutionDir)lib\gen*.*
-del /f $(SolutionDir)lib\icuio*.*
-del /f $(SolutionDir)lib\icule*.*
-del /f $(SolutionDir)lib\iculx*.*
-del /f $(SolutionDir)lib\icutu*.*
-del /f $(SolutionDir)lib\intltest.*
-del /f $(SolutionDir)lib\letest.*
-del /f $(SolutionDir)lib\pixman-1.*
-del /f $(SolutionDir)lib\uconv*
+del /f "$(SolutionDir)lib\ctestfw.*"
+del /f "$(SolutionDir)lib\gen*.*"
+del /f "$(SolutionDir)lib\icuio*.*"
+del /f "$(SolutionDir)lib\icule*.*"
+del /f "$(SolutionDir)lib\iculx*.*"
+del /f "$(SolutionDir)lib\icutu*.*"
+del /f "$(SolutionDir)lib\intltest.*"
+del /f "$(SolutionDir)lib\letest.*"
+del /f "$(SolutionDir)lib\pixman-1.*"
+del /f "$(SolutionDir)lib\uconv*"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

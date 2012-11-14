@@ -99,13 +99,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)config.h.msvc $(ProjectDir)config.h
-xcopy /Y /R $(ProjectDir)include\libcharset.h.in $(ProjectDir)include\libcharset.h
-xcopy /Y /R $(ProjectDir)include\localcharset.h.in $(ProjectDir)include\localcharset.h</Command>
+      <Command>xcopy /Y /R "$(ProjectDir)config.h.msvc" "$(ProjectDir)config.h"
+xcopy /Y /R "$(ProjectDir)include\libcharset.h.in" "$(ProjectDir)include\libcharset.h"
+xcopy /Y /R "$(ProjectDir)include\localcharset.h.in" "$(ProjectDir)include\localcharset.h"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
-xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
+      <Command>xcopy /Y /R "$(ProjectDir)include\libcharset.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)include\localcharset.h" "$(SolutionDir)include"</Command>
       <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -141,13 +141,13 @@ xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
     </Link>
     <Lib />
     <PreBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)config.h.msvc $(ProjectDir)config.h
-xcopy /Y /R $(ProjectDir)include\libcharset.h.in $(ProjectDir)include\libcharset.h
-xcopy /Y /R $(ProjectDir)include\localcharset.h.in $(ProjectDir)include\localcharset.h</Command>
+      <Command>xcopy /Y /R "$(ProjectDir)config.h.msvc" "$(ProjectDir)config.h"
+xcopy /Y /R "$(ProjectDir)include\libcharset.h.in" "$(ProjectDir)include\libcharset.h"
+xcopy /Y /R "$(ProjectDir)include\localcharset.h.in" "$(ProjectDir)include\localcharset.h"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
-xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
+      <Command>xcopy /Y /R "$(ProjectDir)include\libcharset.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)include\localcharset.h" "$(SolutionDir)include"</Command>
       <Message>Install Headers</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

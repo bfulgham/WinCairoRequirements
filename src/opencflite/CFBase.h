@@ -53,6 +53,10 @@
 #define __LITTLE_ENDIAN__ 1
 #endif
 
+#if defined(_MSC_VER) && defined(_M_IX86) && !defined(__LITTLE_ENDIAN__)
+#define __LITTLE_ENDIAN__ 1
+#endif
+
 #if !defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__)
 #error Do not know the endianess of this architecture
 #endif

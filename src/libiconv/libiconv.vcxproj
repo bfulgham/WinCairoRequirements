@@ -109,13 +109,13 @@
       </ModuleDefinitionFile>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)lib\config.h.msvc $(ProjectDir)lib\config.h
-xcopy /Y /R $(ProjectDir)include\iconv.h.msvc-static $(ProjectDir)include\iconv.h
+      <Command>xcopy /Y /R "$(ProjectDir)lib\config.h.msvc" "$(ProjectDir)lib\config.h"
+xcopy /Y /R "$(ProjectDir)include\iconv.h.msvc-static" "$(ProjectDir)include\iconv.h"
 
 </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)include\iconv.h $(SolutionDir)include</Command>
+      <Command>xcopy /Y /R "$(ProjectDir)include\iconv.h" "$(SolutionDir)include"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -152,13 +152,13 @@ xcopy /Y /R $(ProjectDir)include\iconv.h.msvc-static $(ProjectDir)include\iconv.
     </Link>
     <Lib />
     <PreBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)lib\config.h.msvc $(ProjectDir)lib\config.h
-xcopy /Y /R $(ProjectDir)include\iconv.h.msvc-static $(ProjectDir)include\iconv.h
+      <Command>xcopy /Y /R "$(ProjectDir)lib\config.h.msvc" "$(ProjectDir)lib\config.h"
+xcopy /Y /R "$(ProjectDir)include\iconv.h.msvc-static" "$(ProjectDir)include\iconv.h"
 
 </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)include\iconv.h $(SolutionDir)include</Command>
+      <Command>xcopy /Y /R "$(ProjectDir)include\iconv.h" "$(SolutionDir)include"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
