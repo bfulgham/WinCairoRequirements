@@ -50,6 +50,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include"

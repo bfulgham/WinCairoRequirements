@@ -246,6 +246,7 @@ xcopy /Y /R "$(ProjectDir)..\include\*.h" "$(SolutionDir)include\"
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\CoreFoundation\GNUCompatibility;$(ProjectDir)..;$(SolutionDir)include\objc4;$(SolutionDir)include\pthreads;$(SolutionDir)include\unicode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;CFLITELIB_EXPORTS;DEPLOYMENT_TARGET_WINDOWS;__STDC_LIMIT_MACROS;CF_BUILDING_CF;_WIN32_WINNT=0x0500;WINVER=0x0500;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;U_DISABLE_RENAMING=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <PreLinkEvent>
       <Command>

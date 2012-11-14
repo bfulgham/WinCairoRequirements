@@ -95,6 +95,7 @@
       </ExceptionHandling>
       <BrowseInformation>
       </BrowseInformation>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <ResourceCompile />
     <Link>
@@ -131,6 +132,7 @@ xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Comma
       <AssemblerOutput>All</AssemblerOutput>
       <BrowseInformation>
       </BrowseInformation>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <ResourceCompile />
     <Link>

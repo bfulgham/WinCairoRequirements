@@ -99,6 +99,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)include\openssl;$(SolutionDir)include\zlib;$(ProjectDir);$(ProjectDir)..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILDING_LIBCURL;HAVE_ZLIB_H;HAVE_ZLIB;HAVE_LIBZ;USE_SSLEAY;USE_WINDOWS_SSPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <ResourceCompile />
     <Link>

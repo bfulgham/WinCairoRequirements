@@ -145,6 +145,7 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)win32;$(ProjectDir);$(ProjectDir)..\..\pixman\pixman;$(SolutionDir)include;$(SolutionDir)include\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CAIRO_EXPORTS;__STDC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Msimg32.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
