@@ -33,7 +33,7 @@
  */
 
 /*	CFStorage.c
- Copyright (c) 1999-2011, Apple Inc. All rights reserved.
+ Copyright (c) 1999-2012, Apple Inc. All rights reserved.
  Responsibility: Ali Ozer
  */
 
@@ -172,13 +172,13 @@ CF_INLINE void __CFStorageAllocLeafNodeMemory(CFAllocatorRef allocator, CFStorag
 	    __CFAssignWithWriteBarrier((void **)&node->info.leaf.memory, _CFAllocatorReallocateGC(allocator, node->info.leaf.memory, cap, storage->nodeHint));	// This will free...
 	    if (__CFOASafe) __CFSetLastAllocationEventName(node->info.leaf.memory, "CFStorage (node bytes)");
 	    node->info.leaf.capacityInBytes = cap;
-}
+	}
 	__CFSpinUnlock(&(storage->cacheReaderMemoryAllocationLock));	    
     }
 }
 
 #if 0
-#define ASSERT(x) do { if (! (x)) { fprintf(stderr, "Assertion %s failed on line %d\n", #x, __LINE__); abort(); } } while (0)
+#define ASSERT(x) do { if (! (x)) { fprintf(stderr, "Assertion %s failed on line %d\n", #x, __LINE__); HALT; } } while (0)
 #else
 #define ASSERT(x) do { if (0 && ! (x)) { } } while(0)
 #endif
@@ -365,9 +365,9 @@ CF_INLINE CFStorageNode *__CFStorageFindChild(const CFStorageNode * restrict nod
 static CFStorageNode *__CFStorageCopyNode(CFStorageRef storage, const CFStorageNode *node);
 
 /* Finds the location where the specified byte is stored. If validConsecutiveByteRange is not NULL, returns
-   the range of bytes that are consecutive with this one.
-   !!! Assumes the byteNum is within the range of this node.
-*/
+ the range of bytes that are consecutive with this one.
+ !!! Assumes the byteNum is within the range of this node.
+ */
 static void *__CFStorageFindByte(CFStorageRef storage, CFStorageNode *node, CFIndex byteNum, CFIndex absoluteByteOffsetOfNode, CFStorageNode **resultNode, CFRange *validConsecutiveByteRange, bool requireUnfreezing) {
     if (node->isLeaf) {
         *validConsecutiveByteRange = CFRangeMake(absoluteByteOffsetOfNode, node->numBytes);
@@ -391,8 +391,8 @@ static void *__CFStorageFindByte(CFStorageRef storage, CFStorageNode *node, CFIn
 }
 
 /* Guts of CFStorageGetValueAtIndex(); note that validConsecutiveValueRange is not optional.
-   Consults and updates cache.
-*/
+ Consults and updates cache.
+ */
 CF_INLINE void *__CFStorageGetValueAtIndex(CFStorageRef storage, CFIndex idx, CFRange *validConsecutiveValueRange, bool requireUnfreezing) {
     uint8_t *result;
     if (!(result = __CFStorageGetFromCache(storage, idx, validConsecutiveValueRange, requireUnfreezing))) {
@@ -605,7 +605,7 @@ static CFStorageNode *__CFStorageDeleteFrozen(CFAllocatorRef allocator, CFStorag
 #pragma mark Unfrozen Deletion
 
 /* The boolean compact indicates whether leaf nodes that get smaller should be realloced.
-*/
+ */
 static CFStorageNode *__CFStorageDeleteUnfrozen(CFAllocatorRef allocator, CFStorageRef storage, CFStorageNode *node, CFRange range, bool compact, bool isRootNode) {
     ASSERT(! node->isFrozen);
     ASSERT(range.location + range.length <= node->numBytes);
@@ -618,14 +618,14 @@ static CFStorageNode *__CFStorageDeleteUnfrozen(CFAllocatorRef allocator, CFStor
     
     if (node->isLeaf) {
 	node->numBytes -= range.length;
-        // If this node had memory allocated, readjust the bytes...
+	// If this node had memory allocated, readjust the bytes...
 	if (node->info.leaf.memory) {
-            COPYMEM(node->info.leaf.memory + range.location + range.length, node->info.leaf.memory + range.location, node->numBytes - range.location);
+	    COPYMEM(node->info.leaf.memory + range.location + range.length, node->info.leaf.memory + range.location, node->numBytes - range.location);
 	    if (compact) __CFStorageAllocLeafNodeMemory(allocator, storage, node, node->numBytes, true);
 	}
 	CHECK_NODE_INTEGRITY(node);
 	return __CFStorageRetainNodeThreadUnsafe(node); //we can use the ThreadUnsafe calls because this is the Unfrozen variant, so we are not shared
-   } else {
+    } else {
 	CFStorageNode *newChildren[3] = {NULL, NULL, NULL};
 	CFIndex newChildIndex = __CFStoragePopulateBranchChildrenAfterDeletion(allocator, storage, node, range, newChildren, false/*childrenAreDefinitelyFrozen*/, compact);
 	node->numBytes -= range.length;
@@ -640,12 +640,12 @@ static CFStorageNode *__CFStorageDeleteUnfrozen(CFAllocatorRef allocator, CFStor
 	if (newChildIndex == 1) {
 	    /* We have only one child, so return it, transferring the refcount that __CFStoragePopulate gives it */
 	    return newChildren[0];
-            }
+	}
 	else {
 	    CFIndex i;
 	    for (i=0; i < 3; i++) {
 		__CFStorageSetChild(node, i, newChildren[i]); //set the new child, transferring the refcount to us (or set NULL)
-                }
+	    }
 	    CHECK_NODE_INTEGRITY(node);
 	    return __CFStorageRetainNodeThreadUnsafe(node);
 	}
@@ -670,9 +670,9 @@ static CFStorageDoubleNodeReturn __CFStorageInsertLeafFrozen(CFAllocatorRef allo
 	    COPYMEM(node->info.leaf.memory, leftResult->info.leaf.memory, byteNum); //copy first byteNum bytes from existing node
 	    //middle we don't touch
 	    COPYMEM(node->info.leaf.memory + byteNum, leftResult->info.leaf.memory + byteNum + size, node->numBytes - byteNum); //copy last part from existing node
-            }
-	__CFStorageSetCache(storage, leftResult, absoluteByteNum - byteNum);
 	}
+	__CFStorageSetCache(storage, leftResult, absoluteByteNum - byteNum);
+    }
     else {
 	/* We cannot fit into a single node.  See if we can preserve self (i.e. we're inserting at beginning or end). */
 	if (byteNum == node->numBytes) {
@@ -686,7 +686,7 @@ static CFStorageDoubleNodeReturn __CFStorageInsertLeafFrozen(CFAllocatorRef allo
 	    rightResult = __CFStorageRetainNode((CFStorageNode *)node);
 	    leftResult = __CFStorageCreateNode(allocator, storage, true, size);
 	    __CFStorageSetCache(storage, leftResult, absoluteByteNum);
-                    }
+	}
 	else {
 	    /* Inserting in middle.  We will need to create two nodes because we overflow one.  We could be lazy and only allocate up to byteNum, but since it's likely that they're about to insert into us and we'd have to reallocate, just allocate everything requested up front. */
 	    CFIndex leftAmount = storage->maxLeafCapacity, rightAmount = newTotalSize - storage->maxLeafCapacity;
@@ -716,8 +716,8 @@ static CFStorageDoubleNodeReturn __CFStorageInsertLeafFrozen(CFAllocatorRef allo
 	    if ((overlap = intersectionRange(leftNodeRange, preservedData)).length > 0) COPYMEM(node->info.leaf.memory + overlap.location - size, leftResult->info.leaf.memory + overlap.location, overlap.length);
 	    if ((overlap = intersectionRange(rightNodeRange, preservedData)).length > 0) COPYMEM(node->info.leaf.memory + overlap.location - size, rightResult->info.leaf.memory + overlap.location - leftAmount, overlap.length);
 	    __CFStorageSetCache(storage, leftResult, absoluteByteNum - byteNum);
-                }
-            }
+	}
+    }
     return CFStorageDoubleNodeReturnMake(leftResult, rightResult);
 }
 
@@ -931,16 +931,16 @@ static Boolean __CFStorageEqual(CFTypeRef cf1, CFTypeRef cf2) {
     CFIndex loc, count, valueSize;
     CFRange range1, range2;
     uint8_t *ptr1, *ptr2;
-
+    
     count = __CFStorageGetCount(storage1);
     if (count != __CFStorageGetCount(storage2)) return false;
-
+    
     valueSize = __CFStorageGetValueSize(storage1);
     if (valueSize != __CFStorageGetValueSize(storage2)) return false;
-
+    
     loc = range1.location = range1.length = range2.location = range2.length = 0;
     ptr1 = ptr2 = NULL;
-
+    
     while (loc < count) {
 	CFIndex cntThisTime;
 	if (loc >= range1.location + range1.length) ptr1 = (uint8_t *)CFStorageGetValueAtIndex(storage1, loc, &range1);
@@ -964,7 +964,7 @@ static CFHashCode __CFStorageHash(CFTypeRef cf) {
 static void __CFStorageDescribeNode(CFStorageNode *node, CFMutableStringRef str, CFIndex level) {
     int cnt;
     for (cnt = 0; cnt < level; cnt++) CFStringAppendCString(str, "  ", CFStringGetSystemEncoding());
-
+    
     if (node->isLeaf) {
         CFStringAppendFormat(str, NULL, CFSTR("Leaf %ld/%ld (%p) refcount: %u frozen: %s\n"), node->numBytes, node->info.leaf.capacityInBytes, node, node->refCount, node->isFrozen ? "yes" : "no");
     } else {
@@ -1163,7 +1163,7 @@ CFStorageRef CFStorageCreate(CFAllocatorRef allocator, CFIndex valueSize) {
     storage->rootNode.isLeaf = true;
     storage->rootNode.refCount = 0;
     if (valueSize >= sizeof(void *)) {
-    storage->nodeHint = __kCFAllocatorGCScannedMemory;
+	storage->nodeHint = __kCFAllocatorGCScannedMemory;
     }
     else {
 	// Don't scan nodes if the value size is smaller than a pointer (8198596)
@@ -1231,8 +1231,8 @@ CFIndex CFStorageGetCount(CFStorageRef storage) {
 }
 
 /* Returns pointer to the specified value
-   index and validConsecutiveValueRange are in terms of values
-*/
+ index and validConsecutiveValueRange are in terms of values
+ */
 void *CFStorageGetValueAtIndex(CFStorageRef storage, CFIndex idx, CFRange *validConsecutiveValueRange) {
     CFRange dummy;
     return __CFStorageGetValueAtIndex(storage, idx, validConsecutiveValueRange ? validConsecutiveValueRange : &dummy, true/*requireUnfreezing*/);
@@ -1245,8 +1245,8 @@ const void *CFStorageGetConstValueAtIndex(CFStorageRef storage, CFIndex idx, CFR
 
 
 /* Makes space for range.length values at location range.location
-   This function deepens the tree if necessary...
-*/
+ This function deepens the tree if necessary...
+ */
 void CFStorageInsertValues(CFStorageRef storage, CFRange range) {
     CFIndex numBytesToInsert = __CFStorageConvertValueToByte(storage, range.length);
     CFIndex byteNum = __CFStorageConvertValueToByte(storage, range.location);
@@ -1267,8 +1267,8 @@ void CFStorageInsertValues(CFStorageRef storage, CFRange range) {
 	    /* Our root is about to become a branch.  If our root node is currently a leaf, we need to clear the cache, because if the cache points at the root then the cache is about to start pointing at a branch node (which is not allowed) */
 	    if (storage->rootNode.isLeaf) {
 		__CFStorageSetCache(storage, NULL, 0);
-            storage->rootNode.isLeaf = false;
-            }
+		storage->rootNode.isLeaf = false;
+	    }
 	    
 	    /* Set the new children in our root.  Note that it's important that we overwrite the root node's info, because we wanted to transfer the refcounts of our children (or our allocated memory, if we are a leaf) to the new heap root */
 	    __CFStorageSetChild(&storage->rootNode, 0, heapRoot);
@@ -1285,8 +1285,8 @@ void CFStorageInsertValues(CFStorageRef storage, CFRange range) {
 }
 
 /* Deletes the values in the specified range
-   This function gets rid of levels if necessary...
-*/
+ This function gets rid of levels if necessary...
+ */
 void CFStorageDeleteValues(CFStorageRef storage, CFRange range) {
     CHECK_INTEGRITY();
     CFAllocatorRef allocator = CFGetAllocator(storage);
@@ -1336,7 +1336,7 @@ void CFStorageDeleteValues(CFStorageRef storage, CFRange range) {
 	    __CFStorageSetChild(&storage->rootNode, 0, __CFStorageRetainNode(newRoot->info.notLeaf.child[0]));
 	    __CFStorageSetChild(&storage->rootNode, 1, __CFStorageRetainNode(newRoot->info.notLeaf.child[1]));
 	    if (newRoot->info.notLeaf.child[2]) __CFStorageSetChild(&storage->rootNode, 2, __CFStorageRetainNode(newRoot->info.notLeaf.child[2]));
-    }
+	}	
     }
     __CFStorageReleaseNodeWithNullCheck(storage, newRoot); //balance the retain from __CFStorageDeleteUnfrozen
     ASSERT(expectedByteCount == storage->rootNode.numBytes);

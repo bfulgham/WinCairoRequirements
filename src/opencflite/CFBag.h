@@ -32,7 +32,7 @@
  */
 
 /*	CFBag.h
-	Copyright (c) 1998-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1998-2012, Apple Inc. All rights reserved.
 */
 
 #if !defined(__COREFOUNDATION_CFBAG__)
@@ -40,6 +40,7 @@
 
 #include <CoreFoundation/CFBase.h>
 
+CF_IMPLICIT_BRIDGING_ENABLED
 CF_EXTERN_C_BEGIN
 
 typedef const void *	(*CFBagRetainCallBack)(CFAllocatorRef allocator, const void *value);
@@ -118,6 +119,7 @@ CF_EXPORT
 void CFBagRemoveAllValues(CFMutableBagRef theBag);
 
 CF_EXTERN_C_END
+CF_IMPLICIT_BRIDGING_DISABLED
 
 #endif /* ! __COREFOUNDATION_CFBAG__ */
 

@@ -230,13 +230,22 @@
     <ClCompile Include="..\compat\strlcpy.c">
       <Filter>Source Files\compat</Filter>
     </ClCompile>
-    <ClCompile Include="..\CFBasicHash.m">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\CFRunLoop.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\CFWindowsUtilities.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CFBigNumber.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CFBurstTrie.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CFOldStylePList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CFBasicHash.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -460,6 +469,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ForFoundationOnly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CFBigNumber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CFBurstTrie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

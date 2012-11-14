@@ -32,7 +32,7 @@
  */
 
 /*	CFBundle_Internal.h
-	Copyright (c) 1999-2011, Apple Inc.  All rights reserved.
+	Copyright (c) 1999-2012, Apple Inc.  All rights reserved.
 */
 
 #if !defined(__COREFOUNDATION_CFBUNDLE_INTERNAL__)
@@ -52,12 +52,10 @@ CF_EXTERN_C_BEGIN
 #define __kCFLogBundle       3
 #define __kCFLogPlugIn       3
 
-#if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_LINUX || DEPLOYMENT_TARGET_FREEBSD
-#define PLATFORM_PATH_STYLE kCFURLPOSIXPathStyle
-#elif DEPLOYMENT_TARGET_WINDOWS
+#if DEPLOYMENT_TARGET_WINDOWS
 #define PLATFORM_PATH_STYLE kCFURLWindowsPathStyle
 #else
-#error Unknown or unspecified DEPLOYMENT_TARGET
+#define PLATFORM_PATH_STYLE kCFURLPOSIXPathStyle
 #endif
 
 #define CFBundleExecutableNotFoundError             4
@@ -66,6 +64,12 @@ CF_EXTERN_C_BEGIN
 #define CFBundleExecutableRuntimeMismatchError      3586
 #define CFBundleExecutableLoadError                 3587
 #define CFBundleExecutableLinkError                 3588
+
+// uncomment this to enable the new look up algorithm
+#define CFBUNDLE_NEWLOOKUP
+
+// uncomment this to enable the checking for 8302591
+//#define CFBUNDLE_NO_TRAVERSE_OUTSIDE
 
 typedef struct __CFResourceData {
     CFMutableDictionaryRef _stringTableCache;
@@ -101,7 +105,9 @@ extern CFURLRef _CFBundleCopyResourcesDirectoryURLInDirectory(CFURLRef bundleURL
 extern Boolean _CFBundleCouldBeBundle(CFURLRef url);
 extern CFURLRef _CFBundleCopyResourceForkURLMayBeLocal(CFBundleRef bundle, Boolean mayBeLocal);
 extern CFDictionaryRef _CFBundleCopyInfoDictionaryInResourceForkWithAllocator(CFAllocatorRef alloc, CFURLRef url);
-extern CFStringRef _CFBundleCopyBundleDevelopmentRegionFromVersResource(CFBundleRef bundle);
+#if DEPLOYMENT_TARGET_MACOSX
+__private_extern__ CFStringRef _CFBundleCopyBundleDevelopmentRegionFromVersResource(CFBundleRef bundle);
+#endif
 extern CFDictionaryRef _CFBundleCopyInfoDictionaryInExecutable(CFURLRef url);
 extern CFArrayRef _CFBundleCopyArchitecturesForExecutable(CFURLRef url);
 
@@ -119,6 +125,13 @@ extern void _CFBundleScheduleForUnloading(CFBundleRef bundle);
 extern void _CFBundleUnscheduleForUnloading(CFBundleRef bundle);
 extern void _CFBundleUnloadScheduledBundles(void);
 
+__private_extern__ CFStringRef _CFBundleGetBundlePath(CFBundleRef bundle);
+__private_extern__ void _CFBundleSetResourceDir(UniChar *buffer, CFIndex *currLen, CFIndex maxLen, uint8_t version);
+__private_extern__ CFURLRef _CFBundleCopyResourceForkURLWithoutLocal(CFBundleRef bundle);
+__private_extern__ CFDictionaryRef _CFBundleCreateQueryTableAtPath(CFBundleRef bundle, CFURLRef bundleURL, CFArrayRef languages, UniChar *resDir, CFIndex resDirLen, UniChar *subDir, CFIndex subDirLen);
+__private_extern__ CFDictionaryRef _CFBundleCopyQueryTable(CFBundleRef bundle, CFURLRef bundleURL, CFArrayRef languages, UniChar *resDir, CFIndex resDirLen, UniChar *subDirBuffer, CFIndex subDirLen);
+__private_extern__ CFArrayRef _CFFindBundleResourcesNoBlock(CFBundleRef bundle, CFURLRef bundleURL, CFStringRef subDirName, CFArrayRef searchLanguages, CFStringRef resName, CFArrayRef resTypes, CFIndex limit, uint8_t version);
+__private_extern__ CFTypeRef _CFBundleCopyFindResourcesWithNoBlock(CFBundleRef bundle, CFURLRef bundleURL, CFArrayRef languages, CFStringRef resourceName, CFStringRef resourceType, CFStringRef subPath, CFStringRef lproj, Boolean returnArray, Boolean localized);
 
 #if defined(BINARY_SUPPORT_DYLD)
 // DYLD API
@@ -163,8 +176,8 @@ extern void _CFPlugInWillUnload(CFPlugInRef plugIn);
 extern void _CFPlugInAddPlugInInstance(CFPlugInRef plugIn);
 extern void _CFPlugInRemovePlugInInstance(CFPlugInRef plugIn);
 
-extern void _CFPlugInAddFactory(CFPlugInRef plugIn, _CFPFactory *factory);
-extern void _CFPlugInRemoveFactory(CFPlugInRef plugIn, _CFPFactory *factory);
+extern void _CFPlugInAddFactory(CFPlugInRef plugIn, _CFPFactoryRef factory);
+extern void _CFPlugInRemoveFactory(CFPlugInRef plugIn, _CFPFactoryRef factory);
 
 
 /* Strings for parsing bundle structure */
@@ -216,6 +229,11 @@ extern void _CFPlugInRemoveFactory(CFPlugInRef plugIn, _CFPFactory *factory);
 
 #define _CFBundleLprojExtension CFSTR("lproj")
 #define _CFBundleLprojExtensionWithDot CFSTR(".lproj")
+#define _CFBundleDot CFSTR(".")
+#define _CFBundleAllFiles CFSTR("_CFBAF_")
+#define _CFBundleTypeIndicator CFSTR("_CFBT_")
+// This directory contains resources (especially nibs) that may look up localized resources or may fall back to the development language resources
+#define _CFBundleBaseDirectory CFSTR("Base")
 
 #define _CFBundleMacOSXPlatformName CFSTR("macos")
 #define _CFBundleAlternateMacOSXPlatformName CFSTR("macosx")
@@ -237,9 +255,7 @@ extern void _CFPlugInRemoveFactory(CFPlugInRef plugIn, _CFPFactory *factory);
 
 #define _CFBundleLocalizedResourceForkFileName CFSTR("Localized")
 
-#if DEPLOYMENT_TARGET_WINDOWS
 #define _CFBundleWindowsResourceDirectoryExtension CFSTR("resources")
-#endif
 
 /* Old platform names (no longer used) */
 #define _CFBundleMacOSXPlatformName_OLD CFSTR("macintosh")

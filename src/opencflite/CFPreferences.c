@@ -32,7 +32,7 @@
  */
 
 /*	CFPreferences.c
-	Copyright (c) 1998-2011, Apple Inc. All rights reserved.
+	Copyright (c) 1998-2012, Apple Inc. All rights reserved.
 	Responsibility: David Smith
 */
 
