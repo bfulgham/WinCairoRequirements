@@ -1,0 +1,544 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{08CE51EE-3E37-4D23-948C-545D6A6D1212}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>simd</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64;C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64;C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\simd\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo -BC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64 --check-stamp-file C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/CMakeLists.txt;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\CMakeLists.txt;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\CMakeFiles\generate.stamp</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo -BC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64 --check-stamp-file C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/CMakeLists.txt;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\CMakeLists.txt;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\CMakeFiles\generate.stamp</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jfsseflt-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jfsseflt-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jfsseflt-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jfsseflt-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jfsseflt-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jfsseflt-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfsseflt-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jfsseflt-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jfsseflt-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jfsseflt-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jfsseflt-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jfsseflt-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfsseflt-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jccolss2-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jccolss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jccolss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jccolss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jccolss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jccolss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcclrss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jccolss2-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jccolss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jccolss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jccolss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jccolss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jccolss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcclrss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jccolss2-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jdcolss2-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jdcolss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jdcolss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jdcolss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jdcolss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdcolss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdclrss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdcolss2-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jdcolss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jdcolss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jdcolss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jdcolss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdcolss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdclrss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdcolss2-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcgrass2-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jcgrass2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcgrass2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcgrass2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcgrass2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcgrass2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcgryss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcgrass2-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jcgrass2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcgrass2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcgrass2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcgrass2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcgrass2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcgryss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcgrass2-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcsamss2-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jcsamss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcsamss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcsamss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcsamss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcsamss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcsamss2-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jcsamss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcsamss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcsamss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcsamss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcsamss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcsamss2-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jdsamss2-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jdsamss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jdsamss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jdsamss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jdsamss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdsamss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdsamss2-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jdsamss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jdsamss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jdsamss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jdsamss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdsamss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdsamss2-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jdmerss2-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jdmerss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jdmerss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jdmerss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jdmerss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdmerss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdmrgss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdmerss2-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jdmerss2-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jdmerss2-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jdmerss2-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jdmerss2-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdmerss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdmrgss2-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdmerss2-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcqnts2i-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jcqnts2i-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcqnts2i-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcqnts2i-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcqnts2i-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcqnts2i-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2i-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jcqnts2i-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcqnts2i-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcqnts2i-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcqnts2i-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcqnts2i-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2i-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jfss2fst-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jfss2fst-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jfss2fst-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jfss2fst-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jfss2fst-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jfss2fst-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2fst-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jfss2fst-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jfss2fst-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jfss2fst-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jfss2fst-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jfss2fst-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2fst-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jfss2int-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jfss2int-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jfss2int-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jfss2int-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jfss2int-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jfss2int-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2int-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jfss2int-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jfss2int-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jfss2int-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jfss2int-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jfss2int-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2int-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2red-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jiss2red-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2red-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2red-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2red-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2red-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2red-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jiss2red-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2red-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2red-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2red-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2red-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2red-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2int-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jiss2int-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2int-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2int-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2int-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2int-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2int-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jiss2int-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2int-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2int-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2int-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2int-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2int-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2fst-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jiss2fst-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2fst-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2fst-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2fst-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2fst-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2fst-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jiss2fst-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2fst-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2fst-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2fst-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2fst-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2fst-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcqnts2f-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jcqnts2f-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcqnts2f-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcqnts2f-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcqnts2f-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcqnts2f-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2f-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jcqnts2f-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jcqnts2f-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jcqnts2f-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jcqnts2f-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcqnts2f-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2f-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2flt-64.obj.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating $(Configuration)/jiss2flt-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2flt-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2flt-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2flt-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2flt-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2flt-64.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating $(Configuration)/jiss2flt-64.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+nasm -fwin64 -DWIN64 -D__x86_64__ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/win/ -IC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/ C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/simd/jiss2flt-64.asm -oC:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/simd/$(Configuration)/jiss2flt-64.obj
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/00d47ad5a398520e6863c5ce4abf8c9c/jiss2flt-64.obj.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jiss2flt-64.asm;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jcolsamp.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jdct.inc;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\simd\jsimdext.inc;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2flt-64.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeFiles\1086573d12e020fee8361243e6dfd3be\simd.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/1086573d12e020fee8361243e6dfd3be/simd.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfsseflt-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jccolss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdcolss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcgrass2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcsamss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdsamss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdmerss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2i-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2fst-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2int-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2red-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2int-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2fst-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2f-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2flt-64.obj;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\CMakeFiles\simd</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/CMakeFiles/1086573d12e020fee8361243e6dfd3be/simd.rule;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfsseflt-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jccolss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdcolss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcgrass2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcsamss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdsamss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jdmerss2-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2i-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2fst-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jfss2int-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2red-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2int-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2fst-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jcqnts2f-64.obj;C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\$(Configuration)\jiss2flt-64.obj;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Development\Projects\WinCairoRequirements\src\libjpeg-turbo\build64\simd\CMakeFiles\simd</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CMakeFiles\simd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build64/ZERO_CHECK.vcxproj">
+      <Project>9E6EEF0D-44C3-49C6-AEF8-EDFB01BD2A19</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

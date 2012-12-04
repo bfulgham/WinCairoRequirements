@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include=".\jaricom.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jutils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcapimin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcapistd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcarith.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jccoefct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jccolor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcdctmgr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jchuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcinit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcmainct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcmarker.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcmaster.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcomapi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcparam.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcphuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcprepct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jcsample.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jctrans.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdapimin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdapistd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdarith.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdatadst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdatasrc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdcoefct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdcolor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jddctmgr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdhuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdinput.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdmainct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdmarker.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdmaster.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdmerge.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdphuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdpostct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdsample.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jdtrans.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jerror.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jfdctflt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jfdctfst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jfdctint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jidctflt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jidctfst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jidctint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jidctred.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jmemmgr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jmemnobs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jquant1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\jquant2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\simd\jsimd_i386.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="simd\jsimd_x86_64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jccolmmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jsimdcpu.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jccolss2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcgrammx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcgrass2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqnt3dn.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqntmmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqnts2f.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqnts2i.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqntsse.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcsammmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcsamss2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdcolmmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdcolss2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdmermmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdmerss2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdsammmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdsamss2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jf3dnflt.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfmmxfst.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfmmxint.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfss2fst.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfss2int.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfsseflt.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\ji3dnflt.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jimmxfst.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jimmxint.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jimmxred.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2flt.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2fst.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2int.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2red.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jisseflt.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jccolss2-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\simd\x64\jiss2red-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcgrass2-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcqnts2f-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcqnts2i-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcsamss2-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdcolss2-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdmerss2-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdsamss2-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfss2fst-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfss2int-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfsseflt-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2flt-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2fst-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2int-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{68625B53-41DF-4576-9FCE-F8445A580DB2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="32-bit Object Files">
+      <UniqueIdentifier>{820C44F0-3EA7-47CB-83B2-11760230F373}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="64-bit Object Files">
+      <UniqueIdentifier>{03f1ff28-3e81-4c43-bb22-3f7246bb9d9b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

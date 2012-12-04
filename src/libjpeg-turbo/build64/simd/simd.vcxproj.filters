@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="..\..\simd\CMakeLists.txt" />
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jfsseflt-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jccolss2-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jdcolss2-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcgrass2-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcsamss2-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jdsamss2-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jdmerss2-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcqnts2i-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jfss2fst-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jfss2int-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2red-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2int-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2fst-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jcqnts2f-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\00d47ad5a398520e6863c5ce4abf8c9c\jiss2flt-64.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\CMakeFiles\1086573d12e020fee8361243e6dfd3be\simd.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CMakeFiles\simd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A35018AD-CEE6-4165-BF09-FCBEE851810E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

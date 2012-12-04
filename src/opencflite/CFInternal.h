@@ -138,11 +138,11 @@ __private_extern__ CFIndex __CFActiveProcessorCount();
 
 #if defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__)
     #define HALT do {asm __volatile__("trap"); kill(getpid(), 9); } while (0)
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(_M_X64) || defined(_M_AMD64)
     #if defined(__GNUC__)
         #define HALT do {asm __volatile__("int3"); kill(getpid(), 9); } while (0)
     #elif defined(_MSC_VER)
-        #define HALT do { DebugBreak(); abort(); } while (0)
+        #define HALT do { __debugbreak(); abort(); } while (0)
     #else
         #error Compiler not supported
     #endif

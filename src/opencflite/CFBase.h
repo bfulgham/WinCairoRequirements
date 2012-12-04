@@ -53,11 +53,15 @@
 #define __LLP64__ 1
 #endif
 
-#if defined(_MSC_VER) && defined(_M_IX86)
+#if defined(_MSC_VER)
+#if defined(_M_IX86)
 #define __i386__ 1
+#elif defined(_M_X64) || defined(_M_AMD64)
+#define __x86_x64__ 1
+#endif
 #endif
 
-#if (defined(__i386__) || defined(__x86_64__)) && !defined(__LITTLE_ENDIAN__)
+#if (defined(__i386__) || defined(__x86_64__) || defined(_M_X64) || defined(_M_AMD64) || defined(_M_IA64)) && !defined(__LITTLE_ENDIAN__)
 #define __LITTLE_ENDIAN__ 1
 #endif
 
