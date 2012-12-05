@@ -99,6 +99,24 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jconfig.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jdct.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jerror.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jinclude.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jmemsys.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jmorecfg.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jpegint.h " "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jpeglib.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jversion.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)cdjpeg.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)cderror.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)transupp.h" "$(SolutionDir)include"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Install Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -124,6 +142,24 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jconfig.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jdct.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jerror.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jinclude.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jmemsys.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jmorecfg.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jpegint.h " "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jpeglib.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)jversion.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)cdjpeg.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)cderror.h" "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)transupp.h" "$(SolutionDir)include"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Install Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -385,7 +421,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\simd\x64\jiss2red-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2red-64.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </Object>

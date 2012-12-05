@@ -258,9 +258,6 @@
     <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jccolss2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\simd\x64\jiss2red-64.obj">
-      <Filter>64-bit Object Files</Filter>
-    </Object>
     <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcgrass2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
@@ -300,6 +297,7 @@
     <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2int-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2red-64.obj" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

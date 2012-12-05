@@ -102,7 +102,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>jpeg-static.lib</AdditionalDependencies>
+      <AdditionalDependencies>libjpeg.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ImportLibrary>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/Debug/cjpeg-static.lib</ImportLibrary>
@@ -142,7 +142,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>jpeg-static.lib</AdditionalDependencies>
+      <AdditionalDependencies>libjpeg.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ImportLibrary>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/Release/cjpeg-static.lib</ImportLibrary>
