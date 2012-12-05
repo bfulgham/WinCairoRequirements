@@ -353,6 +353,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cairo-mempool.c"
+				>
+			</File>
+			<File
 				RelativePath=".\cairo-mesh-pattern-rasterizer.c"
 				>
 			</File>
@@ -996,6 +1000,10 @@
 			</File>
 			<File
 				RelativePath=".\cairo-malloc-private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cairo-mempool-private.h"
 				>
 			</File>
 			<File

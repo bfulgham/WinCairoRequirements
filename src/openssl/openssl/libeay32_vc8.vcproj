@@ -14,7 +14,7 @@
 	</Platforms>
 	<ToolFiles>
 		<DefaultToolFile
-			FileName="masm.rules"
+			FileName="nasm.rules"
 		/>
 	</ToolFiles>
 	<Configurations>
@@ -26,13 +26,13 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="mkdir &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\aes\aes.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1t.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bf\blowfish.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bio\bio.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bn\bn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\buffer\buffer.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cast\cast.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\comp\comp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf_api.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\crypto.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des_old.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dh\dh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dsa\dsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dso\dso.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ebcdic.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ec\ec.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdh\ecdh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdsa\ecdsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\engine\engine.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\err\err.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\evp\evp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\hmac\hmac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\idea\idea.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\krb5\krb5_asn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\lhash\lhash.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md2\md2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md4\md4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md5\md5.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\mdc2\mdc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\obj_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\objects.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ocsp\ocsp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslconf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslv.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ossl_typ.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs7\pkcs7.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs12\pkcs12.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pqueue\pqueue.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pqueue\pq_compat.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rand\rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc2\rc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc4\rc4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc5\rc5.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ripemd\ripemd.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rsa\rsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\sha\sha.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\stack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\store\store.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\stack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\safestack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\symhacks.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\tmdiff.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\txt_db\txt_db.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui_compat.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509_vfy.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509v3\x509v3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\e_os2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\fips.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\rand\fips_rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\dtls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\kssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl23.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\tls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)Build\$(Configuration)\$(ProjectName)&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\aes\aes.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1_locl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1t.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bf\blowfish.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bio\bio.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bn\bn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\buffer\buffer.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\camellia\camellia.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cast\cast.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cmac\cmac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cms\cms.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\comp\comp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf_api.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\crypto.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des_old.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dh\dh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dsa\dsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dso\dso.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ebcdic.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ec\ec.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdh\ecdh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdsa\ecdsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\engine\engine.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\err\err.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\evp\evp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\hmac\hmac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\idea\idea.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\krb5\krb5_asn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\lhash\lhash.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md2\md2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md4\md4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md5\md5.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\mdc2\mdc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\modes\modes.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\obj_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\objects.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ocsp\ocsp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslconf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslv.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ossl_typ.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs7\pkcs7.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs12\pkcs12.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pqueue\pqueue.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rand\rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc2\rc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc4\rc4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ripemd\ripemd.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rsa\rsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\seed\seed.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\sha\sha.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\srp\srp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\stack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\safestack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\symhacks.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\tmdiff.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ts\ts.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\txt_db\txt_db.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui_compat.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\whrlpool\whrlpool.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509_vfy.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509v3\x509v3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\e_os2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\fips.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\rand\fips_rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\dtls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\kssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl23.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\srtp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\tls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
-				Name="MASM"
+				Name="NASM"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -45,8 +45,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\ssl&quot;;&quot;$(ProjectDir)..\crypto&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)include\zlib&quot;"
-				PreprocessorDefinitions="OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\ssl&quot;;&quot;$(ProjectDir)..\crypto&quot;;&quot;$(ProjectDir)..\crypto\asn1&quot;;&quot;$(ProjectDir)..\crypto\evp&quot;;&quot;$(ProjectDir)..\crypto\modes&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)include\zlib&quot;"
+				PreprocessorDefinitions="OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_THREADS;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_IA32_SSE2;AES_ASM;GHASH_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;OPENSSL_BN_ASM_GF2m;MD5_ASM;RMD160_ASM;SHA1_ASM;SHA256_ASM;SHA512_ASM;VPAES_ASM;WHIRLPOOL_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_RC5;OPENSSL_NO_MD2;OPENSSL_NO_JPAKE;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -60,6 +60,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib crypt32.lib"
+				ModuleDefinitionFile="&quot;$(ProjectDir)$(ProjectName)_x86.def&quot;"
 				GenerateDebugInformation="false"
 				SubSystem="2"
 			/>
@@ -97,13 +98,13 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="mkdir &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\aes\aes.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1t.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bf\blowfish.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bio\bio.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bn\bn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\buffer\buffer.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cast\cast.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\comp\comp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf_api.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\crypto.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des_old.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dh\dh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dsa\dsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dso\dso.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ebcdic.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ec\ec.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdh\ecdh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdsa\ecdsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\engine\engine.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\err\err.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\evp\evp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\hmac\hmac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\idea\idea.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\krb5\krb5_asn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\lhash\lhash.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md2\md2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md4\md4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md5\md5.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\mdc2\mdc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\obj_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\objects.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ocsp\ocsp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslconf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslv.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ossl_typ.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs7\pkcs7.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs12\pkcs12.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pqueue\pqueue.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pqueue\pq_compat.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rand\rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc2\rc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc4\rc4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc5\rc5.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ripemd\ripemd.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rsa\rsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\sha\sha.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\stack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\store\store.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\stack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\safestack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\symhacks.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\tmdiff.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\txt_db\txt_db.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui_compat.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509_vfy.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509v3\x509v3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\e_os2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\fips.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\rand\fips_rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\dtls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\kssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl23.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\tls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;mkdir &quot;$(SolutionDir)Build\$(Configuration)\$(ProjectName)&quot;&#x0D;&#x0A;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\aes\aes.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1_locl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\asn1\asn1t.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bf\blowfish.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bio\bio.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\bn\bn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\buffer\buffer.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\camellia\camellia.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cast\cast.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cmac\cmac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\cms\cms.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\comp\comp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\conf\conf_api.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\crypto.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\des\des_old.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dh\dh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dsa\dsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\dso\dso.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ebcdic.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ec\ec.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdh\ecdh.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ecdsa\ecdsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\engine\engine.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\err\err.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\evp\evp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\hmac\hmac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\idea\idea.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\krb5\krb5_asn.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\lhash\lhash.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md2\md2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md4\md4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\md5\md5.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\mdc2\mdc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\modes\modes.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\obj_mac.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\objects\objects.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ocsp\ocsp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslconf.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\opensslv.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ossl_typ.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pem\pem2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs7\pkcs7.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pkcs12\pkcs12.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\pqueue\pqueue.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rand\rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc2\rc2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rc4\rc4.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ripemd\ripemd.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\rsa\rsa.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\seed\seed.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\sha\sha.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\srp\srp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\stack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\stack\safestack.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\symhacks.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\tmdiff.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ts\ts.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\txt_db\txt_db.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\ui\ui_compat.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\whrlpool\whrlpool.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509\x509_vfy.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\crypto\x509v3\x509v3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\e_os2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\fips.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\fips\rand\fips_rand.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\dtls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\kssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl2.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl3.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\ssl23.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\srtp.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;xcopy /Y /R &quot;$(ProjectDir)..\ssl\tls1.h&quot; &quot;$(SolutionDir)include\openssl&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
-				Name="MASM"
+				Name="NASM"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -116,8 +117,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\ssl&quot;;&quot;$(ProjectDir)..\crypto&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)include\zlib&quot;"
-				PreprocessorDefinitions="OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_CPUID_OBJ;OPENSSL_IA32_SSE2;AES_ASM;BN_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;MD5_ASM;SHA1_ASM;RMD160_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_CAMELLIA;OPENSSL_NO_SEED;OPENSSL_NO_RC5;OPENSSL_NO_MDC2;OPENSSL_NO_CMS;OPENSSL_NO_JPAKE;OPENSSL_NO_CAPIENG;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\ssl&quot;;&quot;$(ProjectDir)..\crypto&quot;;&quot;$(ProjectDir)..\crypto\asn1&quot;;&quot;$(ProjectDir)..\crypto\evp&quot;;&quot;$(ProjectDir)..\crypto\modes&quot;;&quot;$(ProjectDir)..&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)include\zlib&quot;"
+				PreprocessorDefinitions="OPENSSL_BUILD_SHLIBCRYPTO;OPENSSL_THREADS;OPENSSL_SYSNAME_WIN32;WIN32_LEAN_AND_MEAN;L_ENDIAN;DSO_WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;OPENSSL_IA32_SSE2;AES_ASM;GHASH_ASM;OPENSSL_BN_ASM_PART_WORDS;OPENSSL_BN_ASM_MONT;OPENSSL_BN_ASM_GF2m;MD5_ASM;RMD160_ASM;SHA1_ASM;SHA256_ASM;SHA512_ASM;VPAES_ASM;WHIRLPOOL_ASM;OPENSSL_USE_APPLINK;OPENSSL_NO_RC5;OPENSSL_NO_MD2;OPENSSL_NO_JPAKE;OPENSSL_NO_KRB5;ZLIB;ZLIB_SHARED;OPENSSL_NO_DYNAMIC_ENGINE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -131,6 +132,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib crypt32.lib"
+				ModuleDefinitionFile="&quot;$(ProjectDir)$(ProjectName)_x86.def&quot;"
 				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -169,8 +171,28 @@
 			Name="aes"
 			>
 			<File
-				RelativePath="..\crypto\aes\asm\a_win32.asm"
+				RelativePath="..\crypto\aes\asm\aes-586.asm"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\aes\asm\aes-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\aes\aes.h"
@@ -207,6 +229,94 @@
 			<File
 				RelativePath="..\crypto\aes\aes_wrap.c"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\aes\asm\aesni-sha1-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\aes\asm\aesni-x86.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\aes\asm\aesni-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\aes\asm\bsaes-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\aes\asm\vpaes-x86.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\aes\asm\vpaes-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -245,10 +355,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\asn1\a_hdr.c"
-				>
-			</File>
-			<File
 				RelativePath="..\crypto\asn1\a_i2d_fp.c"
 				>
 			</File>
@@ -258,10 +364,6 @@
 			</File>
 			<File
 				RelativePath="..\crypto\asn1\a_mbstr.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\asn1\a_meth.c"
 				>
 			</File>
 			<File
@@ -313,6 +415,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\asn1\ameth_lib.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\asn1\asn1.h"
 				>
 			</File>
@@ -350,6 +456,14 @@
 			</File>
 			<File
 				RelativePath="..\crypto\asn1\asn_pack.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\asn1\bio_asn1.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\asn1\bio_ndef.c"
 				>
 			</File>
 			<File
@@ -453,6 +567,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\asn1\tasn_prn.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\asn1\tasn_typ.c"
 				>
 			</File>
@@ -493,6 +611,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\asn1\x_nx509.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\asn1\x_pkey.c"
 				>
 			</File>
@@ -529,7 +651,7 @@
 			Name="bf"
 			>
 			<File
-				RelativePath="..\crypto\bf\asm\b_win32.asm"
+				RelativePath="..\crypto\bf\asm\bf-586.asm"
 				>
 			</File>
 			<File
@@ -539,6 +661,26 @@
 			<File
 				RelativePath="..\crypto\bf\bf_ecb.c"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\bf\bf_enc.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\bf\bf_ofb64.c"
@@ -645,8 +787,32 @@
 			Name="bn"
 			>
 			<File
+				RelativePath="..\crypto\bn\asm\bn-586.asm"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\bn\bn_add.c"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\bn\bn_asm.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\bn\bn_blind.c"
@@ -717,10 +883,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\bn\bn_opt.c"
-				>
-			</File>
-			<File
 				RelativePath="..\crypto\bn\bn_prime.c"
 				>
 			</File>
@@ -749,10 +911,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\bn\asm\bn_win32.asm"
-				>
-			</File>
-			<File
 				RelativePath="..\crypto\bn\bn_word.c"
 				>
 			</File>
@@ -761,12 +919,96 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\bn\asm\co_win32.asm"
+				RelativePath="..\crypto\bn\asm\co-586.asm"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\bn\asm\mt_win32.asm"
+				RelativePath="..\crypto\bn\asm\modexp512-x86_64.asm"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\bn\asm\x86-gf2m.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\bn\asm\x86-mont.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\bn\asm\x86_64-gf2m.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\bn\asm\x86_64-mont.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\bn\asm\x86_64-mont5.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -781,6 +1023,26 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\cast\c_enc.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\crypto\cast\c_ofb64.c"
 				>
 			</File>
@@ -789,7 +1051,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\cast\asm\c_win32.asm"
+				RelativePath="..\crypto\cast\asm\cast-586.asm"
 				>
 			</File>
 		</Filter>
@@ -885,12 +1147,32 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\des\asm\d_win32.asm"
+				RelativePath="..\crypto\des\asm\crypt586.asm"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\des\des_lib.c"
+				RelativePath="..\crypto\des\asm\des-586.asm"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\des\des_enc.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\des\des_locl.h"
@@ -931,6 +1213,26 @@
 			<File
 				RelativePath="..\crypto\des\fcrypt.c"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\des\fcrypt_b.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\des\ofb64ede.c"
@@ -976,14 +1278,14 @@
 				RelativePath="..\crypto\des\xcbc_enc.c"
 				>
 			</File>
-			<File
-				RelativePath="..\crypto\des\asm\y_win32.asm"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="dh"
 			>
+			<File
+				RelativePath="..\crypto\dh\dh_ameth.c"
+				>
+			</File>
 			<File
 				RelativePath="..\crypto\dh\dh_asn1.c"
 				>
@@ -1012,12 +1314,24 @@
 				RelativePath="..\crypto\dh\dh_lib.c"
 				>
 			</File>
+			<File
+				RelativePath="..\crypto\dh\dh_pmeth.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\dh\dh_prn.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="dsa"
 			>
 			<File
 				RelativePath="..\crypto\dsa\dsa.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\dsa\dsa_ameth.c"
 				>
 			</File>
 			<File
@@ -1049,11 +1363,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\dsa\dsa_sign.c"
+				RelativePath="..\crypto\dsa\dsa_pmeth.c"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\dsa\dsa_utl.c"
+				RelativePath="..\crypto\dsa\dsa_prn.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\dsa\dsa_sign.c"
 				>
 			</File>
 			<File
@@ -1066,6 +1384,10 @@
 			>
 			<File
 				RelativePath="..\crypto\dso\dso.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\dso\dso_beos.c"
 				>
 			</File>
 			<File
@@ -1177,7 +1499,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\ec\ec2_oct.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\ec\ec2_smpl.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\ec_ameth.c"
 				>
 			</File>
 			<File
@@ -1217,7 +1547,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\ec\ec_oct.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\ec_pmeth.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\ec\ec_print.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\eck_prn.c"
 				>
 			</File>
 			<File
@@ -1226,6 +1568,26 @@
 			</File>
 			<File
 				RelativePath="..\crypto\ec\ecp_nist.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\ecp_nistp224.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\ecp_nistp256.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\ecp_nistp521.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\ecp_nistputil.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ec\ecp_oct.c"
 				>
 			</File>
 			<File
@@ -1285,11 +1647,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\engine\eng_padlock.c"
+				RelativePath="..\crypto\engine\eng_pkey.c"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\engine\eng_pkey.c"
+				RelativePath="..\crypto\engine\eng_rdrand.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\engine\eng_rsax.c"
 				>
 			</File>
 			<File
@@ -1298,6 +1664,10 @@
 			</File>
 			<File
 				RelativePath="..\crypto\engine\engine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\engine\tb_asnmth.c"
 				>
 			</File>
 			<File
@@ -1322,6 +1692,10 @@
 			</File>
 			<File
 				RelativePath="..\crypto\engine\tb_ecdsa.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\engine\tb_pkmeth.c"
 				>
 			</File>
 			<File
@@ -1353,19 +1727,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\err\err_bio.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\err\err_def.c"
-				>
-			</File>
-			<File
 				RelativePath="..\crypto\err\err_prn.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\err\err_str.c"
 				>
 			</File>
 		</Filter>
@@ -1401,10 +1763,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\evp\dig_eng.c"
-				>
-			</File>
-			<File
 				RelativePath="..\crypto\evp\digest.c"
 				>
 			</File>
@@ -1413,7 +1771,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\evp\e_aes_cbc_hmac_sha1.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\evp\e_bf.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\evp\e_camellia.c"
 				>
 			</File>
 			<File
@@ -1449,15 +1815,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\evp\e_rc4_hmac_md5.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\evp\e_rc5.c"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\evp\e_xcbc_d.c"
+				RelativePath="..\crypto\evp\e_seed.c"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\evp\enc_min.c"
+				RelativePath="..\crypto\evp\e_xcbc_d.c"
 				>
 			</File>
 			<File
@@ -1469,15 +1839,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\evp\evp_cnf.c"
-				>
-			</File>
-			<File
 				RelativePath="..\crypto\evp\evp_enc.c"
 				>
 			</File>
 			<File
 				RelativePath="..\crypto\evp\evp_err.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\evp\evp_fips.c"
 				>
 			</File>
 			<File
@@ -1509,15 +1879,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\evp\m_md2.c"
-				>
-			</File>
-			<File
 				RelativePath="..\crypto\evp\m_md4.c"
 				>
 			</File>
 			<File
 				RelativePath="..\crypto\evp\m_md5.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\evp\m_mdc2.c"
 				>
 			</File>
 			<File
@@ -1534,6 +1904,14 @@
 			</File>
 			<File
 				RelativePath="..\crypto\evp\m_sha1.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\evp\m_sigver.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\evp\m_wp.c"
 				>
 			</File>
 			<File
@@ -1576,10 +1954,30 @@
 				RelativePath="..\crypto\evp\p_verify.c"
 				>
 			</File>
+			<File
+				RelativePath="..\crypto\evp\pmeth_fn.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\evp\pmeth_gn.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\evp\pmeth_lib.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="hmac"
 			>
+			<File
+				RelativePath="..\crypto\hmac\hm_ameth.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\hmac\hm_pmeth.c"
+				>
+			</File>
 			<File
 				RelativePath="..\crypto\hmac\hmac.c"
 				>
@@ -1650,14 +2048,18 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="md2"
+			Name="mdc2"
 			>
 			<File
-				RelativePath="..\crypto\md2\md2_dgst.c"
+				RelativePath="..\crypto\mdc2\mdc2.h"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\md2\md2_one.c"
+				RelativePath="..\crypto\mdc2\mdc2_one.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\mdc2\mdc2dgst.c"
 				>
 			</File>
 		</Filter>
@@ -1677,8 +2079,28 @@
 			Name="md5"
 			>
 			<File
-				RelativePath="..\crypto\md5\asm\m5_win32.asm"
+				RelativePath="..\crypto\md5\asm\md5-586.asm"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\md5\asm\md5-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\md5\md5_dgst.c"
@@ -1710,6 +2132,14 @@
 			</File>
 			<File
 				RelativePath="..\crypto\objects\obj_lib.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\objects\obj_xref.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\objects\obj_xref.h"
 				>
 			</File>
 			<File
@@ -1816,6 +2246,10 @@
 				RelativePath="..\crypto\pem\pem_xaux.c"
 				>
 			</File>
+			<File
+				RelativePath="..\crypto\pem\pvkfmt.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="pkcs12"
@@ -1889,6 +2323,10 @@
 			Name="pkcs7"
 			>
 			<File
+				RelativePath="..\crypto\pkcs7\bio_pk7.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\pkcs7\pk7_asn1.c"
 				>
 			</File>
@@ -1946,10 +2384,6 @@
 			</File>
 			<File
 				RelativePath="..\crypto\rand\rand_egd.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\rand\rand_eng.c"
 				>
 			</File>
 			<File
@@ -2021,15 +2455,51 @@
 			Name="rc4"
 			>
 			<File
-				RelativePath="..\crypto\rc4\asm\r4_win32.asm"
+				RelativePath="..\crypto\rc4\asm\rc4-586.asm"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\rc4\rc4_fblk.c"
+				RelativePath="..\crypto\rc4\asm\rc4-md5-x86_64.asm"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\crypto\rc4\rc4_skey.c"
+				RelativePath="..\crypto\rc4\asm\rc4-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\rc4\rc4_utl.c"
 				>
 			</File>
 		</Filter>
@@ -2041,7 +2511,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\ripemd\asm\rm_win32.asm"
+				RelativePath="..\crypto\ripemd\asm\rmd-586.asm"
 				>
 			</File>
 			<File
@@ -2065,6 +2535,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\rsa\rsa_ameth.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\rsa\rsa_asn1.c"
 				>
 			</File>
@@ -2073,15 +2547,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\rsa\rsa_crpt.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\rsa\rsa_depr.c"
 				>
 			</File>
 			<File
 				RelativePath="..\crypto\rsa\rsa_eay.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\rsa\rsa_eng.c"
 				>
 			</File>
 			<File
@@ -2113,6 +2587,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\rsa\rsa_pmeth.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\rsa\rsa_prn.c"
+				>
+			</File>
+			<File
 				RelativePath="..\crypto\rsa\rsa_pss.c"
 				>
 			</File>
@@ -2132,21 +2614,37 @@
 				RelativePath="..\crypto\rsa\rsa_x931.c"
 				>
 			</File>
-			<File
-				RelativePath="..\crypto\rsa\rsa_x931g.c"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="sha"
 			>
 			<File
-				RelativePath="..\crypto\sha\asm\s1_win32.asm"
+				RelativePath="..\crypto\sha\sha.h"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\sha\sha.h"
+				RelativePath="..\crypto\sha\asm\sha1-586.asm"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\sha\asm\sha1-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\sha\sha1_one.c"
@@ -2157,12 +2655,56 @@
 				>
 			</File>
 			<File
+				RelativePath="..\crypto\sha\asm\sha256-586.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\sha\asm\sha256-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\crypto\sha\sha256.c"
 				>
 			</File>
 			<File
-				RelativePath="..\crypto\sha\asm\sha512-sse2.asm"
+				RelativePath="..\crypto\sha\asm\sha512-586.asm"
 				>
+			</File>
+			<File
+				RelativePath="..\crypto\sha\asm\sha512-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\crypto\sha\sha512.c"
@@ -2178,34 +2720,6 @@
 			</File>
 			<File
 				RelativePath="..\crypto\sha\sha_one.c"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="store"
-			>
-			<File
-				RelativePath="..\crypto\store\store.h"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\store\str_err.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\store\str_lib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\store\str_locl.h"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\store\str_mem.c"
-				>
-			</File>
-			<File
-				RelativePath="..\crypto\store\str_meth.c"
 				>
 			</File>
 		</Filter>
@@ -2553,6 +3067,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\engines\e_padlock.c"
+				>
+			</File>
+			<File
 				RelativePath="..\engines\e_sureware.c"
 				>
 			</File>
@@ -2560,6 +3078,98 @@
 				RelativePath="..\engines\e_ubsec.c"
 				>
 			</File>
+			<Filter
+				Name="ccgost"
+				>
+				<File
+					RelativePath="..\engines\ccgost\e_gost_err.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\e_gost_err.h"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost2001.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost2001_keyx.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost2001_keyx.h"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost89.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost89.h"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost94_keyx.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_ameth.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_asn1.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_crypt.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_ctl.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_eng.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_keywrap.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_keywrap.h"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_md.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_params.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_params.h"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_pmeth.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gost_sign.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gosthash.c"
+					>
+				</File>
+				<File
+					RelativePath="..\engines\ccgost\gosthash.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -2569,28 +3179,404 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\crypto\buffer\buf_err.c"
+		<Filter
+			Name="buffer"
 			>
-		</File>
-		<File
-			RelativePath="..\crypto\buffer\buf_str.c"
+			<File
+				RelativePath="..\crypto\buffer\buf_err.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\buffer\buf_str.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\buffer\buffer.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="camellia"
 			>
-		</File>
-		<File
-			RelativePath="..\crypto\buffer\buffer.c"
+			<File
+				RelativePath="..\crypto\camellia\camellia.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\asm\cmll-x86.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\asm\cmll-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\cmll_cfb.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\cmll_ctr.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\cmll_ecb.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\cmll_locl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\cmll_misc.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\cmll_ofb.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\camellia\cmll_utl.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="cmac"
 			>
-		</File>
-		<File
-			RelativePath="..\crypto\buffer\buffer.h"
+			<File
+				RelativePath="..\crypto\cmac\cm_ameth.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cmac\cm_pmeth.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cmac\cmac.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cmac\cmac.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="cms"
 			>
-		</File>
+			<File
+				RelativePath="..\crypto\cms\cms.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_asn1.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_att.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_cd.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_dd.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_enc.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_env.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_err.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_ess.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_io.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_lcl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_lib.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_pwri.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_sd.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\cms\cms_smime.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="modes"
+			>
+			<File
+				RelativePath="..\crypto\modes\cbc128.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\ccm128.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\cfb128.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\ctr128.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\cts128.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\gcm128.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\asm\ghash-x86.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\asm\ghash-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\modes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\modes_lcl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\ofb128.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\modes\xts128.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="seed"
+			>
+			<File
+				RelativePath="..\crypto\seed\seed.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\seed\seed.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\seed\seed_cbc.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\seed\seed_cfb.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\seed\seed_ecb.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\seed\seed_locl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\seed\seed_ofb.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="srp"
+			>
+			<File
+				RelativePath="..\crypto\srp\srp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\srp\srp_grps.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\srp\srp_lcl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\srp\srp_lib.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\srp\srp_vfy.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="ts"
+			>
+			<File
+				RelativePath="..\crypto\ts\ts.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_asn1.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_conf.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_err.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_lib.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_req_print.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_req_utils.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_rsp_print.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_rsp_sign.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_rsp_utils.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_rsp_verify.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\ts\ts_verify_ctx.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="whrlpool"
+			>
+			<File
+				RelativePath="..\crypto\whrlpool\whrlpool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\whrlpool\asm\wp-mmx.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\whrlpool\asm\wp-x86_64.asm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="NASM"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\crypto\whrlpool\wp_block.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\whrlpool\wp_dgst.c"
+				>
+			</File>
+			<File
+				RelativePath="..\crypto\whrlpool\wp_locl.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\crypto\cpt_err.c"
-			>
-		</File>
-		<File
-			RelativePath="..\crypto\cpu_win32.asm"
 			>
 		</File>
 		<File
@@ -2626,10 +3612,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\crypto\dyn_lck.c"
-			>
-		</File>
-		<File
 			RelativePath="..\crypto\ebcdic.c"
 			>
 		</File>
@@ -2642,19 +3624,15 @@
 			>
 		</File>
 		<File
-			RelativePath="..\crypto\fips_err.c"
-			>
-		</File>
-		<File
 			RelativePath="..\crypto\fips_err.h"
 			>
 		</File>
 		<File
-			RelativePath="..\crypto\mem.c"
+			RelativePath="..\crypto\fips_ers.c"
 			>
 		</File>
 		<File
-			RelativePath="..\crypto\mem_clr.c"
+			RelativePath="..\crypto\mem.c"
 			>
 		</File>
 		<File
@@ -2667,6 +3645,10 @@
 		</File>
 		<File
 			RelativePath="..\crypto\o_dir.h"
+			>
+		</File>
+		<File
+			RelativePath="..\crypto\o_fips.c"
 			>
 		</File>
 		<File
@@ -2702,14 +3684,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\crypto\tmdiff.c"
-			>
-		</File>
-		<File
-			RelativePath="..\crypto\tmdiff.h"
-			>
-		</File>
-		<File
 			RelativePath="..\crypto\uid.c"
 			>
 		</File>
@@ -2719,6 +3693,50 @@
 		</File>
 		<File
 			RelativePath="..\ms\uplink.h"
+			>
+		</File>
+		<File
+			RelativePath="..\ms\uptable_x86_64.asm"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="NASM"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="NASM"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\ms\x86_64cpuid.asm"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="NASM"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="NASM"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\ms\x86cpuid.asm"
 			>
 		</File>
 	</Files>
