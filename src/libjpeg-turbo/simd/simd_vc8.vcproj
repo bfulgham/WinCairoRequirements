@@ -21,41 +21,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="10"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\lib.vsprops;..\..\..\props\debug.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="NASM"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="E:\Projects\WinCairoRequirements\src\libjpeg-turbo\build;E:\Projects\WinCairoRequirements\src\libjpeg-turbo;"
-				MkTypLibCompatible="false"
-				TargetEnvironment="1"
-				GenerateStublessProxies="true"
-				TypeLibraryName="$(InputName).tlb"
-				OutputDirectory="$(IntDir)"
-				HeaderFileName="$(InputName).h"
-				DLLDataFileName=""
-				InterfaceIdentifierFileName="$(InputName)_i.c"
-				ProxyFileName="$(InputName)_p.c"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			ConfigurationType="10"
-			InheritedPropertySheets="..\..\..\props\common.vsprops;..\..\..\props\lib.vsprops;..\..\..\props\debug.vsprops"
+			InheritedPropertySheets="..\..\..\props\lib.vsprops;..\..\..\props\debug.vsprops;..\..\..\props\common_vc8.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -73,7 +39,43 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="E:\Projects\WinCairoRequirements\src\libjpeg-turbo\build;E:\Projects\WinCairoRequirements\src\libjpeg-turbo;"
+				AdditionalIncludeDirectories="$(ProjectDirectory)"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(InputName).tlb"
+				OutputDirectory="$(IntDir)"
+				HeaderFileName="$(InputName).h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="$(InputName)_i.c"
+				ProxyFileName="$(InputName)_p.c"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			ConfigurationType="10"
+			InheritedPropertySheets="..\..\..\props\common_vc8.vsprops;..\..\..\props\lib.vsprops;..\..\..\props\release.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="NASM"
+				PreprocessorDefinitions="WIN32"
+				IncludePaths="$(ProjectDir)..\\win\\;$(ProjectDir)..\\simd\\"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				AdditionalIncludeDirectories="$(ProjectDir)"
 				MkTypLibCompatible="false"
 				TargetEnvironment="1"
 				GenerateStublessProxies="true"
