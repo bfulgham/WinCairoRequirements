@@ -56,7 +56,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="netapi32.lib ole32.lib ws2_32.lib kernel32.lib libicuuc.lib libicuin.lib rpcrt4.lib msvcrt.lib pthreadVC2.lib"
-				OutputFile="$(OutDir)\$(ProjectName)_$(ConfigurationName).dll"
 				AdditionalLibraryDirectories=""
 				IgnoreDefaultLibraryNames="LIBCMT"
 				ModuleDefinitionFile=""
