@@ -56,7 +56,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/DYNAMICBASE /NXCOMPAT /SAFESEH"
-				OutputFile="$(OutDir)\$(ProjectName)_debug.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				ModuleDefinitionFile="..\sqlite3.def"
 				SubSystem="2"
 			/>
