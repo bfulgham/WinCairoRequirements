@@ -118,11 +118,11 @@
 // Used to reference an old-style plist parser error inside of a more general XML error
 #define CFPropertyListOldStyleParserErrorKey     CFSTR("kCFPropertyListOldStyleParsingError")
 
+#if __DISPATCH__
 static CFTypeID stringtype, datatype, numbertype, datetype;
 static CFTypeID booltype, nulltype, dicttype, arraytype, settype;
 
 static void initStatics() {
-#if __DISPATCH__
     static dispatch_once_t once;
     dispatch_once(&once, ^{
         stringtype = CFStringGetTypeID();
@@ -135,8 +135,41 @@ static void initStatics() {
         settype = CFSetGetTypeID();
         nulltype = CFNullGetTypeID();
     });
-#endif
 }
+#else
+static CFTypeID stringtype = -1, datatype = -1, numbertype = -1, datetype = -1;
+static CFTypeID booltype = -1, nulltype = -1, dicttype = -1, arraytype = -1, settype = -1;
+
+static void initStatics() {
+    if ((CFTypeID)-1 == stringtype) {
+        stringtype = CFStringGetTypeID();
+    }
+    if ((CFTypeID)-1 == datatype) {
+        datatype = CFDataGetTypeID();        
+    }
+    if ((CFTypeID)-1 == numbertype) {
+        numbertype = CFNumberGetTypeID();
+    }
+    if ((CFTypeID)-1 == booltype) {
+        booltype = CFBooleanGetTypeID();
+    }
+    if ((CFTypeID)-1 == datetype) {
+        datetype = CFDateGetTypeID();
+    }
+    if ((CFTypeID)-1 == dicttype) {
+        dicttype = CFDictionaryGetTypeID();
+    }
+    if ((CFTypeID)-1 == arraytype) {
+        arraytype = CFArrayGetTypeID();
+    }
+    if ((CFTypeID)-1 == settype) {
+        settype = CFSetGetTypeID();
+    }
+    if ((CFTypeID)-1 == nulltype) {
+        nulltype = CFNullGetTypeID();
+    }
+}
+#endif
 
 __private_extern__ CFErrorRef __CFPropertyListCreateError(CFIndex code, CFStringRef debugString, ...) {    
     va_list argList;        
