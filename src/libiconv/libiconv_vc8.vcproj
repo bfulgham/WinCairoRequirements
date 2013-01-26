@@ -22,6 +22,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Install headers"
+				CommandLine="xcopy /Y /R $(ProjectDir)include\iconv.h $(SolutionDir)include"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -66,8 +68,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Install headers"
-				CommandLine="xcopy /Y /R $(ProjectDir)include\iconv.h $(SolutionDir)include&#x0D;&#x0A;"
+				Description=""
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -79,6 +81,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Install headers"
+				CommandLine="xcopy /Y /R $(ProjectDir)include\iconv.h $(SolutionDir)include"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -123,8 +127,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Install headers"
-				CommandLine="xcopy /Y /R $(ProjectDir)include\iconv.h $(SolutionDir)include&#x0D;&#x0A;"
+				Description=""
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>

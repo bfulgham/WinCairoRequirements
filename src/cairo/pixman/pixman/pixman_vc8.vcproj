@@ -138,7 +138,15 @@
 			>
 		</File>
 		<File
+			RelativePath=".\pixman-arm.c"
+			>
+		</File>
+		<File
 			RelativePath=".\pixman-bits-image.c"
+			>
+		</File>
+		<File
+			RelativePath=".\pixman-combine-float.c"
 			>
 		</File>
 		<File
@@ -146,15 +154,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\pixman-combine64.c"
-			>
-		</File>
-		<File
 			RelativePath=".\pixman-conical-gradient.c"
-			>
-		</File>
-		<File
-			RelativePath=".\pixman-cpu.c"
 			>
 		</File>
 		<File
@@ -171,6 +171,10 @@
 		</File>
 		<File
 			RelativePath=".\pixman-general.c"
+			>
+		</File>
+		<File
+			RelativePath=".\pixman-glyph.c"
 			>
 		</File>
 		<File
@@ -194,11 +198,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\pixman-mips.c"
+			>
+		</File>
+		<File
 			RelativePath=".\pixman-mmx.c"
 			>
 		</File>
 		<File
 			RelativePath=".\pixman-noop.c"
+			>
+		</File>
+		<File
+			RelativePath=".\pixman-ppc.c"
 			>
 		</File>
 		<File
@@ -231,6 +243,10 @@
 		</File>
 		<File
 			RelativePath=".\pixman-utils.c"
+			>
+		</File>
+		<File
+			RelativePath=".\pixman-x86.c"
 			>
 		</File>
 		<File

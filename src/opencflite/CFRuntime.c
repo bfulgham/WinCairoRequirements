@@ -843,8 +843,8 @@ __private_extern__ void __CFTSDWindowsCleanup(void);
 __private_extern__ void __CFFinalizeWindowsThreadData();
 #endif
 extern void __CFStreamInitialize(void);
-//FIXME extern void __CFPreferencesDomainInitialize(void);
-//FIXME extern void __CFUserNotificationInitialize(void);
+extern void __CFPreferencesDomainInitialize(void);
+extern void __CFUserNotificationInitialize(void);
 extern void __CFCalendarInitialize();
 extern void __CFTimeZoneInitialize();
 #if DEPLOYMENT_TARGET_LINUX
@@ -1082,7 +1082,9 @@ void __CFInitialize(void) {
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX
         __CFStreamInitialize();
 #endif
+        __CFPreferencesDomainInitialize();
 #if DEPLOYMENT_TARGET_WINDOWS
+        __CFUserNotificationInitialize();
         //FIXME: __CFWindowsNamedPipeInitialize();
 #endif
 #if DEPLOYMENT_TARGET_MACOSX || DEPLOYMENT_TARGET_EMBEDDED || DEPLOYMENT_TARGET_EMBEDDED_MINI || DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX

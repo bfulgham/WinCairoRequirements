@@ -4,7 +4,7 @@
 	Version="8.00"
 	Name="common"
 	OutputDirectory="$(SolutionDir)Bin\"
-	IntermediateDirectory="$(SolutionDir)Build\$(Configuration)\$(ProjectName)"
+	IntermediateDirectory="$(SolutionDir)Build\$(ConfigurationName)\$(ProjectName)"
 	>
 	<Tool
 		Name="VCBscMakeTool"
@@ -33,8 +33,6 @@
 		MapFileName="$(TargetDir)$(TargetName).map"
 		MapExports="true"
 		SubSystem="2"
-		RandomizedBaseAddress="1"
-		DataExecutionPrevention="0"
 		ImportLibrary="$(SolutionDir)\Lib\$(TargetName).lib"
 		TargetMachine="1"
 	/>
