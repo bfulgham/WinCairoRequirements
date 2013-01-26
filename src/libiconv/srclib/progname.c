@@ -31,7 +31,7 @@
 
 /* String containing name the program is called with.
    To be initialized by main().  */
-const char *program_name = NULL;
+extern const char *program_name = NULL;
 
 /* Set program_name, based on argv[0].  */
 void

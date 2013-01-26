@@ -49,10 +49,10 @@
 /* If NULL, error will flush stdout, then print on stderr the program
    name, a colon and a space.  Otherwise, error will call this
    function without parameters instead.  */
-void (*error_print_progname) (void);
+extern DLL_VARIABLE void (*error_print_progname) (void);
 
 /* This variable is incremented each time `error' is called.  */
-unsigned int error_message_count;
+extern DLL_VARIABLE unsigned int error_message_count;
 
 #ifdef _LIBC
 /* In the GNU C library, there is a predefined variable for this.  */
@@ -227,7 +227,7 @@ error (int status, int errnum, const char *message, ...)
 
 /* Sometimes we want to have at most one error per line.  This
    variable controls whether this mode is selected or not.  */
-int error_one_per_line;
+extern DLL_VARIABLE int error_one_per_line;
 
 void
 error_at_line (int status, int errnum, const char *file_name,

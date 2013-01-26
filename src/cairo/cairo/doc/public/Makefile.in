@@ -536,6 +536,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lzo_LIBS = @lzo_LIBS@
 mandir = @mandir@
 mesa_DIR = @mesa_DIR@
 mkdir_p = @mkdir_p@
@@ -657,12 +658,13 @@ cairo_sources = cairo-analysis-surface.c cairo-arc.c cairo-array.c \
 	cairo-paginated-surface.c cairo-path-bounds.c cairo-path.c \
 	cairo-path-fill.c cairo-path-fixed.c cairo-path-in-fill.c \
 	cairo-path-stroke.c cairo-path-stroke-boxes.c \
-	cairo-path-stroke-polygon.c cairo-path-stroke-tristrip.c \
-	cairo-pattern.c cairo-pen.c cairo-polygon.c \
-	cairo-polygon-intersect.c cairo-polygon-reduce.c \
-	cairo-raster-source-pattern.c cairo-recording-surface.c \
-	cairo-rectangle.c cairo-rectangular-scan-converter.c \
-	cairo-region.c cairo-rtree.c cairo-scaled-font.c \
+	cairo-path-stroke-polygon.c cairo-path-stroke-traps.c \
+	cairo-path-stroke-tristrip.c cairo-pattern.c cairo-pen.c \
+	cairo-polygon.c cairo-polygon-intersect.c \
+	cairo-polygon-reduce.c cairo-raster-source-pattern.c \
+	cairo-recording-surface.c cairo-rectangle.c \
+	cairo-rectangular-scan-converter.c cairo-region.c \
+	cairo-rtree.c cairo-scaled-font.c \
 	cairo-shape-mask-compositor.c cairo-slope.c cairo-spans.c \
 	cairo-spans-compositor.c cairo-spline.c cairo-stroke-dash.c \
 	cairo-stroke-style.c cairo-surface.c cairo-surface-clipper.c \

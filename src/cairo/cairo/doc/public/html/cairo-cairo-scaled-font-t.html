@@ -793,7 +793,8 @@ hold true for all possible cases.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>The <a class="link" href="cairo-cairo-font-face-t.html#cairo-font-face-t" title="cairo_font_face_t"><span class="type">cairo_font_face_t</span></a> with which <em class="parameter"><code>scaled_font</code></em> was
-created.</td>
+created.  This object is owned by cairo. To keep a reference to it,
+you must call <a class="link" href="cairo-cairo-scaled-font-t.html#cairo-scaled-font-reference" title="cairo_scaled_font_reference ()"><code class="function">cairo_scaled_font_reference()</code></a>.</td>
 </tr>
 </tbody>
 </table></div>

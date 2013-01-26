@@ -54,7 +54,7 @@ AC_PREREQ([2.57])
 
 m4_define([pixman_major], 0)
 m4_define([pixman_minor], 28)
-m4_define([pixman_micro], 0)
+m4_define([pixman_micro], 2)
 
 m4_define([pixman_version],[pixman_major.pixman_minor.pixman_micro])
 
@@ -860,7 +860,7 @@ AC_CACHE_VAL(ac_cv_tls, [
 #error OpenBSD has broken __thread support
 #endif
 
-int $kw test;], [], ac_cv_tls=$kw)
+int $kw test;], [], [ac_cv_tls=$kw; break])
     done
 ])
 AC_MSG_RESULT($ac_cv_tls)

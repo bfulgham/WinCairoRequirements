@@ -367,6 +367,7 @@ test_sources = \
 	world-map.c					\
 	white-in-noop.c					\
 	xcb-huge-image-shm.c				\
+	xcb-huge-subimage.c				\
 	xcb-stress-cache.c				\
 	xcb-snapshot-assert.c				\
 	xcomposite-projection.c				\
@@ -390,6 +391,7 @@ ft_font_test_sources = \
 	ft-text-antialias-none.c
 
 gl_surface_test_sources = \
+	gl-device-release.c \
 	gl-surface-source.c
 
 quartz_surface_test_sources = quartz-surface-source.c

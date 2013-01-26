@@ -107,9 +107,6 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
-/* FT_Bitmap_Size structure includes y_ppem field */
-#undef HAVE_FT_BITMAP_SIZE_Y_PPEM
-
 /* Define to 1 if you have the `FT_Get_X11_Font_Format' function. */
 #undef HAVE_FT_GET_X11_FONT_FORMAT
 
@@ -157,6 +154,9 @@
 
 /* Define to 1 if you have the Valgrind lockdep tool */
 #undef HAVE_LOCKDEP
+
+/* Define to 1 if you have lzo available */
+#undef HAVE_LZO
 
 /* Define to 1 if you have the Valgrind memfault tool */
 #undef HAVE_MEMFAULT

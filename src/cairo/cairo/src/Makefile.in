@@ -473,12 +473,13 @@ am__libcairo_la_SOURCES_DIST = cairo.h cairo-deprecated.h cairo-xlib.h \
 	cairo-paginated-surface.c cairo-path-bounds.c cairo-path.c \
 	cairo-path-fill.c cairo-path-fixed.c cairo-path-in-fill.c \
 	cairo-path-stroke.c cairo-path-stroke-boxes.c \
-	cairo-path-stroke-polygon.c cairo-path-stroke-tristrip.c \
-	cairo-pattern.c cairo-pen.c cairo-polygon.c \
-	cairo-polygon-intersect.c cairo-polygon-reduce.c \
-	cairo-raster-source-pattern.c cairo-recording-surface.c \
-	cairo-rectangle.c cairo-rectangular-scan-converter.c \
-	cairo-region.c cairo-rtree.c cairo-scaled-font.c \
+	cairo-path-stroke-polygon.c cairo-path-stroke-traps.c \
+	cairo-path-stroke-tristrip.c cairo-pattern.c cairo-pen.c \
+	cairo-polygon.c cairo-polygon-intersect.c \
+	cairo-polygon-reduce.c cairo-raster-source-pattern.c \
+	cairo-recording-surface.c cairo-rectangle.c \
+	cairo-rectangular-scan-converter.c cairo-region.c \
+	cairo-rtree.c cairo-scaled-font.c \
 	cairo-shape-mask-compositor.c cairo-slope.c cairo-spans.c \
 	cairo-spans-compositor.c cairo-spline.c cairo-stroke-dash.c \
 	cairo-stroke-style.c cairo-surface.c cairo-surface-clipper.c \
@@ -618,12 +619,12 @@ am__objects_33 = cairo-analysis-surface.lo cairo-arc.lo cairo-array.lo \
 	cairo-path-bounds.lo cairo-path.lo cairo-path-fill.lo \
 	cairo-path-fixed.lo cairo-path-in-fill.lo cairo-path-stroke.lo \
 	cairo-path-stroke-boxes.lo cairo-path-stroke-polygon.lo \
-	cairo-path-stroke-tristrip.lo cairo-pattern.lo cairo-pen.lo \
-	cairo-polygon.lo cairo-polygon-intersect.lo \
-	cairo-polygon-reduce.lo cairo-raster-source-pattern.lo \
-	cairo-recording-surface.lo cairo-rectangle.lo \
-	cairo-rectangular-scan-converter.lo cairo-region.lo \
-	cairo-rtree.lo cairo-scaled-font.lo \
+	cairo-path-stroke-traps.lo cairo-path-stroke-tristrip.lo \
+	cairo-pattern.lo cairo-pen.lo cairo-polygon.lo \
+	cairo-polygon-intersect.lo cairo-polygon-reduce.lo \
+	cairo-raster-source-pattern.lo cairo-recording-surface.lo \
+	cairo-rectangle.lo cairo-rectangular-scan-converter.lo \
+	cairo-region.lo cairo-rtree.lo cairo-scaled-font.lo \
 	cairo-shape-mask-compositor.lo cairo-slope.lo cairo-spans.lo \
 	cairo-spans-compositor.lo cairo-spline.lo cairo-stroke-dash.lo \
 	cairo-stroke-style.lo cairo-surface.lo \
@@ -1094,6 +1095,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lzo_LIBS = @lzo_LIBS@
 mandir = @mandir@
 mesa_DIR = @mesa_DIR@
 mkdir_p = @mkdir_p@
@@ -1213,12 +1215,13 @@ cairo_sources = cairo-analysis-surface.c cairo-arc.c cairo-array.c \
 	cairo-paginated-surface.c cairo-path-bounds.c cairo-path.c \
 	cairo-path-fill.c cairo-path-fixed.c cairo-path-in-fill.c \
 	cairo-path-stroke.c cairo-path-stroke-boxes.c \
-	cairo-path-stroke-polygon.c cairo-path-stroke-tristrip.c \
-	cairo-pattern.c cairo-pen.c cairo-polygon.c \
-	cairo-polygon-intersect.c cairo-polygon-reduce.c \
-	cairo-raster-source-pattern.c cairo-recording-surface.c \
-	cairo-rectangle.c cairo-rectangular-scan-converter.c \
-	cairo-region.c cairo-rtree.c cairo-scaled-font.c \
+	cairo-path-stroke-polygon.c cairo-path-stroke-traps.c \
+	cairo-path-stroke-tristrip.c cairo-pattern.c cairo-pen.c \
+	cairo-polygon.c cairo-polygon-intersect.c \
+	cairo-polygon-reduce.c cairo-raster-source-pattern.c \
+	cairo-recording-surface.c cairo-rectangle.c \
+	cairo-rectangular-scan-converter.c cairo-region.c \
+	cairo-rtree.c cairo-scaled-font.c \
 	cairo-shape-mask-compositor.c cairo-slope.c cairo-spans.c \
 	cairo-spans-compositor.c cairo-spline.c cairo-stroke-dash.c \
 	cairo-stroke-style.c cairo-surface.c cairo-surface-clipper.c \
@@ -1970,6 +1973,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo-path-in-fill.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo-path-stroke-boxes.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo-path-stroke-polygon.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo-path-stroke-traps.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo-path-stroke-tristrip.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo-path-stroke.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo-path.Plo@am__quote@

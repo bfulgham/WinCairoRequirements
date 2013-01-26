@@ -272,15 +272,17 @@ am__cairo_test_suite_SOURCES_DIST = buffer-diff.c cairo-test.c \
 	unantialiased-shapes.c unbounded-operator.c unclosed-strokes.c \
 	user-data.c user-font.c user-font-mask.c user-font-proxy.c \
 	user-font-rescale.c world-map.c white-in-noop.c \
-	xcb-huge-image-shm.c xcb-stress-cache.c xcb-snapshot-assert.c \
-	xcomposite-projection.c xlib-expose-event.c zero-alpha.c \
-	zero-mask.c pthread-same-source.c pthread-show-text.c \
-	pthread-similar.c bitmap-font.c ft-font-create-for-ft-face.c \
+	xcb-huge-image-shm.c xcb-huge-subimage.c xcb-stress-cache.c \
+	xcb-snapshot-assert.c xcomposite-projection.c \
+	xlib-expose-event.c zero-alpha.c zero-mask.c \
+	pthread-same-source.c pthread-show-text.c pthread-similar.c \
+	bitmap-font.c ft-font-create-for-ft-face.c \
 	ft-show-glyphs-positioning.c ft-show-glyphs-table.c \
 	ft-text-vertical-layout-type1.c \
 	ft-text-vertical-layout-type3.c ft-text-antialias-none.c \
-	gl-surface-source.c quartz-surface-source.c pdf-features.c \
-	pdf-mime-data.c pdf-surface-source.c ps-eps.c ps-features.c \
+	gl-device-release.c gl-surface-source.c \
+	quartz-surface-source.c pdf-features.c pdf-mime-data.c \
+	pdf-surface-source.c ps-eps.c ps-features.c \
 	ps-surface-source.c svg-surface.c svg-clip.c \
 	svg-surface-source.c xcb-surface-source.c xlib-surface.c \
 	xlib-surface-source.c get-xrender-format.c multi-page.c \
@@ -301,7 +303,8 @@ am__objects_5 = cairo_test_suite-bitmap-font.$(OBJEXT) \
 	cairo_test_suite-ft-text-vertical-layout-type3.$(OBJEXT) \
 	cairo_test_suite-ft-text-antialias-none.$(OBJEXT)
 @CAIRO_HAS_FC_FONT_TRUE@@CAIRO_HAS_FT_FONT_TRUE@am__objects_6 = $(am__objects_5)
-am__objects_7 = cairo_test_suite-gl-surface-source.$(OBJEXT)
+am__objects_7 = cairo_test_suite-gl-device-release.$(OBJEXT) \
+	cairo_test_suite-gl-surface-source.$(OBJEXT)
 @CAIRO_HAS_GL_SURFACE_TRUE@am__objects_8 = $(am__objects_7)
 am__objects_9 = cairo_test_suite-quartz-surface-source.$(OBJEXT)
 @CAIRO_HAS_QUARTZ_SURFACE_TRUE@am__objects_10 = $(am__objects_9)
@@ -700,6 +703,7 @@ am__objects_27 = cairo_test_suite-a1-bug.$(OBJEXT) \
 	cairo_test_suite-world-map.$(OBJEXT) \
 	cairo_test_suite-white-in-noop.$(OBJEXT) \
 	cairo_test_suite-xcb-huge-image-shm.$(OBJEXT) \
+	cairo_test_suite-xcb-huge-subimage.$(OBJEXT) \
 	cairo_test_suite-xcb-stress-cache.$(OBJEXT) \
 	cairo_test_suite-xcb-snapshot-assert.$(OBJEXT) \
 	cairo_test_suite-xcomposite-projection.$(OBJEXT) \
@@ -1012,6 +1016,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lzo_LIBS = @lzo_LIBS@
 mandir = @mandir@
 mesa_DIR = @mesa_DIR@
 mkdir_p = @mkdir_p@
@@ -1199,12 +1204,13 @@ test_sources = a1-bug.c a1-clip.c a1-fill.c a1-image-sample.c \
 	unantialiased-shapes.c unbounded-operator.c unclosed-strokes.c \
 	user-data.c user-font.c user-font-mask.c user-font-proxy.c \
 	user-font-rescale.c world-map.c white-in-noop.c \
-	xcb-huge-image-shm.c xcb-stress-cache.c xcb-snapshot-assert.c \
-	xcomposite-projection.c xlib-expose-event.c zero-alpha.c \
-	zero-mask.c $(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_4) $(am__append_5) $(am__append_6) \
-	$(am__append_7) $(am__append_8) $(am__append_9) \
-	$(am__append_10) $(am__append_11) $(am__append_12) $(test)
+	xcb-huge-image-shm.c xcb-huge-subimage.c xcb-stress-cache.c \
+	xcb-snapshot-assert.c xcomposite-projection.c \
+	xlib-expose-event.c zero-alpha.c zero-mask.c $(am__append_1) \
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5) $(am__append_6) $(am__append_7) \
+	$(am__append_8) $(am__append_9) $(am__append_10) \
+	$(am__append_11) $(am__append_12) $(test)
 pthread_test_sources = \
 	pthread-same-source.c				\
 	pthread-show-text.c				\
@@ -1221,6 +1227,7 @@ ft_font_test_sources = \
 	ft-text-antialias-none.c
 
 gl_surface_test_sources = \
+	gl-device-release.c \
 	gl-surface-source.c
 
 quartz_surface_test_sources = quartz-surface-source.c
@@ -1656,6 +1663,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-get-group-target.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-get-path-extents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-get-xrender-format.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-gl-device-release.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-gl-surface-source.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-glyph-cache-pressure.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-gradient-alpha.Po@am__quote@
@@ -1893,6 +1901,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-white-in-noop.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-world-map.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-xcb-huge-image-shm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-xcb-huge-subimage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-xcb-snapshot-assert.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-xcb-stress-cache.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cairo_test_suite-xcb-surface-source.Po@am__quote@
@@ -7139,6 +7148,20 @@ cairo_test_suite-xcb-huge-image-shm.obj: xcb-huge-image-shm.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -c -o cairo_test_suite-xcb-huge-image-shm.obj `if test -f 'xcb-huge-image-shm.c'; then $(CYGPATH_W) 'xcb-huge-image-shm.c'; else $(CYGPATH_W) '$(srcdir)/xcb-huge-image-shm.c'; fi`
 
+cairo_test_suite-xcb-huge-subimage.o: xcb-huge-subimage.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -MT cairo_test_suite-xcb-huge-subimage.o -MD -MP -MF $(DEPDIR)/cairo_test_suite-xcb-huge-subimage.Tpo -c -o cairo_test_suite-xcb-huge-subimage.o `test -f 'xcb-huge-subimage.c' || echo '$(srcdir)/'`xcb-huge-subimage.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cairo_test_suite-xcb-huge-subimage.Tpo $(DEPDIR)/cairo_test_suite-xcb-huge-subimage.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xcb-huge-subimage.c' object='cairo_test_suite-xcb-huge-subimage.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -c -o cairo_test_suite-xcb-huge-subimage.o `test -f 'xcb-huge-subimage.c' || echo '$(srcdir)/'`xcb-huge-subimage.c
+
+cairo_test_suite-xcb-huge-subimage.obj: xcb-huge-subimage.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -MT cairo_test_suite-xcb-huge-subimage.obj -MD -MP -MF $(DEPDIR)/cairo_test_suite-xcb-huge-subimage.Tpo -c -o cairo_test_suite-xcb-huge-subimage.obj `if test -f 'xcb-huge-subimage.c'; then $(CYGPATH_W) 'xcb-huge-subimage.c'; else $(CYGPATH_W) '$(srcdir)/xcb-huge-subimage.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cairo_test_suite-xcb-huge-subimage.Tpo $(DEPDIR)/cairo_test_suite-xcb-huge-subimage.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xcb-huge-subimage.c' object='cairo_test_suite-xcb-huge-subimage.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -c -o cairo_test_suite-xcb-huge-subimage.obj `if test -f 'xcb-huge-subimage.c'; then $(CYGPATH_W) 'xcb-huge-subimage.c'; else $(CYGPATH_W) '$(srcdir)/xcb-huge-subimage.c'; fi`
+
 cairo_test_suite-xcb-stress-cache.o: xcb-stress-cache.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -MT cairo_test_suite-xcb-stress-cache.o -MD -MP -MF $(DEPDIR)/cairo_test_suite-xcb-stress-cache.Tpo -c -o cairo_test_suite-xcb-stress-cache.o `test -f 'xcb-stress-cache.c' || echo '$(srcdir)/'`xcb-stress-cache.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cairo_test_suite-xcb-stress-cache.Tpo $(DEPDIR)/cairo_test_suite-xcb-stress-cache.Po
@@ -7362,6 +7385,20 @@ cairo_test_suite-ft-text-antialias-none.obj: ft-text-antialias-none.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ft-text-antialias-none.c' object='cairo_test_suite-ft-text-antialias-none.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -c -o cairo_test_suite-ft-text-antialias-none.obj `if test -f 'ft-text-antialias-none.c'; then $(CYGPATH_W) 'ft-text-antialias-none.c'; else $(CYGPATH_W) '$(srcdir)/ft-text-antialias-none.c'; fi`
+
+cairo_test_suite-gl-device-release.o: gl-device-release.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -MT cairo_test_suite-gl-device-release.o -MD -MP -MF $(DEPDIR)/cairo_test_suite-gl-device-release.Tpo -c -o cairo_test_suite-gl-device-release.o `test -f 'gl-device-release.c' || echo '$(srcdir)/'`gl-device-release.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cairo_test_suite-gl-device-release.Tpo $(DEPDIR)/cairo_test_suite-gl-device-release.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gl-device-release.c' object='cairo_test_suite-gl-device-release.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -c -o cairo_test_suite-gl-device-release.o `test -f 'gl-device-release.c' || echo '$(srcdir)/'`gl-device-release.c
+
+cairo_test_suite-gl-device-release.obj: gl-device-release.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -MT cairo_test_suite-gl-device-release.obj -MD -MP -MF $(DEPDIR)/cairo_test_suite-gl-device-release.Tpo -c -o cairo_test_suite-gl-device-release.obj `if test -f 'gl-device-release.c'; then $(CYGPATH_W) 'gl-device-release.c'; else $(CYGPATH_W) '$(srcdir)/gl-device-release.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cairo_test_suite-gl-device-release.Tpo $(DEPDIR)/cairo_test_suite-gl-device-release.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gl-device-release.c' object='cairo_test_suite-gl-device-release.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -c -o cairo_test_suite-gl-device-release.obj `if test -f 'gl-device-release.c'; then $(CYGPATH_W) 'gl-device-release.c'; else $(CYGPATH_W) '$(srcdir)/gl-device-release.c'; fi`
 
 cairo_test_suite-gl-surface-source.o: gl-surface-source.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cairo_test_suite_CFLAGS) $(CFLAGS) -MT cairo_test_suite-gl-surface-source.o -MD -MP -MF $(DEPDIR)/cairo_test_suite-gl-surface-source.Tpo -c -o cairo_test_suite-gl-surface-source.o `test -f 'gl-surface-source.c' || echo '$(srcdir)/'`gl-surface-source.c

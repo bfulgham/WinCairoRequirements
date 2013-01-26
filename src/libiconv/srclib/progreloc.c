@@ -119,6 +119,8 @@ maybe_executable (const char *filename)
 	}
     }
 #endif
+#else
+  (void)filename;
 #endif
 
   return true;

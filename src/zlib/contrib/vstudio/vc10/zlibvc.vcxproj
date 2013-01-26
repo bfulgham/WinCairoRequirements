@@ -99,7 +99,7 @@
     </ClCompile>
     <ResourceCompile />
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MACHINE:I386 /SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
       <ModuleDefinitionFile>.\zlibvc.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
       <DataExecutionPrevention>
@@ -136,7 +136,7 @@ xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Comma
     </ClCompile>
     <ResourceCompile />
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MACHINE:I386 /SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <ModuleDefinitionFile>.\zlibvc.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>

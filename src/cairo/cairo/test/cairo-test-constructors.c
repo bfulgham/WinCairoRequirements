@@ -489,6 +489,7 @@ extern void _register_world_map_stroke (void);
 extern void _register_world_map_fill (void);
 extern void _register_white_in_noop (void);
 extern void _register_xcb_huge_image_shm (void);
+extern void _register_xcb_huge_subimage (void);
 extern void _register_xcb_stress_cache (void);
 extern void _register_xcb_snapshot_assert (void);
 extern void _register_xcomposite_projection (void);
@@ -1009,6 +1010,7 @@ _cairo_test_runner_register_tests (void)
     _register_world_map_fill ();
     _register_white_in_noop ();
     _register_xcb_huge_image_shm ();
+    _register_xcb_huge_subimage ();
     _register_xcb_stress_cache ();
     _register_xcb_snapshot_assert ();
     _register_xcomposite_projection ();

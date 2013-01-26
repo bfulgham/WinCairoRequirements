@@ -47,6 +47,18 @@ AC_CHECK_LIB(z, compress,
 	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])],
 	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])
 
+save_LIBS="$LIBS"
+AC_CHECK_LIB(lzo2, lzo2a_decompress,
+	 [AC_CHECK_HEADER(lzo/lzo2a.h, [
+	  have_lzo=yes
+	  AC_DEFINE(HAVE_LZO, 1, [Define to 1 if you have lzo available])
+	  lzo_LIBS="-llzo2"
+	 ],
+	 [have_lzo="no (requires lzpo http://www.oberhumer.com/opensource/lzo/)"])],
+	 [have_lzo="no (requires lzpo http://www.oberhumer.com/opensource/lzo/)"])
+AC_SUBST(lzo_LIBS)
+LIBS="$save_LIBS"
+
 AC_CHECK_LIB(dl, dlsym,
 	     [have_dlsym=yes; have_dl=yes],
 	     [have_dlsym=no; have_dl=no])
@@ -522,13 +534,6 @@ if test "x$use_ft" = "xyes"; then
   _save_cflags="$CFLAGS"
   LIBS="$LIBS $ft_LIBS"
   CFLAGS="$CFLAGS $ft_CFLAGS"
-  AC_CHECK_MEMBER(FT_Bitmap_Size.y_ppem,
-                  HAVE_FT_BITMAP_SIZE_Y_PPEM=1,
-                  HAVE_FT_BITMAP_SIZE_Y_PPEM=0,
-                  [#include <ft2build.h>
-                   #include FT_FREETYPE_H])
-  AC_DEFINE_UNQUOTED(HAVE_FT_BITMAP_SIZE_Y_PPEM,$HAVE_FT_BITMAP_SIZE_Y_PPEM,
-                     [FT_Bitmap_Size structure includes y_ppem field])
 
   AC_CHECK_FUNCS(FT_Get_X11_Font_Format FT_GlyphSlot_Embolden FT_GlyphSlot_Oblique FT_Load_Sfnt_Table FT_Library_SetLcdFilter)
 

@@ -273,6 +273,7 @@ xcopy /Y /R "$(ProjectDir)cairo-xml.h" "$(SolutionDir)include\cairo"
     <ClCompile Include="cairo-path-in-fill.c" />
     <ClCompile Include="cairo-path-stroke-boxes.c" />
     <ClCompile Include="cairo-path-stroke-polygon.c" />
+    <ClCompile Include="cairo-path-stroke-traps.c" />
     <ClCompile Include="cairo-path-stroke-tristrip.c" />
     <ClCompile Include="cairo-path-stroke.c" />
     <ClCompile Include="cairo-path.c" />

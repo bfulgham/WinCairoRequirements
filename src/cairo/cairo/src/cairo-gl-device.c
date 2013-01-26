@@ -164,6 +164,22 @@ _cairo_gl_msaa_compositor_enabled (void)
     return env && strcmp(env, "msaa") == 0;
 }
 
+static cairo_bool_t
+test_can_read_bgra (cairo_gl_flavor_t gl_flavor)
+{
+    /* Desktop GL always supports BGRA formats. */
+    if (gl_flavor == CAIRO_GL_FLAVOR_DESKTOP)
+	return TRUE;
+
+    assert (gl_flavor == CAIRO_GL_FLAVOR_ES);
+
+   /* For OpenGL ES we have to look for the specific extension and BGRA only
+    * matches cairo's integer packed bytes on little-endian machines. */
+    if (!_cairo_is_little_endian())
+	return FALSE;
+    return _cairo_gl_has_extension ("EXT_read_format_bgra");
+}
+
 cairo_status_t
 _cairo_gl_context_init (cairo_gl_context_t *ctx)
 {
@@ -172,6 +188,9 @@ _cairo_gl_context_init (cairo_gl_context_t *ctx)
     int gl_version = _cairo_gl_get_version ();
     cairo_gl_flavor_t gl_flavor = _cairo_gl_get_flavor ();
     int n;
+
+    cairo_bool_t is_desktop = gl_flavor == CAIRO_GL_FLAVOR_DESKTOP;
+    cairo_bool_t is_gles = gl_flavor == CAIRO_GL_FLAVOR_ES;
 
     _cairo_device_init (&ctx->base, &_cairo_gl_device_backend);
 
@@ -195,7 +214,7 @@ _cairo_gl_context_init (cairo_gl_context_t *ctx)
 	return _cairo_error (CAIRO_STATUS_DEVICE_ERROR);
 
     /* Check for required extensions */
-    if (gl_flavor == CAIRO_GL_FLAVOR_DESKTOP) {
+    if (is_desktop) {
 	if (_cairo_gl_has_extension ("GL_ARB_texture_non_power_of_two")) {
 	    ctx->tex_target = GL_TEXTURE_2D;
 	    ctx->has_npot_repeat = TRUE;
@@ -206,49 +225,58 @@ _cairo_gl_context_init (cairo_gl_context_t *ctx)
 	    return _cairo_error (CAIRO_STATUS_DEVICE_ERROR);
     } else {
 	ctx->tex_target = GL_TEXTURE_2D;
-	if (_cairo_gl_has_extension ("GL_OES_texture_npot"))
+	if (_cairo_gl_has_extension ("GL_OES_texture_npot") ||
+	    _cairo_gl_has_extension ("GL_IMG_texture_npot"))
 	    ctx->has_npot_repeat = TRUE;
 	else
 	    ctx->has_npot_repeat = FALSE;
     }
 
-    if (gl_flavor == CAIRO_GL_FLAVOR_DESKTOP &&
-	gl_version < CAIRO_GL_VERSION_ENCODE (2, 1) &&
+    if (is_desktop && gl_version < CAIRO_GL_VERSION_ENCODE (2, 1) &&
 	! _cairo_gl_has_extension ("GL_ARB_pixel_buffer_object"))
 	return _cairo_error (CAIRO_STATUS_DEVICE_ERROR);
 
-    if (gl_flavor == CAIRO_GL_FLAVOR_ES &&
-	! _cairo_gl_has_extension ("GL_EXT_texture_format_BGRA8888"))
+    if (is_gles && ! _cairo_gl_has_extension ("GL_EXT_texture_format_BGRA8888"))
 	return _cairo_error (CAIRO_STATUS_DEVICE_ERROR);
 
-    ctx->has_map_buffer = (gl_flavor == CAIRO_GL_FLAVOR_DESKTOP ||
-			   (gl_flavor == CAIRO_GL_FLAVOR_ES &&
-			    _cairo_gl_has_extension ("GL_OES_mapbuffer")));
+    ctx->has_map_buffer =
+	is_desktop || (is_gles && _cairo_gl_has_extension ("GL_OES_mapbuffer"));
+
+    ctx->can_read_bgra = test_can_read_bgra (gl_flavor);
 
     ctx->has_mesa_pack_invert =
 	_cairo_gl_has_extension ("GL_MESA_pack_invert");
 
     ctx->has_packed_depth_stencil =
-	((gl_flavor == CAIRO_GL_FLAVOR_DESKTOP &&
-	 _cairo_gl_has_extension ("GL_EXT_packed_depth_stencil")) ||
-	(gl_flavor == CAIRO_GL_FLAVOR_ES &&
-	 _cairo_gl_has_extension ("GL_OES_packed_depth_stencil")));
+	(is_desktop && _cairo_gl_has_extension ("GL_EXT_packed_depth_stencil")) ||
+	(is_gles && _cairo_gl_has_extension ("GL_OES_packed_depth_stencil"));
 
     ctx->num_samples = 1;
 
 #if CAIRO_HAS_GL_SURFACE
-    if (ctx->has_packed_depth_stencil &&
-	_cairo_gl_has_extension ("GL_ARB_framebuffer_object")) {
+    if (is_desktop && ctx->has_packed_depth_stencil &&
+	(gl_version >= CAIRO_GL_VERSION_ENCODE (3, 0) ||
+	 (_cairo_gl_has_extension ("GL_ARB_framebuffer_object") &&
+	  _cairo_gl_has_extension ("GL_EXT_framebuffer_blit") &&
+	  _cairo_gl_has_extension ("EXT_framebuffer_multisample")))) {
 	glGetIntegerv(GL_MAX_SAMPLES_EXT, &ctx->num_samples);
     }
 #endif
 
 #if CAIRO_HAS_GLESV2_SURFACE && defined(GL_MAX_SAMPLES_EXT)
-    if (ctx->has_packed_depth_stencil &&
+    if (is_gles && ctx->has_packed_depth_stencil &&
 	_cairo_gl_has_extension ("GL_EXT_multisampled_render_to_texture")) {
 	glGetIntegerv(GL_MAX_SAMPLES_EXT, &ctx->num_samples);
     }
 #endif
+
+#if CAIRO_HAS_GLESV2_SURFACE && defined(GL_MAX_SAMPLES_IMG)
+    if (is_gles && ctx->has_packed_depth_stencil &&
+	_cairo_gl_has_extension ("GL_IMG_multisampled_render_to_texture")) {
+	glGetIntegerv(GL_MAX_SAMPLES_IMG, &ctx->num_samples);
+    }
+#endif
+
     ctx->supports_msaa = ctx->num_samples > 1;
     if (ctx->num_samples > MAX_MSAA_SAMPLES)
 	ctx->num_samples = MAX_MSAA_SAMPLES;
@@ -688,6 +716,7 @@ _cairo_gl_context_set_destination (cairo_gl_context_t *ctx,
 	    glDisable(GL_MULTISAMPLE);
 #endif
 
+        surface->msaa_active = multisampling;
         ctx->dispatch.BindFramebuffer (GL_FRAMEBUFFER, 0);
 
 #if CAIRO_HAS_GL_SURFACE
