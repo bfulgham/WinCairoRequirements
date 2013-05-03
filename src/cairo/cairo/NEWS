@@ -1,3 +1,59 @@
+Release 1.12.14 (2013-02-10 Chris Wilson <chris@chris-wilson.co.uk>)
+===================================================================
+In the last week we had a few more bugs reported and promptly resolved.
+As these are a combination of regressions and stability issues, it is
+time for a prompt update and release. Many thanks to everyone for
+testing and reporting issues, and helping to make Cairo better.
+
+Bug fixes
+---------
+
+  Prevent user callbacks accessing user-data during destroy to prevent
+  use-after-free bugs.
+  https://bugzilla.mozilla.org/show_bug.cgi?id=722975
+
+  Use standard names for glyphs in subset fonts (PDF).
+  https://bugs.freedesktop.org/show_bug.cgi?id=60248
+
+  Fix detection of Win98. The logic for detecting Win98 (and its broken
+  AlphaBlend()) was inverted, disabling AlphaBlend() for everyone.
+
+  Prevent numeric overflow from extrapolating polygon edges to the clip
+  boundary and causing severe render artifacts.
+  https://bugs.freedesktop.org/show_bug.cgi?id=60489
+
+  Fix computation of glyph string coordinates when breaking up runs
+  for xlib.
+
+  Fix an assertion in the win32 backend for failing to clear its
+  similar-images.
+  https://bugs.freedesktop.org/show_bug.cgi?id=60519
+
+
+Release 1.12.12 (2013-01-31 Chris Wilson <chris@chris-wilson.co.uk>)
+===================================================================
+The goal of this release is to fix the synchronisation problems that
+were exhibited in the SHM transport for cairo-xlib. This cropped up
+any place that tried to rapidly push fresh pixel data to the X server
+through an ordinary image surface, such as gimp-2.9 and evince.
+
+Bug fixes
+---------
+
+   Avoid replacing the entire image when uploading subimages
+   https://bugs.freedesktop.org/show_bug.cgi?id=59635
+
+   Force synchronisation for scratch SHM image buffers, so that we do
+   not overwrite data as it is being read by X.
+   https://bugs.freedesktop.org/show_bug.cgi?id=59635 (also)
+
+   Fix typos in detecting multisampling for the GL (MSAA) backend.
+
+   Fix a memory leak in the GL (MSAA) backend.
+
+   Fix a reference counting bug when mapping a GL surface to an image.
+
+
 Release 1.12.10 (2013-01-16 Chris Wilson <chris@chris-wilson.co.uk>)
 ===================================================================
 A heap of bug fixes everywhere, and the gradual completion of the MSAA
@@ -19,11 +75,11 @@ Bug fixes
   to all clients when the keyboard changes. The testsuite would detect
   the unexpected event and complain.
 
-  Handle very large large images in the XCB backend.
+  Handle very large images in the XCB backend.
 
   Fix a memory leak in the xlib/shm layer, and prevent use of the SHM
   surfaces after the display is closed.
-  https://bugs.freedesktop.org/show_bug.cgi
+  https://bugs.freedesktop.org/show_bug.cgi?id=58253
 
   Handle resizing of bitmap fonts, in preparation for a fix to
   fontconfig to correctly pass on the user request for scaling.

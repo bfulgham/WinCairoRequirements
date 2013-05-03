@@ -168,6 +168,7 @@ copy_image_boxes (void *_dst,
 	int x2 = _cairo_fixed_integer_part (boxes->chunks.base[0].p2.x);
 	int y2 = _cairo_fixed_integer_part (boxes->chunks.base[0].p2.y);
 
+	_cairo_xlib_shm_surface_mark_active (&image->base);
 	XCopyArea (dst->dpy, src, dst->drawable, gc,
 		   x1 + dx, y1 + dy,
 		   x2 - x1, y2 - y1,
@@ -201,6 +202,7 @@ copy_image_boxes (void *_dst,
 	}
 
 	XSetClipRectangles (dst->dpy, gc, 0, 0, rects, j, Unsorted);
+	_cairo_xlib_shm_surface_mark_active (&image->base);
 	XCopyArea (dst->dpy, src, dst->drawable, gc,
 		   0, 0, image->width, image->height, -dx, -dy);
 	XSetClipMask (dst->dpy, gc, None);
@@ -209,7 +211,6 @@ copy_image_boxes (void *_dst,
 	    free (rects);
     }
 
-    _cairo_xlib_shm_surface_mark_active (&image->base);
     _cairo_xlib_surface_put_gc (dst->display, dst, gc);
     release (dst);
     return CAIRO_STATUS_SUCCESS;
@@ -245,16 +246,20 @@ draw_image_boxes (void *_dst,
 {
     cairo_xlib_surface_t *dst = _dst;
     struct _cairo_boxes_chunk *chunk;
-    cairo_image_surface_t *shm;
+    cairo_image_surface_t *shm = NULL;
     cairo_int_status_t status;
     int i;
 
-    if (image->base.device == dst->base.device &&
-	image->depth == dst->depth &&
-	_cairo_xlib_shm_surface_get_pixmap (&image->base))
+    if (image->base.device == dst->base.device) {
+	if (image->depth != dst->depth)
+	    return CAIRO_INT_STATUS_UNSUPPORTED;
+
+	if (_cairo_xlib_shm_surface_get_pixmap (&image->base))
 	    return copy_image_boxes (dst, image, boxes, dx, dy);
 
-    shm = NULL;
+	goto draw_image_boxes;
+    }
+
     if (boxes_cover_surface (boxes, dst))
 	shm = (cairo_image_surface_t *) _cairo_xlib_surface_get_shm (dst, TRUE);
     if (shm) {
@@ -351,6 +356,7 @@ draw_image_boxes (void *_dst,
 	}
     }
 
+draw_image_boxes:
     status = CAIRO_STATUS_SUCCESS;
     for (chunk = &boxes->chunks; chunk; chunk = chunk->next) {
 	for (i = 0; i < chunk->count; i++) {
@@ -359,10 +365,10 @@ draw_image_boxes (void *_dst,
 	    int y1 = _cairo_fixed_integer_part (b->p1.y);
 	    int x2 = _cairo_fixed_integer_part (b->p2.x);
 	    int y2 = _cairo_fixed_integer_part (b->p2.y);
-	    if ( _cairo_xlib_surface_draw_image (dst, image,
-						 x1 + dx, y1 + dy,
-						 x2 - x1, y2 - y1,
-						 x1, y1)) {
+	    if (_cairo_xlib_surface_draw_image (dst, image,
+						x1 + dx, y1 + dy,
+						x2 - x1, y2 - y1,
+						x1, y1)) {
 		status = CAIRO_INT_STATUS_UNSUPPORTED;
 		goto out;
 	    }
@@ -1463,14 +1469,14 @@ _emit_glyphs_chunk (cairo_xlib_display_t *display,
        */
       if (_start_new_glyph_elt (j, &glyphs[i])) {
 	  if (j) {
-	    elts[nelt].nchars = n;
-	    nelt++;
-	    n = 0;
+	      elts[nelt].nchars = n;
+	      nelt++;
+	      n = 0;
 	  }
 	  elts[nelt].chars = char8 + size * j;
 	  elts[nelt].glyphset = info->glyphset;
-	  elts[nelt].xOff = glyphs[i].i.x - dst_x;
-	  elts[nelt].yOff = glyphs[i].i.y - dst_y;
+	  elts[nelt].xOff = glyphs[i].i.x;
+	  elts[nelt].yOff = glyphs[i].i.y;
       }
 
       switch (width) {
@@ -1573,7 +1579,7 @@ composite_glyphs (void				*surface,
     cairo_xlib_display_t *display = dst->display;
     cairo_int_status_t status = CAIRO_INT_STATUS_SUCCESS;
     cairo_scaled_glyph_t *glyph;
-    cairo_fixed_t x = 0, y = 0;
+    cairo_fixed_t x = dst_x, y = dst_y;
     cairo_xlib_font_glyphset_t *glyphset = NULL, *this_glyphset_info;
 
     unsigned long max_index = 0;

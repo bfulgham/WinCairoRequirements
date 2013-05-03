@@ -316,6 +316,29 @@ _cairo_win32_display_surface_create_for_dc (HDC             original_dc,
     if (status)
 	goto FAIL;
 
+   ////
+   // Double-check memory is valid
+   ////
+   {
+   uint32_t test = 0;
+   uint32_t* start = (uint32_t*)bits;
+   uint32_t* d = 0;
+   int byteCheck = width * height * (32 / 8);
+   int totalCount = 0;
+   int yy = 0;
+
+   for (yy = 0; yy < height; ++yy)
+   {
+      d = (uint32_t *)((uint8_t*)bits + rowstride*yy);
+      if (*d)
+         test += *d;
+   }
+
+   totalCount = ((uint8_t*)d - (uint8_t*)start) + rowstride;
+   assert (totalCount == byteCheck);
+   }
+   ////
+
     _cairo_image_surface_set_parent (to_image_surface(surface->image),
 				     &surface->win32.base);
 
@@ -336,6 +359,28 @@ _cairo_win32_display_surface_create_for_dc (HDC             original_dc,
 			 device,
 			 _cairo_content_from_format (format));
 
+   ////
+   // Double-check memory is valid
+   ////
+   {
+   uint32_t test = 0;
+   uint32_t* start = (uint32_t*)bits;
+   uint32_t* d = 0;
+   int byteCheck = width * height * (32 / 8);
+   int totalCount = 0;
+   int yy = 0;
+
+   for (yy = 0; yy < height; ++yy)
+   {
+      d = (uint32_t *)((uint8_t*)bits + rowstride*yy);
+      if (*d)
+         test += *d;
+   }
+
+   totalCount = ((uint8_t*)d - (uint8_t*)start) + rowstride;
+   assert (totalCount == byteCheck);
+   }
+   ////
     cairo_device_destroy (device);
 
     return &surface->win32.base;
@@ -392,6 +437,7 @@ _cairo_win32_display_surface_create_similar_image (void	    *abstract_other,
 						   int	     height)
 {
     cairo_win32_display_surface_t *surface = abstract_other;
+    cairo_image_surface_t *image;
 
     surface = (cairo_win32_display_surface_t *)
 	_cairo_win32_display_surface_create_for_dc (surface->win32.dc,
@@ -399,7 +445,14 @@ _cairo_win32_display_surface_create_similar_image (void	    *abstract_other,
     if (surface->win32.base.status)
 	return &surface->win32.base;
 
-    return surface->image;
+    /* And clear in order to comply with our user API semantics */
+    image = (cairo_image_surface_t *) surface->image;
+    if (! image->base.is_clear) {
+	memset (image->data, 0, image->stride * height);
+	image->base.is_clear = TRUE;
+    }
+
+    return &image->base;
 }
 
 static cairo_status_t
@@ -420,6 +473,8 @@ _cairo_win32_display_surface_finish (void *abstract_surface)
 	DeleteObject (surface->bitmap);
 	DeleteDC (surface->win32.dc);
     }
+
+    _cairo_win32_display_surface_discard_fallback (surface);
 
     if (surface->initial_clip_rgn)
 	DeleteObject (surface->initial_clip_rgn);
@@ -750,6 +805,7 @@ _cairo_win32_display_surface_discard_fallback (cairo_win32_display_surface_t *su
 	TRACE ((stderr, "%s (surface=%d)\n",
 		__FUNCTION__, surface->win32.base.unique_id));
 
+   cairo_surface_finish (surface->fallback);
 	cairo_surface_destroy (surface->fallback);
 	surface->fallback = NULL;
     }

@@ -55,10 +55,13 @@ _cairo_gl_shader_compile_and_link (cairo_gl_context_t *ctx,
 typedef struct _cairo_shader_cache_entry {
     cairo_cache_entry_t base;
 
+    unsigned vertex;
+
     cairo_gl_operand_type_t src;
     cairo_gl_operand_type_t mask;
     cairo_gl_operand_type_t dest;
     cairo_bool_t use_coverage;
+
     cairo_gl_shader_in_t in;
     GLint src_gl_filter;
     cairo_bool_t src_border_fade;
@@ -79,13 +82,14 @@ _cairo_gl_shader_cache_equal_desktop (const void *key_a, const void *key_b)
     cairo_bool_t both_have_npot_repeat =
 	a->ctx->has_npot_repeat && b->ctx->has_npot_repeat;
 
-    return a->src  == b->src  &&
-           a->mask == b->mask &&
-           a->dest == b->dest &&
-	   a->use_coverage == b->use_coverage &&
-           a->in   == b->in &&
-	   (both_have_npot_repeat || a->src_extend == b->src_extend) &&
-	   (both_have_npot_repeat || a->mask_extend == b->mask_extend);
+    return (a->vertex == b->vertex &&
+	    a->src  == b->src  &&
+	    a->mask == b->mask &&
+	    a->dest == b->dest &&
+	    a->use_coverage == b->use_coverage &&
+	    a->in   == b->in &&
+	    (both_have_npot_repeat || a->src_extend == b->src_extend) &&
+	    (both_have_npot_repeat || a->mask_extend == b->mask_extend));
 }
 
 /*
@@ -101,23 +105,24 @@ _cairo_gl_shader_cache_equal_gles2 (const void *key_a, const void *key_b)
     cairo_bool_t both_have_npot_repeat =
 	a->ctx->has_npot_repeat && b->ctx->has_npot_repeat;
 
-    return a->src  == b->src  &&
-	   a->mask == b->mask &&
-	   a->dest == b->dest &&
-	   a->use_coverage == b->use_coverage &&
-	   a->in   == b->in   &&
-	   a->src_gl_filter == b->src_gl_filter &&
-	   a->src_border_fade == b->src_border_fade &&
-	   (both_have_npot_repeat || a->src_extend == b->src_extend) &&
-	   a->mask_gl_filter == b->mask_gl_filter &&
-	   a->mask_border_fade == b->mask_border_fade &&
-	   (both_have_npot_repeat || a->mask_extend == b->mask_extend);
+    return (a->vertex == b->vertex &&
+	    a->src  == b->src  &&
+	    a->mask == b->mask &&
+	    a->dest == b->dest &&
+	    a->use_coverage == b->use_coverage &&
+	    a->in   == b->in   &&
+	    a->src_gl_filter == b->src_gl_filter &&
+	    a->src_border_fade == b->src_border_fade &&
+	    (both_have_npot_repeat || a->src_extend == b->src_extend) &&
+	    a->mask_gl_filter == b->mask_gl_filter &&
+	    a->mask_border_fade == b->mask_border_fade &&
+	    (both_have_npot_repeat || a->mask_extend == b->mask_extend));
 }
 
 static unsigned long
 _cairo_gl_shader_cache_hash (const cairo_shader_cache_entry_t *entry)
 {
-    return (entry->src << 24) | (entry->mask << 16) | (entry->dest << 8) | (entry->in << 1) | entry->use_coverage;
+    return ((entry->src << 24) | (entry->mask << 16) | (entry->dest << 8) | (entry->in << 1) | entry->use_coverage) ^ entry->vertex;
 }
 
 static void
@@ -215,9 +220,9 @@ _cairo_gl_shader_fini (cairo_gl_context_t *ctx,
 static const char *operand_names[] = { "source", "mask", "dest" };
 
 static cairo_gl_var_type_t
-cairo_gl_operand_get_var_type (cairo_gl_operand_type_t type)
+cairo_gl_operand_get_var_type (cairo_gl_operand_t *operand)
 {
-    switch (type) {
+    switch (operand->type) {
     default:
     case CAIRO_GL_OPERAND_COUNT:
         ASSERT_NOT_REACHED;
@@ -228,8 +233,9 @@ cairo_gl_operand_get_var_type (cairo_gl_operand_type_t type)
     case CAIRO_GL_OPERAND_RADIAL_GRADIENT_A0:
     case CAIRO_GL_OPERAND_RADIAL_GRADIENT_NONE:
     case CAIRO_GL_OPERAND_RADIAL_GRADIENT_EXT:
+        return operand->gradient.texgen ? CAIRO_GL_VAR_TEXGEN : CAIRO_GL_VAR_TEXCOORDS;
     case CAIRO_GL_OPERAND_TEXTURE:
-        return CAIRO_GL_VAR_TEXCOORDS;
+        return operand->texture.texgen ? CAIRO_GL_VAR_TEXGEN : CAIRO_GL_VAR_TEXCOORDS;
     }
 }
 
@@ -245,7 +251,16 @@ cairo_gl_shader_emit_variable (cairo_output_stream_t *stream,
         break;
     case CAIRO_GL_VAR_TEXCOORDS:
         _cairo_output_stream_printf (stream,
+				     "attribute vec4 MultiTexCoord%d;\n"
                                      "varying vec2 %s_texcoords;\n",
+                                     name,
+                                     operand_names[name]);
+        break;
+    case CAIRO_GL_VAR_TEXGEN:
+        _cairo_output_stream_printf (stream,
+				     "uniform mat3 %s_texgen;\n"
+                                     "varying vec2 %s_texcoords;\n",
+                                     operand_names[name],
                                      operand_names[name]);
         break;
     }
@@ -265,6 +280,12 @@ cairo_gl_shader_emit_vertex (cairo_output_stream_t *stream,
         _cairo_output_stream_printf (stream,
                                      "    %s_texcoords = MultiTexCoord%d.xy;\n",
                                      operand_names[name], name);
+        break;
+
+    case CAIRO_GL_VAR_TEXGEN:
+        _cairo_output_stream_printf (stream,
+				     "    %s_texcoords = (%s_texgen * Vertex.xyw).xy;\n",
+                                     operand_names[name], operand_names[name]);
         break;
     }
 }
@@ -301,8 +322,6 @@ cairo_gl_shader_get_vertex_source (cairo_gl_var_type_t src,
     _cairo_output_stream_printf (stream,
 				 "attribute vec4 Vertex;\n"
 				 "attribute vec4 Color;\n"
-				 "attribute vec4 MultiTexCoord0;\n"
-				 "attribute vec4 MultiTexCoord1;\n"
 				 "uniform mat4 ModelViewProjectionMatrix;\n"
 				 "void main()\n"
 				 "{\n"
@@ -920,7 +939,8 @@ _cairo_gl_shader_bind_vec4 (cairo_gl_context_t *ctx,
 
 void
 _cairo_gl_shader_bind_matrix (cairo_gl_context_t *ctx,
-			      const char *name, cairo_matrix_t* m)
+			      const char *name,
+			      const cairo_matrix_t* m)
 {
     cairo_gl_dispatch_t *dispatch = &ctx->dispatch;
     GLint location = dispatch->GetUniformLocation (ctx->current_shader->program,
@@ -973,6 +993,12 @@ _cairo_gl_get_shader_by_type (cairo_gl_context_t *ctx,
     cairo_status_t status;
 
     lookup.ctx = ctx;
+
+    lookup.vertex = cairo_gl_var_type_hash (cairo_gl_operand_get_var_type (source),
+					    cairo_gl_operand_get_var_type (mask),
+					    use_coverage,
+					    CAIRO_GL_VAR_NONE);
+
     lookup.src = source->type;
     lookup.mask = mask->type;
     lookup.dest = CAIRO_GL_OPERAND_NONE;
@@ -1016,8 +1042,8 @@ _cairo_gl_get_shader_by_type (cairo_gl_context_t *ctx,
     _cairo_gl_shader_init (&entry->shader);
     status = _cairo_gl_shader_compile_and_link (ctx,
 						&entry->shader,
-						cairo_gl_operand_get_var_type (source->type),
-						cairo_gl_operand_get_var_type (mask->type),
+						cairo_gl_operand_get_var_type (source),
+						cairo_gl_operand_get_var_type (mask),
 						use_coverage,
 						fs_source);
     free (fs_source);

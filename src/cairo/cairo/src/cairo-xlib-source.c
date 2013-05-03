@@ -87,10 +87,10 @@ _cairo_xlib_proxy_finish (void *abstract_surface)
 {
     cairo_xlib_proxy_t *proxy = abstract_surface;
 
+    _cairo_xlib_shm_surface_mark_active (proxy->owner);
     XRenderFreePicture (proxy->source.dpy, proxy->source.picture);
     if (proxy->source.pixmap)
 	    XFreePixmap (proxy->source.dpy, proxy->source.pixmap);
-    _cairo_xlib_shm_surface_mark_active (proxy->owner);
     cairo_surface_destroy (proxy->owner);
     return CAIRO_STATUS_SUCCESS;
 }
@@ -955,18 +955,14 @@ surface_source (cairo_xlib_surface_t *dst,
 	_cairo_xlib_shm_surface_get_pixmap (src)) {
 	cairo_xlib_proxy_t *proxy;
 
-	cairo_surface_reference (src);
-
 	proxy = malloc (sizeof(*proxy));
-	if (unlikely (proxy == NULL)) {
-	    cairo_surface_destroy (src);
+	if (unlikely (proxy == NULL))
 	    return _cairo_surface_create_in_error (CAIRO_STATUS_NO_MEMORY);
-	}
 
 	_cairo_surface_init (&proxy->source.base,
 			     &cairo_xlib_proxy_backend,
 			     dst->base.device,
-			     CAIRO_CONTENT_COLOR_ALPHA);
+			     src->content);
 
 	proxy->source.dpy = dst->display->display;
 	proxy->source.picture = XRenderCreatePicture (proxy->source.dpy,
@@ -979,7 +975,7 @@ surface_source (cairo_xlib_surface_t *dst,
 	proxy->source.has_matrix = 0;
 	proxy->source.filter = CAIRO_FILTER_NEAREST;
 	proxy->source.extend = CAIRO_EXTEND_NONE;
-	proxy->owner = src;
+	proxy->owner = cairo_surface_reference (src);
 
 	return embedded_source (dst, pattern, extents, src_x, src_y,
 				&proxy->source);
@@ -1035,7 +1031,13 @@ surface_source (cairo_xlib_surface_t *dst,
 
 	status = _cairo_surface_unmap_image (&xsrc->base, image);
 	if (unlikely (status)) {
-	    cairo_surface_destroy (src);
+	    cairo_surface_destroy (&xsrc->base);
+	    return _cairo_surface_create_in_error (status);
+	}
+
+	status = _cairo_xlib_surface_put_shm (xsrc);
+	if (unlikely (status)) {
+	    cairo_surface_destroy (&xsrc->base);
 	    return _cairo_surface_create_in_error (status);
 	}
     }

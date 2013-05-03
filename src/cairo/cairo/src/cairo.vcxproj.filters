@@ -785,5 +785,8 @@
     <ClInclude Include="cairo-mempool-private.h">
       <Filter>Headers %28Private%29</Filter>
     </ClInclude>
+    <ClInclude Include="cairo-gl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

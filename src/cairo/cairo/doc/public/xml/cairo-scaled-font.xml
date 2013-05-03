@@ -527,7 +527,8 @@ hold true for all possible cases.
 <varlistentry><term><parameter>scaled_font</parameter>&#160;:</term>
 <listitem><simpara>a <link linkend="cairo-scaled-font-t"><type>cairo_scaled_font_t</type></link></simpara></listitem></varlistentry>
 <varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>The <link linkend="cairo-font-face-t"><type>cairo_font_face_t</type></link> with which <parameter>scaled_font</parameter> was
-created.</simpara></listitem></varlistentry>
+created.  This object is owned by cairo. To keep a reference to it,
+you must call <link linkend="cairo-scaled-font-reference"><function>cairo_scaled_font_reference()</function></link>.</simpara></listitem></varlistentry>
 </variablelist><para role="since">Since 1.2</para></refsect2>
 <refsect2 id="cairo-scaled-font-get-font-options" role="function" condition="since:1.2">
 <title>cairo_scaled_font_get_font_options ()</title>

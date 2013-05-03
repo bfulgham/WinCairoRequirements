@@ -221,6 +221,18 @@ seqno_passed (unsigned long a, unsigned long b)
     return (long)(b - a) >= 0;
 }
 
+static inline cairo_bool_t
+seqno_before (unsigned long a, unsigned long b)
+{
+    return (long)(b - a) > 0;
+}
+
+static inline cairo_bool_t
+seqno_after (unsigned long a, unsigned long b)
+{
+    return (long)(a - b) > 0;
+}
+
 static inline cairo_status_t
 _pqueue_init (struct pqueue *pq)
 {
@@ -404,11 +416,6 @@ peek_processed (cairo_device_t *device)
     return LastKnownRequestProcessed (peek_display(device));
 }
 
-static unsigned next_request (cairo_device_t *device)
-{
-    return NextRequest (peek_display (device));
-}
-
 static void
 _cairo_xlib_display_shm_pool_destroy (cairo_xlib_display_t *display,
 				      cairo_xlib_shm_t *pool)
@@ -429,7 +436,7 @@ static void send_event(cairo_xlib_display_t *display,
 {
     XShmCompletionEvent ev;
 
-    if (seqno_passed (seqno, display->shm->last_event))
+    if (! seqno_after (seqno, display->shm->last_event))
 	return;
 
     ev.type = display->shm->event;
@@ -504,7 +511,7 @@ _cairo_xlib_shm_info_find (cairo_xlib_display_t *display, size_t size,
 	*last_request = info->last_request;
 
 	_pqueue_pop (&display->shm->info);
-	_cairo_mempool_free (&info->pool->mem, info->mem);
+	_cairo_mempool_free (&pool->mem, info->mem);
 	free (info);
 
 	if (pool->mem.free_bytes >= size) {
@@ -725,7 +732,7 @@ _cairo_xlib_shm_surface_finish (void *abstract_surface)
     if (active (shm, display->display)) {
 	shm->info->last_request = shm->active;
 	_pqueue_push (&display->shm->info, shm->info);
-	if (! seqno_passed (display->shm->last_request, shm->active))
+	if (seqno_before (display->shm->last_request, shm->active))
 	    display->shm->last_request = shm->active;
     } else {
 	_cairo_mempool_free (&shm->info->pool->mem, shm->info->mem);
@@ -1160,7 +1167,7 @@ _cairo_xlib_surface_create_shm__image (cairo_xlib_surface_t *surface,
 	return NULL;
 
     return &_cairo_xlib_shm_surface_create (surface, format, width, height,
-					    TRUE, 0)->image.base;
+					    FALSE, 0)->image.base;
 }
 
 cairo_surface_t *
@@ -1231,10 +1238,10 @@ _cairo_xlib_shm_surface_get_ximage (cairo_surface_t *surface,
 void *
 _cairo_xlib_shm_surface_get_obdata (cairo_surface_t *surface)
 {
-    cairo_xlib_shm_surface_t *shm;
+    cairo_xlib_display_t *display = (cairo_xlib_display_t *) surface->device;
+    cairo_xlib_shm_surface_t *shm = (cairo_xlib_shm_surface_t *) surface;
 
-    shm = (cairo_xlib_shm_surface_t *) surface;
-    shm->active = next_request (surface->device);
+    display->shm->last_event = shm->active = NextRequest (display->display);
     return &shm->info->pool->shm;
 }
 
