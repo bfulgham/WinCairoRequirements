@@ -104,7 +104,7 @@
       <SubSystem>Windows</SubSystem>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>$(SolutionDir)Lib/zdll.lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib32/zdll.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\zlib"
@@ -142,7 +142,7 @@ xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Comma
       <SubSystem>Windows</SubSystem>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>$(SolutionDir)Lib/zdll.lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib32/zdll.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)include\zlib"

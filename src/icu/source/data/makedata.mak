@@ -127,7 +127,7 @@ ICUDATA=$(ICUP)\source\data
 #!IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
 #DLL_OUTPUT=$(ICUP)\bin64
 #!ELSE
-#DLL_OUTPUT=$(ICUP)\bin
+#DLL_OUTPUT=$(ICUP)\bin32
 #!ENDIF
 DLL_OUTPUT=$(DISTOUT)
 
@@ -161,8 +161,8 @@ ICUTOOLS=$(ICUP)\source\tools
 #PATH = $(ICUP)\bin64;$(PATH)
 #ICUPBIN=$(ICUP)\bin64
 #!ELSE
-#PATH = $(ICUP)\bin;$(PATH)
-#ICUPBIN=$(ICUP)\bin
+#PATH = $(ICUP)\bin32;$(PATH)
+#ICUPBIN=$(ICUP)\bin32
 #!ENDIF
 #PATH=$PATH
 ICUPBIN=$(DISTOUT)

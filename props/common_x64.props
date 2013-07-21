@@ -3,11 +3,11 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <LinkIncremental>false</LinkIncremental>
-    <OutputPath>$(SolutionDir)..\Bin\$(Configuration)\</OutputPath>
-    <OutDir>$(SolutionDir)Bin\x64\</OutDir>
+    <OutputPath>$(SolutionDir)..\bin64\$(Configuration)\</OutputPath>
+    <OutDir>$(SolutionDir)bin64\</OutDir>
     <IntDir>$(SolutionDir)Build\$(Configuration)\$(ProjectName)\x64\</IntDir>
     <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Bscmake>
