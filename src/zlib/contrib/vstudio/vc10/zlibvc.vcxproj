@@ -176,7 +176,7 @@ xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Comma
     <Link>
       <ModuleDefinitionFile>.\zlibvc.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(SolutionDir)Lib/x64/zdll.lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib64/zdll.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Message>Install headers</Message>
@@ -213,7 +213,7 @@ xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Comma
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <ModuleDefinitionFile>.\zlibvc.def</ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(SolutionDir)Lib/x64/zdll.lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib64/zdll.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Message>Install headers</Message>
