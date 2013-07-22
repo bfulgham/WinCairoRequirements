@@ -234,13 +234,13 @@ xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Comma
     <ClCompile Include="..\..\..\gzread.c" />
     <ClCompile Include="..\..\..\gzwrite.c" />
     <ClCompile Include="..\..\..\infback.c" />
+    <ClCompile Include="..\..\..\inffast.c" />
+    <ClCompile Include="..\..\..\inflate.c" />
+    <ClCompile Include="..\..\..\inftrees.c" />
     <ClCompile Include="..\..\masmx64\inffas8664.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\inffast.c" />
-    <ClCompile Include="..\..\..\inflate.c" />
-    <ClCompile Include="..\..\..\inftrees.c" />
     <ClCompile Include="..\..\minizip\ioapi.c" />
     <ClCompile Include="..\..\minizip\iowin32.c" />
     <ClCompile Include="..\..\..\trees.c" />
@@ -274,10 +274,12 @@ xcopy /Y /R "$(ProjectDir)..\..\..\gzguts.h" "$(SolutionDir)include\zlib"</Comma
     <MASM Include="..\..\masmx86\inffas32.asm">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MASM>
     <MASM Include="..\..\masmx86\match686.asm">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MASM>
     <None Include="zlibvc.def" />
   </ItemGroup>

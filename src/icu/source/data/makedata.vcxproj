@@ -74,11 +74,11 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VCInstallDir)bin\NMAKE" /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin32" CFG=release</NMakeBuildCommandLine>
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin\x64" CFG=release PLATFORM=x64</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin64" CFG=release PLATFORM=x64</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VCInstallDir)bin\NMAKE" /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin32" CFG=release clean all</NMakeReBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin\x64" CFG=release PLATFORM=x64 clean all</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin64" CFG=release PLATFORM=x64 clean all</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VCInstallDir)bin\NMAKE" /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin32" CFG=release clean</NMakeCleanCommandLine>
-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin\x64" CFG=release PLATFORM=x64 clean</NMakeCleanCommandLine>
+    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin64" CFG=release PLATFORM=x64 clean</NMakeCleanCommandLine>
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
@@ -92,11 +92,11 @@
     <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
     <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
     <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VCInstallDir)bin\NMAKE" /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin" CFG=debug</NMakeBuildCommandLine>
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin" CFG=debug PLATFORM=x64</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin64" CFG=debug PLATFORM=x64</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VCInstallDir)bin\NMAKE" /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin" CFG=debug clean all</NMakeReBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin" CFG=debug PLATFORM=x64 clean all</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin64" CFG=debug PLATFORM=x64 clean all</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VCInstallDir)bin\NMAKE" /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin" CFG=debug clean</NMakeCleanCommandLine>
-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)Bin" CFG=debug PLATFORM=x64 clean</NMakeCleanCommandLine>
+    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NMAKE /f makedata.mak ICUMAKE="$(MSBuildProjectDirectory)" DISTOUT="$(SolutionDir)bin64" CFG=debug PLATFORM=x64 clean</NMakeCleanCommandLine>
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
     <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>

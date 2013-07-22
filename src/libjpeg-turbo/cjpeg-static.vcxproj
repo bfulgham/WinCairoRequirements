@@ -157,13 +157,31 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>jpeg-static.lib</AdditionalDependencies>
+      <AdditionalDependencies>libjpeg.lib</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)/win;$(ProjectDir)/simd;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BMP_SUPPORTED;GIF_SUPPORTED;PPM_SUPPORTED;TARGA_SUPPORTED;USE_SETMODE;WITH_SIMD;CMAKE_INTDIR="Debug";_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalDependencies>jpeg-static.lib</AdditionalDependencies>
+      <AdditionalDependencies>libjpeg.lib</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)/win;$(ProjectDir)/simd;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BMP_SUPPORTED;GIF_SUPPORTED;PPM_SUPPORTED;TARGA_SUPPORTED;USE_SETMODE;WITH_SIMD;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include=".\cjpeg.c" />
