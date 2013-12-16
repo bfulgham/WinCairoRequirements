@@ -135,7 +135,7 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     <ResourceCompile />
     <Link>
       <AdditionalDependencies>ws2_32.lib;wldap32.lib</AdditionalDependencies>
-      <ImportLibrary>$(SolutionDir)Lib/x64/$(TargetName)_imp.lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib64/$(TargetName)_imp.lib</ImportLibrary>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
     </Link>
@@ -193,7 +193,7 @@ xcopy /Y /R "$(ProjectDir)..\include\curl\*.h" "$(SolutionDir)include\curl\"</Co
     <ResourceCompile />
     <Link>
       <AdditionalDependencies>ws2_32.lib;wldap32.lib</AdditionalDependencies>
-      <ImportLibrary>$(SolutionDir)Lib/x64/$(TargetName)_imp.lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib64/$(TargetName)_imp.lib</ImportLibrary>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
     </Link>

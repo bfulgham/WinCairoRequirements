@@ -131,7 +131,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <NASM>
-      <IncludePaths>$(ProjectDir)..\\win\\;$(ProjectDir)..\\simd\\;%(IncludePaths)</IncludePaths>
+      <IncludePaths>$(ProjectDir)..\win\;$(ProjectDir)..\simd\;%(IncludePaths)</IncludePaths>
       <PreprocessorDefinitions>WIN64;__x86_64__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Outputswitch>1</Outputswitch>
     </NASM>
