@@ -91,7 +91,6 @@
       </DebugInformationFormat>
       <PreprocessorDefinitions>BMP_SUPPORTED;GIF_SUPPORTED;PPM_SUPPORTED;TARGA_SUPPORTED;USE_SETMODE;WITH_SIMD;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>Debug</AssemblerListingLocation>
-      <ProgramDataBaseFileName>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/Debug/cjpeg-static.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>BMP_SUPPORTED;GIF_SUPPORTED;PPM_SUPPORTED;TARGA_SUPPORTED;USE_SETMODE;WITH_SIMD;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -131,7 +130,6 @@
       </DebugInformationFormat>
       <PreprocessorDefinitions>BMP_SUPPORTED;GIF_SUPPORTED;PPM_SUPPORTED;TARGA_SUPPORTED;USE_SETMODE;WITH_SIMD;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>Release</AssemblerListingLocation>
-      <ProgramDataBaseFileName>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/Release/cjpeg-static.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>BMP_SUPPORTED;GIF_SUPPORTED;PPM_SUPPORTED;TARGA_SUPPORTED;USE_SETMODE;WITH_SIMD;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -149,8 +147,7 @@
       <AdditionalDependencies>libjpeg.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ImportLibrary>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/Release/cjpeg-static.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/Release/cjpeg-static.pdb</ProgramDataBaseFile>
+      <ImportLibrary>$(SolutionDir)lib32/$(TargetName).lib</ImportLibrary>
       <SubSystem>Console</SubSystem>
       <Version>
       </Version>
@@ -195,14 +192,6 @@
     <ClCompile Include=".\rdppm.c" />
     <ClCompile Include=".\rdswitch.c" />
     <ClCompile Include=".\rdtarga.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/ZERO_CHECK.vcxproj">
-      <Project>8D5F16F7-2938-4610-A4CC-AC90DA18C422</Project>
-    </ProjectReference>
-    <ProjectReference Include="C:/Development/Projects/WinCairoRequirements/src/libjpeg-turbo/build/jpeg-static.vcxproj">
-      <Project>87EDBECD-763E-4231-A588-9529F414001E</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

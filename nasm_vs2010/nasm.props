@@ -14,8 +14,8 @@
       <OutputFormat>$(IntDir)%(FileName).obj</OutputFormat>
       <Outputswitch>0</Outputswitch>
       <PackAlignmentBoundary>0</PackAlignmentBoundary>
-      <CommandLineTemplate Condition="'$(Platform)' == 'Win32'">"$(NasmPath)"nasm.exe [AdditionalOptions] [AllOptions] %(FullPath)</CommandLineTemplate>
-      <CommandLineTemplate Condition="'$(Platform)' == 'x64'">"$(NasmPath)"nasm.exe [AdditionalOptions] [AllOptions] %(FullPath)</CommandLineTemplate>
+      <CommandLineTemplate Condition="'$(Platform)' == 'Win32'">"$(NasmPath)"\nasm.exe [AdditionalOptions] [AllOptions] %(FullPath)</CommandLineTemplate>
+      <CommandLineTemplate Condition="'$(Platform)' == 'x64'">"$(NasmPath)"\nasm.exe [AdditionalOptions] [AllOptions] %(FullPath)</CommandLineTemplate>
       <CommandLineTemplate Condition="'$(Platform)' != 'Win32' and '$(Platform)' != 'x64'">echo NASM not supported on this platform</CommandLineTemplate>
       <ExecutionDescription>Assembling %(Filename)%(Extension)...</ExecutionDescription>
     </NASM>
