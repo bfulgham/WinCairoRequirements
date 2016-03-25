@@ -391,6 +391,9 @@ box32_intersect (pixman_box32_t *dest,
     return dest->x2 > dest->x1 && dest->y2 > dest->y1;
 }
 
+#if defined(__GNUC__) && !defined(__x86_64__) && !defined(__amd64__)
+__attribute__((__force_align_arg_pointer__))
+#endif
 PIXMAN_EXPORT void
 pixman_composite_glyphs_no_mask (pixman_op_t            op,
 				 pixman_image_t        *src,
@@ -463,16 +466,13 @@ pixman_composite_glyphs_no_mask (pixman_op_t            op,
 		{
 		    glyph_format = glyph_img->common.extended_format_code;
 		    glyph_flags = glyph_img->common.flags;
-		    
+
 		    _pixman_implementation_lookup_composite (
 			get_implementation(), op,
 			src->common.extended_format_code, src->common.flags,
 			glyph_format, glyph_flags | extra,
 			dest_format, dest_flags,
 			&implementation, &func);
-
-		    if (!func)
-			goto out;
 		}
 
 		info.src_x = src_x + composite_box.x1 - dest_x;
@@ -508,7 +508,7 @@ add_glyphs (pixman_glyph_cache_t *cache,
     uint32_t glyph_flags = 0;
     pixman_composite_func_t func = NULL;
     pixman_implementation_t *implementation = NULL;
-    uint32_t dest_format;
+    pixman_format_code_t dest_format;
     uint32_t dest_flags;
     pixman_box32_t dest_box;
     pixman_composite_info_t info;
@@ -582,9 +582,6 @@ add_glyphs (pixman_glyph_cache_t *cache,
 		mask_format, info.mask_flags,
 		dest_format, dest_flags,
 		&implementation, &func);
-
-	    if (!func)
-		goto out;
 	}
 
 	glyph_box.x1 = glyphs[i].x - glyph->origin_x + off_x;
@@ -636,6 +633,9 @@ out:
  *   - Trim the mask to the destination clip/image?
  *   - Trim composite region based on sources, when the op ignores 0s.
  */
+#if defined(__GNUC__) && !defined(__x86_64__) && !defined(__amd64__)
+__attribute__((__force_align_arg_pointer__))
+#endif
 PIXMAN_EXPORT void
 pixman_composite_glyphs (pixman_op_t            op,
 			 pixman_image_t        *src,

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2010 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2011,2014 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  06/28/2001   synwee      Creation.
@@ -30,11 +30,11 @@
  * See the <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
  * <p> 
- * The algorithm implemented is a modified form of the Boyer Moore's search.
- * For more information  see 
+ * The implementation may use a linear search or a modified form of the Boyer-Moore
+ * search; for more information on the latter see 
  * <a href="http://icu-project.org/docs/papers/efficient_text_searching_in_java.html">
  * "Efficient Text Searching in Java"</a>, published in <i>Java Report</i> 
- * in February, 1999, for further information on the algorithm.
+ * in February, 1999.
  * <p>
  * There are 2 match options for selection:<br>
  * Let S' be the sub-string of a text string S between the offsets start and 
@@ -90,6 +90,11 @@
  * E.g. In English, overlapping matches produces the result 0 and 2 
  * for the pattern "abab" in the text "ababab", where else mutually 
  * exclusive matches only produce the result of 0.
+ * <p>
+ * Options are also provided to implement "asymmetric search" as described in
+ * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+ * UTS #10 Unicode Collation Algorithm</a>, specifically the USearchAttribute
+ * USEARCH_ELEMENT_COMPARISON and its values.
  * <p>
  * Though collator attributes will be taken into consideration while 
  * performing matches, there are no APIs here for setting and getting the 
@@ -154,32 +159,60 @@ typedef struct UStringSearch UStringSearch;
 * @stable ICU 2.4
 */
 typedef enum {
-    /** Option for overlapping matches */
-    USEARCH_OVERLAP,
-    /** 
-     * Option for canonical matches. option 1 in header documentation.
-     * The default value will be USEARCH_OFF
+    /**
+     * Option for overlapping matches
+     * @stable ICU 2.4
      */
-    USEARCH_CANONICAL_MATCH,
+    USEARCH_OVERLAP = 0,
+#ifndef U_HIDE_DEPRECATED_API
+    /** 
+     * Option for canonical matches; option 1 in header documentation.
+     * The default value will be USEARCH_OFF.
+     * Note: Setting this option to USEARCH_ON currently has no effect on
+     * search behavior, and this option is deprecated. Instead, to control
+     * canonical match behavior, you must set UCOL_NORMALIZATION_MODE
+     * appropriately (to UCOL_OFF or UCOL_ON) in the UCollator used by
+     * the UStringSearch object.
+     * @see usearch_openFromCollator 
+     * @see usearch_getCollator
+     * @see usearch_setCollator
+     * @see ucol_getAttribute
+     * @deprecated ICU 53
+     */
+    USEARCH_CANONICAL_MATCH = 1,
+#endif  /* U_HIDE_DEPRECATED_API */
     /** 
      * Option to control how collation elements are compared.
      * The default value will be USEARCH_STANDARD_ELEMENT_COMPARISON.
      * @stable ICU 4.4
      */
-    USEARCH_ELEMENT_COMPARISON,
+    USEARCH_ELEMENT_COMPARISON = 2,
 
-    USEARCH_ATTRIBUTE_COUNT
+    /**
+     * Count of attribute types
+     * @stable ICU 2.4
+     */
+    USEARCH_ATTRIBUTE_COUNT = 3
 } USearchAttribute;
 
 /**
 * @stable ICU 2.4
 */
 typedef enum {
-    /** Default value for any USearchAttribute */
+    /** 
+     * Default value for any USearchAttribute
+     * @stable ICU 2.4
+     */
     USEARCH_DEFAULT = -1,
-    /** Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
+    /**
+     * Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH
+     * @stable ICU 2.4
+     */
     USEARCH_OFF, 
-    /** Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH */
+    /**
+     * Value for USEARCH_OVERLAP and USEARCH_CANONICAL_MATCH
+     * @stable ICU 2.4
+     */
     USEARCH_ON,
     /** 
      * Value (default) for USEARCH_ELEMENT_COMPARISON;
@@ -199,6 +232,11 @@ typedef enum {
      * the pattern will match a plain e or an e with any diacritic in the
      * searched text, but an e with diacritic in the pattern will only
      * match an e with the same diacritic in the searched text.
+     *
+     * This supports "asymmetric search" as described in
+     * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+     * UTS #10 Unicode Collation Algorithm</a>.
+     *
      * @stable ICU 4.4
      */
     USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD,
@@ -213,10 +251,21 @@ typedef enum {
      * in the pattern will match a plain e or an e with any diacritic in the
      * searched text, but an e with diacritic in the pattern will only
      * match an e with the same diacritic or a plain e in the searched text.
+     *
+     * This option is similar to "asymmetric search" as described in
+     * <a href="http://www.unicode.org/reports/tr10/#Asymmetric_Search">
+     * UTS #10 Unicode Collation Algorithm</a, but also allows unmarked
+     * characters in the searched text to match marked or unmarked versions of
+     * that character in the pattern.
+     *
      * @stable ICU 4.4
      */
     USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD,
 
+    /**
+     * Count of attribute values
+     * @stable ICU 2.4
+     */
     USEARCH_ATTRIBUTE_VALUE_COUNT
 } USearchAttributeValue;
 
@@ -586,8 +635,8 @@ U_STABLE int32_t U_EXPORT2 usearch_first(UStringSearch *strsrch,
                                            UErrorCode    *status);
 
 /**
-* Returns the first index greater than <tt>position</tt> at which the string 
-* text 
+* Returns the first index equal or greater than <tt>position</tt> at which
+* the string text
 * matches the search pattern. The iterator is adjusted so that its current 
 * index (as returned by <tt>usearch_getOffset</tt>) is the match position if 
 * one was found.
@@ -638,7 +687,12 @@ U_STABLE int32_t U_EXPORT2 usearch_last(UStringSearch *strsrch,
 * <p>
 * Search positions that may render incorrect results are highlighted in the
 * header comments. If position is less than or greater than the text range 
-* for searching, an U_INDEX_OUTOFBOUNDS_ERROR will be returned
+* for searching, an U_INDEX_OUTOFBOUNDS_ERROR will be returned.
+* <p>
+* When <tt>USEARCH_OVERLAP</tt> option is off, the last index of the
+* result match is always less than <tt>position</tt>.
+* When <tt>USERARCH_OVERLAP</tt> is on, the result match may span across
+* <tt>position</tt>.
 * @param strsrch search iterator data struct
 * @param position index position the search is to begin at
 * @param status for errors if it occurs
@@ -704,6 +758,7 @@ U_STABLE int32_t U_EXPORT2 usearch_previous(UStringSearch *strsrch,
 */
 U_STABLE void U_EXPORT2 usearch_reset(UStringSearch *strsrch);
 
+#ifndef U_HIDE_INTERNAL_API
 /**
   *  Simple forward search for the pattern, starting at a specified index,
   *     and using using a default set search options.
@@ -823,6 +878,7 @@ U_INTERNAL UBool U_EXPORT2 usearch_searchBackwards(UStringSearch *strsrch,
                                                    int32_t        *matchStart,
                                                    int32_t        *matchLimit,
                                                    UErrorCode     *status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif /* #if !UCONFIG_NO_COLLATION  && !UCONFIG_NO_BREAK_ITERATION */
 

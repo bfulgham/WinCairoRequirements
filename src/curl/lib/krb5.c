@@ -2,7 +2,7 @@
  *
  * Copyright (c) 1995, 1996, 1997, 1998, 1999 Kungliga Tekniska Högskolan
  * (Royal Institute of Technology, Stockholm, Sweden).
- * Copyright (c) 2004 - 2011 Daniel Stenberg
+ * Copyright (c) 2004 - 2015 Daniel Stenberg
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,15 +32,9 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.  */
 
-#include "setup.h"
+#include "curl_setup.h"
 
-#ifndef CURL_DISABLE_FTP
-#ifdef HAVE_GSSAPI
-
-#ifdef HAVE_OLD_GSSMIT
-#define GSS_C_NT_HOSTBASED_SERVICE gss_nt_service_name
-#define NCOMPAT 1
-#endif
+#if defined(HAVE_GSSAPI) && !defined(CURL_DISABLE_FTP)
 
 #ifdef HAVE_NETDB_H
 #include <netdb.h>
@@ -51,13 +45,12 @@
 #include "ftp.h"
 #include "curl_gssapi.h"
 #include "sendf.h"
-#include "krb4.h"
+#include "curl_sec.h"
+#include "warnless.h"
+#include "curl_printf.h"
+
+/* The last #include files should be: */
 #include "curl_memory.h"
-
-#define _MPRINTF_REPLACE /* use our functions only */
-#include <curl/mprintf.h>
-
-/* The last #include file should be: */
 #include "memdebug.h"
 
 #define LOCAL_ADDR (&conn->local_addr)
@@ -103,7 +96,7 @@ krb5_decode(void *app_data, void *buf, int len,
   }
 
   memcpy(buf, dec.value, dec.length);
-  len = dec.length;
+  len = curlx_uztosi(dec.length);
   gss_release_buffer(&min, &dec);
 
   return len;
@@ -120,17 +113,13 @@ krb5_overhead(void *app_data, int level, int len)
 }
 
 static int
-krb5_encode(void *app_data, const void *from, int length, int level, void **to,
-            struct connectdata *conn UNUSED_PARAM)
+krb5_encode(void *app_data, const void *from, int length, int level, void **to)
 {
   gss_ctx_id_t *context = app_data;
   gss_buffer_desc dec, enc;
   OM_uint32 maj, min;
   int state;
   int len;
-
-  /* shut gcc up */
-  conn = NULL;
 
   /* NOTE that the cast is safe, neither of the krb5, gnu gss and heimdal
    * libraries modify the input buffer in gss_seal()
@@ -151,7 +140,7 @@ krb5_encode(void *app_data, const void *from, int length, int level, void **to,
   if(!*to)
     return -1;
   memcpy(*to, enc.value, enc.length);
-  len = enc.length;
+  len = curlx_uztosi(enc.length);
   gss_release_buffer(&min, &enc);
   return len;
 }
@@ -235,9 +224,11 @@ krb5_auth(void *app_data, struct connectdata *conn)
                                       &min,
                                       context,
                                       gssname,
+                                      &Curl_krb5_mech_oid,
                                       &chan,
                                       gssresp,
                                       &output_buffer,
+                                      TRUE,
                                       NULL);
 
       if(gssresp) {
@@ -255,7 +246,8 @@ krb5_auth(void *app_data, struct connectdata *conn)
         result = Curl_base64_encode(data, (char *)output_buffer.value,
                                     output_buffer.length, &p, &base64_sz);
         if(result) {
-          Curl_infof(data,"base64-encoding: %s\n", curl_easy_strerror(result));
+          Curl_infof(data, "base64-encoding: %s\n",
+                     curl_easy_strerror(result));
           ret = AUTH_CONTINUE;
           break;
         }
@@ -287,7 +279,8 @@ krb5_auth(void *app_data, struct connectdata *conn)
                                       (unsigned char **)&_gssresp.value,
                                       &_gssresp.length);
           if(result) {
-            Curl_failf(data,"base64-decoding: %s", curl_easy_strerror(result));
+            Curl_failf(data, "base64-decoding: %s",
+                       curl_easy_strerror(result));
             ret = AUTH_CONTINUE;
             break;
           }
@@ -313,10 +306,13 @@ krb5_auth(void *app_data, struct connectdata *conn)
 
 static void krb5_end(void *app_data)
 {
-    OM_uint32 maj, min;
+    OM_uint32 min;
     gss_ctx_id_t *context = app_data;
     if(*context != GSS_C_NO_CONTEXT) {
-      maj = gss_delete_sec_context(&min, context, GSS_C_NO_BUFFER);
+#ifdef DEBUGBUILD
+      OM_uint32 maj =
+#endif
+      gss_delete_sec_context(&min, context, GSS_C_NO_BUFFER);
       DEBUGASSERT(maj == GSS_S_COMPLETE);
     }
 }
@@ -333,5 +329,4 @@ struct Curl_sec_client_mech Curl_krb5_client_mech = {
     krb5_decode
 };
 
-#endif /* HAVE_GSSAPI */
-#endif /* CURL_DISABLE_FTP */
+#endif /* HAVE_GSSAPI && !CURL_DISABLE_FTP */

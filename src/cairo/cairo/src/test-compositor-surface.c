@@ -87,7 +87,8 @@ test_compositor_surface_create (const cairo_compositor_t *compositor,
     _cairo_surface_init (&surface->base.base,
 			 &test_compositor_surface_backend,
 			 NULL, /* device */
-			 content);
+			 content,
+			 FALSE); /* is_vector */
     _cairo_image_surface_init (&surface->base, pixman_image, pixman_format);
 
     surface->base.compositor = compositor;
@@ -145,6 +146,8 @@ test_compositor_surface_stroke (void				*_surface,
 				const cairo_clip_t		*clip)
 {
     test_compositor_surface_t *surface = _surface;
+    if (antialias == CAIRO_ANTIALIAS_DEFAULT)
+	antialias = CAIRO_ANTIALIAS_BEST;
     return _cairo_compositor_stroke (surface->base.compositor,
 				     _surface, op, source,
 				     path, style, ctm, ctm_inverse,
@@ -163,6 +166,8 @@ test_compositor_surface_fill (void			*_surface,
 			      const cairo_clip_t	*clip)
 {
     test_compositor_surface_t *surface = _surface;
+    if (antialias == CAIRO_ANTIALIAS_DEFAULT)
+	antialias = CAIRO_ANTIALIAS_BEST;
     return _cairo_compositor_fill (surface->base.compositor,
 				   _surface, op, source,
 				   path, fill_rule, tolerance, antialias,

@@ -213,7 +213,11 @@ check_bbox (cairo_test_context_t *ctx,
     bbox_pass = FALSE;
     page_bbox_pass = FALSE;
     while (!feof(f)) {
-	fgets (buf, sizeof(buf), f);
+	if (fgets (buf, sizeof(buf), f) == (char *)EOF) {
+	    cairo_test_log (ctx, "Error: Unexpected EOF in %s\n",
+			    filename);
+	    break;
+	}
 
 	if (strncmp (buf, DOCUMENT_BBOX, strlen (DOCUMENT_BBOX)) == 0) {
 	    ret = sscanf (buf+strlen (DOCUMENT_BBOX), "%d %d %d %d", &llx, &lly, &urx, &ury);
@@ -239,31 +243,13 @@ check_bbox (cairo_test_context_t *ctx,
     return TRUE;
 }
 
-static cairo_bool_t
-_cairo_test_mkdir (const char *path)
-{
-#if ! HAVE_MKDIR
-    return FALSE;
-#elif HAVE_MKDIR == 1
-    if (mkdir (path) == 0)
-	return TRUE;
-#elif HAVE_MKDIR == 2
-    if (mkdir (path, 0770) == 0)
-	return TRUE;
-#else
-#error Bad value for HAVE_MKDIR
-#endif
-
-    return errno == EEXIST;
-}
-
 static cairo_test_status_t
 preamble (cairo_test_context_t *ctx)
 {
     cairo_t *cr;
     cairo_test_status_t ret = CAIRO_TEST_UNTESTED;
-    const char *path = _cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
     unsigned int i;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
     for (i = 0; i < ctx->num_targets; i++) {
 	const cairo_boilerplate_target_t *target = ctx->targets_to_test[i];

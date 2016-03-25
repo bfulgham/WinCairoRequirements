@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2008, International Business Machines
+* Copyright (C) 1999-2014, International Business Machines
 * Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -277,6 +277,7 @@ private:
         void*   pointer;
     };
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Return a token containing an integer.
      * @return a token containing an integer.
@@ -290,6 +291,7 @@ private:
      * @internal
      */
     inline static Token pointerToken(void*);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * A function that creates and returns a Transliterator.  When
@@ -495,8 +497,7 @@ public:
      * for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const }.
+     * @param index an array of three integers.  See {@link #transliterate(Replaceable&, UTransPosition&, const UnicodeString*, UErrorCode&) const }.
      * @param status    Output param to filled in with a success or an error.
      * @see #transliterate(Replaceable, int[], String)
      * @stable ICU 2.0
@@ -652,7 +653,7 @@ private:
      *
      * <p>If this transliterator has a filter, break up the input text into runs
      * of unfiltered characters.  Pass each run to
-     * <subclass>.handleTransliterate().
+     * subclass.handleTransliterate().
      *
      * <p>In incremental mode, if rollback is TRUE, perform a special
      * incremental procedure in which several passes are made over the input
@@ -964,6 +965,11 @@ public:
     /**
      * Registers a factory function that creates transliterators of
      * a given ID.
+     *
+     * Because ICU may choose to cache Transliterators internally, this must
+     * be called at application startup, prior to any calls to
+     * Transliterator::createXXX to avoid undefined behavior.
+     *
      * @param id the ID being registered
      * @param factory a function pointer that will be copied and
      * called later when the given ID is passed to createInstance()
@@ -985,6 +991,10 @@ public:
      *
      * After this call the Transliterator class owns the adoptedObj
      * and will delete it.
+     *
+     * Because ICU may choose to cache Transliterators internally, this must
+     * be called at application startup, prior to any calls to
+     * Transliterator::createXXX to avoid undefined behavior.
      *
      * @param adoptedObj an instance of subclass of
      * <code>Transliterator</code> that defines <tt>clone()</tt>
@@ -1014,14 +1024,15 @@ public:
 
 protected:
 
+#ifndef U_HIDE_INTERNAL_API
     /**
-     * @internal
      * @param id the ID being registered
      * @param factory a function pointer that will be copied and
      * called later when the given ID is passed to createInstance()
      * @param context a context pointer that will be stored and
      * later passed to the factory function when an ID matching
      * the registration ID is being instantiated with this factory.
+     * @internal
      */
     static void _registerFactory(const UnicodeString& id,
                                  Factory factory,
@@ -1073,6 +1084,7 @@ protected:
     static void _registerSpecialInverse(const UnicodeString& target,
                                         const UnicodeString& inverseTarget,
                                         UBool bidirectional);
+#endif  /* U_HIDE_INTERNAL_API */
 
 public:
 
@@ -1081,6 +1093,10 @@ public:
      * a system transliterator or a user transliterator or class.
      * Any attempt to construct an unregistered transliterator based
      * on its ID will fail.
+     *
+     * Because ICU may choose to cache Transliterators internally, this should
+     * be called during application shutdown, after all calls to
+     * Transliterator::createXXX to avoid undefined behavior.
      *
      * @param ID the ID of the transliterator or class
      * @return the <code>Object</code> that was registered with
@@ -1178,6 +1194,7 @@ public:
 
 protected:
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Non-mutexed internal method
      * @internal
@@ -1220,6 +1237,7 @@ protected:
                                                const UnicodeString& source,
                                                const UnicodeString& target,
                                                UnicodeString& result);
+#endif  /* U_HIDE_INTERNAL_API */
 
 protected:
 
@@ -1266,6 +1284,7 @@ private:
     static UBool initializeRegistry(UErrorCode &status);
 
 public:
+#ifndef U_HIDE_OBSOLETE_API
     /**
      * Return the number of IDs currently registered with the system.
      * To retrieve the actual IDs, call getAvailableID(i) with
@@ -1288,6 +1307,7 @@ public:
      * may become invalid if another thread calls unregister
      */
     static const UnicodeString& U_EXPORT2 getAvailableID(int32_t index);
+#endif  /* U_HIDE_OBSOLETE_API */
 };
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {
@@ -1301,6 +1321,7 @@ inline void Transliterator::setID(const UnicodeString& id) {
     ID.truncate(ID.length()-1);
 }
 
+#ifndef U_HIDE_INTERNAL_API
 inline Transliterator::Token Transliterator::integerToken(int32_t i) {
     Token t;
     t.integer = i;
@@ -1312,6 +1333,7 @@ inline Transliterator::Token Transliterator::pointerToken(void* p) {
     t.pointer = p;
     return t;
 }
+#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_END
 

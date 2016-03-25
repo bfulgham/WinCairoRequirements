@@ -244,6 +244,12 @@ cairo_egl_device_create (EGLDisplay dpy, EGLContext egl)
 	return _cairo_gl_context_create_in_error (status);
     }
 
+    /* Tune the default VBO size to reduce overhead on embedded devices.
+     * This smaller size means that flushing needs to be done more often,
+     * but it is less demanding of scarce memory on embedded devices.
+     */
+    ctx->base.vbo_size = 16*1024;
+
     eglMakeCurrent (dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 
     return &ctx->base.base;
@@ -275,4 +281,37 @@ cairo_gl_surface_create_for_egl (cairo_device_t	*device,
     surface->egl = egl;
 
     return &surface->base.base;
+}
+
+static cairo_bool_t is_egl_device (cairo_device_t *device)
+{
+    return (device->backend != NULL &&
+	    device->backend->type == CAIRO_DEVICE_TYPE_GL);
+}
+
+static cairo_egl_context_t *to_egl_context (cairo_device_t *device)
+{
+    return (cairo_egl_context_t *) device;
+}
+
+EGLDisplay
+cairo_egl_device_get_display (cairo_device_t *device)
+{
+    if (! is_egl_device (device)) {
+	_cairo_error_throw (CAIRO_STATUS_DEVICE_TYPE_MISMATCH);
+	return EGL_NO_DISPLAY;
+    }
+
+    return to_egl_context (device)->display;
+}
+
+cairo_public EGLContext
+cairo_egl_device_get_context (cairo_device_t *device)
+{
+    if (! is_egl_device (device)) {
+	_cairo_error_throw (CAIRO_STATUS_DEVICE_TYPE_MISMATCH);
+	return EGL_NO_CONTEXT;
+    }
+
+    return to_egl_context (device)->context;
 }

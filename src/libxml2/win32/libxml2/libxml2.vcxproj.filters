@@ -44,6 +44,7 @@
     <ClCompile Include="..\..\xmlwriter.c" />
     <ClCompile Include="..\..\xpath.c" />
     <ClCompile Include="..\..\xpointer.c" />
+    <ClCompile Include="..\..\buf.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

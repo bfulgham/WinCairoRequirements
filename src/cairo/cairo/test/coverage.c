@@ -99,6 +99,54 @@ rectangles (cairo_t *cr, int width, int height)
 }
 
 static cairo_test_status_t
+rhombus (cairo_t *cr, int width, int height)
+{
+    int x, y;
+
+    cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+    cairo_paint (cr);
+
+#if GENERATE_REFERENCE
+    for (y = 0; y < WIDTH; y++) {
+	for (x = 0; x < WIDTH; x++) {
+	    cairo_set_source_rgba (cr, 1, 1, 1,
+				   x * y / (2. * WIDTH * WIDTH));
+	    cairo_rectangle (cr, 2*x, 2*y, 2, 2);
+	    cairo_fill (cr);
+	}
+    }
+#else
+    cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+    cairo_set_source_rgb (cr, 1, 1, 1);
+
+    for (y = 0; y < WIDTH; y++) {
+	double yf = y / (double) WIDTH;
+	for (x = 0; x < WIDTH; x++) {
+	    double xf = x / (double) WIDTH;
+
+	    cairo_move_to (cr,
+			   2*x + 1 - xf,
+			   2*y + 1);
+	    cairo_line_to (cr,
+			   2*x + 1,
+			   2*y + 1 - yf);
+	    cairo_line_to (cr,
+			   2*x + 1 + xf,
+			   2*y + 1);
+	    cairo_line_to (cr,
+			   2*x + 1,
+			   2*y + 1 + yf);
+	    cairo_close_path (cr);
+	}
+    }
+
+    cairo_fill (cr);
+#endif
+
+    return CAIRO_TEST_SUCCESS;
+}
+
+static cairo_test_status_t
 intersecting_quads (cairo_t *cr, int width, int height)
 {
     int x, y, channel;
@@ -155,7 +203,7 @@ intersecting_triangles (cairo_t *cr, int width, int height)
 
 #if GENERATE_REFERENCE
     for (x = 0; x < WIDTH; x++) {
-	cairo_set_source_rgba (cr, 1, 1, 1, x * 0.75 / WIDTH);
+	cairo_set_source_rgba (cr, 1, 1, 1, x * x * 0.75 / (WIDTH * WIDTH));
 	cairo_rectangle (cr, x, 0, 1, HEIGHT);
 	cairo_fill (cr);
     }
@@ -232,6 +280,53 @@ triangles (cairo_t *cr, int width, int height)
 	    }
 	}
 	cairo_fill (cr);
+    }
+#endif
+
+    return CAIRO_TEST_SUCCESS;
+}
+
+static cairo_test_status_t
+abutting (cairo_t *cr, int width, int height)
+{
+    int x, y;
+
+    cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+    cairo_paint (cr);
+
+    cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.75);
+
+#if GENERATE_REFERENCE
+    cairo_paint (cr);
+#else
+    cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
+
+    for (y = 0; y < 16; y++) {
+	for (x = 0; x < 16; x++) {
+	    double theta = (y * 16 + x) * M_PI / 512;
+	    double cx = 16 * cos (theta) + x * 16;
+	    double cy = 16 * sin (theta) + y * 16;
+
+	    cairo_move_to (cr, x * 16, y * 16);
+	    cairo_line_to (cr, cx, cy);
+	    cairo_line_to (cr, (x + 1) * 16, y * 16);
+	    cairo_fill (cr);
+
+	    cairo_move_to (cr, (x + 1) * 16, y * 16);
+	    cairo_line_to (cr, cx, cy);
+	    cairo_line_to (cr, (x + 1) * 16, (y + 1) * 16);
+	    cairo_fill (cr);
+
+	    cairo_move_to (cr, (x + 1) * 16, (y + 1) * 16);
+	    cairo_line_to (cr, cx, cy);
+	    cairo_line_to (cr, x * 16, (y + 1) * 16);
+	    cairo_fill (cr);
+
+	    cairo_move_to (cr, x * 16, (y + 1) * 16);
+	    cairo_line_to (cr, cx, cy);
+	    cairo_line_to (cr, x * 16, y * 16);
+	    cairo_fill (cr);
+	}
     }
 #endif
 
@@ -361,38 +456,51 @@ row_triangles (cairo_t *cr, int width, int height)
 CAIRO_TEST (coverage_rectangles,
 	    "Check the fidelity of the rasterisation.",
 	    NULL, /* keywords */
-	    "target=raster slow", /* requirements */
+	    "target=raster", /* requirements */
 	    WIDTH, HEIGHT,
 	    NULL, rectangles)
+
+CAIRO_TEST (coverage_rhombus,
+	    "Check the fidelity of the rasterisation.",
+	    NULL, /* keywords */
+	    "target=raster", /* requirements */
+	    2*WIDTH, 2*WIDTH,
+	    NULL, rhombus)
 
 CAIRO_TEST (coverage_intersecting_quads,
 	    "Check the fidelity of the rasterisation.",
 	    NULL, /* keywords */
-	    "target=raster slow", /* requirements */
+	    "target=raster", /* requirements */
 	    WIDTH, HEIGHT,
 	    NULL, intersecting_quads)
 
 CAIRO_TEST (coverage_intersecting_triangles,
 	    "Check the fidelity of the rasterisation.",
 	    NULL, /* keywords */
-	    "target=raster slow", /* requirements */
+	    "target=raster", /* requirements */
 	    WIDTH, HEIGHT,
 	    NULL, intersecting_triangles)
 CAIRO_TEST (coverage_row_triangles,
 	    "Check the fidelity of the rasterisation.",
 	    NULL, /* keywords */
-	    "target=raster slow", /* requirements */
+	    "target=raster", /* requirements */
 	    WIDTH, HEIGHT,
 	    NULL, row_triangles)
 CAIRO_TEST (coverage_column_triangles,
 	    "Check the fidelity of the rasterisation.",
 	    NULL, /* keywords */
-	    "target=raster slow", /* requirements */
+	    "target=raster", /* requirements */
 	    WIDTH, HEIGHT,
 	    NULL, column_triangles)
 CAIRO_TEST (coverage_triangles,
 	    "Check the fidelity of the rasterisation.",
 	    NULL, /* keywords */
-	    "target=raster slow", /* requirements */
+	    "target=raster", /* requirements */
 	    WIDTH, HEIGHT,
 	    NULL, triangles)
+CAIRO_TEST (coverage_abutting,
+	    "Check the fidelity of the rasterisation.",
+	    NULL, /* keywords */
+	    "target=raster", /* requirements */
+	    16*16, 16*16,
+	    NULL, abutting)

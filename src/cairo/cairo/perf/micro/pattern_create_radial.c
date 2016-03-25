@@ -28,8 +28,8 @@
  * presents a somewhat realistic use-case (although the RADIALS_COUNT
  * isn't very realistic).
  */
-#include <time.h>
 #include "cairo-perf.h"
+#include <time.h>
 
 #define RADIALS_COUNT (10000)
 

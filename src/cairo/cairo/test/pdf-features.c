@@ -23,11 +23,11 @@
  * Author: Carl D. Worth <cworth@cworth.org>
  */
 
+#include "cairo-test.h"
+
 #include <stdio.h>
 #include <cairo.h>
 #include <cairo-pdf.h>
-
-#include "cairo-test.h"
 
 /* This test exists to test the various features of cairo-pdf.h.
  *
@@ -39,6 +39,7 @@
 #define INCHES_TO_POINTS(in) ((in) * 72.0)
 #define MM_TO_POINTS(mm) ((mm) / 25.4 * 72.0)
 #define TEXT_SIZE 12
+#define BASENAME "pdf-features.out"
 
 static struct {
     const char *page_size;
@@ -84,14 +85,17 @@ static struct {
 static cairo_test_status_t
 preamble (cairo_test_context_t *ctx)
 {
-    const char *filename = "pdf-features.out.pdf";
     cairo_surface_t *surface;
     cairo_t *cr;
     cairo_status_t status;
     size_t i;
+    char *filename;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
     if (! cairo_test_is_target_enabled (ctx, "pdf"))
 	return CAIRO_TEST_UNTESTED;
+
+    xasprintf (&filename, "%s/%s.pdf", path, BASENAME);
 
     /* The initial size passed here is the default size that will be
      * inheritable by each page. That is, any page for which this
@@ -124,6 +128,7 @@ preamble (cairo_test_context_t *ctx)
 
     cairo_destroy (cr);
     cairo_surface_destroy (surface);
+    free (filename);
 
     if (status) {
 	cairo_test_log (ctx, "Failed to create pdf surface for file %s: %s\n",

@@ -52,6 +52,8 @@
 #include "cairo-traps-private.h"
 #include "cairo-tristrip-private.h"
 
+#include "cairo-pixman-private.h"
+
 static pixman_image_t *
 to_pixman_image (cairo_surface_t *s)
 {
@@ -256,9 +258,9 @@ _pixman_operator (cairo_operator_t op)
 }
 
 static cairo_bool_t
-fill_reduces_to_source (cairo_operator_t op,
-			const cairo_color_t *color,
-			cairo_image_surface_t *dst)
+__fill_reduces_to_source (cairo_operator_t op,
+			  const cairo_color_t *color,
+			  const cairo_image_surface_t *dst)
 {
     if (op == CAIRO_OPERATOR_SOURCE || op == CAIRO_OPERATOR_CLEAR)
 	return TRUE;
@@ -266,6 +268,19 @@ fill_reduces_to_source (cairo_operator_t op,
 	return TRUE;
     if (dst->base.is_clear)
 	return op == CAIRO_OPERATOR_OVER || op == CAIRO_OPERATOR_ADD;
+
+    return FALSE;
+}
+
+static cairo_bool_t
+fill_reduces_to_source (cairo_operator_t op,
+			const cairo_color_t *color,
+			const cairo_image_surface_t *dst,
+			uint32_t *pixel)
+{
+    if (__fill_reduces_to_source (op, color, dst)) {
+	return color_to_pixel (color, dst->pixman_format, pixel);
+    }
 
     return FALSE;
 }
@@ -283,9 +298,7 @@ fill_rectangles (void			*_dst,
 
     TRACE ((stderr, "%s\n", __FUNCTION__));
 
-    if (fill_reduces_to_source (op, color, dst) &&
-	color_to_pixel (color, dst->pixman_format, &pixel))
-    {
+    if (fill_reduces_to_source (op, color, dst, &pixel)) {
 	for (i = 0; i < num_rects; i++) {
 	    pixman_fill ((uint32_t *) dst->data, dst->stride / sizeof (uint32_t),
 			 PIXMAN_FORMAT_BPP (dst->pixman_format),
@@ -293,10 +306,10 @@ fill_rectangles (void			*_dst,
 			 rects[i].width, rects[i].height,
 			 pixel);
 	}
-    }
-    else
-    {
+    } else {
 	pixman_image_t *src = _pixman_image_for_color (color);
+	if (unlikely (src == NULL))
+	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
 
 	op = _pixman_operator (op);
 	for (i = 0; i < num_rects; i++) {
@@ -327,9 +340,7 @@ fill_boxes (void		*_dst,
 
     TRACE ((stderr, "%s x %d\n", __FUNCTION__, boxes->num_boxes));
 
-    if (fill_reduces_to_source (op, color, dst) &&
-	color_to_pixel (color, dst->pixman_format, &pixel))
-    {
+    if (fill_reduces_to_source (op, color, dst, &pixel)) {
 	for (chunk = &boxes->chunks; chunk; chunk = chunk->next) {
 	    for (i = 0; i < chunk->count; i++) {
 		int x = _cairo_fixed_integer_part (chunk->base[i].p1.x);
@@ -346,6 +357,8 @@ fill_boxes (void		*_dst,
     else
     {
 	pixman_image_t *src = _pixman_image_for_color (color);
+	if (unlikely (src == NULL))
+	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
 
 	op = _pixman_operator (op);
 	for (chunk = &boxes->chunks; chunk; chunk = chunk->next) {
@@ -498,6 +511,8 @@ composite_boxes (void			*_dst,
 	    op = PIXMAN_OP_LERP_CLEAR;
 #else
 	    free_src = src = _pixman_image_for_color (CAIRO_COLOR_WHITE);
+	    if (unlikely (src == NULL))
+		return _cairo_error (CAIRO_STATUS_NO_MEMORY);
 	    op = PIXMAN_OP_OUT_REVERSE;
 #endif
 	} else if (op == CAIRO_OPERATOR_SOURCE) {
@@ -634,10 +649,17 @@ composite_traps (void			*_dst,
 {
     cairo_image_surface_t *dst = (cairo_image_surface_t *) _dst;
     cairo_image_source_t *src = (cairo_image_source_t *) abstract_src;
+    cairo_int_status_t status;
     pixman_image_t *mask;
     pixman_format_code_t format;
 
     TRACE ((stderr, "%s\n", __FUNCTION__));
+
+    /* pixman doesn't eliminate self-intersecting trapezoids/edges */
+    status = _cairo_bentley_ottmann_tessellate_traps (traps,
+						      CAIRO_FILL_RULE_WINDING);
+    if (status != CAIRO_INT_STATUS_SUCCESS)
+	    return status;
 
     /* Special case adding trapezoids onto a mask surface; we want to avoid
      * creating an intermediate temporary mask unnecessarily.
@@ -674,6 +696,7 @@ composite_traps (void			*_dst,
     return  CAIRO_STATUS_SUCCESS;
 }
 
+#if PIXMAN_VERSION >= PIXMAN_VERSION_ENCODE(0,22,0)
 static void
 set_point (pixman_point_fixed_t *p, cairo_point_t *c)
 {
@@ -722,6 +745,31 @@ composite_tristrip (void			*_dst,
     if (strip->num_points < 3)
 	return CAIRO_STATUS_SUCCESS;
 
+    if (1) { /* pixman doesn't eliminate self-intersecting triangles/edges */
+	    cairo_int_status_t status;
+	    cairo_traps_t traps;
+	    int n;
+
+	    _cairo_traps_init (&traps);
+	    for (n = 0; n < strip->num_points; n++) {
+		    cairo_point_t p[4];
+
+		    p[0] = strip->points[0];
+		    p[1] = strip->points[1];
+		    p[2] = strip->points[2];
+		    p[3] = strip->points[0];
+
+		    _cairo_traps_tessellate_convex_quad (&traps, p);
+	    }
+	    status = composite_traps (_dst, op, abstract_src,
+				      src_x, src_y,
+				      dst_x, dst_y,
+				      extents, antialias, &traps);
+	    _cairo_traps_fini (&traps);
+
+	    return status;
+    }
+
     format = antialias == CAIRO_ANTIALIAS_NONE ? PIXMAN_a1 : PIXMAN_a8;
     if (dst->pixman_format == format &&
 	(abstract_src == NULL ||
@@ -749,6 +797,7 @@ composite_tristrip (void			*_dst,
 
     return  CAIRO_STATUS_SUCCESS;
 }
+#endif
 
 static cairo_int_status_t
 check_composite_glyphs (const cairo_composite_rectangles_t *extents,
@@ -1215,7 +1264,9 @@ _cairo_image_traps_compositor_get (void)
 	//compositor.check_composite_traps = check_composite_traps;
 	compositor.composite_traps = composite_traps;
 	//compositor.check_composite_tristrip = check_composite_traps;
+#if PIXMAN_VERSION >= PIXMAN_VERSION_ENCODE(0,22,0)
 	compositor.composite_tristrip = composite_tristrip;
+#endif
 	compositor.check_composite_glyphs = check_composite_glyphs;
 	compositor.composite_glyphs = composite_glyphs;
     }
@@ -1238,7 +1289,7 @@ _cairo_image_mask_compositor_get (void)
 	compositor.draw_image_boxes = draw_image_boxes;
 	compositor.fill_rectangles = fill_rectangles;
 	compositor.fill_boxes = fill_boxes;
-	//compositor.check_composite = check_composite;
+	compositor.check_composite = check_composite;
 	compositor.composite = composite;
 	//compositor.lerp = lerp;
 	//compositor.check_composite_boxes = check_composite_boxes;
@@ -1548,7 +1599,7 @@ typedef struct _cairo_image_span_renderer {
 	} mask;
     } u;
     uint8_t _buf[0];
-#define SZ_BUF (sizeof (cairo_abstract_span_renderer_t) - sizeof (cairo_image_span_renderer_t))
+#define SZ_BUF (int)(sizeof (cairo_abstract_span_renderer_t) - sizeof (cairo_image_span_renderer_t))
 } cairo_image_span_renderer_t;
 COMPILE_TIME_ASSERT (sizeof (cairo_image_span_renderer_t) <= sizeof (cairo_abstract_span_renderer_t));
 
@@ -2010,8 +2061,7 @@ mono_renderer_init (cairo_image_span_renderer_t	*r,
 	if (composite->op == CAIRO_OPERATOR_CLEAR)
 	    color = CAIRO_COLOR_TRANSPARENT;
 
-	if (fill_reduces_to_source (composite->op, color, dst) &&
-	    color_to_pixel (color, dst->pixman_format, &r->u.fill.pixel)) {
+	if (fill_reduces_to_source (composite->op, color, dst, &r->u.fill.pixel)) {
 	    /* Use plain C for the fill operations as the span length is
 	     * typically small, too small to payback the startup overheads of
 	     * using SSE2 etc.
@@ -2192,10 +2242,10 @@ _fill_xrgb32_lerp_opaque_spans (void *abstract_renderer, int y, int h,
 				     spans[0].x, y, len, 1, r->u.fill.pixel);
 		    } else {
 			uint32_t *d = (uint32_t*)(r->u.fill.data + r->u.fill.stride*y + spans[0].x*4);
-			while (len--)
+			while (len-- > 0)
 			    *d++ = r->u.fill.pixel;
 		    }
-		} else while (len--) {
+		} else while (len-- > 0) {
 		    *d = lerp8x4 (r->u.fill.pixel, a, *d);
 		    d++;
 		}
@@ -2755,8 +2805,7 @@ inplace_renderer_init (cairo_image_span_renderer_t	*r,
 	if (composite->op == CAIRO_OPERATOR_CLEAR)
 	    color = CAIRO_COLOR_TRANSPARENT;
 
-	if (fill_reduces_to_source (composite->op, color, dst) &&
-	    color_to_pixel (color, dst->pixman_format, &r->u.fill.pixel)) {
+	if (fill_reduces_to_source (composite->op, color, dst, &r->u.fill.pixel)) {
 	    /* Use plain C for the fill operations as the span length is
 	     * typically small, too small to payback the startup overheads of
 	     * using SSE2 etc.
@@ -3028,11 +3077,12 @@ span_renderer_fini (cairo_abstract_span_renderer_t *_r,
 
     TRACE ((stderr, "%s\n", __FUNCTION__));
 
-    if (likely (status == CAIRO_INT_STATUS_SUCCESS && r->bpp == 0)) {
-	const cairo_composite_rectangles_t *composite = r->composite;
-
+    if (likely (status == CAIRO_INT_STATUS_SUCCESS)) {
 	if (r->base.finish)
 	    r->base.finish (r);
+    }
+    if (likely (status == CAIRO_INT_STATUS_SUCCESS && r->bpp == 0)) {
+	const cairo_composite_rectangles_t *composite = r->composite;
 
 	pixman_image_composite32 (r->op, r->src, r->mask,
 				  to_pixman_image (composite->surface),

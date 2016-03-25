@@ -39,22 +39,21 @@ header files are thus altered during build process to use this pragma, in
 order to force libcurl enums of being type int (the pragma disposition in use
 before inclusion is restored before resuming the including unit compilation).
 
-  Three SSL implementations were present in libcurl. Nevertheless, none of them
-is available on OS/400. To support SSL on OS/400, a fourth implementation has
-been added (qssl.[ch]). There is no way to have different certificate stores
-for CAs and for personal/application certificates/key. More, the SSL context
-may be defined as an application identifier in the main certificate store,
-or as a keyring file. As a consequence, the meaning of some fields have been
-slightly altered:
-_ The "certificate identifier" is taken from CURLOPT_SSLCERT if defined, else
-from CURLOPT_CAINFO.
-_ The certificate identifier is then used as an application identifier in the
-main certificate store. If successful, this context is used.
-_ If the previous step failed, the certificate identifier is used as the file
-name of a keyring. CURLOPT_KEYPASSWD is used here as the keyring password.
-_ The default ca-bundle (CURLOPT_CAINFO) is set to the main certificate store's
-keyring file name: this allows to use the system global CAs by default. (In that
-case, the keyring password is safely recovered from the system... IBM dixit!)
+  Secure socket layer is provided by the IBM GSKit API: unlike other SSL
+implementations, GSKit is based on "certificate stores" or keyrings
+rather than individual certificate/key files. Certificate stores, as well as
+"certificate labels" are managed by external IBM-defined applications.
+  There are two ways to specify an SSL context:
+- By an application identifier.
+- By a keyring file pathname and (optionally) certificate label.
+  To identify an SSL context by application identifier, use option
+SETOPT_SSLCERT to specify the application identifier.
+  To address an SSL context by keyring and certificate label, use CURLOPT_CAINFO
+to set-up the keyring pathname, CURLOPT_SSLCERT to define the certificate label
+(omitting it will cause the default certificate in keyring to be used) and
+CURLOPT_KEYPASSWD to give the keyring password. If SSL is used without
+defining any of these options, the default (i.e.: system) keyring is used for
+server certificate validation.
 
   Non-standard EBCDIC wrapper prototypes are defined in an additional header
 file: ccsidcurl.h. These should be self-explanatory to an OS/400-aware
@@ -73,6 +72,8 @@ options:
         CURLOPT_COPYPOSTFIELDS
         CURLOPT_CRLFILE
         CURLOPT_CUSTOMREQUEST
+        CURLOPT_DEFAULT_PROTOCOL
+        CURLOPT_DNS_SERVERS
         CURLOPT_EGDSOCKET
         CURLOPT_ENCODING
         CURLOPT_FTP_ACCOUNT
@@ -82,20 +83,25 @@ options:
         CURLOPT_ISSUERCERT
         CURLOPT_KEYPASSWD
         CURLOPT_KRBLEVEL
+        CURLOPT_LOGIN_OPTIONS
         CURLOPT_MAIL_FROM
+        CURLOPT_MAIL_AUTH
         CURLOPT_NETRC_FILE
         CURLOPT_NOPROXY
         CURLOPT_PASSWORD
+        CURLOPT_PINNEDPUBLICKEY
         CURLOPT_PROXY
         CURLOPT_PROXYPASSWORD
         CURLOPT_PROXYUSERNAME
         CURLOPT_PROXYUSERPWD
+        CURLOPT_PROXY_SERVICE_NAME
         CURLOPT_RANDOM_FILE
         CURLOPT_RANGE
         CURLOPT_REFERER
         CURLOPT_RTSP_SESSION_UID
         CURLOPT_RTSP_STREAM_URI
         CURLOPT_RTSP_TRANSPORT
+        CURLOPT_SERVICE_NAME
         CURLOPT_SOCKS5_GSSAPI_SERVICE
         CURLOPT_SSH_HOST_PUBLIC_KEY_MD5 Note: SSH not available on OS400.
         CURLOPT_SSH_KNOWNHOSTS          Note: SSH not available on OS400.
@@ -110,10 +116,12 @@ options:
         CURLOPT_TLSAUTH_PASSWORD
         CURLOPT_TLSAUTH_TYPE
         CURLOPT_TLSAUTH_USERNAME
+        CURLOPT_UNIX_SOCKET_PATH
         CURLOPT_URL
         CURLOPT_USERAGENT
         CURLOPT_USERNAME
         CURLOPT_USERPWD
+        CURLOPT_XOAUTH2_BEARER
   Else it is the same as for curl_easy_setopt().
   Note that CURLOPT_ERRORBUFFER is not in the list above, since it gives the
 address of an (empty) character buffer, not the address of a string.
@@ -141,7 +149,7 @@ parameter/array boundary.
   Please note that CURLFORM_PTRCONTENTS and CURLFORM_BUFFERPTR are considered
 unconvertible strings and thus are NOT followed by a CCSID.
 
-_ curl_easy_getinfo_ccsid
+_ curl_easy_getinfo_ccsid()
   The following options are followed by a 'char * *' and a CCSID. Unlike
 curl_easy_getinfo(), the value returned in the pointer should be freed after
 use:
@@ -152,7 +160,23 @@ use:
         CURLINFO_PRIMARY_IP
         CURLINFO_RTSP_SESSION_ID
         CURLINFO_LOCAL_IP
+  Likewise, the following options are followed by a struct curl_slist * * and a
+CCSID.
+        CURLINFO_SSL_ENGINES
+        CURLINFO_COOKIELIST
+Lists returned should be released with curl_slist_free_all() after use.
+  Option CURLINFO_CERTINFO is followed by a struct curl_certinfo * * and a
+CCSID. Returned structures sould be free'ed using curl_certinfo_free_all() after
+use.
   Other options are processed like in curl_easy_getinfo().
+
+_ curl_pushheader_bynum_cssid() and curl_pushheader_byname_ccsid()
+  Although the prototypes are self-explanatory, the returned string pointer
+should be freed after use, as opposite to the non-ccsid versions of these
+procedures.
+  Please note that HTTP2 is not (yet) implemented on OS/400, thus these
+functions will always return NULL.
+
 
   Standard compilation environment does support neither autotools nor make;
 in fact, very few common utilities are available. As a consequence, the
@@ -250,14 +274,14 @@ _ Do not use original source include files unless you know what you are doing.
 ILE/RPG support:
 
   Since 95% of the OS/400 programmers use ILE/RPG exclusively, a definition
-  /COPY member is provided for this language. To include all libcurl
+  /INCLUDE member is provided for this language. To include all libcurl
   definitions in an ILE/RPG module, line
 
      h bnddir('CURL/CURL')
 
 must figure in the program header, and line
 
-     d/copy curl/h,curl.inc
+     d/include curl/h,curl.inc
 
 in the global data section of the module's source code.
 

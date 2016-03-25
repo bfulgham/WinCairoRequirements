@@ -11,15 +11,16 @@ dnl MAYBE_WARN in an ignorable way (like adding whitespace)
 # -Wlogical-op causes too much noise from strcmp("literal", str)
 
 MAYBE_WARN="-Wall -Wextra \
--Wold-style-definition -Wdeclaration-after-statement \
 -Wmissing-declarations -Werror-implicit-function-declaration \
--Wnested-externs -Wpointer-arith -Wwrite-strings \
--Wsign-compare -Wstrict-prototypes -Wmissing-prototypes \
--Wpacked -Wswitch-enum -Wmissing-format-attribute \
--Wbad-function-cast -Wvolatile-register-var \
+-Wpointer-arith -Wwrite-strings -Wsign-compare -Wpacked \
+-Wswitch-enum -Wmissing-format-attribute -Wvolatile-register-var \
 -Wstrict-aliasing=2 -Winit-self -Wunsafe-loop-optimizations \
 -Wno-missing-field-initializers -Wno-unused-parameter \
 -Wno-attributes -Wno-long-long -Winline"
+
+MAYBE_C_SPECIFIC_WARN="-Wold-style-definition \
+-Wdeclaration-after-statement -Wstrict-prototypes \
+-Wmissing-prototypes -Wbad-function-cast -Wnested-externs"
 
 # New -Wno options should be added here
 # gcc-4.4 and later accept every -Wno- option but may complain later that this
@@ -35,17 +36,6 @@ MAYBE_WARN="$MAYBE_WARN -erroff=E_ENUM_TYPE_MISMATCH_ARG \
 
 dnl We also abuse the warning-flag facility to enable other compiler
 dnl options.  Namely, the following:
-
-dnl -flto working really needs a test link, not just a compile
-
-safe_MAYBE_WARN="$MAYBE_WARN"
-MAYBE_WARN="$MAYBE_WARN -flto"
-AC_TRY_LINK([],[
-	int main(int argc, char **argv) { return 0; }
-],[],[
-	MAYBE_WARN="$safe_MAYBE_WARN"
-])
-
 MAYBE_WARN="$MAYBE_WARN -fno-strict-aliasing -fno-common"
 
 dnl Also to turn various gcc/glibc-specific preprocessor checks
@@ -77,7 +67,7 @@ AC_CACHE_CHECK([for supported warning flags], cairo_cv_warn_cflags, [
 		CAIRO_CC_TRY_FLAG([-W$W -Wno-$W],, [WARN_CFLAGS="$WARN_CFLAGS -Wno-$W"])
 	done
 	cairo_cv_warn_cflags=$WARN_CFLAGS
-	cairo_cv_warn_maybe=$MAYBE_WARN
+	cairo_cv_warn_maybe="$MAYBE_WARN $MAYBE_C_SPECIFIC_WARN"
 
 	AC_MSG_CHECKING([which warning flags were supported])
 ])

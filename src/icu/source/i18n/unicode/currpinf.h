@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2010, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2015, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,8 +17,6 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/unistr.h"
-
-union UHashTok;
 
 U_NAMESPACE_BEGIN
 
@@ -193,6 +191,7 @@ public:
 
 private:
     friend class DecimalFormat;
+    friend class DecimalFormatImpl;
 
     void initialize(const Locale& loc, UErrorCode& status);
    
@@ -221,6 +220,7 @@ private:
      *
      * @param source   the source to copy from
      * @param target   the target to copy to
+     * @param status   error code
      */
     void copyHash(const Hashtable* source, Hashtable* target, UErrorCode& status);
 

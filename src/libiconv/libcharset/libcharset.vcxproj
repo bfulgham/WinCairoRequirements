@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -28,27 +28,27 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -108,7 +108,8 @@ xcopy /Y /R "$(ProjectDir)include\libcharset.h.in" "$(ProjectDir)include\libchar
 xcopy /Y /R "$(ProjectDir)include\localcharset.h.in" "$(ProjectDir)include\localcharset.h"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R "$(ProjectDir)include\libcharset.h" "$(SolutionDir)include"
+      <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)include\libcharset.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)include\localcharset.h" "$(SolutionDir)include"</Command>
       <Message>Install Headers</Message>
     </PostBuildEvent>
@@ -127,7 +128,8 @@ xcopy /Y /R $(ProjectDir)include\libcharset.h.in $(ProjectDir)include\libcharset
 xcopy /Y /R $(ProjectDir)include\localcharset.h.in $(ProjectDir)include\localcharset.h</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
+      <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
 xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
       <Message>Install Headers</Message>
     </PostBuildEvent>
@@ -150,7 +152,8 @@ xcopy /Y /R "$(ProjectDir)include\libcharset.h.in" "$(ProjectDir)include\libchar
 xcopy /Y /R "$(ProjectDir)include\localcharset.h.in" "$(ProjectDir)include\localcharset.h"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R "$(ProjectDir)include\libcharset.h" "$(SolutionDir)include"
+      <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R "$(ProjectDir)include\libcharset.h" "$(SolutionDir)include"
 xcopy /Y /R "$(ProjectDir)include\localcharset.h" "$(SolutionDir)include"</Command>
       <Message>Install Headers</Message>
     </PostBuildEvent>
@@ -172,7 +175,8 @@ xcopy /Y /R $(ProjectDir)include\libcharset.h.in $(ProjectDir)include\libcharset
 xcopy /Y /R $(ProjectDir)include\localcharset.h.in $(ProjectDir)include\localcharset.h</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
+      <Command>mkdir "$(SolutionDir)include"
+xcopy /Y /R $(ProjectDir)include\libcharset.h $(SolutionDir)include
 xcopy /Y /R $(ProjectDir)include\localcharset.h $(SolutionDir)include</Command>
       <Message>Install Headers</Message>
     </PostBuildEvent>

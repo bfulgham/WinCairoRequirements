@@ -100,7 +100,7 @@ _cairo_box_contains_point (const cairo_box_t *box,
 static inline cairo_bool_t
 _cairo_box_is_pixel_aligned (const cairo_box_t *box)
 {
-#if 1 //CAIRO_FIXED_FRAC_BITS <= 8 && 0
+#if CAIRO_FIXED_FRAC_BITS <= 8 && 0
     return ((box->p1.x & CAIRO_FIXED_FRAC_MASK) << 24 |
 	    (box->p1.y & CAIRO_FIXED_FRAC_MASK) << 16 |
 	    (box->p2.x & CAIRO_FIXED_FRAC_MASK) << 8 |

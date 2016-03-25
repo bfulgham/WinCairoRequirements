@@ -1,14 +1,11 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/haw.xml
+// * Copyright (C) 2015 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/haw.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/haw.xml
- */
 haw{
     Languages{
         ar{"ʻAlapia"}
@@ -28,7 +25,7 @@ haw{
         fr_CH{"Kuikilani"}
         ga{"ʻAiliki"}
         gsw{"Kuikilani Kelemānia"}
-        haw{"ʻōlelo Hawaiʻi"}
+        haw{"ʻŌlelo Hawaiʻi"}
         he{"Hebera"}
         it{"ʻĪkālia"}
         ja{"Kepanī"}
@@ -49,5 +46,5 @@ haw{
         zh_Hans{"Pākē Hoʻomaʻalahi ʻia"}
         zh_Hant{"Pākē Kuʻuna"}
     }
-    Version{"2.0.47.68"}
+    Version{"2.1.19.14"}
 }

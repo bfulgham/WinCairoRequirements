@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{08ae31dd-0f8f-4ea5-adad-9b95e4cca9bc}</UniqueIdentifier>
+      <UniqueIdentifier>{2dee2c2f-25a5-43f0-985f-de4ba26925b4}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{2ee9968c-ee73-4dde-a8ec-825f1b674bad}</UniqueIdentifier>
+      <UniqueIdentifier>{7156c811-7116-4eef-8bb1-0400c51f9fd3}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{01b191e3-6a6f-4437-b59b-f61b23d9a5d2}</UniqueIdentifier>
+      <UniqueIdentifier>{df647868-56cc-475d-a3f6-1d1f50aa5e4f}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>
@@ -18,10 +18,10 @@
     <ClCompile Include="errmsg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="genrb.c">
+    <ClCompile Include="genrb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parse.c">
+    <ClCompile Include="parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="prscmnts.cpp">
@@ -33,7 +33,7 @@
     <ClCompile Include="read.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="reslist.c">
+    <ClCompile Include="reslist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rle.c">
@@ -42,7 +42,7 @@
     <ClCompile Include="ustr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wrtjava.c">
+    <ClCompile Include="wrtjava.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="wrtxml.cpp">

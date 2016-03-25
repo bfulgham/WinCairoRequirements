@@ -24,17 +24,17 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-#include <assert.h>
 #include "cairo-perf.h"
+#include <assert.h>
 
 
 #define STEP	5
 #define WIDTH	100
 #define HEIGHT	100
 
-static void path (cairo_t *cr, int width, int height)
+static void path (cairo_t *cr, unsigned int width, unsigned int height)
 {
-    int i;
+    unsigned int i;
 
     for (i = 0; i < width+1; i += STEP) {
 	cairo_rectangle (cr, i-1, -1, 2, height+2);

@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2015 - All Rights Reserved
  *
  */
 
@@ -10,7 +10,7 @@
 
 #include "LETypes.h"
 /**
- * \file 
+ * \file
  * \brief C++ API: Layout Engine Font Instance object
  */
 
@@ -23,14 +23,14 @@ U_NAMESPACE_BEGIN
  * and character mirroring - replacing a character which has both a left and a right
  * hand form with the opposite form.
  *
- * @stable ICU 3.2
+ * @deprecated ICU 54. See {@link icu::LayoutEngine}
  */
 class LECharMapper /* not : public UObject because this is an interface/mixin class */
 {
 public:
     /**
      * Destructor.
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual ~LECharMapper();
 
@@ -41,7 +41,7 @@ public:
      *
      * @return the adjusted character
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual LEUnicode32 mapChar(LEUnicode32 ch) const = 0;
 };
@@ -50,7 +50,7 @@ public:
  * This is a forward reference to the class which holds the per-glyph
  * storage.
  *
- * @stable ICU 3.0
+ * @deprecated ICU 54. See {@link icu::LayoutEngine}
  */
 class LEGlyphStorage;
 
@@ -76,7 +76,7 @@ class LEGlyphStorage;
  * methods with some default behavior such as returning constant values, or using the
  * values from the first subfont.
  *
- * @stable ICU 3.0
+ * @deprecated ICU 54. See {@link icu::LayoutEngine}
  */
 class U_LAYOUT_API LEFontInstance : public UObject
 {
@@ -86,7 +86,7 @@ public:
      * This virtual destructor is here so that the subclass
      * destructors can be invoked through the base class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual ~LEFontInstance();
 
@@ -107,7 +107,7 @@ public:
      * <code>this</code> and indicates that the entire string can be rendered.
      *
      * This method will return a valid <code>LEFontInstance</code> unless you
-     * have passed illegal parameters, or an internal error has been encountered. 
+     * have passed illegal parameters, or an internal error has been encountered.
      * For composite fonts, it may return the warning <code>LE_NO_SUBFONT_WARNING</code>
      * to indicate that the returned font may not be able to render all of
      * the text. Whenever a valid font is returned, the <code>offset</code> parameter
@@ -139,7 +139,7 @@ public:
      *
      * @see LEScripts.h
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit, le_int32 script, LEErrorCode &success) const;
 
@@ -156,14 +156,13 @@ public:
      *
      * Subclasses which represent composite fonts should always return <code>NULL</code>.
      *
-     * @param tableTag - the four byte table tag. (e.g. 'cmap') 
-     *
+     * @param tableTag - the four byte table tag. (e.g. 'cmap')
+     * @param length - ignored on entry, on exit will be the length of the table if known, or -1 if unknown.
      * @return the address of the table in memory, or <code>NULL</code>
      *         if the table doesn't exist.
-     *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link LayoutEngine}
      */
-    virtual const void *getFontTable(LETag tableTag) const = 0;
+    virtual const void* getFontTable(LETag tableTag, size_t &length) const = 0;
 
     /**
      * This method is used to determine if the font can
@@ -179,7 +178,7 @@ public:
      *
      * @return <code>TRUE</code> if the font can render ch.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_bool canDisplay(LEUnicode32 ch) const;
 
@@ -189,7 +188,7 @@ public:
      *
      * @return the number of design units pre EM.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_int32 getUnitsPerEM() const = 0;
 
@@ -214,7 +213,7 @@ public:
      *
      * @see LECharMapper
      *
-     * @stable ICU 3.6
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, le_bool filterZeroWidth, LEGlyphStorage &glyphStorage) const;
 
@@ -231,7 +230,7 @@ public:
      *
      * @see LECharMapper
      *
-     * @stable ICU 3.6
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const;
 
@@ -247,7 +246,7 @@ public:
      *
      * @see LECharMapper
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
 
@@ -261,7 +260,7 @@ public:
      *
      * @return the glyph index
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const = 0;
 
@@ -275,7 +274,7 @@ public:
      * @param glyph - the glyph index
      * @param advance - the X and Y pixel values will be stored here
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const = 0;
 
@@ -289,7 +288,7 @@ public:
      *
      * @return <code>TRUE</code> if the point coordinates could be stored.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const = 0;
 
@@ -299,7 +298,7 @@ public:
      *
      * @return the pixel width of the EM square
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float getXPixelsPerEm() const = 0;
 
@@ -309,7 +308,7 @@ public:
      *
      * @return the pixel height of the EM square
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float getYPixelsPerEm() const = 0;
 
@@ -321,7 +320,7 @@ public:
      *
      * @return points in the X direction
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float xUnitsToPoints(float xUnits) const;
 
@@ -333,7 +332,7 @@ public:
      *
      * @return points in the Y direction
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float yUnitsToPoints(float yUnits) const;
 
@@ -343,7 +342,7 @@ public:
      * @param units - X and Y design units
      * @param points - set to X and Y points
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void unitsToPoints(LEPoint &units, LEPoint &points) const;
 
@@ -355,7 +354,7 @@ public:
      *
      * @return font design units in the X direction
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float xPixelsToUnits(float xPixels) const;
 
@@ -367,7 +366,7 @@ public:
      *
      * @return font design units in the Y direction
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float yPixelsToUnits(float yPixels) const;
 
@@ -377,7 +376,7 @@ public:
      * @param pixels - X and Y pixel
      * @param units - set to X and Y font design units
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void pixelsToUnits(LEPoint &pixels, LEPoint &units) const;
 
@@ -390,7 +389,7 @@ public:
      *
      * @see transformFunits
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float getScaleFactorX() const = 0;
 
@@ -402,7 +401,7 @@ public:
      *
      * @see transformFunits
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual float getScaleFactorY() const = 0;
 
@@ -419,7 +418,7 @@ public:
      * @see getScaleFactorX
      * @see getScaleFactorY
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const;
 
@@ -431,7 +430,7 @@ public:
      *
      * @return the floating point value
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static inline float fixedToFloat(le_int32 fixed);
 
@@ -443,7 +442,7 @@ public:
      *
      * @return the fixed point value
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static inline le_int32 floatToFixed(float theFloat);
 
@@ -459,7 +458,7 @@ public:
      * @return the font's ascent, in points. This value
      * will always be positive.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_int32 getAscent() const = 0;
 
@@ -469,7 +468,7 @@ public:
      * @return the font's descent, in points. This value
      * will always be positive.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_int32 getDescent() const = 0;
 
@@ -479,7 +478,7 @@ public:
      * @return the font's leading, in points. This value
      * will always be positive.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_int32 getLeading() const = 0;
 
@@ -491,21 +490,21 @@ public:
      * @return the line height, in points. This vaule will
      * always be positive.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_int32 getLineHeight() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static UClassID getStaticClassID();
 
@@ -523,5 +522,3 @@ inline le_int32 LEFontInstance::floatToFixed(float theFloat)
 
 U_NAMESPACE_END
 #endif
-
-

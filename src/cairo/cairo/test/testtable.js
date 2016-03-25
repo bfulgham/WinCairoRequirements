@@ -21,7 +21,7 @@ resultToString = {
 };
 
 resultField = "result";
-rowFields = [ "test", "offset", "similar" ];
+rowFields = [ "test", "offset", "scale", "similar" ];
 colFields = [ "target", "format" ];
 allFields = [ resultField ].concat (rowFields, colFields);
 

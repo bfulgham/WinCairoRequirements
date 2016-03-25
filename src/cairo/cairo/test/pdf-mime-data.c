@@ -39,6 +39,7 @@
  * are not using a jpeg library */
 #define IMAGE_FILE "romedalen"
 
+#define BASENAME "pdf-mime-data.out"
 
 static cairo_test_status_t
 read_file (const cairo_test_context_t *ctx,
@@ -49,7 +50,7 @@ read_file (const cairo_test_context_t *ctx,
     FILE *fp;
 
     fp = fopen (file, "rb");
-    if (file == NULL) {
+    if (fp == NULL) {
 	char filename[4096];
 
 	/* try again with srcdir */
@@ -60,8 +61,11 @@ read_file (const cairo_test_context_t *ctx,
     if (fp == NULL) {
 	switch (errno) {
 	case ENOMEM:
+	    cairo_test_log (ctx, "Could not create file handle for %s due to \
+				lack of memory\n", file);
 	    return CAIRO_TEST_NO_MEMORY;
 	default:
+	    cairo_test_log (ctx, "Could not get the file handle for %s\n", file);
 	    return CAIRO_TEST_FAILURE;
 	}
     }
@@ -70,11 +74,19 @@ read_file (const cairo_test_context_t *ctx,
     *len = ftell(fp);
     fseek (fp, 0, SEEK_SET);
     *data = malloc (*len);
-    if (*data == NULL)
+    if (*data == NULL) {
+	fclose(fp);
+	cairo_test_log (ctx, "Could not allocate memory for buffer to read \
+				from file %s\n", file);
 	return CAIRO_TEST_NO_MEMORY;
+    }
 
-    if (fread(*data, *len, 1, fp) != 1)
+    if (fread(*data, *len, 1, fp) != 1) {
+	free (*data);
+	fclose(fp);
+	cairo_test_log (ctx, "Could not read data from file %s\n", file);
 	return CAIRO_TEST_FAILURE;
+    }
 
     fclose(fp);
     return CAIRO_TEST_SUCCESS;
@@ -83,7 +95,6 @@ read_file (const cairo_test_context_t *ctx,
 static cairo_test_status_t
 preamble (cairo_test_context_t *ctx)
 {
-    const char *filename = "pdf-mime-data.out.pdf";
     cairo_surface_t *image;
     cairo_surface_t *surface;
     cairo_t *cr;
@@ -95,6 +106,8 @@ preamble (cairo_test_context_t *ctx)
     unsigned int len, out_len;
     char command[4096];
     int exit_status;
+    char *filename;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
     if (! cairo_test_is_target_enabled (ctx, "pdf"))
 	return CAIRO_TEST_UNTESTED;
@@ -102,7 +115,6 @@ preamble (cairo_test_context_t *ctx)
     image = cairo_image_surface_create_from_png (IMAGE_FILE ".png");
     test_status = read_file (ctx, IMAGE_FILE ".jpg", &data, &len);
     if (test_status) {
-	cairo_test_log (ctx, "Could not read input jpeg file %s\n", IMAGE_FILE ".jpg");
 	return test_status;
     }
 
@@ -112,6 +124,7 @@ preamble (cairo_test_context_t *ctx)
     width = cairo_image_surface_get_width (image);
     height = cairo_image_surface_get_height (image);
 
+    xasprintf (&filename, "%s/%s.pdf", path, BASENAME);
     surface = cairo_pdf_surface_create (filename, width + 20, height + 20);
     cr = cairo_create (surface);
     cairo_translate (cr, 10, 10);
@@ -129,13 +142,15 @@ preamble (cairo_test_context_t *ctx)
     if (status) {
 	cairo_test_log (ctx, "Failed to create pdf surface for file %s: %s\n",
 			filename, cairo_status_to_string (status));
+        free (filename);
 	return CAIRO_TEST_FAILURE;
     }
 
     printf ("pdf-mime-data: Please check %s to ensure it looks/prints correctly.\n", filename);
 
-    sprintf (command, "pdfimages -j %s pdf-mime-data.out", filename);
+    sprintf (command, "pdfimages -j %s %s", filename, CAIRO_TEST_OUTPUT_DIR "/" BASENAME);
     exit_status = system (command);
+    free (filename);
     if (exit_status) {
 	cairo_test_log (ctx, "pdfimages failed with exit status %d\n", exit_status);
 	return CAIRO_TEST_FAILURE;
@@ -143,16 +158,11 @@ preamble (cairo_test_context_t *ctx)
 
     test_status = read_file (ctx, IMAGE_FILE ".jpg", &data, &len);
     if (test_status) {
-	cairo_test_log (ctx, "Could not read input jpeg file %s\n", IMAGE_FILE ".jpg");
 	return test_status;
     }
 
-    test_status = read_file (ctx, "pdf-mime-data.out-000.jpg", &out_data, &out_len);
+    test_status = read_file (ctx, CAIRO_TEST_OUTPUT_DIR "/" BASENAME "-000.jpg", &out_data, &out_len);
     if (test_status) {
-	free (data);
-	cairo_test_log (ctx,
-			"Could not read input jpeg file %s\n",
-			"pdf-mime-data.out-000.jpg");
 	return test_status;
     }
 

@@ -23,10 +23,11 @@
  * Author: Carl D. Worth <cworth@cworth.org>
  */
 
+#include "cairo-test.h"
+
 #include <stdio.h>
 
 #include <cairo-svg.h>
-#include "cairo-test.h"
 
 /* Pretty boring test just to make sure things aren't crashing ---
  * no verification that we're getting good results yet.
@@ -37,6 +38,7 @@
 #define HEIGHT_IN_INCHES 3
 #define WIDTH_IN_POINTS  (WIDTH_IN_INCHES  * 72)
 #define HEIGHT_IN_POINTS (HEIGHT_IN_INCHES * 72)
+#define BASENAME "svg-surface.out"
 
 static cairo_test_status_t
 draw (cairo_t *cr, int width, int height)
@@ -90,8 +92,9 @@ static cairo_test_status_t
 preamble (cairo_test_context_t *ctx)
 {
     cairo_t *cr;
-    const char *filename = "svg-surface.out.svg";
     cairo_surface_t *surface;
+    char *filename;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
     if (! cairo_test_is_target_enabled (ctx, "svg11") &&
 	! cairo_test_is_target_enabled (ctx, "svg12"))
@@ -99,6 +102,7 @@ preamble (cairo_test_context_t *ctx)
 	return CAIRO_TEST_UNTESTED;
     }
 
+    xasprintf (&filename, "%s/%s.svg", path, BASENAME);
     surface = cairo_svg_surface_create (filename,
 					WIDTH_IN_POINTS, HEIGHT_IN_POINTS);
     if (cairo_surface_status (surface)) {
@@ -106,6 +110,7 @@ preamble (cairo_test_context_t *ctx)
 			"Failed to create svg surface for file %s: %s\n",
 			filename,
 			cairo_status_to_string (cairo_surface_status (surface)));
+	free (filename);
 	return CAIRO_TEST_FAILURE;
     }
 
@@ -118,7 +123,8 @@ preamble (cairo_test_context_t *ctx)
     cairo_destroy (cr);
     cairo_surface_destroy (surface);
 
-    printf ("svg-surface: Please check svg-surface.svg to make sure it looks happy.\n");
+    printf ("svg-surface: Please check %s to make sure it looks happy.\n", filename);
+    free (filename);
     return CAIRO_TEST_SUCCESS;
 }
 

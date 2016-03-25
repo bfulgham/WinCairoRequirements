@@ -1,5 +1,5 @@
-#ifndef __CURL_SOCKS_H
-#define __CURL_SOCKS_H
+#ifndef HEADER_CURL_SOCKS_H
+#define HEADER_CURL_SOCKS_H
 /***************************************************************************
  *                                  _   _ ____  _
  *  Project                     ___| | | |  _ \| |
@@ -22,7 +22,7 @@
  *
  ***************************************************************************/
 
-#include "setup.h"
+#include "curl_setup.h"
 
 #ifdef CURL_DISABLE_PROXY
 #define Curl_SOCKS4(a,b,c,d,e,f) CURLE_NOT_BUILT_IN
@@ -65,7 +65,7 @@ CURLcode Curl_SOCKS5(const char *proxy_name,
 
 #if defined(HAVE_GSSAPI) || defined(USE_WINDOWS_SSPI)
 /*
- * This function handles the sockss5 gssapie negotiation and initialisation
+ * This function handles the SOCKS5 GSS-API negotiation and initialisation
  */
 CURLcode Curl_SOCKS5_gssapi_negotiate(int sockindex,
                                       struct connectdata *conn);
@@ -73,4 +73,5 @@ CURLcode Curl_SOCKS5_gssapi_negotiate(int sockindex,
 
 #endif /* CURL_DISABLE_PROXY */
 
-#endif  /* __CURL_SOCKS_H */
+#endif  /* HEADER_CURL_SOCKS_H */
+

@@ -20,6 +20,10 @@ if CAIRO_HAS_GL_SURFACE
 test_sources += $(gl_surface_test_sources)
 endif
 
+if CAIRO_HAS_EGL_FUNCTIONS
+test_sources += $(egl_surface_test_sources)
+endif
+
 # Need to add quartz-surface-source
 if CAIRO_HAS_QUARTZ_SURFACE
 test_sources += $(quartz_surface_test_sources)
@@ -72,11 +76,12 @@ endif
 test_sources += $(test)
 
 noinst_PROGRAMS = cairo-test-suite$(EXEEXT) # always build
+noinst_SCRIPTS = check-refs.sh
 
 TESTS += cairo-test-suite$(EXEEXT)
 
 cairo-test-constructors.c: Makefile $(test_sources) make-cairo-test-constructors.sh
-	(cd $(srcdir) && sh ./make-cairo-test-constructors.sh $(test_sources)) > $@
+	(cd $(srcdir) && sh ./make-cairo-test-constructors.sh $(test_sources)) > $@ || (rm $@ ; exit 1)
 
 cairo_test_suite_SOURCES = 		\
 	$(cairo_test_suite_sources)	\
@@ -140,79 +145,6 @@ scarab.jpg		\
 surface-source.c	\
 testtable.js		\
 reference
-
-# Any test for which the code committed to CVS is expected to fail
-# should be listed here.
-#
-# This way, we can avoid being bothered by reports of bugs we are
-# aware of, but users can still report when tests start behaving in
-# unexpected ways on their system.
-#
-# Of course, before any "release" of cairo we should eliminate
-# everything from this list by fixing the bugs. (We don't necessarily
-# have to be that strict for "snapshots" though.)
-#
-# Analysis of XFAIL errors:
-# alpha-similar         - discrepancy between backends in applying color
-#                         components of a pure alpha surface
-# big-line              - range overflow of fixed-point
-# big-trap              - range overflow of fixed-point
-# degenerate-dash       - needs path editing in PS to convert degenerate
-#                         end-caps into the shapes as expected by cairo
-#                         (Or maybe PS is the correct behaviour?)
-# degenerate-path       - undefined behaviour in PS, needs path editing to
-#                         convert degenerate segments into circles/rectangles
-#                         as expected by cairo
-# device-offset-scale   - complication of pre-multiplying device_offset
-#                         into the pattern_matrix and then requiring further
-#                         manipulation for SVG
-# extend-pad            - lacks implementation in pixman and consequently used
-#                         as an excuse for lack of support in other backends
-# fallback-resolution   - The essential problem here is that the recording-surface
-#                         has recorded a sequence of operations with one device
-#                         transformation, and we attempt to replay it with
-#                         another (basically a scale-factor for the falback
-#                         resolution). Carl begun to look at this with his
-#                         chain-of-bugs, but the can of worms is much bigger.
-#                         It appears to be a design flaw in the recording-surface
-#                         that may spread further...
-#                         My solution would be to lock Behad and Adrian in a
-#                         room, with Carl as a moderator and not let them out
-#                         until they have come up with an interface and
-#                         semantics that actually work. :-)
-# in-fill-empty-trapezoid The cairo_in_fill () function can sometimes
-#                         produce false positives when the tessellator
-#                         produces empty trapezoids and the query
-#                         point lands exactly on a trapezoid edge.
-# long-lines            - range overflow of fixed-point
-# scale-offset-image    - loss of precision converting a cairo matrix to
-# scale-offset-similar    pixman's fixed point format.
-# self-copy-overlap     - vector surfaces take snapshot of patterns in contrast
-#                         to the raster backends which don't. One solution
-#                         would be to clone overlapping areas of dst/source, so
-#                         patterns were effectively snapshotted across all
-#                         backends.
-# self-intersecting     - incremental trapezoidation of strokes can generate
-#                         overlapping traps. Needs self-intersection analysis
-#                         on cairo_traps_t after strokes.
-#                         Test case should also be expanded to hit special-case
-#                         tessellators as well.
-# surface-pattern-big...- Strange, unexplained results for SVG/PS.
-XFAIL_TESTS =					\
-alpha-similar$(EXEEXT)				\
-big-line$(EXEEXT)				\
-big-trap$(EXEEXT)				\
-degenerate-dash$(EXEEXT)			\
-degenerate-path$(EXEEXT)			\
-device-offset-scale$(EXEEXT)			\
-extend-pad$(EXEEXT)				\
-fallback-resolution$(EXEEXT)			\
-in-fill-empty-trapezoid$(EXEEXT)		\
-long-lines$(EXEEXT)				\
-self-copy-overlap$(EXEEXT)			\
-self-intersecting$(EXEEXT)			\
-surface-pattern-big-scale-down$(EXEEXT)		\
-$(NULL)
 
 # Any test that doesn't generate a log file goes here
 NOLOG_TESTS =			\
@@ -289,6 +221,9 @@ $(top_builddir)/src/libcairo.la:
 $(top_builddir)/test/pdiff/libpdiff.la:
 	cd $(top_builddir)/test/pdiff && $(MAKE) $(AM_MAKEFLAGS) libpdiff.la
 
+$(top_builddir)/test/pdiff/perceptualdiff:
+	cd $(top_builddir)/test/pdiff && $(MAKE) $(AM_MAKEFLAGS) perceptualdiff
+
 $(top_builddir)/util/cairo-script/libcairo-script-interpreter.la: $(top_builddir)/src/libcairo.la
 	cd $(top_builddir)/util/cairo-script && $(MAKE) $(AM_MAKEFLAGS) libcairo-script-interpreter.la
 
@@ -358,13 +293,14 @@ EXTRA_PROGRAMS += $(TESTS)
 # and TARGETS make var on the command line.  Same for the rest.
 TARGETS = $(CAIRO_TEST_TARGET)
 TARGETS_EXCLUDE = $(CAIRO_TEST_TARGET_EXCLUDE)
+FORMAT = $(CAIRO_TEST_TARGET_FORMAT)
 NUM_THREADS = $(CAIRO_TEST_NUM_THREADS)
 MODE = $(CAIRO_TEST_MODE)
 
 # Same about ENV vs CAIRO_TEST_ENV.  ENV is used with "make run" only
 ENV = $(CAIRO_TEST_ENV)
 
-TESTS_ENVIRONMENT = CAIRO_TEST_MODE="$(MODE)" CAIRO_TEST_TARGET="$(TARGETS)" CAIRO_TEST_TARGET_EXCLUDE="$(TARGETS_EXCLUDE)" CAIRO_TEST_NUM_THREADS="$(NUM_THREADS)" $(ENV)
+TESTS_ENVIRONMENT = CAIRO_TEST_MODE="$(MODE)" CAIRO_TEST_TARGET="$(TARGETS)" CAIRO_TEST_TARGET_FORMAT="$(FORMAT)" CAIRO_TEST_TARGET_EXCLUDE="$(TARGETS_EXCLUDE)" CAIRO_TEST_NUM_THREADS="$(NUM_THREADS)" $(ENV)
 
 EXTRA_VALGRIND_FLAGS = $(CAIRO_EXTRA_VALGRIND_FLAGS)
 VALGRIND_FLAGS = \
@@ -445,10 +381,12 @@ $(NOLOG_TESTS_LOG):
 	@echo dummy > $@
 
 # Identify identical reference images
-check-ref-dups:
-	@LANG=C; \
-	( cd "$(srcdir)" && sha1sum *.ref.png | sort ) > ref.hash; \
-	join ref.hash ref.hash | grep -v -E '( .*.ref.png).*\1' | cut -d' ' -f 1-2 | sort -u
+check-ref-dups: check-refs.sh $(top_builddir)/test/pdiff/perceptualdiff
+	sh $(srcdir)/check-refs.sh $(top_builddir)/test/pdiff/perceptualdiff
+
+# Remove identical reference images (DANGEROUS)
+clean-ref-dups: check-refs.sh $(top_builddir)/test/pdiff/perceptualdiff
+	sh $(srcdir)/check-refs.sh | cut -d' ' -f2 | while read f; do git rm "reference/$$f"; done
 
 results.tar:
 	@tar cf $@ index.html testtable.js *.log output/*.log; \

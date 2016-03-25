@@ -2,62 +2,62 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="break iteration">
-      <UniqueIdentifier>{2069d541-d925-4410-b365-704eaa539173}</UniqueIdentifier>
+      <UniqueIdentifier>{fbc22165-d4c4-4a53-a5fa-0d52d2c7a43d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spoof detection">
+      <UniqueIdentifier>{3003db1c-a191-4c8a-9a4c-3f1022700646}</UniqueIdentifier>
     </Filter>
     <Filter Include="collation">
-      <UniqueIdentifier>{06358a23-ef7d-4138-bc31-5ddb4a516f82}</UniqueIdentifier>
+      <UniqueIdentifier>{87bbaf14-bab2-41b6-9ba8-f07ea5d6659e}</UniqueIdentifier>
     </Filter>
     <Filter Include="collections">
-      <UniqueIdentifier>{9adcd4ab-ff53-4c17-8bb0-b9a0effa553a}</UniqueIdentifier>
+      <UniqueIdentifier>{e3d31c2c-9063-4957-9cf7-2a5d586238bd}</UniqueIdentifier>
     </Filter>
     <Filter Include="configuration">
-      <UniqueIdentifier>{fa3d3210-f768-4422-b7ce-31f57df67c12}</UniqueIdentifier>
+      <UniqueIdentifier>{36d7f301-817c-4471-85d1-626d76d0d433}</UniqueIdentifier>
     </Filter>
     <Filter Include="data &amp; memory">
-      <UniqueIdentifier>{fac8201e-c392-4e41-863b-b65fb45aed4d}</UniqueIdentifier>
+      <UniqueIdentifier>{3a8ee5d5-5715-4f41-9ab7-3ed81fe6c111}</UniqueIdentifier>
     </Filter>
     <Filter Include="formatting">
-      <UniqueIdentifier>{52986667-8416-4d1c-923a-2e8222164964}</UniqueIdentifier>
+      <UniqueIdentifier>{110a4b0e-160b-4913-aec6-3e116af8654e}</UniqueIdentifier>
     </Filter>
     <Filter Include="idna">
-      <UniqueIdentifier>{c53ea494-279a-43a2-98fc-6491dfe62743}</UniqueIdentifier>
+      <UniqueIdentifier>{cc7537a7-9441-4c2b-8681-b683db42e3b3}</UniqueIdentifier>
       <Extensions>*.c,*.h</Extensions>
     </Filter>
     <Filter Include="locales &amp; resources">
-      <UniqueIdentifier>{e6aaee16-75ef-4de5-b7bc-6f93de32bc78}</UniqueIdentifier>
+      <UniqueIdentifier>{5b97feaa-435e-4ff8-986c-305576b5c05d}</UniqueIdentifier>
     </Filter>
     <Filter Include="misc">
-      <UniqueIdentifier>{1eb0c492-3e60-4af6-9bd5-abe1821532c6}</UniqueIdentifier>
+      <UniqueIdentifier>{361b0c62-81ce-43f0-a502-0675d12f1e79}</UniqueIdentifier>
     </Filter>
     <Filter Include="normalization">
-      <UniqueIdentifier>{6ff152fb-fda8-40fb-a185-f2f610f46820}</UniqueIdentifier>
+      <UniqueIdentifier>{2a409c86-8f9d-4b70-9969-0f2c73da30cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="properties &amp; sets">
-      <UniqueIdentifier>{d798728c-0c47-4e4f-a37d-6cf40bc9857e}</UniqueIdentifier>
+      <UniqueIdentifier>{cf44c931-1863-4278-9d20-c82c5d346fca}</UniqueIdentifier>
     </Filter>
     <Filter Include="regex">
-      <UniqueIdentifier>{6656f092-f354-467a-8b66-a34164d3cb61}</UniqueIdentifier>
+      <UniqueIdentifier>{74eed088-b701-43ff-9bb3-4f12d6532f86}</UniqueIdentifier>
     </Filter>
     <Filter Include="registration">
-      <UniqueIdentifier>{167401bd-c422-4a63-8a2d-719cdc05466a}</UniqueIdentifier>
+      <UniqueIdentifier>{1fb122a2-f7b7-4cf3-8acb-f19fa84c29ce}</UniqueIdentifier>
     </Filter>
     <Filter Include="strings">
-      <UniqueIdentifier>{a37eaaaf-d2d4-4b73-af30-c8e30d9cc6f9}</UniqueIdentifier>
+      <UniqueIdentifier>{a36badc0-da84-4c9f-9253-6556858b15c5}</UniqueIdentifier>
     </Filter>
     <Filter Include="transforms">
-      <UniqueIdentifier>{cd24e7a4-0b6b-4c92-80c0-5c98499a7f20}</UniqueIdentifier>
+      <UniqueIdentifier>{6f2b0723-6c1b-4cba-8a96-99b166289586}</UniqueIdentifier>
     </Filter>
     <Filter Include="conversion">
-      <UniqueIdentifier>{c55a5a79-eb1e-4c4b-b42c-c8f318fb15bd}</UniqueIdentifier>
+      <UniqueIdentifier>{01d96490-8aa2-4fb4-b618-23cb19fa7f78}</UniqueIdentifier>
     </Filter>
     <Filter Include="charset detection">
-      <UniqueIdentifier>{cae4012f-c4d4-40a4-9a02-30a27ea7dd51}</UniqueIdentifier>
+      <UniqueIdentifier>{6eb24172-ec69-4dd0-b032-cd3cd18fcc3d}</UniqueIdentifier>
     </Filter>
     <Filter Include="bidi">
-      <UniqueIdentifier>{60da8db2-dcb7-435a-a9dd-e25adf7a2c90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="spoof detection">
-      <UniqueIdentifier>{47012573-0a34-46dc-95ad-9426a1550c82}</UniqueIdentifier>
+      <UniqueIdentifier>{07274807-3dcf-4826-9531-a84a7da7b821}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,13 +79,7 @@
     <ClCompile Include="apicoll.cpp">
       <Filter>collation</Filter>
     </ClCompile>
-    <ClCompile Include="cntabcol.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
     <ClCompile Include="currcoll.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="dadrcoll.cpp">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="decoll.cpp">
@@ -142,6 +136,9 @@
     <ClCompile Include="ucaconf.cpp">
       <Filter>collation</Filter>
     </ClCompile>
+    <ClCompile Include="unifiedcachetest.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
     <ClCompile Include="uvectest.cpp">
       <Filter>collections</Filter>
     </ClCompile>
@@ -181,10 +178,16 @@
     <ClCompile Include="caltztst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="compactdecimalformattest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="dadrcal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="dadrfmt.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="datadrivennumberformattestsuite.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="dcfmapts.cpp">
@@ -214,6 +217,9 @@
     <ClCompile Include="fldset.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="genderinfotest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="incaltst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -232,6 +238,9 @@
     <ClCompile Include="locnmtst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="measfmttest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="miscdtfm.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -242,6 +251,12 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="nmfmtrt.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numberformattesttuple.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numberformat2test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numfmtst.cpp">
@@ -259,10 +274,25 @@
     <ClCompile Include="pptest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="quantityformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="pluralmaptest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="reldatefmttest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="scientificnumberformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="sdtfmtts.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="selfmts.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="simplepatternformattertest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="tchcfmt.cpp">
@@ -439,6 +469,30 @@
     <ClCompile Include="bidiconf.cpp">
       <Filter>bidi</Filter>
     </ClCompile>
+    <ClCompile Include="alphaindextst.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="colldata.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="regiontst.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="collationtest.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
+    <ClCompile Include="numfmtspectest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="listformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="bytestrietest.cpp">
+      <Filter>data &amp; memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ucharstrietest.cpp">
+      <Filter>data &amp; memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
@@ -459,13 +513,7 @@
     <ClInclude Include="apicoll.h">
       <Filter>collation</Filter>
     </ClInclude>
-    <ClInclude Include="cntabcol.h">
-      <Filter>collation</Filter>
-    </ClInclude>
     <ClInclude Include="currcoll.h">
-      <Filter>collation</Filter>
-    </ClInclude>
-    <ClInclude Include="dadrcoll.h">
       <Filter>collation</Filter>
     </ClInclude>
     <ClInclude Include="decoll.h">
@@ -567,6 +615,9 @@
     <ClInclude Include="dadrfmt.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="datadrivennumberformattestsuite.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="dcfmapts.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -622,6 +673,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="nmfmtrt.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="numberformattesttuple.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="numfmtst.h">
@@ -803,6 +857,18 @@
     </ClInclude>
     <ClInclude Include="csdetest.h">
       <Filter>charset detection</Filter>
+    </ClInclude>
+    <ClInclude Include="alphaindextst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="colldata.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="regiontst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="listformattertest.h">
+      <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

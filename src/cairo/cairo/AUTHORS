@@ -24,6 +24,7 @@ John Ellson <ellson@research.att.com> First font/glyph extents functions
 Michael Emmel <mike.emmel@gmail.com> DirectFB backend
 Miklós Erdélyi <erdelyim@gmail.com> Fix typo leading to a crash
 Behdad Esfahbod <behdad@behdad.org> Huge piles of bug fixes, improvements, and general maintenance
+Gilles Espinasse <g.esp@free.fr> Font related fixes
 Larry Ewing <lewing@novell.com> Test case for group-clip
 Brian Ewins <Brian.Ewins@gmail.com> ATSUI maintenance (first success at making it really work)
 Bertram Felgenhauer <int-e@gmx.de> Fixes for subtle arithmetic errors
@@ -32,6 +33,7 @@ Bdale Garbee <bdale@gag.com> Provided essential support for cairo achitecture se
 Jens Granseuer <jensgr@gmx.net> Fixes to generate proper compiler flags
 Laxmi Harikumar <laxmi.harikumar@digital.com> Build fix
 J. Ali Harlow <ali@avrc.city.ac.uk> win32 backend updates
+Bryce Harrington <bryce@osg.samsung.com> Test cases, bug/typo fixes
 Mathias Hasselmann <mathias.hasselmann@gmx.de> Significant reduction of calls to malloc
 Richard Henderson <rth@twiddle.net> "slim" macros for better shared libraries 
 James Henstridge <james@daa.com.au> Build fixes related to freetype
@@ -49,6 +51,7 @@ Martin Kretzschmar <martink@gnome.org> Arithmetic fix for 64-bit architectures
 Mathieu Lacage <Mathieu.Lacage@sophia.inria.fr> several bug/typo fixes
 Dominic Lachowicz <domlachowicz@gmail.com> PDF conformance fix, fix image surface to zero out contents
 Alexander Larsson <alexl@redhat.com> Profiling and performance fixes.
+Sylvestre Ledru <sylvestre@mozilla.com> Static analysis fixes.
 Tor Lillqvist <tml@novell.com> win32 build fixes, build scripts
 Jinghua Luo <sunmoon1997@gmail.com> Add bitmap glyph transformation, many freetype and glitz fixes
 Luke-Jr <luke-jr@utopios.org> Build fix for cross-compiling
@@ -62,6 +65,7 @@ Christopher (Monty) Montgomery <xiphmont@gmail.com> Performnace fix (subimage_co
 Tim Mooney <enchanter@users.sourceforge.net> Fix test suite to compile with Solaris compiler
 Jeff Muizelaar <jeff@infidigm.net> Patient, painful, pixman code merge. Many fixes for intricacies of dashing.
 Yevgen Muntyan <muntyan@tamu.edu> win32 build fix
+Ravi Nanjundappa <nravi.n@samsung.com> Static analysis fixes, test cases, skia backend update/fixes
 Declan Naughton <piratepenguin@gmail.com> Fix documentation typos
 Peter Nilsson <c99pnn@cs.umu.se> Glitz backend
 Henning Noren <henning.noren.402@student.lu.se> Fix memory leak
@@ -88,7 +92,7 @@ Jamey Sharp <jamey@minilop.net> Surface/font backend virtualization, XCB backend
 Jason Dorje Short <jdorje@users.sf.net> Build fixes and bug fixes
 Jeff Smith <whydoubt@yahoo.com> Fixes for intricacies of stroking code
 Travis Spencer <tspencer@cs.pdx.edu> XCB backend fix
-Bill Spitzak <spitzak@d2.com> Build fix to find Xrender.h without xrender.pc
+Bill Spitzak <spitzak@d2.com> Build fix to find Xrender.h without xrender.pc, downscaling support
 Zhe Su <james.su@gmail.com> Add support for fontconfig's embeddedbitmap option
 Owen Taylor <otaylor@redhat.com> Font rewrite, documentation, win32 backend
 Pierre Tardy <tardyp@gmail.com> EGL support and testing, OpenVG backend

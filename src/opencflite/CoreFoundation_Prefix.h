@@ -239,6 +239,7 @@ CF_EXPORT int _NS_access(const char *name, int amode);
 
 #undef BOOL
 
+#if !defined(_MSC_VER) || _MSC_VER < 1900
 #ifndef HAVE_STRUCT_TIMESPEC
 #define HAVE_STRUCT_TIMESPEC 1
 struct timespec {
@@ -246,6 +247,7 @@ struct timespec {
         long tv_nsec;
 };
 #endif /* HAVE_STRUCT_TIMESPEC */
+#endif
 
 #define __PRETTY_FUNCTION__ __FUNCTION__
 

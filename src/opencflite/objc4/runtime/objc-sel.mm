@@ -28,6 +28,9 @@
  *	(method name).
  */
 
+// VS2015 build fix
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
+
 #include "objc.h"
 #include "objc-private.h"
 #include "objc-auto.h"

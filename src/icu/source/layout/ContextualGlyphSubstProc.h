@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2014 - All Rights Reserved
  *
  */
 
@@ -31,20 +31,20 @@ public:
 
     virtual void endStateTable();
 
-    ContextualGlyphSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader);
+    ContextualGlyphSubstitutionProcessor(const LEReferenceTo<MorphSubtableHeader> &morphSubtableHeader, LEErrorCode &success);
     virtual ~ContextualGlyphSubstitutionProcessor();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static UClassID getStaticClassID();
 
@@ -53,11 +53,11 @@ private:
 
 protected:
     ByteOffset substitutionTableOffset;
-    const ContextualGlyphSubstitutionStateEntry *entryTable;
-
+    LEReferenceToArrayOf<ContextualGlyphSubstitutionStateEntry> entryTable;
+    LEReferenceToArrayOf<le_int16> int16Table;
     le_int32 markGlyph;
 
-    const ContextualGlyphSubstitutionHeader *contextualGlyphSubstitutionHeader;
+    LEReferenceTo<ContextualGlyphSubstitutionHeader> contextualGlyphSubstitutionHeader;
 
 };
 

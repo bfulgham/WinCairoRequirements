@@ -112,13 +112,19 @@ cairo_boilerplate_format_from_content (cairo_content_t content)
     cairo_format_t format;
 
     switch (content) {
-	case CAIRO_CONTENT_COLOR: format = CAIRO_FORMAT_RGB24; break;
-	case CAIRO_CONTENT_COLOR_ALPHA: format = CAIRO_FORMAT_ARGB32; break;
-	case CAIRO_CONTENT_ALPHA: format = CAIRO_FORMAT_A8; break;
-	default:
-	    assert (0); /* not reached */
-	    format = CAIRO_FORMAT_INVALID;
-	    break;
+    case CAIRO_CONTENT_COLOR:
+        format = CAIRO_FORMAT_RGB24;
+        break;
+    case CAIRO_CONTENT_COLOR_ALPHA:
+        format = CAIRO_FORMAT_ARGB32;
+        break;
+    case CAIRO_CONTENT_ALPHA:
+        format = CAIRO_FORMAT_A8;
+        break;
+    default:
+        assert (0); /* not reached */
+        format = CAIRO_FORMAT_INVALID;
+        break;
     }
 
     return format;
@@ -163,10 +169,16 @@ _cairo_boilerplate_image_create_similar (cairo_surface_t *other,
     void *ptr;
 
     switch (content) {
-    case CAIRO_CONTENT_ALPHA: format = CAIRO_FORMAT_A8; break;
-    case CAIRO_CONTENT_COLOR: format = CAIRO_FORMAT_RGB24; break;
+    case CAIRO_CONTENT_ALPHA:
+        format = CAIRO_FORMAT_A8;
+        break;
+    case CAIRO_CONTENT_COLOR:
+        format = CAIRO_FORMAT_RGB24;
+        break;
+    case CAIRO_CONTENT_COLOR_ALPHA:
     default:
-    case CAIRO_CONTENT_COLOR_ALPHA: format = CAIRO_FORMAT_ARGB32; break;
+        format = CAIRO_FORMAT_ARGB32;
+        break;
     }
 
     stride = cairo_format_stride_for_width(format, width);
@@ -206,10 +218,16 @@ _cairo_boilerplate_image16_create_similar (cairo_surface_t *other,
     void *ptr;
 
     switch (content) {
-    case CAIRO_CONTENT_ALPHA: format = CAIRO_FORMAT_A8; break;
-    case CAIRO_CONTENT_COLOR: format = CAIRO_FORMAT_RGB16_565; break;
+    case CAIRO_CONTENT_ALPHA:
+        format = CAIRO_FORMAT_A8;
+        break;
+    case CAIRO_CONTENT_COLOR:
+        format = CAIRO_FORMAT_RGB16_565;
+        break;
+    case CAIRO_CONTENT_COLOR_ALPHA:
     default:
-    case CAIRO_CONTENT_COLOR_ALPHA: format = CAIRO_FORMAT_ARGB32; break;
+        format = CAIRO_FORMAT_ARGB32;
+        break;
     }
 
     stride = cairo_format_stride_for_width(format, width);
@@ -504,6 +522,28 @@ _cairo_boilerplate_register_backend (const cairo_boilerplate_target_t *targets,
 }
 
 static cairo_bool_t
+_cairo_boilerplate_target_format_matches_name (const cairo_boilerplate_target_t *target,
+					const char *tcontent_name,
+					const char *tcontent_end)
+{
+	char const *content_name;
+	const char *content_end = tcontent_end;
+	size_t content_len;
+
+	content_name = _cairo_boilerplate_content_visible_name (target->content);
+	if (tcontent_end)
+		content_len = content_end - tcontent_name;
+	else
+		content_len = strlen(tcontent_name);
+	if (strlen(content_name) != content_len)
+		return FALSE;
+	if (0 == strncmp (content_name, tcontent_name, content_len))
+		return TRUE;
+
+	return FALSE;
+}
+
+static cairo_bool_t
 _cairo_boilerplate_target_matches_name (const cairo_boilerplate_target_t *target,
 					const char			 *tname,
 					const char			 *end)
@@ -514,6 +554,8 @@ _cairo_boilerplate_target_matches_name (const cairo_boilerplate_target_t *target
     size_t name_len;
     size_t content_len;
 
+    if (content_start >= end)
+	content_start = NULL;
     if (content_start != NULL)
 	end = content_start++;
 
@@ -577,13 +619,38 @@ cairo_boilerplate_get_targets (int	    *pnum_targets,
 		 list != NULL;
 		 list = list->next)
 	    {
-		const cairo_boilerplate_target_t *target = list->target;
-		if (_cairo_boilerplate_target_matches_name (target, tname, end)) {
-		    /* realloc isn't exactly the best thing here, but meh. */
-		    targets_to_test = xrealloc (targets_to_test, sizeof(cairo_boilerplate_target_t *) * (num_targets+1));
-		    targets_to_test[num_targets++] = target;
-		    found = 1;
-		}
+		    const cairo_boilerplate_target_t *target = list->target;
+		    const char *tcontent_name;
+		    const char *tcontent_end;
+		    if (_cairo_boilerplate_target_matches_name (target, tname, end)) {
+			    if ((tcontent_name = getenv ("CAIRO_TEST_TARGET_FORMAT")) != NULL && *tcontent_name) {
+				    while(tcontent_name) {
+					    tcontent_end = strpbrk (tcontent_name, " \t\r\n;:,");
+					    if (tcontent_end == tcontent_name) {
+						    tcontent_name = tcontent_end + 1;
+						    continue;
+					    }
+					    if(_cairo_boilerplate_target_format_matches_name (target,
+								    tcontent_name, tcontent_end)) {
+						    /* realloc isn't exactly the best thing here, but meh. */
+						    targets_to_test = xrealloc (targets_to_test,
+								    sizeof(cairo_boilerplate_target_t *) * (num_targets+1));
+						    targets_to_test[num_targets++] = target;
+						    found = 1;
+					    }
+
+					    if (tcontent_end)
+						    tcontent_end++;
+					    tcontent_name = tcontent_end;
+				    }
+			    } else {
+				    /* realloc isn't exactly the best thing here, but meh. */
+				    targets_to_test = xrealloc (targets_to_test,
+						    sizeof(cairo_boilerplate_target_t *) * (num_targets+1));
+				    targets_to_test[num_targets++] = target;
+				    found = 1;
+			    }
+		    }
 	    }
 
 	    if (!found) {
@@ -616,20 +683,62 @@ cairo_boilerplate_get_targets (int	    *pnum_targets,
 	    tname = end;
 	}
     } else {
-	/* check all compiled in targets */
-	num_targets = 0;
-	for (list = cairo_boilerplate_targets; list != NULL; list = list->next)
-	    num_targets++;
+	    int found = 0;
+	    int not_found_targets = 0;
+	    num_targets = 0;
+	    targets_to_test = xmalloc (sizeof(cairo_boilerplate_target_t*) * num_targets);
+	    for (list = cairo_boilerplate_targets; list != NULL; list = list->next)
+	    {
+		    const cairo_boilerplate_target_t *target = list->target;
+		    const char *tcontent_name;
+		    const char *tcontent_end;
+		    if ((tcontent_name = getenv ("CAIRO_TEST_TARGET_FORMAT")) != NULL && *tcontent_name) {
+			    while(tcontent_name) {
+				    tcontent_end = strpbrk (tcontent_name, " \t\r\n;:,");
+				    if (tcontent_end == tcontent_name) {
+					    tcontent_name = tcontent_end + 1;
+					    continue;
+				    }
+				    if (_cairo_boilerplate_target_format_matches_name (target,
+							    tcontent_name, tcontent_end)) {
+					    /* realloc isn't exactly the best thing here, but meh. */
+					    targets_to_test = xrealloc (targets_to_test,
+							    sizeof(cairo_boilerplate_target_t *) * (num_targets+1));
+					    targets_to_test[num_targets++] = target;
+					    found =1;
+				    }
+				    else
+				    {
+					    not_found_targets++;
+				    }
 
-	targets_to_test = xmalloc (sizeof(cairo_boilerplate_target_t*) * num_targets);
-	num_targets = 0;
-	for (list = cairo_boilerplate_targets;
-	     list != NULL;
-	     list = list->next)
-	{
-	    const cairo_boilerplate_target_t *target = list->target;
-	    targets_to_test[num_targets++] = target;
-	}
+				    if (tcontent_end)
+					    tcontent_end++;
+
+				    tcontent_name = tcontent_end;
+			    }
+		    }
+		    else
+		    {
+			    num_targets++;
+		    }
+	    }
+	    if (!found)
+	    {
+		    /* check all compiled in targets */
+		    num_targets = num_targets + not_found_targets;
+		    targets_to_test = xrealloc (targets_to_test,
+				    sizeof(cairo_boilerplate_target_t*) * num_targets);
+		    num_targets = 0;
+		    for (list = cairo_boilerplate_targets;
+				    list != NULL;
+				    list = list->next)
+		    {
+			    const cairo_boilerplate_target_t *target = list->target;
+			    targets_to_test[num_targets++] = target;
+		    }
+	    }
+
     }
 
     /* exclude targets as specified by the user */
@@ -679,10 +788,13 @@ cairo_boilerplate_get_image_target (cairo_content_t content)
 	_cairo_boilerplate_register_all ();
 
     switch (content) {
+    case CAIRO_CONTENT_COLOR:
+        return &builtin_targets[1];
+    case CAIRO_CONTENT_COLOR_ALPHA:
+        return &builtin_targets[0];
+    case CAIRO_CONTENT_ALPHA:
     default:
-    case CAIRO_CONTENT_ALPHA: return NULL;
-    case CAIRO_CONTENT_COLOR: return &builtin_targets[1];
-    case CAIRO_CONTENT_COLOR_ALPHA: return &builtin_targets[0];
+        return NULL;
     }
 }
 
@@ -830,14 +942,14 @@ cairo_boilerplate_open_any2ppm (const char   *filename,
     }
 
     *close_cb = fclose;
-    return fdopen (sk, "r");
+    return fdopen (sk, "rb");
 
 POPEN:
 #endif
 
     *close_cb = pclose;
     sprintf (command, "%s %s %d", any2ppm, filename, page);
-    return popen (command, "r");
+    return popen (command, "rb");
 }
 
 static cairo_bool_t

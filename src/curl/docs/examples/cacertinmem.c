@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -19,17 +19,11 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
-/* Example using a "in core" PEM certificate to retrieve a https page.
- * Written by Theo Borm
+/* <DESC>
+ * CA cert in memory with OpenSSL to get a HTTPS page.
+ * </DESC>
  */
 
-/* on a netBSD system with OPENSSL& LIBCURL installed from
- * pkgsrc (using default paths) this program can be compiled using:
- * gcc -I/usr/pkg/include -L/usr/pkg/lib -lcurl -Wl,-R/usr/pkg/lib -lssl
- * -lcrypto -lz -o curlcacerttest curlcacerttest.c
- * on other operating systems you may want to change paths to headers
- * and libraries
-*/
 #include <openssl/ssl.h>
 #include <curl/curl.h>
 #include <stdio.h>
@@ -103,6 +97,10 @@ static CURLcode sslctx_function(CURL * curl, void * sslctx, void * parm)
   if (X509_STORE_add_cert(store, cert)==0)
     printf("error adding certificate\n");
 
+  /* decrease reference counts */
+  X509_free(cert);
+  BIO_free(bio);
+
   /* all set to go */
   return CURLE_OK ;
 }
@@ -121,7 +119,7 @@ int main(void)
   rv=curl_easy_setopt(ch,CURLOPT_WRITEFUNCTION, *writefunction);
   rv=curl_easy_setopt(ch,CURLOPT_WRITEDATA, stdout);
   rv=curl_easy_setopt(ch,CURLOPT_HEADERFUNCTION, *writefunction);
-  rv=curl_easy_setopt(ch,CURLOPT_WRITEHEADER, stderr);
+  rv=curl_easy_setopt(ch,CURLOPT_HEADERDATA, stderr);
   rv=curl_easy_setopt(ch,CURLOPT_SSLCERTTYPE,"PEM");
   rv=curl_easy_setopt(ch,CURLOPT_SSL_VERIFYPEER,1L);
   rv=curl_easy_setopt(ch, CURLOPT_URL, "https://www.example.com/");

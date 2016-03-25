@@ -60,8 +60,9 @@ static struct alloc_stats_t total_allocations;
 static struct func_stat_t *func_stats[31627];
 static int func_stats_num;
 
-#define ARRAY_SIZE(A) (sizeof (A)/sizeof (A[0]))
-
+#ifndef ARRAY_LENGTH
+#define ARRAY_LENGTH(__array) ((int) (sizeof (__array) / sizeof (__array[0])))
+#endif
 static void
 alloc_stats_add (struct alloc_stats_t *stats, int is_realloc, size_t size)
 {
@@ -147,7 +148,7 @@ func_stats_add (const void *caller, int is_realloc, size_t size)
 
 	alloc_stats_add (&total_allocations, is_realloc, size);
 
-	i = ((uintptr_t) caller ^ 1215497) % ARRAY_SIZE (func_stats);
+	i = ((uintptr_t) caller ^ 1215497) % ARRAY_LENGTH (func_stats);
 	for (elt = func_stats[i]; elt != NULL; elt = elt->next) {
 		if (elt->addr == caller)
 			break;
@@ -328,7 +329,7 @@ malloc_stats (void)
 		return;
 
 	j = 0;
-	for (i = 0; i < ARRAY_SIZE (func_stats); i++) {
+	for (i = 0; i < ARRAY_LENGTH (func_stats); i++) {
 		struct func_stat_t *elt;
 		for (elt = func_stats[i]; elt != NULL; elt = elt->next)
 			sorted_func_stats[j++] = *elt;

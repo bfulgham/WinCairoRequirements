@@ -16,15 +16,12 @@
  * SOFTWARE.
  */
 
-#include "setup.h"
+#include "curl_setup.h"
 
 #ifndef HAVE_INET_PTON
 
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
-#endif
-#ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
 #endif
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
@@ -192,7 +189,7 @@ inet_pton6(const char *src, unsigned char *dst)
       if(tp + INT16SZ > endp)
         return (0);
       *tp++ = (unsigned char) (val >> 8) & 0xff;
-      *tp++ = (unsigned char) val & 0xff;
+      *tp++ = (unsigned char) (val & 0xff);
       saw_xdigit = 0;
       val = 0;
       continue;
@@ -209,7 +206,7 @@ inet_pton6(const char *src, unsigned char *dst)
     if(tp + INT16SZ > endp)
       return (0);
     *tp++ = (unsigned char) (val >> 8) & 0xff;
-    *tp++ = (unsigned char) val & 0xff;
+    *tp++ = (unsigned char) (val & 0xff);
   }
   if(colonp != NULL) {
     /*

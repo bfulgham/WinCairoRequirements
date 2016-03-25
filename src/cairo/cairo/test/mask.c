@@ -24,8 +24,8 @@
  *          Kristian Høgsberg <krh@redhat.com>
  */
 
-#include <math.h>
 #include "cairo-test.h"
+#include <math.h>
 #include <stdio.h>
 
 #define WIDTH 16

@@ -197,7 +197,7 @@ _cairo_dfb_surface_map_to_image (void *abstract_surface,
 	_cairo_image_surface_init (&surface->image, image, surface->image.pixman_format);
     }
 
-    return _cairo_surface_map_to_image (&surface->image.base, extents);
+    return _cairo_image_surface_map_to_image (&surface->image.base, extents);
 }
 
 static cairo_int_status_t
@@ -205,7 +205,7 @@ _cairo_dfb_surface_unmap_image (void *abstract_surface,
 				cairo_image_surface_t *image)
 {
     cairo_dfb_surface_t *surface = abstract_surface;
-    return _cairo_surface_unmap_image (&surface->image.base, image);
+    return _cairo_image_surface_unmap_image (&surface->image.base, image);
 }
 
 static cairo_status_t
@@ -522,7 +522,8 @@ cairo_directfb_surface_create (IDirectFB *dfb, IDirectFBSurface *dfbsurface)
     _cairo_surface_init (&surface->image.base,
                          &_cairo_dfb_surface_backend,
 			 NULL, /* device */
-			 _directfb_format_to_content (format));
+			 _directfb_format_to_content (format),
+			 FALSE); /* is_vector */
 
     surface->image.pixman_format = pixman_format;
     surface->image.format = _cairo_format_from_pixman_format (pixman_format);

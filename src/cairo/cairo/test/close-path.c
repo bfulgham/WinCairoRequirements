@@ -23,8 +23,8 @@
  * Author: Carl D. Worth <cworth@cworth.org>
  */
 
-#include <stdlib.h>
 #include "cairo-test.h"
+#include <stdlib.h>
 
 static cairo_test_draw_function_t draw;
 

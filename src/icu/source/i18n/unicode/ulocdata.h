@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2010, International Business Machines                   *
+* Copyright (C) 2003-2015, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -39,20 +39,32 @@ typedef struct ULocaleData ULocaleData;
   * @stable ICU 3.4
   */
 typedef enum ULocaleDataExemplarSetType  {
-     ULOCDATA_ES_STANDARD=0,      /* Basic set */
-     ULOCDATA_ES_AUXILIARY=1,     /* Auxiliary set */
-     ULOCDATA_ES_COUNT=2
+    /** Basic set @stable ICU 3.4 */
+    ULOCDATA_ES_STANDARD=0,
+    /** Auxiliary set @stable ICU 3.4 */
+    ULOCDATA_ES_AUXILIARY=1,
+    /** Index Character set @stable ICU 4.8 */
+    ULOCDATA_ES_INDEX=2,
+    /** Punctuation set @stable ICU 51 */
+    ULOCDATA_ES_PUNCTUATION=3,
+    /** One higher than the last valid type @stable ICU 3.4 */
+    ULOCDATA_ES_COUNT=4
 } ULocaleDataExemplarSetType;
 
 /** The possible types of delimiters.
   * @stable ICU 3.4
   */
 typedef enum ULocaleDataDelimiterType {
-    ULOCDATA_QUOTATION_START = 0,     /* Quotation start */
-     ULOCDATA_QUOTATION_END = 1,       /* Quotation end */
-     ULOCDATA_ALT_QUOTATION_START = 2, /* Alternate quotation start */
-     ULOCDATA_ALT_QUOTATION_END = 3,   /* Alternate quotation end */
-     ULOCDATA_DELIMITER_COUNT = 4
+    /** Quotation start @stable ICU 3.4 */
+    ULOCDATA_QUOTATION_START = 0,
+    /** Quotation end @stable ICU 3.4 */
+    ULOCDATA_QUOTATION_END = 1,
+    /** Alternate quotation start @stable ICU 3.4 */
+    ULOCDATA_ALT_QUOTATION_START = 2,
+    /** Alternate quotation end @stable ICU 3.4 */
+    ULOCDATA_ALT_QUOTATION_END = 3,
+    /** One higher than the last valid type @stable ICU 3.4 */
+    ULOCDATA_DELIMITER_COUNT = 4
 } ULocaleDataDelimiterType;
 
 /**
@@ -142,9 +154,11 @@ ulocdata_getNoSubstitute(ULocaleData *uld);
  *                  always set, regardless of the value of 'options'.
  * @param extype    Specifies the type of exemplar set to be retrieved.
  * @param status    Pointer to an input-output error code value;
- *                  must not be NULL.
+ *                  must not be NULL.  Will be set to U_MISSING_RESOURCE_ERROR
+ *                  if the requested data is not available.
  * @return USet*    Either fillIn, or if fillIn is NULL, a pointer to
  *                  a newly-allocated USet that the user must close.
+ *                  In case of error, NULL is returned.
  * @stable ICU 3.4
  */
 U_STABLE USet* U_EXPORT2
@@ -172,8 +186,9 @@ ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, UChar *re
  * @stable ICU 2.8
  */
 typedef enum UMeasurementSystem {
-    UMS_SI,     /** Measurement system specified by SI otherwise known as Metric system. */
-    UMS_US,     /** Measurement system followed in the United States of America. */
+    UMS_SI,     /**< Measurement system specified by SI otherwise known as Metric system. @stable ICU 2.8 */
+    UMS_US,     /**< Measurement system followed in the United States of America. @stable ICU 2.8 */
+    UMS_UK,     /**< Mix of metric and imperial units used in Great Britain. @stable ICU 55 */
     UMS_LIMIT
 } UMeasurementSystem;
 

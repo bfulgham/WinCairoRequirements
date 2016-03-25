@@ -1,5 +1,5 @@
-#include <math.h>
 #include "cairo-test.h"
+#include <math.h>
 #include <stdio.h>
 
 static const char *png_filename = "romedalen.png";

@@ -1,4 +1,4 @@
-.TH CJPEG 1 "31 January 2012"
+.TH CJPEG 1 "21 November 2014"
 .SH NAME
 cjpeg \- compress an image file to a JPEG file
 .SH SYNOPSIS
@@ -16,7 +16,7 @@ cjpeg \- compress an image file to a JPEG file
 compresses the named image file, or the standard input if no file is
 named, and produces a JPEG/JFIF file on the standard output.
 The currently supported input file formats are: PPM (PBMPLUS color
-format), PGM (PBMPLUS gray-scale format), BMP, Targa, and RLE (Utah Raster
+format), PGM (PBMPLUS grayscale format), BMP, Targa, and RLE (Utah Raster
 Toolkit format).  (RLE is supported only if the URT library is available.)
 .SH OPTIONS
 All switch names may be abbreviated; for example,
@@ -48,6 +48,11 @@ isn't bright enough to notice whether a BMP file uses only shades of gray.
 By saying
 .BR \-grayscale ,
 you'll get a smaller JPEG file that takes less time to process.
+.TP
+.B \-rgb
+Create RGB JPEG file.
+Using this switch suppresses the conversion from RGB
+colorspace input to the default YCbCr JPEG colorspace.
 .TP
 .B \-optimize
 Perform optimization of entropy encoding parameters.  Without this, default
@@ -161,14 +166,27 @@ Use integer DCT method (default).
 .TP
 .B \-dct fast
 Use fast integer DCT (less accurate).
+In libjpeg-turbo, the fast method is generally about 5-15% faster than the int
+method when using the x86/x86-64 SIMD extensions (results may vary with other
+SIMD implementations, or when using libjpeg-turbo without SIMD extensions.)
+For quality levels of 90 and below, there should be little or no perceptible
+difference between the two algorithms.  For quality levels above 90, however,
+the difference between the fast and the int methods becomes more pronounced.
+With quality=97, for instance, the fast method incurs generally about a 1-3 dB
+loss (in PSNR) relative to the int method, but this can be larger for some
+images.  Do not use the fast method with quality levels above 97.  The
+algorithm often degenerates at quality=98 and above and can actually produce a
+more lossy image than if lower quality levels had been used.  Also, in
+libjpeg-turbo, the fast method is not fully accelerated for quality levels
+above 97, so it will be slower than the int method.
 .TP
 .B \-dct float
 Use floating-point DCT method.
-The float method is very slightly more accurate than the int method, but is
-much slower unless your machine has very fast floating-point hardware.  Also
-note that results of the floating-point method may vary slightly across
-machines, while the integer methods should give the same results everywhere.
-The fast integer method is much less accurate than the other two.
+The float method is mainly a legacy feature.  It does not produce significantly
+more accurate results than the int method, and it is much slower.  The float
+method may also give different results on different machines due to varying
+roundoff behavior, whereas the integer methods should give the same results on
+all machines.
 .TP
 .BI \-restart " N"
 Emit a JPEG restart marker every N MCU rows, or every N MCU blocks if "B" is
@@ -190,6 +208,11 @@ selects 4000000 bytes.  If more space is needed, temporary files will be used.
 .BI \-outfile " name"
 Send output image to the named file, not to standard output.
 .TP
+.BI \-memdst
+Compress to memory instead of a file.  This feature was implemented mainly as a
+way of testing the in-memory destination manager (jpeg_mem_dest()), but it is
+also useful for benchmarking, since it reduces the I/O overhead.
+.TP
 .B \-verbose
 Enable debug printout.  More
 .BR \-v 's
@@ -198,6 +221,9 @@ give more output.  Also, version information is printed at startup.
 .B \-debug
 Same as
 .BR \-verbose .
+.TP
+.B \-version
+Print version information and exit.
 .PP
 The
 .B \-restart
@@ -308,6 +334,10 @@ Wallace, Gregory K.  "The JPEG Still Picture Compression Standard",
 Communications of the ACM, April 1991 (vol. 34, no. 4), pp. 30-44.
 .SH AUTHOR
 Independent JPEG Group
+.PP
+This file was modified by The libjpeg-turbo Project to include only information
+relevant to libjpeg-turbo, to wordsmith certain sections, and to describe
+features not present in libjpeg.
 .SH BUGS
 Support for GIF input files was removed in cjpeg v6b due to concerns over
 the Unisys LZW patent.  Although this patent expired in 2006, cjpeg still

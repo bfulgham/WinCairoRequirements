@@ -24,8 +24,8 @@
  * Author: Behdad Esfahbod <behdad@behdad.org>
  */
 
-#include <math.h>
 #include "cairo-test.h"
+#include <math.h>
 #include <stdio.h>
 
 #define SIZE 90

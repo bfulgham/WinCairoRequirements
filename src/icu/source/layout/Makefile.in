@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2007, International Business Machines
+#   Copyright (C) 1999-2013, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -52,9 +52,6 @@ DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 CFLAGS += $(LIBCFLAGS)
 CXXFLAGS += $(LIBCXXFLAGS)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
-endif
 CPPFLAGS += -I$(srcdir) -I$(srcdir)/.. -I$(top_srcdir)/common -I$(srcdir)/unicode $(LIBCPPFLAGS)
 DEFS += -DU_LAYOUT_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICULE)
@@ -133,7 +130,21 @@ TibetanLayoutEngine.o \
 TibetanReordering.o \
 HangulLayoutEngine.o \
 KernTable.o \
-loengine.o
+loengine.o \
+ContextualGlyphInsertionProc2.o \
+ContextualGlyphSubstProc2.o \
+GXLayoutEngine2.o \
+IndicRearrangementProcessor2.o \
+LigatureSubstProc2.o \
+MorphTables2.o \
+NonContextualGlyphSubstProc2.o \
+SegmentArrayProcessor2.o \
+SegmentSingleProcessor2.o \
+SimpleArrayProcessor2.o \
+SingleTableProcessor2.o \
+StateTableProcessor2.o \
+SubtableProcessor2.o \
+TrimmedArrayProcessor2.o
 
 ## Header files to install
 HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h $(srcdir)/loengine.h
@@ -147,7 +158,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
 distclean distclean-local install-library install-headers dist	\
-dist-local check check-local
+dist-local check check-local check-exhaustive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -159,6 +170,8 @@ clean: clean-local
 distclean : distclean-local
 dist: dist-local
 check: all check-local
+
+check-exhaustive: check
 
 all-local: $(ALL_TARGETS)
 
@@ -219,6 +232,11 @@ endif
 ifneq ($(ENABLE_SHARED),)
 $(SHARED_OBJECT): $(OBJECTS) $(SO_VERSION_DATA)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
+ifeq ($(ENABLE_RPATH),YES)
+ifneq ($(wildcard $(libdir)/$(MIDDLE_SO_TARGET)),)
+	$(warning RPATH warning: --enable-rpath means test programs may use existing $(libdir)/$(MIDDLE_SO_TARGET))
+endif
+endif
 
 ifeq ($(OS390BATCH),1)
 $(BATCH_TARGET):$(OBJECTS)
@@ -233,4 +251,3 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
-

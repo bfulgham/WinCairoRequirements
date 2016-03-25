@@ -155,7 +155,7 @@ static cairo_bool_t upload_box (cairo_box_t *box, void *closure)
 
     TRACE ((stderr, "%s\n", __FUNCTION__));
     return StretchDIBits (cb->dst, x, y + height - 1, width, -height,
-           x + cb->tx,  src_height - (y + cb->ty - 1),
+			  x + cb->tx,  src_height - (y + cb->ty - 1),
 			  width, -height,
 			  cb->data, &cb->bi,
 			  DIB_RGB_COLORS, SRCCOPY);
@@ -404,8 +404,7 @@ draw_boxes (cairo_composite_rectangles_t *composite,
 	return CAIRO_STATUS_SUCCESS;
 
     if (!boxes->is_pixel_aligned)
-	return CAIRO_STATUS_SUCCESS;
-	//return CAIRO_INT_STATUS_UNSUPPORTED;
+	return CAIRO_INT_STATUS_UNSUPPORTED;
 
     if (op == CAIRO_OPERATOR_CLEAR)
 	op = CAIRO_OPERATOR_SOURCE;

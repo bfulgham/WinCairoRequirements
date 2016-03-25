@@ -41,7 +41,7 @@ draw (cairo_t *cr, int width, int height)
     png = cairo_test_create_surface_from_png (ctx, png_filename);
 
     stride = cairo_format_stride_for_width (format, width);
-    data = calloc (stride, height);
+    data = xcalloc (stride, height);
     inv = cairo_image_surface_create_for_data (data + stride * (height - 1),
 					       format, width, height, -stride);
 

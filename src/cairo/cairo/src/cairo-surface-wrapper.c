@@ -119,14 +119,14 @@ _cairo_surface_wrapper_get_clip (cairo_surface_wrapper_t *wrapper,
 				 const cairo_clip_t *clip)
 {
     cairo_clip_t *copy;
+    cairo_matrix_t m;
 
     copy = _cairo_clip_copy (clip);
     if (wrapper->has_extents) {
 	copy = _cairo_clip_intersect_rectangle (copy, &wrapper->extents);
     }
-    copy = _cairo_clip_transform (copy, &wrapper->transform);
-    if (! _cairo_matrix_is_identity (&wrapper->target->device_transform))
-	copy = _cairo_clip_transform (copy, &wrapper->target->device_transform);
+    _cairo_surface_wrapper_get_transform (wrapper, &m);
+    copy = _cairo_clip_transform (copy, &m);
     if (wrapper->clip)
 	copy = _cairo_clip_intersect_clip (copy, wrapper->clip);
 
@@ -437,12 +437,11 @@ _cairo_surface_wrapper_show_text_glyphs (cairo_surface_wrapper_t *wrapper,
 
 	_cairo_surface_wrapper_get_transform (wrapper, &m);
 
-	if (! _cairo_matrix_is_translation (&wrapper->transform)) {
+	if (! _cairo_matrix_is_translation (&m)) {
 	    cairo_matrix_t ctm;
 
-	    /* XXX No device-transform? A bug in the tangle of layers? */
 	    _cairo_matrix_multiply (&ctm,
-				    &wrapper->transform,
+				    &m,
 				    &scaled_font->ctm);
 	    dev_scaled_font = cairo_scaled_font_create (scaled_font->font_face,
 							&scaled_font->font_matrix,
@@ -514,8 +513,8 @@ _cairo_surface_wrapper_create_similar (cairo_surface_wrapper_t *wrapper,
 				       int		width,
 				       int		height)
 {
-    return _cairo_surface_create_similar_scratch (wrapper->target,
-						  content, width, height);
+    return _cairo_surface_create_scratch (wrapper->target,
+					  content, width, height, NULL);
 }
 
 cairo_bool_t

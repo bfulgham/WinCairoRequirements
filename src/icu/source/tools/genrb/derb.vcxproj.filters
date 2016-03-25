@@ -2,20 +2,20 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{689a3b29-2b8d-48a6-a045-3736fda15e6b}</UniqueIdentifier>
+      <UniqueIdentifier>{b10d3c34-0b4c-43e9-9c28-e17fdabee575}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{6e1fa78f-e407-42e0-ade5-6bdee37eab76}</UniqueIdentifier>
+      <UniqueIdentifier>{0f0a70a2-7e7e-4e7a-88ab-b3bf739fabed}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{24fc9a67-6fd1-4bc4-9d04-a887e4a86ca8}</UniqueIdentifier>
+      <UniqueIdentifier>{ac6d5215-57af-486d-81ed-badc17745780}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="derb.c">
+    <ClCompile Include="derb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

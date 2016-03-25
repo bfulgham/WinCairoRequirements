@@ -1,161 +1,153 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Include="jcolsamp.inc">
-      <Filter>asm</Filter>
-    </None>
-    <None Include="jdct.inc">
-      <Filter>asm</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="asm">
       <UniqueIdentifier>{eb7a1ea9-f0e6-4e21-8545-278295a8fe96}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <NASM Include="jisseflt.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2red.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2red-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2int.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2int-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2fst.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2fst-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2flt.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jiss2flt-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jimmxred.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jimmxint.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jimmxfst.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="ji3dnflt.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfsseflt.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfsseflt-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfss2int.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfss2int-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfss2fst.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfss2fst-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfmmxint.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jfmmxfst.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jf3dnflt.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdsamss2.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdsamss2-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdsammmx.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdmerss2.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdmerss2-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdmermmx.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdcolss2.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdcolss2-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jdcolmmx.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcsamss2.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcsamss2-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcsammmx.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcqntsse.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcqnts2i.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcqnts2i-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcqnts2f.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcqnts2f-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcqntmmx.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcqnt3dn.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcgrass2.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcgrass2-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jcgrammx.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jccolss2.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jccolss2-64.asm">
-      <Filter>asm</Filter>
-    </NASM>
-    <NASM Include="jccolmmx.asm">
-      <Filter>asm</Filter>
-    </NASM>
     <NASM Include="jsimdcpu.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jccolor-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jccolor-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jccolor-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jcgray-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jcgray-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jcgray-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jcsample-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jcsample-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jcsample-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdcolor-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdcolor-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdcolor-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdmerge-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdmerge-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdmerge-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdsample-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdsample-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jdsample-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctflt-3dn.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctflt-sse.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctflt-sse-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctfst-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctfst-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctfst-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctint-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctint-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jfdctint-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctflt-3dn.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctflt-sse.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctflt-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctflt-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctfst-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctfst-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctfst-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctint-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctint-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctint-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctred-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctred-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jidctred-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jquant-3dn.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jquantf-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jquantf-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jquanti-sse2.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jquanti-sse2-64.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jquant-mmx.asm">
+      <Filter>asm</Filter>
+    </NASM>
+    <NASM Include="jquant-sse.asm">
       <Filter>asm</Filter>
     </NASM>
   </ItemGroup>

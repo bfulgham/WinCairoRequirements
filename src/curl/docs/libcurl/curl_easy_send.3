@@ -5,7 +5,7 @@
 .\" *                            | (__| |_| |  _ <| |___
 .\" *                             \___|\___/|_| \_\_____|
 .\" *
-.\" * Copyright (C) 1998 - 2010, Daniel Stenberg, <daniel@haxx.se>, et al.
+.\" * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
 .\" *
 .\" * This software is licensed as described in the file COPYING, which
 .\" * you should have received as part of this distribution. The terms
@@ -39,9 +39,10 @@ connection set-up.
 \fBbuffer\fP is a pointer to the data of length \fBbuflen\fP that you want sent.
 The variable \fBn\fP points to will receive the number of sent bytes.
 
-To establish the connection, set \fBCURLOPT_CONNECT_ONLY\fP option before
-calling \fIcurl_easy_perform(3)\fP. Note that \fIcurl_easy_send(3)\fP will not
-work on connections that were created without this option.
+To establish the connection, set \fBCURLOPT_CONNECT_ONLY(3)\fP option before
+calling \fIcurl_easy_perform(3)\fP or \fIcurl_multi_perform()\fP. Note that
+\fIcurl_easy_send(3)\fP will not work on connections that were created without
+this option.
 
 You must ensure that the socket is writable before calling
 \fIcurl_easy_send(3)\fP, otherwise the call will return \fBCURLE_AGAIN\fP -
@@ -57,6 +58,9 @@ sent into \fB*n\fP. Note that this may very well be less than the amount you
 wanted to send.
 
 On failure, returns the appropriate error code.
+
+If there's no socket available to use from the previous transfer, this function
+returns CURLE_UNSUPPORTED_PROTOCOL.
 .SH EXAMPLE
 See \fBsendrecv.c\fP in \fBdocs/examples\fP directory for usage example.
 .SH "SEE ALSO"

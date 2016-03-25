@@ -1,3 +1,11 @@
+/*
+ * The intention for sphinx is for detection of rendering errors inside
+ * applications by simultaneously rendering on to the target device and on
+ * an image surface and comparing the two. If it found a discrepancy, it
+ * would then dump the trace that reproduces the error. (Then apply
+ * delta-debugging to reduce that down to a minimal trace.)
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -25,6 +33,10 @@
 
 #ifndef CAIRO_HAS_REAL_PTHREAD
 # error "cairo-sphinx needs real pthreads"
+#endif
+
+#ifndef MAP_NORESERVE
+#define MAP_NORESERVE 0
 #endif
 
 #define DATA_SIZE (256 << 20)

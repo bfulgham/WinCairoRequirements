@@ -38,7 +38,16 @@ typedef struct _cairo_stats {
     double ticks_per_ms;
     double std_dev;
     int iterations;
+    cairo_time_t *values;
 } cairo_stats_t;
+
+typedef struct _cairo_histogram {
+    int width, height, max_count;
+    int num_columns, num_rows;
+    cairo_time_t min_value, max_value;
+    int *columns;
+} cairo_histogram_t;
+
 
 /* timers */
 
@@ -185,6 +194,14 @@ test_report_cmp_name (const void *a,
 #define CAIRO_PERF_RUN_DECL(func) void (func) (cairo_perf_t *perf, cairo_t *cr, int width, int height)
 
 #define CAIRO_PERF_DECL(func) CAIRO_PERF_RUN_DECL(func); CAIRO_PERF_ENABLED_DECL(func)
+
+#ifndef MIN
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#endif
+
+#ifndef MAX
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#endif
 
 CAIRO_PERF_DECL (fill);
 CAIRO_PERF_DECL (paint);

@@ -28,23 +28,27 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -115,12 +119,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\openssl\openssl\libeay32.vcxproj">
-      <Project>{94e8b419-53a1-4c01-857e-9744f79a4822}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\openssl\openssl\ssleay32.vcxproj">
-      <Project>{74efb919-63b2-4c01-857e-9744f79a4822}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\lib\libcurl.vcxproj">
       <Project>{69cce97a-88c6-49e2-bb5f-9cec31bec238}</Project>
     </ProjectReference>
@@ -177,7 +175,7 @@
     <ClCompile Include="..\..\lib\nonblock.c" />
     <ClCompile Include="..\..\lib\rawstr.c" />
     <ClCompile Include="..\..\lib\strtoofft.c" />
-    <ClCompile Include="..\hugehelp.c" />
+    <ClCompile Include="..\..\lib\warnless.c" />
     <ClCompile Include="..\tool_binmode.c" />
     <ClCompile Include="..\tool_bname.c" />
     <ClCompile Include="..\tool_cb_dbg.c" />
@@ -185,7 +183,6 @@
     <ClCompile Include="..\tool_cb_prg.c" />
     <ClCompile Include="..\tool_cb_rea.c" />
     <ClCompile Include="..\tool_cb_see.c" />
-    <ClCompile Include="..\tool_cb_skt.c" />
     <ClCompile Include="..\tool_cb_wrt.c" />
     <ClCompile Include="..\tool_cfgable.c" />
     <ClCompile Include="..\tool_convert.c" />
@@ -198,6 +195,7 @@
     <ClCompile Include="..\tool_help.c" />
     <ClCompile Include="..\tool_helpers.c" />
     <ClCompile Include="..\tool_homedir.c" />
+    <ClCompile Include="..\tool_hugehelp.c" />
     <ClCompile Include="..\tool_libinfo.c" />
     <ClCompile Include="..\tool_main.c" />
     <ClCompile Include="..\tool_mfiles.c" />

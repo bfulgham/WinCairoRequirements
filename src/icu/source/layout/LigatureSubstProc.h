@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2014 - All Rights Reserved
  *
  */
 
@@ -33,20 +33,20 @@ public:
 
     virtual void endStateTable();
 
-    LigatureSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader);
+    LigatureSubstitutionProcessor(const LEReferenceTo<MorphSubtableHeader> &morphSubtableHeader, LEErrorCode &success);
     virtual ~LigatureSubstitutionProcessor();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static UClassID getStaticClassID();
 
@@ -58,12 +58,12 @@ protected:
     ByteOffset componentTableOffset;
     ByteOffset ligatureTableOffset;
 
-    const LigatureSubstitutionStateEntry *entryTable;
+    LEReferenceToArrayOf<LigatureSubstitutionStateEntry> entryTable;
 
     le_int32 componentStack[nComponents];
     le_int16 m;
 
-    const LigatureSubstitutionHeader *ligatureSubstitutionHeader;
+    LEReferenceTo<LigatureSubstitutionHeader> ligatureSubstitutionHeader;
 
 };
 

@@ -140,9 +140,6 @@ _cairo_quartz_surface_create_internal (CGContextRef cgContext,
 				       unsigned int width,
 				       unsigned int height);
 
-static cairo_bool_t
-_cairo_surface_is_quartz (const cairo_surface_t *surface);
-
 /* Load all extra symbols */
 static void quartz_ensure_symbols (void)
 {
@@ -511,9 +508,13 @@ _cairo_cgcontext_set_cairo_operator (CGContextRef context, cairo_operator_t op)
 
     /* Quartz doesn't support SATURATE at all. COLOR_DODGE and
      * COLOR_BURN in Quartz follow the ISO32000 definition, but cairo
-     * uses the definition from the Adobe Supplement.
+     * uses the definition from the Adobe Supplement.  Also fallback
+     * on SOFT_LIGHT and HSL_HUE, because their results are
+     * significantly different from those provided by pixman.
      */
     if (op == CAIRO_OPERATOR_SATURATE ||
+	op == CAIRO_OPERATOR_SOFT_LIGHT ||
+	op == CAIRO_OPERATOR_HSL_HUE ||
 	op == CAIRO_OPERATOR_COLOR_DODGE ||
 	op == CAIRO_OPERATOR_COLOR_BURN)
     {
@@ -608,14 +609,25 @@ _cairo_quartz_cairo_line_join_to_quartz (cairo_line_join_t cjoin)
 static inline CGInterpolationQuality
 _cairo_quartz_filter_to_quartz (cairo_filter_t filter)
 {
+    /* The CGInterpolationQuality enumeration values seem to have the
+     * following meaning:
+     *  - kCGInterpolationNone: nearest neighbor
+     *  - kCGInterpolationLow: bilinear
+     *  - kCGInterpolationHigh: bicubic? Lanczos?
+     */
+
     switch (filter) {
     case CAIRO_FILTER_NEAREST:
     case CAIRO_FILTER_FAST:
 	return kCGInterpolationNone;
 
     case CAIRO_FILTER_BEST:
+	return kCGInterpolationHigh;
+
     case CAIRO_FILTER_GOOD:
     case CAIRO_FILTER_BILINEAR:
+	return kCGInterpolationLow;
+
     case CAIRO_FILTER_GAUSSIAN:
 	return kCGInterpolationDefault;
 
@@ -1374,7 +1386,6 @@ _cairo_quartz_teardown_state (cairo_quartz_drawing_state_t *state,
 	CGContextDrawLayerInRect (surface->cgContext,
 				  state->clipRect,
 				  state->layer);
-	CGContextRelease (state->cgDrawContext);
 	CGLayerRelease (state->layer);
     }
 
@@ -2251,7 +2262,8 @@ _cairo_quartz_surface_create_internal (CGContextRef cgContext,
     _cairo_surface_init (&surface->base,
 			 &cairo_quartz_surface_backend,
 			 NULL, /* device */
-			 content);
+			 content,
+			 FALSE); /* is_vector */
 
     _cairo_surface_clipper_init (&surface->clipper,
 				 _cairo_quartz_surface_clipper_intersect_clip_path);
@@ -2466,7 +2478,15 @@ cairo_quartz_surface_get_cg_context (cairo_surface_t *surface)
 	return NULL;
 }
 
-static cairo_bool_t
+/**
+ * _cairo_surface_is_quartz:
+ * @surface: a #cairo_surface_t
+ *
+ * Checks if a surface is a #cairo_quartz_surface_t
+ *
+ * Return value: True if the surface is an quartz surface
+ **/
+cairo_bool_t
 _cairo_surface_is_quartz (const cairo_surface_t *surface)
 {
     return surface->backend == &cairo_quartz_surface_backend;

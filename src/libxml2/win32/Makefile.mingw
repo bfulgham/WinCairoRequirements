@@ -60,6 +60,9 @@ endif
 ifeq ($(WITH_ZLIB),1)
 CFLAGS += -DHAVE_ZLIB_H
 endif
+ifeq ($(WITH_LZMA),1)
+CFLAGS += -DHAVE_LZMA_H
+endif
 
 # The linker and its options.
 LD = gcc.exe
@@ -82,6 +85,9 @@ ifeq ($(WITH_ZLIB),1)
 # Could be named differently
 # LIBS += -lzdll
 LIBS += -lz
+endif
+ifeq ($(WITH_LZMA),1)
+LIBS += -llzma
 endif
 ifeq ($(WITH_THREADS),posix)
 LIBS += -lpthreadGC
@@ -107,7 +113,8 @@ endif
 
 
 # Libxml object files.
-XML_OBJS = $(XML_INTDIR)/c14n.o\
+XML_OBJS = $(XML_INTDIR)/buf.o\
+	$(XML_INTDIR)/c14n.o\
 	$(XML_INTDIR)/catalog.o\
 	$(XML_INTDIR)/chvalid.o\
 	$(XML_INTDIR)/debugXML.o\
@@ -154,7 +161,8 @@ XML_OBJS = $(XML_INTDIR)/c14n.o\
 XML_SRCS = $(subst .o,.c,$(subst $(XML_INTDIR)/,$(XML_SRCDIR)/,$(XML_OBJS)))
 
 # Static libxml object files.
-XML_OBJS_A = $(XML_INTDIR_A)/c14n.o\
+XML_OBJS_A = $(XML_INTDIR_A)/buf.o\
+	$(XML_INTDIR_A)/c14n.o\
 	$(XML_INTDIR_A)/catalog.o\
 	$(XML_INTDIR_A)/chvalid.o\
 	$(XML_INTDIR_A)/debugXML.o\
@@ -217,7 +225,8 @@ UTILS = $(BINDIR)/xmllint.exe\
 	$(BINDIR)/testXPath.exe\
 	$(BINDIR)/runtest.exe\
 	$(BINDIR)/runsuite.exe\
-	$(BINDIR)/testapi.exe
+	$(BINDIR)/testapi.exe\
+	$(BINDIR)/testlimits.exe
 
 ifeq ($(WITH_THREADS),yes)
 UTILS += $(BINDIR)/testThreadsWin32.exe
@@ -254,10 +263,11 @@ distclean : clean
 rebuild : clean all
 
 install-libs : all
-	cmd.exe /C "if not exist $(INCPREFIX)\libxml mkdir $(INCPREFIX)\libxml"
+	cmd.exe /C "if not exist $(INCPREFIX)\libxml2 mkdir $(INCPREFIX)\libxml2"
+	cmd.exe /C "if not exist $(INCPREFIX)\libxml2\libxml mkdir $(INCPREFIX)\libxml2\libxml"
 	cmd.exe /C "if not exist $(BINPREFIX) mkdir $(BINPREFIX)"
 	cmd.exe /C "if not exist $(LIBPREFIX) mkdir $(LIBPREFIX)"
-	cmd.exe /C "copy $(XML_SRCDIR)\include\libxml\*.h $(INCPREFIX)\libxml"
+	cmd.exe /C "copy $(XML_SRCDIR)\include\libxml\*.h $(INCPREFIX)\libxml2\libxml"
 	cmd.exe /C "copy $(BINDIR)\$(XML_SO) $(SOPREFIX)"
 	cmd.exe /C "copy $(BINDIR)\$(XML_A) $(LIBPREFIX)"
 	cmd.exe /C "copy $(BINDIR)\$(XML_IMP) $(LIBPREFIX)"

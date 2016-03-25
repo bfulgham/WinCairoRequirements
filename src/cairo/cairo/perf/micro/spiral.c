@@ -24,8 +24,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-#include <assert.h>
 #include "cairo-perf.h"
+#include <assert.h>
 
 #define MAX_SEGMENTS 2560
 

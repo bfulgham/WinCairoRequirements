@@ -93,8 +93,9 @@
 
 /* VBO size that we allocate, smaller size means we gotta flush more often,
  * but larger means hogging more memory and can cause trouble for drivers
- * (especially on embedded devices). */
-#define CAIRO_GL_VBO_SIZE (16*1024)
+ * (especially on embedded devices). Use the CAIRO_GL_VBO_SIZE environment
+ * variable to set this to a different size. */
+#define CAIRO_GL_VBO_SIZE_DEFAULT (1024*1024)
 
 typedef struct _cairo_gl_surface cairo_gl_surface_t;
 
@@ -201,6 +202,13 @@ typedef enum cairo_gl_tex {
 typedef struct cairo_gl_shader {
     GLuint fragment_shader;
     GLuint program;
+    GLint mvp_location;
+    GLint constant_location[2];
+    GLint a_location[2];
+    GLint circle_d_location[2];
+    GLint radius_0_location[2];
+    GLint texdims_location[2];
+    GLint texgen_location[2];
 } cairo_gl_shader_t;
 
 typedef enum cairo_gl_shader_in {
@@ -240,88 +248,82 @@ typedef void (*cairo_gl_emit_glyph_t) (cairo_gl_context_t *ctx,
 #define cairo_gl_var_type_hash(src,mask,spans,dest) ((spans) << 5) | ((mask) << 3 | (src << 1) | (dest))
 #define CAIRO_GL_VAR_TYPE_MAX (1 << 6)
 
-#if defined CAIRO_HAS_WGL_FUNCTIONS
-typedef int (WINAPI *cairo_gl_generic_func_t)(void);
-typedef WINGDIAPI cairo_gl_generic_func_t (WINAPI *cairo_gl_get_proc_addr_func_t)(LPCTSTR);
-#else
-#define APIENTRY
 typedef void (*cairo_gl_generic_func_t)(void);
 typedef cairo_gl_generic_func_t (*cairo_gl_get_proc_addr_func_t)(const char *procname);
-#endif
 
 typedef struct _cairo_gl_dispatch {
     /* Buffers */
-    void (APIENTRY *GenBuffers) (GLsizei n, GLuint *buffers);
-    void (APIENTRY *BindBuffer) (GLenum target, GLuint buffer);
-    void (APIENTRY *BufferData) (GLenum target, GLsizeiptr size,
+    void (*GenBuffers) (GLsizei n, GLuint *buffers);
+    void (*BindBuffer) (GLenum target, GLuint buffer);
+    void (*BufferData) (GLenum target, GLsizeiptr size,
 			  const GLvoid* data, GLenum usage);
-    GLvoid *(APIENTRY *MapBuffer) (GLenum target, GLenum access);
-    GLboolean (APIENTRY *UnmapBuffer) (GLenum target);
+    GLvoid *(*MapBuffer) (GLenum target, GLenum access);
+    GLboolean (*UnmapBuffer) (GLenum target);
 
     /* Shaders */
-    GLuint (APIENTRY *CreateShader) (GLenum type);
-    void (APIENTRY *ShaderSource) (GLuint shader, GLsizei count,
+    GLuint (*CreateShader) (GLenum type);
+    void (*ShaderSource) (GLuint shader, GLsizei count,
 			    const GLchar** string, const GLint* length);
-    void (APIENTRY *CompileShader) (GLuint shader);
-    void (APIENTRY *GetShaderiv) (GLuint shader, GLenum pname, GLint *params);
-    void (APIENTRY *GetShaderInfoLog) (GLuint shader, GLsizei bufSize,
+    void (*CompileShader) (GLuint shader);
+    void (*GetShaderiv) (GLuint shader, GLenum pname, GLint *params);
+    void (*GetShaderInfoLog) (GLuint shader, GLsizei bufSize,
 				GLsizei *length, GLchar *infoLog);
-    void (APIENTRY *DeleteShader) (GLuint shader);
+    void (*DeleteShader) (GLuint shader);
 
     /* Programs */
-    GLuint (APIENTRY *CreateProgram) (void);
-    void (APIENTRY *AttachShader) (GLuint program, GLuint shader);
-    void (APIENTRY *DeleteProgram) (GLuint program);
-    void (APIENTRY *LinkProgram) (GLuint program);
-    void (APIENTRY *UseProgram) (GLuint program);
-    void (APIENTRY *GetProgramiv) (GLuint program, GLenum pname, GLint *params);
-    void (APIENTRY *GetProgramInfoLog) (GLuint program, GLsizei bufSize,
+    GLuint (*CreateProgram) (void);
+    void (*AttachShader) (GLuint program, GLuint shader);
+    void (*DeleteProgram) (GLuint program);
+    void (*LinkProgram) (GLuint program);
+    void (*UseProgram) (GLuint program);
+    void (*GetProgramiv) (GLuint program, GLenum pname, GLint *params);
+    void (*GetProgramInfoLog) (GLuint program, GLsizei bufSize,
 				 GLsizei *length, GLchar *infoLog);
 
     /* Uniforms */
-    GLint (APIENTRY *GetUniformLocation) (GLuint program, const GLchar* name);
-    void (APIENTRY *Uniform1f) (GLint location, GLfloat x);
-    void (APIENTRY *Uniform2f) (GLint location, GLfloat x, GLfloat y);
-    void (APIENTRY *Uniform3f) (GLint location, GLfloat x, GLfloat y, GLfloat z);
-    void (APIENTRY *Uniform4f) (GLint location, GLfloat x, GLfloat y, GLfloat z,
+    GLint (*GetUniformLocation) (GLuint program, const GLchar* name);
+    void (*Uniform1f) (GLint location, GLfloat x);
+    void (*Uniform2f) (GLint location, GLfloat x, GLfloat y);
+    void (*Uniform3f) (GLint location, GLfloat x, GLfloat y, GLfloat z);
+    void (*Uniform4f) (GLint location, GLfloat x, GLfloat y, GLfloat z,
 			 GLfloat w);
-    void (APIENTRY *UniformMatrix3fv) (GLint location, GLsizei count,
+    void (*UniformMatrix3fv) (GLint location, GLsizei count,
 				GLboolean transpose, const GLfloat *value);
-    void (APIENTRY *UniformMatrix4fv) (GLint location, GLsizei count,
+    void (*UniformMatrix4fv) (GLint location, GLsizei count,
 			      GLboolean transpose, const GLfloat *value);
-    void (APIENTRY *Uniform1i) (GLint location, GLint x);
+    void (*Uniform1i) (GLint location, GLint x);
 
     /* Attributes */
-    void (APIENTRY *BindAttribLocation) (GLuint program, GLuint index,
+    void (*BindAttribLocation) (GLuint program, GLuint index,
 				const GLchar *name);
-    void (APIENTRY *VertexAttribPointer) (GLuint index, GLint size, GLenum type,
+    void (*VertexAttribPointer) (GLuint index, GLint size, GLenum type,
 				 GLboolean normalized, GLsizei stride,
 				 const GLvoid *pointer);
-    void (APIENTRY *EnableVertexAttribArray) (GLuint index);
-    void (APIENTRY *DisableVertexAttribArray) (GLuint index);
+    void (*EnableVertexAttribArray) (GLuint index);
+    void (*DisableVertexAttribArray) (GLuint index);
 
     /* Framebuffer objects */
-    void (APIENTRY *GenFramebuffers) (GLsizei n, GLuint* framebuffers);
-    void (APIENTRY *BindFramebuffer) (GLenum target, GLuint framebuffer);
-    void (APIENTRY *FramebufferTexture2D) (GLenum target, GLenum attachment,
+    void (*GenFramebuffers) (GLsizei n, GLuint* framebuffers);
+    void (*BindFramebuffer) (GLenum target, GLuint framebuffer);
+    void (*FramebufferTexture2D) (GLenum target, GLenum attachment,
 				    GLenum textarget, GLuint texture,
 				    GLint level);
-    GLenum (APIENTRY *CheckFramebufferStatus) (GLenum target);
-    void (APIENTRY *DeleteFramebuffers) (GLsizei n, const GLuint* framebuffers);
-    void (APIENTRY *GenRenderbuffers) (GLsizei n, GLuint *renderbuffers);
-    void (APIENTRY *BindRenderbuffer) (GLenum target, GLuint renderbuffer);
-    void (APIENTRY *RenderbufferStorage) (GLenum target, GLenum internal_format,
+    GLenum (*CheckFramebufferStatus) (GLenum target);
+    void (*DeleteFramebuffers) (GLsizei n, const GLuint* framebuffers);
+    void (*GenRenderbuffers) (GLsizei n, GLuint *renderbuffers);
+    void (*BindRenderbuffer) (GLenum target, GLuint renderbuffer);
+    void (*RenderbufferStorage) (GLenum target, GLenum internal_format,
 				 GLsizei width, GLsizei height);
-    void (APIENTRY *FramebufferRenderbuffer) (GLenum target, GLenum attachment,
+    void (*FramebufferRenderbuffer) (GLenum target, GLenum attachment,
 				     GLenum renderbuffer_ttarget, GLuint renderbuffer);
-    void (APIENTRY *DeleteRenderbuffers) (GLsizei n, GLuint *renderbuffers);
-    void (APIENTRY *BlitFramebuffer) (GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
+    void (*DeleteRenderbuffers) (GLsizei n, GLuint *renderbuffers);
+    void (*BlitFramebuffer) (GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
 			     GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
 			     GLbitfield mask, GLenum filter);
-    void (APIENTRY *RenderbufferStorageMultisample) (GLenum target, GLsizei samples,
+    void (*RenderbufferStorageMultisample) (GLenum target, GLsizei samples,
 					    GLenum internalformat,
 					    GLsizei width, GLsizei height);
-    void (APIENTRY *FramebufferTexture2DMultisample) (GLenum target, GLenum attachment,
+    void (*FramebufferTexture2DMultisample) (GLenum target, GLenum attachment,
 					     GLenum textarget, GLuint texture,
 					     GLint level, GLsizei samples);
 } cairo_gl_dispatch_t;
@@ -360,6 +362,7 @@ struct _cairo_gl_context {
     cairo_gl_operand_t operands[2];
     cairo_bool_t spans;
 
+    unsigned int vbo_size;
     unsigned int vb_offset;
     unsigned int vertex_size;
     cairo_region_t *clip_region;
@@ -446,6 +449,9 @@ _cairo_gl_surface_draw_image (cairo_gl_surface_t *dst,
 			      int dst_x, int dst_y,
 			      cairo_bool_t force_flush);
 
+cairo_private cairo_int_status_t
+_cairo_gl_surface_resolve_multisampling (cairo_gl_surface_t *surface);
+
 static cairo_always_inline cairo_bool_t
 _cairo_gl_device_has_glsl (cairo_device_t *device)
 {
@@ -495,13 +501,14 @@ _cairo_gl_context_release (cairo_gl_context_t *ctx, cairo_status_t status)
 }
 
 cairo_private void
-_cairo_gl_activate_surface_as_nonmultisampling (cairo_gl_context_t *ctx,
-						cairo_gl_surface_t *surface);
-
-cairo_private void
 _cairo_gl_context_set_destination (cairo_gl_context_t *ctx,
 				   cairo_gl_surface_t *surface,
 				   cairo_bool_t multisampling);
+
+cairo_private void
+_cairo_gl_context_bind_framebuffer (cairo_gl_context_t *ctx,
+				    cairo_gl_surface_t *surface,
+				    cairo_bool_t multisampling);
 
 cairo_private cairo_gl_emit_rect_t
 _cairo_gl_context_choose_emit_rect (cairo_gl_context_t *ctx);
@@ -653,35 +660,35 @@ _cairo_gl_get_shader_by_type (cairo_gl_context_t *ctx,
 
 cairo_private void
 _cairo_gl_shader_bind_float (cairo_gl_context_t *ctx,
-			     const char *name,
+			     GLint location,
 			     float value);
 
 cairo_private void
 _cairo_gl_shader_bind_vec2 (cairo_gl_context_t *ctx,
-			    const char *name,
+			    GLint location,
 			    float value0, float value1);
 
 cairo_private void
 _cairo_gl_shader_bind_vec3 (cairo_gl_context_t *ctx,
-			    const char *name,
+			    GLint location,
 			    float value0,
 			    float value1,
 			    float value2);
 
 cairo_private void
 _cairo_gl_shader_bind_vec4 (cairo_gl_context_t *ctx,
-			    const char *name,
+			    GLint location,
 			    float value0, float value1,
 			    float value2, float value3);
 
 cairo_private void
 _cairo_gl_shader_bind_matrix (cairo_gl_context_t *ctx,
-			      const char *name,
+			      GLint location,
 			      const cairo_matrix_t* m);
 
 cairo_private void
 _cairo_gl_shader_bind_matrix4f (cairo_gl_context_t *ctx,
-				const char *name,
+				GLint location,
 				GLfloat* gl_m);
 
 cairo_private void
@@ -696,6 +703,9 @@ _cairo_gl_get_version (void);
 
 cairo_private cairo_gl_flavor_t
 _cairo_gl_get_flavor (void);
+
+cairo_private unsigned long
+_cairo_gl_get_vbo_size (void);
 
 cairo_private cairo_bool_t
 _cairo_gl_has_extension (const char *ext);

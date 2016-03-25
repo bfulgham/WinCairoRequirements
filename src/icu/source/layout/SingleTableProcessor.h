@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2014 - All Rights Reserved
  *
  */
 
@@ -25,23 +25,23 @@ class LEGlyphStorage;
 class SingleTableProcessor : public NonContextualGlyphSubstitutionProcessor
 {
 public:
-    virtual void process(LEGlyphStorage &glyphStorage);
+    virtual void process(LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
-    SingleTableProcessor(const MorphSubtableHeader *morphSubtableHeader);
+    SingleTableProcessor(const LEReferenceTo<MorphSubtableHeader> &morphSubtableHeader, LEErrorCode &success);
 
     virtual ~SingleTableProcessor();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static UClassID getStaticClassID();
 
@@ -49,7 +49,7 @@ private:
     SingleTableProcessor();
 
 protected:
-    const SingleTableLookupTable *singleTableLookupTable;
+    LEReferenceTo<SingleTableLookupTable> singleTableLookupTable;
 
 };
 

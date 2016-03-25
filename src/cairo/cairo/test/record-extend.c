@@ -27,8 +27,8 @@
  *	Chris Wilson <chris@chris-wilson.co.uk>
  */
 
-#include <math.h>
 #include "cairo-test.h"
+#include <math.h>
 #include <stdio.h>
 
 #define SIZE 90

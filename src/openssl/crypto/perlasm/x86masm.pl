@@ -33,10 +33,13 @@ sub ::generic
 sub ::call	{ &::emit("call",(&::islabel($_[0]) or "$nmdecor$_[0]")); }
 sub ::call_ptr	{ &::emit("call",@_);	}
 sub ::jmp_ptr	{ &::emit("jmp",@_);	}
+sub ::lock	{ &::data_byte(0xf0);	}
 
 sub get_mem
 { my($size,$addr,$reg1,$reg2,$idx)=@_;
   my($post,$ret);
+
+    if (!defined($idx) && 1*$reg2) { $idx=$reg2; $reg2=$reg1; undef $reg1; }
 
     $ret .= "$size PTR " if ($size ne "");
 
@@ -132,7 +135,7 @@ ___
     if (grep {/\b${nmdecor}OPENSSL_ia32cap_P\b/i} @out)
     {	my $comm=<<___;
 .bss	SEGMENT 'BSS'
-COMM	${nmdecor}OPENSSL_ia32cap_P:QWORD
+COMM	${nmdecor}OPENSSL_ia32cap_P:DWORD:4
 .bss	ENDS
 ___
 	# comment out OPENSSL_ia32cap_P declarations

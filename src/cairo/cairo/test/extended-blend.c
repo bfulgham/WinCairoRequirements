@@ -27,8 +27,8 @@
  *          Emmanuel Pacaud <emmanuel.pacaud@lapp.in2p3.fr>
  */
 
-#include <math.h>
 #include "cairo-test.h"
+#include <math.h>
 #include <stdio.h>
 
 #define STEPS 16

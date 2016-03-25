@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -15,9 +15,7 @@
 #include "cmemory.h"
 #include "servloc.h"
 #include "ustrfmt.h"
-#include "uhash.h"
 #include "charstr.h"
-#include "ucln_cmn.h"
 #include "uassert.h"
 
 #define UNDERSCORE_CHAR ((UChar)0x005f)
@@ -26,24 +24,20 @@
 
 U_NAMESPACE_BEGIN
 
+static UMutex llock = U_MUTEX_INITIALIZER;
 ICULocaleService::ICULocaleService()
   : fallbackLocale(Locale::getDefault())
-  , llock(0)
 {
-  umtx_init(&llock);
 }
 
 ICULocaleService::ICULocaleService(const UnicodeString& dname)
   : ICUService(dname)
   , fallbackLocale(Locale::getDefault())
-  , llock(0)
 {
-  umtx_init(&llock);
 }
 
 ICULocaleService::~ICULocaleService()
 {
-  umtx_destroy(&llock);
 }
 
 UObject*
@@ -167,7 +161,7 @@ private:
     ServiceEnumeration(const ICULocaleService* service, UErrorCode &status)
         : _service(service)
         , _timestamp(service->getTimestamp())
-        , _ids(uhash_deleteUnicodeString, NULL, status)
+        , _ids(uprv_deleteUObject, NULL, status)
         , _pos(0)
     {
         _service->getVisibleIDs(_ids, status);
@@ -176,7 +170,7 @@ private:
     ServiceEnumeration(const ServiceEnumeration &other, UErrorCode &status)
         : _service(other._service)
         , _timestamp(other._timestamp)
-        , _ids(uhash_deleteUnicodeString, NULL, status)
+        , _ids(uprv_deleteUObject, NULL, status)
         , _pos(0)
     {
         if(U_SUCCESS(status)) {
@@ -204,7 +198,7 @@ public:
         return NULL;
     }
 
-    virtual ~ServiceEnumeration() {}
+    virtual ~ServiceEnumeration();
 
     virtual StringEnumeration *clone() const {
         UErrorCode status = U_ZERO_ERROR;
@@ -253,6 +247,8 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 };
 
+ServiceEnumeration::~ServiceEnumeration() {}
+
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ServiceEnumeration)
 
 StringEnumeration*
@@ -267,7 +263,7 @@ ICULocaleService::validateFallbackLocale() const
     const Locale&     loc    = Locale::getDefault();
     ICULocaleService* ncThis = (ICULocaleService*)this;
     {
-        Mutex mutex(&ncThis->llock);
+        Mutex mutex(&llock);
         if (loc != fallbackLocale) {
             ncThis->fallbackLocale = loc;
             LocaleUtility::initNameFromLocale(loc, ncThis->fallbackLocaleName);

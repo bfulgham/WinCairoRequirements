@@ -72,6 +72,7 @@ sqlite3_enable_shared_cache
 sqlite3_errcode
 sqlite3_errmsg
 sqlite3_errmsg16
+sqlite3_errstr
 sqlite3_exec
 sqlite3_expired
 sqlite3_extended_errcode
@@ -92,6 +93,7 @@ sqlite3_libversion_number
 sqlite3_limit
 sqlite3_log
 sqlite3_malloc
+sqlite3_malloc64
 sqlite3_memory_alarm
 sqlite3_memory_highwater
 sqlite3_memory_used
@@ -116,6 +118,7 @@ sqlite3_profile
 sqlite3_progress_handler
 sqlite3_randomness
 sqlite3_realloc
+sqlite3_realloc64
 sqlite3_release_memory
 sqlite3_reset
 sqlite3_reset_auto_extension
@@ -149,6 +152,8 @@ sqlite3_status
 sqlite3_step
 sqlite3_stmt_readonly
 sqlite3_stmt_status
+sqlite3_strglob
+sqlite3_stricmp
 sqlite3_strnicmp
 sqlite3_temp_directory
 sqlite3_test_control
@@ -181,3 +186,4 @@ sqlite3_wal_autocheckpoint
 sqlite3_wal_checkpoint
 sqlite3_wal_hook
 sqlite3_win32_mbcs_to_utf8
+sqlite3_win32_utf8_to_mbcs

@@ -23,18 +23,29 @@ CFG_CFLAGS := -MD -O2
 CFG_LDFLAGS :=
 endif
 
-PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman/pixman
-PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
+ifeq ($(PIXMAN_PATH),)
+PIXMAN_PATH := $(top_builddir)/../pixman
+endif
+PIXMAN_CFLAGS := -I$(PIXMAN_PATH)/pixman/
+PIXMAN_LIBS := $(PIXMAN_PATH)/pixman/$(CFG)/pixman-1.lib
 
 CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
+
 ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
-LIBPNG_CFLAGS += -I$(top_srcdir)/../../libpng/
-CAIRO_LIBS +=  $(top_builddir)/../../libpng/libpng.lib
+ifeq ($(LIBPNG_PATH),)
+LIBPNG_PATH := $(top_builddir)/../libpng
 endif
+LIBPNG_CFLAGS += -I$(LIBPNG_PATH)/
+CAIRO_LIBS +=  $(LIBPNG_PATH)/libpng.lib
+endif
+
 ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
 else
-ZLIB_CFLAGS += -I$(top_srcdir)/../../zlib/
-CAIRO_LIBS += $(top_builddir)/../../zlib/zdll.lib
+ifeq ($(ZLIB_PATH),)
+ZLIB_PATH := $(top_builddir)/../zlib
+endif
+ZLIB_CFLAGS += -I$(ZLIB_PATH)/
+CAIRO_LIBS += $(ZLIB_PATH)/zdll.lib
 endif
 
 DEFAULT_CFLAGS = -nologo $(CFG_CFLAGS)

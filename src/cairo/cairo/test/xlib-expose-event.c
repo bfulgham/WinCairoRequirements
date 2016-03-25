@@ -31,12 +31,12 @@
  * made the same mistake again, it is worth adding a regression test...
  */
 
+#include "cairo-test.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "cairo.h"
-#include "cairo-test.h"
 
 #include "buffer-diff.h"
 

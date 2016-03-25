@@ -111,6 +111,6 @@ lpyramid_get_value (lpyramid_t *pyramid, int x, int y, int level)
     int index = x + y * pyramid->width;
     int l = level;
     if (l > MAX_PYR_LEVELS)
-	l = MAX_PYR_LEVELS;
-    return pyramid->levels[level][index];
+        l = MAX_PYR_LEVELS;
+    return pyramid->levels[l][index];
 }

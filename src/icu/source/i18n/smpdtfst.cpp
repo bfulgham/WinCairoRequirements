@@ -1,14 +1,15 @@
-//
-//  smpdtfst.h
-//
-//  Copyright (C) 2009, International Business Machines Corporation and others.
-//  All Rights Reserved.
-//
-//  This file contains the class SimpleDateFormatStaticSets
-//
-//  SimpleDateFormatStaticSets holds the UnicodeSets that are needed for lenient
-//  parsing of literal characters in date/time strings.
-//
+/*
+*******************************************************************************
+* Copyright (C) 2009-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* This file contains the class SimpleDateFormatStaticSets
+*
+* SimpleDateFormatStaticSets holds the UnicodeSets that are needed for lenient
+* parsing of literal characters in date/time strings.
+********************************************************************************
+*/
 
 #include "unicode/utypes.h"
 
@@ -17,6 +18,7 @@
 #include "unicode/uniset.h"
 #include "unicode/udat.h"
 #include "cmemory.h"
+#include "uassert.h"
 #include "ucln_in.h"
 #include "umutex.h"
 
@@ -25,35 +27,36 @@
 
 U_NAMESPACE_BEGIN
 
-SimpleDateFormatStaticSets *SimpleDateFormatStaticSets::gStaticSets = NULL;
+SimpleDateFormatStaticSets *gStaticSets = NULL;
+UInitOnce gSimpleDateFormatStaticSetsInitOnce = U_INITONCE_INITIALIZER;
 
-SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode *status)
+SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode &status)
 : fDateIgnorables(NULL),
   fTimeIgnorables(NULL),
   fOtherIgnorables(NULL)
 {
-    fDateIgnorables  = new UnicodeSet("[-,./[:whitespace:]]", *status);
-    fTimeIgnorables  = new UnicodeSet("[-.:[:whitespace:]]",  *status);
-    fOtherIgnorables = new UnicodeSet("[:whitespace:]",       *status);
-    
+    fDateIgnorables  = new UnicodeSet(UNICODE_STRING("[-,./[:whitespace:]]", 20), status);
+    fTimeIgnorables  = new UnicodeSet(UNICODE_STRING("[-.:[:whitespace:]]", 19),  status);
+    fOtherIgnorables = new UnicodeSet(UNICODE_STRING("[:whitespace:]", 14),       status);
+
     // Check for null pointers
     if (fDateIgnorables == NULL || fTimeIgnorables == NULL || fOtherIgnorables == NULL) {
         goto ExitConstrDeleteAll;
     }
-    
+
     // Freeze all the sets
     fDateIgnorables->freeze();
     fTimeIgnorables->freeze();
     fOtherIgnorables->freeze();
-	
+
     return; // If we reached this point, everything is fine so just exit
-    
+
 ExitConstrDeleteAll: // Remove all sets and return error
     delete fDateIgnorables;  fDateIgnorables = NULL;
     delete fTimeIgnorables;  fTimeIgnorables = NULL;
     delete fOtherIgnorables; fOtherIgnorables = NULL;
-    
-    *status = U_MEMORY_ALLOCATION_ERROR;
+
+    status = U_MEMORY_ALLOCATION_ERROR;
 }
 
 
@@ -73,9 +76,9 @@ SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
 UBool
 SimpleDateFormatStaticSets::cleanup(void)
 {
-    delete SimpleDateFormatStaticSets::gStaticSets;
-    SimpleDateFormatStaticSets::gStaticSets = NULL;
-    
+    delete gStaticSets;
+    gStaticSets = NULL;
+    gSimpleDateFormatStaticSetsInitOnce.reset();
     return TRUE;
 }
 
@@ -85,50 +88,26 @@ smpdtfmt_cleanup(void)
 {
     return SimpleDateFormatStaticSets::cleanup();
 }
-U_CDECL_END
 
-void SimpleDateFormatStaticSets::initSets(UErrorCode *status)
-{
-	SimpleDateFormatStaticSets *p;
-    
-    UMTX_CHECK(NULL, gStaticSets, p);
-    if (p == NULL) {
-        p = new SimpleDateFormatStaticSets(status);
-        
-        if (p == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return;
-        }
-        
-        if (U_FAILURE(*status)) {
-            delete p;
-            return;
-        }
-        
-        umtx_lock(NULL);
-        if (gStaticSets == NULL) {
-            gStaticSets = p;
-            p = NULL;
-        }
-        
-        umtx_unlock(NULL);
-        if (p != NULL) {
-            delete p;
-        }
-        
-        ucln_i18n_registerCleanup(UCLN_I18N_SMPDTFMT, smpdtfmt_cleanup);
+static void U_CALLCONV smpdtfmt_initSets(UErrorCode &status) {
+    ucln_i18n_registerCleanup(UCLN_I18N_SMPDTFMT, smpdtfmt_cleanup);
+    U_ASSERT(gStaticSets == NULL);
+    gStaticSets = new SimpleDateFormatStaticSets(status);
+    if (gStaticSets == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
 }
 
+U_CDECL_END
+
 UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
 {
-	UErrorCode status = U_ZERO_ERROR;
-    
-	initSets(&status);
-    
-	if (U_FAILURE(status)) {
-		return NULL;
-	}
+    UErrorCode status = U_ZERO_ERROR;
+    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     
     switch (fieldIndex) {
         case UDAT_YEAR_FIELD:
@@ -150,7 +129,6 @@ UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldInde
             return gStaticSets->fOtherIgnorables;
     }
 }
-
 
 U_NAMESPACE_END
 

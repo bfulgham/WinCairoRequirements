@@ -48,7 +48,7 @@ DIR* opendir (const char *name)
           (dir->name = (char*)malloc(base_length + strlen(all) + 1)) != 0) {
          (void) strcat(strcpy(dir->name, name), all);
 
-         if ((dir->handle = (long) _findfirst(dir->name, &dir->info)) != -1) {
+         if ((dir->handle = _findfirst(dir->name, &dir->info)) != -1) {
             dir->result.d_name = 0;
          } else {
             free(dir->name);

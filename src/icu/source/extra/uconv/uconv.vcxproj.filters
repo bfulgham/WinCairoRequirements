@@ -2,19 +2,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{31f8c43a-5157-423d-b6ab-1cf2bcf60b00}</UniqueIdentifier>
+      <UniqueIdentifier>{c0129698-5425-4988-b34a-fe215c03a818}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{3fd952a0-3592-4b9b-ad10-9b2d36ccd325}</UniqueIdentifier>
+      <UniqueIdentifier>{8b1cc031-0c2e-41cf-a1f4-53e2ebdfc4ac}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Bundles">
-      <UniqueIdentifier>{779647cb-242a-44eb-a236-f626023b275d}</UniqueIdentifier>
+      <UniqueIdentifier>{bcebaef1-fbff-4aca-9a90-0f652e3fd00b}</UniqueIdentifier>
       <Extensions>txt</Extensions>
     </Filter>
     <Filter Include="Build Scripts">
-      <UniqueIdentifier>{e9670e7e-96da-45f0-9868-ac4bc48a8d76}</UniqueIdentifier>
+      <UniqueIdentifier>{7faa3049-c5bb-4b2c-ac0f-10b572b69c83}</UniqueIdentifier>
       <Extensions>mak;mk;bat</Extensions>
     </Filter>
   </ItemGroup>

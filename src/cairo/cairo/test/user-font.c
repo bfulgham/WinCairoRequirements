@@ -25,10 +25,10 @@
  *	Behdad Esfahbod <behdad@behdad.org>
  */
 
+#include "cairo-test.h"
+
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "cairo-test.h"
 
 /*#define ROTATED 1*/
 

@@ -477,6 +477,9 @@
     <ClCompile Include="cairo-path-stroke-traps.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cairo-line.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cairo-deprecated.h">

@@ -100,7 +100,7 @@ draw (cairo_t *cr, int width, int height)
 
     cairo_set_line_width (cr, LINE_WIDTH);
 
-    for (t = 0; t < sizeof(theta)/sizeof (theta[0]); t++) {
+    for (t = 0; t < ARRAY_LENGTH(theta); t++) {
 	cairo_save (cr);
 	cairo_translate (cr, 0, t * (SIZE + PAD) + PAD);
 	draw_caps_joins (cr, theta[t]);
@@ -119,7 +119,7 @@ draw (cairo_t *cr, int width, int height)
 
 CAIRO_TEST (caps_tails_curve,
 	    "Test caps and joins on short tail segments",
-	    "stroke cap join", /* keywords */
+	    "stroke, cap, join", /* keywords */
 	    NULL, /* requirements */
 	    9 * (PAD + SIZE) + 4*PAD,
 	    12 * (PAD + SIZE) + PAD,

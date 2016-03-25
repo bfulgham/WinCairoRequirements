@@ -28,13 +28,19 @@
 
 #include "surface-source.c"
 
+#define BASENAME "ps-surface-source.out"
+
 static cairo_surface_t *
 create_source_surface (int size)
 {
     cairo_surface_t *surface;
+    char *filename;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
-    surface = cairo_ps_surface_create ("ps-surface-source.out.ps", size, size);
+    xasprintf (&filename, "%s/%s.ps", path, BASENAME);
+    surface = cairo_ps_surface_create (filename, size, size);
     cairo_surface_set_fallback_resolution (surface, 72., 72.);
+    free (filename);
 
     return surface;
 }

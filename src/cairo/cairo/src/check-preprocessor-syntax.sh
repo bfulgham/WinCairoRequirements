@@ -9,10 +9,10 @@ stat=0
 
 
 HEADERS=$all_cairo_headers
-test "x$HEADERS" = x && HEADERS=`find . -name 'cairo*.h' ! -name 'cairo*-private.h' ! -name 'cairoint.h'`
+test "x$HEADERS" = x && HEADERS=`find . -name 'cairo*.h' ! -name 'cairo*-private.h' ! -name 'cairo*-inline.h' ! -name 'cairoint.h'`
 
 PRIVATE=$all_cairo_private
-test "x$PRIVATE" = x && PRIVATE=`find . -name 'cairo*-private.h' -or -name 'cairoint.h'`
+test "x$PRIVATE" = x && PRIVATE=`find . -name 'cairo*-private.h' -or -name 'cairo*-inline.h' -or -name 'cairoint.h'`
 
 SOURCES=$all_cairo_sources
 test "x$SOURCES" = x && SOURCES=`find . -name 'cairo*.c' -or -name 'cairo*.cpp'`

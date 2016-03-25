@@ -53,9 +53,10 @@
  */
 #define PDF_GLYPH_BUFFER_SIZE 200
 
-typedef cairo_status_t (*cairo_pdf_operators_use_font_subset_t) (unsigned int  font_id,
-								 unsigned int  subset_id,
-								 void         *closure);
+typedef cairo_int_status_t
+(*cairo_pdf_operators_use_font_subset_t) (unsigned int  font_id,
+					  unsigned int  subset_id,
+					  void         *closure);
 
 typedef struct _cairo_pdf_glyph {
     unsigned int glyph_index;
@@ -69,6 +70,7 @@ typedef struct _cairo_pdf_operators {
     cairo_scaled_font_subsets_t *font_subsets;
     cairo_pdf_operators_use_font_subset_t use_font_subset;
     void *use_font_subset_closure;
+    cairo_bool_t ps_output; /* output is for PostScript */
     cairo_bool_t use_actual_text;
     cairo_bool_t in_text_object; /* inside BT/ET pair */
 
@@ -100,7 +102,8 @@ cairo_private void
 _cairo_pdf_operators_init (cairo_pdf_operators_t       *pdf_operators,
 			   cairo_output_stream_t       *stream,
 			   cairo_matrix_t 	       *cairo_to_pdf,
-			   cairo_scaled_font_subsets_t *font_subsets);
+			   cairo_scaled_font_subsets_t *font_subsets,
+			   cairo_bool_t                 ps);
 
 cairo_private cairo_status_t
 _cairo_pdf_operators_fini (cairo_pdf_operators_t       *pdf_operators);

@@ -34,6 +34,7 @@
  3.3 How To Make a Patch without git
  3.4 How to get your changes into the main sources
  3.5 Write good commit messages
+ 3.6 About pull requests
 
 ==============================================================================
 
@@ -50,6 +51,10 @@
  list etiquette: http://curl.haxx.se/mail/etiquette.html
 
  We also hang out on IRC in #curl on irc.freenode.net
+
+ If you're at all interested in the code side of things, consider clicking
+ 'watch' on the curl repo at github to get notified on pull requests and new
+ issues posted there.
 
 1.2. License
 
@@ -77,10 +82,10 @@
 
 1.3 What To Read
 
- Source code, the man pages, the INTERNALS document, TODO, KNOWN_BUGS, the
- most recent CHANGES. Just lurking on the libcurl mailing list is gonna give
- you a lot of insights on what's going on right now. Asking there is a good
- idea too.
+ Source code, the man pages, the INTERNALS document, TODO, KNOWN_BUGS and the
+ most recent changes in the git log. Just lurking on the curl-library mailing
+ list is gonna give you a lot of insights on what's going on right now. Asking
+ there is a good idea too.
 
 2. cURL Coding Standards
 
@@ -97,12 +102,12 @@
 
 2.2 Indenting
 
- Please try using the same indenting levels and bracing method as all the
- other code already does. It makes the source code a lot easier to follow if
- all of it is written using the same style. We don't ask you to like it, we
- just ask you to follow the tradition! ;-) This mainly means: 2-level indents,
- using spaces only (no tabs) and having the opening brace ({) on the same line
- as the if() or while().
+ Use the same indenting levels and bracing method as all the other code
+ already does. It makes the source code easier to follow if all of it is
+ written using the same style. We don't ask you to like it, we just ask you to
+ follow the tradition! ;-) This mainly means: 2-level indents, using spaces
+ only (no tabs) and having the opening brace ({) on the same line as the if()
+ or while().
 
  Also note that we use if() and while() with no space before the parenthesis.
 
@@ -150,6 +155,9 @@
  description exactly what they correct so that all patches can be selectively
  applied by the maintainer or other interested parties.
 
+ Also, separate patches enable bisecting much better when we track problems in
+ the future.
+
 2.9 Patch Against Recent Sources
 
  Please try to get the latest available sources to make your patches
@@ -177,6 +185,10 @@
  test case that verifies that it works as documented. If every submitter also
  posts a few test cases, it won't end up as a heavy burden on a single person!
 
+ If you don't have test cases or perhaps you have done something that is very
+ hard to write tests for, do explain exactly how you have otherwise tested and
+ verified your changes.
+
 3. Pushing Out Your Changes
 
 3.1 Write Access to git Repository
@@ -191,7 +203,7 @@
 
  You need to first checkout the repository:
 
-     git clone git://github.com/bagder/curl.git
+     git clone https://github.com/bagder/curl.git
 
  You then proceed and edit all the files you like and you commit them to your
  local repository:
@@ -211,7 +223,7 @@
  commit.
 
  Now send those patches off to the curl-library list. You can of course opt to
- do that with the 'get send-email' command.
+ do that with the 'git send-email' command.
 
 3.3 How To Make a Patch without git
 
@@ -233,8 +245,8 @@
 
  For unix-like operating systems:
 
-     http://www.gnu.org/software/patch/patch.html
-     http://www.gnu.org/directory/diffutils.html
+     https://savannah.gnu.org/projects/patch/
+     https://www.gnu.org/software/diffutils/
 
  For Windows:
 
@@ -270,9 +282,25 @@
       [full description, no wider than 72 columns that describe as much as
       possible as to why this change is made, and possibly what things
       it fixes and everything else that is related]
+
+      [Bug: link to source of the report or more related discussion]
+      [Reported-by: John Doe - credit the reporter]
+      [whatever-else-by: credit all helpers, finders, doers]
       ---- stop ----
 
  Don't forget to use commit --author="" if you commit someone else's work,
  and make sure that you have your own user and email setup correctly in git
  before you commit
 
+3.6 About pull requests
+
+ With git (and especially github) it is easy and tempting to send a pull
+ request to the curl project to have changes merged this way instead of
+ mailing patches to the curl-library mailing list.
+
+ We used to dislike this but we're trying to change that and accept that this
+ is a frictionless way for people to contribute to the project. We now welcome
+ pull requests!
+
+ We will continue to avoid using github's merge tools to make the history
+ linear and to make sure commits follow our style guidelines.

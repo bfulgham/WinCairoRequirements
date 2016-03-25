@@ -1213,7 +1213,7 @@ static void traverseCFBurstTrieWithCursor(CFBurstTrieRef trie, const uint8_t *pr
         }
     } else {    
         TrieCursor csr;
-        csr.next = ((unsigned long)&trie->root)|TrieKind;
+        csr.next = ((uintptr_t)&trie->root)|TrieKind;
         csr.prefix = prefix;
         csr.prefixlen = prefixLen;
         csr.key[0] = 0;

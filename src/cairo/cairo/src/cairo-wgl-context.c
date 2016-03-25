@@ -63,9 +63,6 @@ typedef struct _cairo_wgl_surface {
     HDC dc;
 } cairo_wgl_surface_t;
 
-PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL;
-PFNGLBLENDFUNCSEPARATEPROC _glBlendFuncSeparate = NULL;
-
 static void
 _wgl_acquire (void *abstract_ctx)
 {
@@ -263,18 +260,24 @@ cairo_gl_surface_create_for_dc (cairo_device_t	*device,
     return &surface->base.base;
 }
 
-void InitWGLStuff ()
+GLAPI void APIENTRY glActiveTexture(GLenum texture)
 {
-    _glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress((LPCSTR)"glActiveTextureARB");
-    _glBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)wglGetProcAddress((LPCSTR)"glBlendFuncSeparate");
+    static PFNGLACTIVETEXTUREARBPROC _glActiveTextureARB = NULL;
+
+    if (!_glActiveTextureARB)
+        _glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress((LPCSTR)"glActiveTextureARB");
+
+    if (_glActiveTextureARB)
+        (*_glActiveTextureARB)(texture);
 }
 
-GLAPI void APIENTRY glActiveTexture (GLenum texture)
+GLAPI void APIENTRY glBlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
 {
-    (*_glActiveTextureARB)(texture);
-}
+    static PFNGLBLENDFUNCSEPARATEPROC _glBlendFuncSeparate = NULL;
 
-GLAPI void APIENTRY glBlendFuncSeparate (GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
-{
-    (*_glBlendFuncSeparate)(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+    if (!_glBlendFuncSeparate)
+        _glBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)wglGetProcAddress((LPCSTR)"glBlendFuncSeparate");
+
+    if (_glBlendFuncSeparate)
+        (*_glBlendFuncSeparate)(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
 }

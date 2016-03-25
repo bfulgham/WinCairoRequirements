@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -23,13 +23,11 @@
 
 #include <curl/curl.h>
 
-/*
- * Similar to ftpget.c but this also stores the received response-lines
+/* <DESC>
+ * Similar to ftpget.c but also stores the received response-lines
  * in a separate file using our own callback!
- *
- * This functionality was introduced in libcurl 7.9.3.
+ * </DESC>
  */
-
 static size_t
 write_response(void *ptr, size_t size, size_t nmemb, void *data)
 {
@@ -58,8 +56,12 @@ int main(void)
     /* If you intend to use this on windows with a libcurl DLL, you must use
        CURLOPT_WRITEFUNCTION as well */
     curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, write_response);
-    curl_easy_setopt(curl, CURLOPT_WRITEHEADER, respfile);
+    curl_easy_setopt(curl, CURLOPT_HEADERDATA, respfile);
     res = curl_easy_perform(curl);
+    /* Check for errors */
+    if(res != CURLE_OK)
+      fprintf(stderr, "curl_easy_perform() failed: %s\n",
+              curl_easy_strerror(res));
 
     /* always cleanup */
     curl_easy_cleanup(curl);

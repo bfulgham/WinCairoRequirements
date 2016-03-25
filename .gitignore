@@ -31,9 +31,7 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 Build/
-Lib/
 bin/
-include/
 
 src/icu/source/data/out/icudt46l.dat
 src/icu/source/data/out/tmp/icudata.lst

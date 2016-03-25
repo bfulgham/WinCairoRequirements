@@ -91,6 +91,10 @@
 #include <fontconfig/fontconfig.h>
 #endif
 
+#ifndef MAP_NORESERVE
+#define MAP_NORESERVE 0
+#endif
+
 #define DEBUG 0
 
 #define ignore_image_differences 0 /* XXX make me a cmdline option! */

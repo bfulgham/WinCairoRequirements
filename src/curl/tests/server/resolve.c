@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2010, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2014, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -19,6 +19,7 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
+#include "server_setup.h"
 
 /* Purpose
  *
@@ -30,21 +31,8 @@
  *
  */
 
-#define CURL_NO_OLDIES
-
-#include "setup.h" /* portability help from the lib directory */
-
 #ifdef HAVE_SIGNAL_H
 #include <signal.h>
-#endif
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
 #endif
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
@@ -132,7 +120,7 @@ int main(int argc, char *argv[])
     /* Check that the system has IPv6 enabled before checking the resolver */
     curl_socket_t s = socket(PF_INET6, SOCK_DGRAM, 0);
     if(s == CURL_SOCKET_BAD)
-      /* an ipv6 address was requested and we can't get/use one */
+      /* an IPv6 address was requested and we can't get/use one */
       rc = -1;
     else {
       sclose(s);
@@ -147,9 +135,11 @@ int main(int argc, char *argv[])
       hints.ai_family = PF_INET6;
       hints.ai_socktype = SOCK_STREAM;
       hints.ai_flags = AI_CANONNAME;
-      /* Use parenthesis around function to stop it from being replaced by
-      the macro in memdebug.h */
+      /* Use parenthesis around functions to stop them from being replaced by
+         the macro in memdebug.h */
       rc = (getaddrinfo)(host, "80", &hints, &ai);
+      if (rc == 0)
+        (freeaddrinfo)(ai);
     }
 
 #else

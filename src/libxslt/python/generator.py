@@ -15,76 +15,27 @@ import string
 #
 #######################################################################
 import os
-import xmllib
-try:
-    import sgmlop
-except ImportError:
-    sgmlop = None # accelerator not available
+import xml.sax
 
 debug = 0
+srcdir = os.getenv("SRCDIR", ".")
 
-if sgmlop:
-    class FastParser:
-        """sgmlop based XML parser.  this is typically 15x faster
-           than SlowParser..."""
+def getparser():
+    # Attach parser to an unmarshalling object. return both objects.
+    target = docParser()
+    parser = xml.sax.make_parser()
+    parser.setContentHandler(target)
+    return parser, target
 
-        def __init__(self, target):
-
-            # setup callbacks
-            self.finish_starttag = target.start
-            self.finish_endtag = target.end
-            self.handle_data = target.data
-
-            # activate parser
-            self.parser = sgmlop.XMLParser()
-            self.parser.register(self)
-            self.feed = self.parser.feed
-            self.entity = {
-                "amp": "&", "gt": ">", "lt": "<",
-                "apos": "'", "quot": '"'
-                }
-
-        def close(self):
-            try:
-                self.parser.close()
-            finally:
-                self.parser = self.feed = None # nuke circular reference
-
-        def handle_entityref(self, entity):
-            # <string> entity
-            try:
-                self.handle_data(self.entity[entity])
-            except KeyError:
-                self.handle_data("&%s;" % entity)
-
-else:
-    FastParser = None
-
-
-class SlowParser(xmllib.XMLParser):
-    """slow but safe standard parser, based on the XML parser in
-       Python's standard library."""
-
-    def __init__(self, target):
-        self.unknown_starttag = target.start
-        self.handle_data = target.data
-        self.unknown_endtag = target.end
-        xmllib.XMLParser.__init__(self)
-
-def getparser(target = None):
-    # get the fastest available parser, and attach it to an
-    # unmarshalling object.  return both objects.
-    if target == None:
-        target = docParser()
-    if FastParser:
-        return FastParser(target), target
-    return SlowParser(target), target
-
-class docParser:
+class docParser(xml.sax.handler.ContentHandler):
     def __init__(self):
         self._methodname = None
         self._data = []
         self.in_function = 0
+
+        self.startElement = self.start
+        self.endElement = self.end
+        self.characters = self.data
 
     def close(self):
         if debug:
@@ -442,14 +393,14 @@ def buildStubs():
     global unknown_types
 
     try:
-        f = open("libxslt-api.xml")
+        f = open("%s/libxslt-api.xml" % srcdir)
         data = f.read()
         (parser, target)  = getparser()
         parser.feed(data)
         parser.close()
     except IOError, msg:
         try:
-            f = open("../doc/libxslt-api.xml")
+            f = open("%s/../doc/libxslt-api.xml" % srcdir)
             data = f.read()
             (parser, target)  = getparser()
             parser.feed(data)
@@ -463,7 +414,7 @@ def buildStubs():
     py_types['pythonObject'] = ('O', "pythonObject", "pythonObject",
                                 "pythonObject", "libxml_")
     try:
-        f = open("libxslt-python-api.xml")
+        f = open("%s/libxslt-python-api.xml" % srcdir)
         data = f.read()
         (parser, target)  = getparser()
         parser.feed(data)

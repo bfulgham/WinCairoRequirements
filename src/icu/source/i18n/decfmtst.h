@@ -1,14 +1,15 @@
-//
-//  decfmtst.h
-//
-//  Copyright (C) 2009, International Business Machines Corporation and others.
-//  All Rights Reserved.
-//
-//  This file contains declarations for the class DecimalFormatStaticSets
-//
-//  DecimalFormatStaticSets holds the UnicodeSets that are needed for lenient
-//  parsing of decimal and group separators.
-//
+/*
+*******************************************************************************
+* Copyright (C) 2009-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* This file contains declarations for the class DecimalFormatStaticSets
+*
+* DecimalFormatStaticSets holds the UnicodeSets that are needed for lenient
+* parsing of decimal and group separators.
+********************************************************************************
+*/
 
 #ifndef DECFMTST_H
 #define DECFMTST_H
@@ -25,16 +26,17 @@ class  UnicodeSet;
 class DecimalFormatStaticSets : public UMemory
 {
 public:
-    static DecimalFormatStaticSets *gStaticSets;  // Ptr to all lazily initialized constant
-                                                  //   shared sets.
-
-    DecimalFormatStaticSets(UErrorCode *status);
+    // Constructor and Destructor not for general use.
+    //   Public to permit access from plain C implementation functions.
+    DecimalFormatStaticSets(UErrorCode &status);
     ~DecimalFormatStaticSets();
 
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
+    /**
+      * Return a pointer to a lazy-initialized singleton instance of this class.
+      */
+    static const DecimalFormatStaticSets *getStaticSets(UErrorCode &status);
 
-    static UnicodeSet *getSimilarDecimals(UChar32 decimal, UBool strictParse, UnicodeSet *fallback);
+    static const UnicodeSet *getSimilarDecimals(UChar32 decimal, UBool strictParse);
 
     UnicodeSet *fDotEquivalents;
     UnicodeSet *fCommaEquivalents;
@@ -48,6 +50,11 @@ public:
 
     UnicodeSet *fDefaultGroupingSeparators;
     UnicodeSet *fStrictDefaultGroupingSeparators;
+
+    UnicodeSet *fMinusSigns;
+    UnicodeSet *fPlusSigns;
+private:
+    void cleanup();
 
 };
 

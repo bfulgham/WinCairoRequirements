@@ -23,12 +23,13 @@
  * Author: Carl D. Worth <cworth@cworth.org>
  */
 
+#include "cairo-test.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "cairo.h"
 #include "cairo-xlib.h"
-#include "cairo-test.h"
 
 #include "cairo-boilerplate-xlib.h"
 

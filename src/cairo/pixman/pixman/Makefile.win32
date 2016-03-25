@@ -4,12 +4,6 @@ top_srcdir = ..
 include $(top_srcdir)/pixman/Makefile.sources
 include $(top_srcdir)/Makefile.win32.common
 
-LIBRARY     = pixman-1
-
-CC   = cl
-#LINK = link
-LINK = /cygdrive/C/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 9.0/VC/BIN/link.exe
-
 MMX_VAR = $(MMX)
 ifeq ($(MMX_VAR),)
 MMX_VAR=on
@@ -20,13 +14,14 @@ ifeq ($(SSE2_VAR),)
 SSE2_VAR=on
 endif
 
-# Note: changes here to use pthreads because of problems with win32 TLS (thread local storage) using: __declspec( thread ).  
-# Happens because cairo/pixman is loaded using LoadLibrary in Skype and so memory doesn't get allocated for TLS in lookup_composite_function (in pixman).
-PTHREADS = -DHAVE_PTHREAD_SETSPECIFIC  -I../../pthreads-win32/pthreads.2
+SSSE3_VAR = $(SSSE3)
+ifeq ($(SSSE3_VAR),)
+SSSE3_VAR=on
+endif
 
-CFLAGS     = -MD -nologo -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_BIND_TO_CURRENT_VCLIBS_VERSION -D_MT -I../pixman/src -I. -DPACKAGE=$(LIBRARY) -DPACKAGE_VERSION="" -DPACKAGE_BUGREPORT="" $(PTHREADS)
 MMX_CFLAGS = -DUSE_X86_MMX -w14710 -w14714
 SSE2_CFLAGS = -DUSE_SSE2
+SSSE3_CFLAGS = -DUSE_SSSE3
 
 # MMX compilation flags
 ifeq ($(MMX_VAR),on)
@@ -40,30 +35,16 @@ PIXMAN_CFLAGS += $(SSE2_CFLAGS)
 libpixman_sources += pixman-sse2.c
 endif
 
+# SSSE3 compilation flags
+ifeq ($(SSSE3_VAR),on)
+PIXMAN_CFLAGS += $(SSSE3_CFLAGS)
+libpixman_sources += pixman-ssse3.c
+endif
+
 OBJECTS = $(patsubst %.c, $(CFG_VAR)/%.obj, $(libpixman_sources))
 
 # targets
-all: inform informMMX informSSE2 $(CFG_VAR)/$(LIBRARY).lib
-	@exit 0
-clean: inform clean_r 
-	@exit 0
-pixman: inform informMMX informSSE2 $(CFG_VAR)/$(LIBRARY).lib 
-	@exit 0
-
-inform:
-ifneq ($(CFG),release)
-ifneq ($(CFG),debug)
-ifneq ($(CFG),)
-	@echo "Invalid specified configuration option : "$(CFG)"."
-	@echo
-	@echo -n "Possible choices for configuration are "
-	@echo "'release' and 'debug'"
-	@echo ""
-	@exit 1
-endif
-	@echo "Using default RELEASE configuration... (use CFG=release or CFG=debug)"
-endif
-endif
+all: inform informMMX informSSE2 informSSSE3 $(CFG_VAR)/$(LIBRARY).lib
 
 informMMX:
 ifneq ($(MMX),off)
@@ -91,17 +72,22 @@ endif
 endif
 endif
 
-# pixman compilation and linking
-$(CFG_VAR)/%.obj: %.c $(BUILT_SOURCES)
-	@mkdir -p $(CFG_VAR)
-	@$(CC) -c $(CFLAGS) -Fo"$@" $<
+informSSSE3:
+ifneq ($(SSSE3),off)
+ifneq ($(SSSE3),on)
+ifneq ($(SSSE3),)
+	@echo "Invalid specified SSE option : "$(SSSE3)"."
+	@echo
+	@echo "Possible choices for SSSE3 are 'on' or 'off'"
+	@exit 1
+endif
+	@echo "Setting SSSE3 flag to default value 'on'... (use SSSE3=on or SSSE3=off)"
+endif
+endif
+
 
 # pixman linking
 $(CFG_VAR)/$(LIBRARY).lib: $(OBJECTS)
-	lib -NOLOGO -OUT:$@ $(OBJECTS) || exit 0
+	@$(AR) $(PIXMAN_ARFLAGS) -OUT:$@ $^
 
-clean_r:
-	@rm -f $(CFG_VAR)/*.obj $(CFG_VAR)/*.lib $(CFG_VAR)/*.pdb $(CFG)/*.ilk || exit 0
-	@rm -f $(CFG)/*.obj $(CFG)/*.lib $(CFG)/*.pdb $(CFG)/*.ilk $(BUILT_SOURCES) || exit 0
-
-.PHONY: all informMMX informSSE2
+.PHONY: all informMMX informSSE2 informSSSE3

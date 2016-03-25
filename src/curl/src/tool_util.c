@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2014, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -19,7 +19,7 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
-#include "setup.h"
+#include "tool_setup.h"
 
 #include "tool_util.h"
 
@@ -33,10 +33,19 @@ struct timeval tool_tvnow(void)
   ** GetTickCount() is available on _all_ Windows versions from W95 up
   ** to nowadays. Returns milliseconds elapsed since last system boot,
   ** increases monotonically and wraps once 49.7 days have elapsed.
+  **
+  ** GetTickCount64() is available on Windows version from Windows Vista
+  ** and Windows Server 2008 up to nowadays. The resolution of the
+  ** function is limited to the resolution of the system timer, which
+  ** is typically in the range of 10 milliseconds to 16 milliseconds.
   */
   struct timeval now;
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0600)
+  ULONGLONG milliseconds = GetTickCount64();
+#else
   DWORD milliseconds = GetTickCount();
-  now.tv_sec = milliseconds / 1000;
+#endif
+  now.tv_sec = (long)(milliseconds / 1000);
   now.tv_usec = (milliseconds % 1000) * 1000;
   return now;
 }
@@ -123,8 +132,11 @@ long tool_tvdiff(struct timeval newer, struct timeval older)
  */
 double tool_tvdiff_secs(struct timeval newer, struct timeval older)
 {
-  return (double)(newer.tv_sec-older.tv_sec)+
-    (double)(newer.tv_usec-older.tv_usec)/1000000.0;
+  if(newer.tv_sec != older.tv_sec)
+    return (double)(newer.tv_sec-older.tv_sec)+
+      (double)(newer.tv_usec-older.tv_usec)/1000000.0;
+  else
+    return (double)(newer.tv_usec-older.tv_usec)/1000000.0;
 }
 
 /* return the number of seconds in the given input timeval struct */

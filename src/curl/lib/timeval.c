@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2008, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -32,9 +32,17 @@ struct timeval curlx_tvnow(void)
   ** increases monotonically and wraps once 49.7 days have elapsed.
   */
   struct timeval now;
+#if !defined(_WIN32_WINNT) || !defined(_WIN32_WINNT_VISTA) || \
+    (_WIN32_WINNT < _WIN32_WINNT_VISTA)
   DWORD milliseconds = GetTickCount();
   now.tv_sec = milliseconds / 1000;
   now.tv_usec = (milliseconds % 1000) * 1000;
+#else
+  ULONGLONG milliseconds = GetTickCount64();
+  now.tv_sec = (long) (milliseconds / 1000);
+  now.tv_usec = (long) (milliseconds % 1000) * 1000;
+#endif
+
   return now;
 }
 
@@ -110,7 +118,7 @@ struct timeval curlx_tvnow(void)
 long curlx_tvdiff(struct timeval newer, struct timeval older)
 {
   return (newer.tv_sec-older.tv_sec)*1000+
-    (newer.tv_usec-older.tv_usec)/1000;
+    (long)(newer.tv_usec-older.tv_usec)/1000;
 }
 
 /*
@@ -120,8 +128,11 @@ long curlx_tvdiff(struct timeval newer, struct timeval older)
  */
 double curlx_tvdiff_secs(struct timeval newer, struct timeval older)
 {
-  return (double)(newer.tv_sec-older.tv_sec)+
-    (double)(newer.tv_usec-older.tv_usec)/1000000.0;
+  if(newer.tv_sec != older.tv_sec)
+    return (double)(newer.tv_sec-older.tv_sec)+
+      (double)(newer.tv_usec-older.tv_usec)/1000000.0;
+  else
+    return (double)(newer.tv_usec-older.tv_usec)/1000000.0;
 }
 
 /* return the number of seconds in the given input timeval struct */

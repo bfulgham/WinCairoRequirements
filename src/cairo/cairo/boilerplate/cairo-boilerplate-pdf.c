@@ -54,8 +54,6 @@ typedef struct _pdf_target_closure
     cairo_surface_t	*target;
 } pdf_target_closure_t;
 
-#define ARRAY_LENGTH(__array) ((int) (sizeof (__array) / sizeof (__array[0])))
-
 static cairo_surface_t *
 _cairo_boilerplate_pdf_create_surface (const char		 *name,
 				       cairo_content_t		  content,

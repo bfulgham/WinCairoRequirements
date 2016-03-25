@@ -94,6 +94,10 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+#ifndef ARRAY_LENGTH
+#define ARRAY_LENGTH(__array) ((int) (sizeof (__array) / sizeof (__array[0])))
+#endif
+
 CAIRO_BEGIN_DECLS
 
 /* A fake format we use for the flattened ARGB output of the PS and
@@ -113,7 +117,12 @@ cairo_boilerplate_format_from_content (cairo_content_t content);
 
 typedef enum {
     CAIRO_BOILERPLATE_MODE_TEST,
-    CAIRO_BOILERPLATE_MODE_PERF
+    CAIRO_BOILERPLATE_MODE_PERF,
+
+    /* This will allow running performance test with threads. The
+     * GL backend is very slow on some drivers when run with thread
+     * awareness turned on. */
+    CAIRO_BOILERPLATE_MODE_PERF_THREADS,
 } cairo_boilerplate_mode_t;
 
 typedef cairo_surface_t *

@@ -57,7 +57,7 @@ _cairo_composite_reduce_pattern (const cairo_pattern_t *src,
     if (dst->base.type == CAIRO_PATTERN_TYPE_SOLID)
 	return;
 
-    dst->base.filter = _cairo_pattern_analyze_filter (&dst->base, NULL),
+    dst->base.filter = _cairo_pattern_analyze_filter (&dst->base);
 
     tx = ty = 0;
     if (_cairo_matrix_is_pixman_translation (&dst->base.matrix,
@@ -166,6 +166,13 @@ _cairo_composite_rectangles_intersect (cairo_composite_rectangles_t *extents,
     if (! _cairo_rectangle_intersect (&extents->unbounded,
 				      _cairo_clip_get_extents (extents->clip)))
 	return CAIRO_INT_STATUS_NOTHING_TO_DO;
+
+    if (! _cairo_rectangle_intersect (&extents->bounded,
+				      _cairo_clip_get_extents (extents->clip)) &&
+	extents->is_bounded & CAIRO_OPERATOR_BOUND_BY_MASK)
+    {
+	return CAIRO_INT_STATUS_NOTHING_TO_DO;
+    }
 
     if (extents->source_pattern.base.type != CAIRO_PATTERN_TYPE_SOLID)
 	_cairo_pattern_sampled_area (&extents->source_pattern.base,
@@ -346,7 +353,7 @@ _cairo_composite_rectangles_init_for_stroke (cairo_composite_rectangles_t *exten
 	return CAIRO_INT_STATUS_NOTHING_TO_DO;
     }
 
-    _cairo_path_fixed_approximate_stroke_extents (path, style, ctm, &extents->mask);
+    _cairo_path_fixed_approximate_stroke_extents (path, style, ctm, surface->is_vector, &extents->mask);
 
     return _cairo_composite_rectangles_intersect (extents, clip);
 }

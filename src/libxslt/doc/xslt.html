@@ -222,12 +222,7 @@ database:</a>:</p>
 <h2><a name="Downloads">Downloads</a></h2>
 
 <p>The latest versions of libxslt can be found on the <a
-href="ftp://xmlsoft.org/libxslt/">xmlsoft.org</a> server and on mirrors (<a
-href="ftp://fr.rpmfind.net/pub/libxml/">France</a>) or on the <a
-href="ftp://ftp.gnome.org/pub/GNOME/MIRRORS.html">GNOME FTP server</a> as a
-<a href="ftp://ftp.gnome.org/pub/GNOME/sources/libxslt/1.1/">source
-archive</a>, Antonin Sprinzl also provides <a
-href="ftp://gd.tuwien.ac.at/pub/libxml/">a mirror in Austria</a>. (NOTE that
+href="ftp://xmlsoft.org/libxslt/">xmlsoft.org</a> server. (NOTE that
 you need the <a href="http://rpmfind.net/linux/RPM/libxml2.html">libxml2</a>,
 <a href="http://rpmfind.net/linux/RPM/libxml2-devel.html">libxml2-devel</a>,
 <a href="http://rpmfind.net/linux/RPM/libxslt.html">libxslt</a> and <a
@@ -242,22 +237,28 @@ binaries</a>. <a href="http://opencsw.org/">CSW</a> provides
 href="http://www.explain.com.au/oss/libxml2xslt.html">Mac Os X
 binaries</a>.</p>
 
+<p><a name="Snapshot">Snapshot:</a></p>
+<ul>
+  <li>Code from the GNOME GIT base libxslt module, updated hourly <a
+    href="ftp://xmlsoft.org/libxml2/libxslt-git-snapshot.tar.gz">libxslt-git-snapshot.tar.gz</a>.</li>
+</ul>
+
 <p><a name="Contribs">Contribs:</a></p>
 
 <p>I do accept external contributions, especially if compiling on another
 platform, get in touch with me to upload the package. I will keep them in the
 <a href="ftp://xmlsoft.org/libxml2/contribs/">contrib directory</a></p>
 
-<p>Libxslt is also available from SVN:</p>
+<p>Libxslt is also available from GIT:</p>
 <ul>
-  <li><p>The <a href="http://svn.gnome.org/viewcvs/libxslt/trunk/">GNOME SVN
-    base</a>. Check the <a
-    href="http://developer.gnome.org/tools/svn.html">GNOME SVN Tools</a>
-    page; the SVN module is <b>libxslt</b>.</p>
+  <li><p>See <a href="http://git.gnome.org/browse/libxslt/">libxslt Git web</a>.
+         To checkout a local tree use:</p>
+       <pre>git clone git://git.gnome.org/libxslt</pre>
   </li>
-  <li><a href="ftp://xmlsoft.org/libxml2/libxslt-cvs-snapshot.tar.gz">snapshots from
-    SVN</a> updated every hour are also provided</li>
+  <li>The <strong>libxml2</strong> module is also present
+      <a href="http://git.gnome.org/browse/libxml2/">there</a></li>
 </ul>
+
 
 <h2><a name="FAQ">FAQ</a></h2>
 <ol>
@@ -299,11 +300,124 @@ platform, get in touch with me to upload the package. I will keep them in the
 
 <h2><a name="News">News</a></h2>
 
-<p>The <a href="ChangeLog.html">change log</a> describes the recents commits
-to the <a href="http://svn.gnome.org/viewcvs/libxslt/trunk/">SVN</a> code base.</p>
+<p>See the <a href="http://git.gnome.org/browse/libxslt/">git page</a>
+to get a description of the recent commits.</p>
 
 <p>Those are the public releases made:</p>
 
+<h3>1.1.28: Nov 21 2012</h3>
+<ul>
+  <li> Portability:<br/>
+    Fix python build by using libxsltmod_la_CPPFLAGS instead of AM_CPPFLAGS (Alexandre Rostovtsev),<br/>
+    configure should be more careful with linker script (Igor Pashev),<br/>
+    add gcrypt library in LIBADD, not LDFLAGS, as recommended (Roumen Petrov)<br/>
+  </li>
+
+  <li> Bug fixes:<br/>
+    Fix generate-id() to avoid generating the same ID (Stewart Brodie),<br/>
+    Fix crash with empty xsl:key/@match attribute (Nick Wellnhofer),<br/>
+    Crash when passing an uninitialized variable to document() (Nick Wellnhofer),<br/>
+    Add missing test docs to EXTRA_DIST (Nick Wellnhofer),<br/>
+    Fix regression: Default namespace not correctly used (Nick Wellnhofer)<br/>
+  </li>
+
+  <li> Cleanups:<br/>
+    Remove xsltTransStorageAdd and xsltTransStorageRemove from symbols.xml (Daniel Veillard),<br/>
+    autogen.sh cleanup (Daniel Richard),<br/>
+    consistent use of xslt processor (Roumen Petrov),<br/>
+    Add object files in tests/plugins to .gitignore (Nick Wellnhofer),<br/>
+    Fix error on bug-165 regression test (Daniel Veillard),<br/>
+    Remove xsltTransStorageAdd and xsltTransStorageRemove (Daniel Veillard),<br/>
+  </li>
+</ul>
+<h3>1.1.27: Sep 12 2012</h3>
+<ul>
+  <li> Portability:<br/>
+    xincludestyle wasn't protected with LIBXML_XINCLUDE_ENABLED (Michael Bonfils),<br/>
+    Portability fix for testThreads.c (IlyaS),<br/>
+    FreeBSD portability fixes (Pedro F. Giffuni),<br/>
+    check for gmtime - on mingw* hosts will enable date-time function (Roumen Petrov),<br/>
+    use only native crypto-API for mingw* hosts (Roumen Petrov),<br/>
+    autogen: Only check for libtoolize (Colin Walters),<br/>
+    minimal mingw support (Roumen Petrov),<br/>
+    configure: acconfig.h is deprecated since autoconf-2.50 (Stefan Kost),<br/>
+    Fix a small out of tree compilation issue (Hao Hu),<br/>
+    Fix python generator to not use deprecated xmllib (Daniel Veillard),<br/>
+    link python module with python library (Frederic Crozat)<br/>
+  </li>
+
+  <li> Documentation:<br/>
+    Tiny doc improvement (Daniel Veillard),<br/>
+    Various documentation fixes for docs on internals (C. M. Sperberg-McQueen)<br/>
+  </li>
+
+  <li> Bug fixes:<br/>
+    Report errors on variable use in key (Daniel Veillard),<br/>
+    The XSLT namespace string is a constant one (Daniel Veillard),<br/>
+    Fix handling of names in xsl:attribute (Nick Wellnhofer),<br/>
+    Reserved namespaces in xsl:element and xsl:attribute (Nick Wellnhofer),<br/>
+    Null-terminate result string of cry:rc4_decrypt (Nick Wellnhofer),<br/>
+    EXSLT date normalization fix (James Muscat),<br/>
+    Exit after compilation of invalid func:result (Nick Wellnhofer),<br/>
+    Fix for EXSLT func:function (Nick Wellnhofer),<br/>
+    Rewrite EXSLT string:replace to be conformant (Nick Wellnhofer),<br/>
+    Avoid a heap use after free error (Chris Evans),<br/>
+    Fix a dictionary string usage (Chris Evans),<br/>
+    Output should not include extraneous newlines when indent is off (Laurence Rowe),<br/>
+    document('') fails to return stylesheets parsed from memory (Jason Viers),<br/>
+    xsltproc should return an error code if xinclude fails (Malcolm Purvis),<br/>
+    Forwards-compatible processing of unknown top level elements (Nick Wellnhofer),<br/>
+    Fix system-property with unknown namespace (Nick Wellnhofer),<br/>
+    Hardening of code checking node types in EXSLT (Daniel Veillard),<br/>
+    Hardening of code checking node types in various entry point (Daniel Veillard),<br/>
+    Cleanup of the pattern compilation code (Daniel Veillard),<br/>
+    Fix default template processing on namespace nodes (Daniel Veillard),<br/>
+    Fix a bug in selecting XSLT elements (Daniel Veillard),<br/>
+    Fixed bug #616839 (Daniel Mustieles),<br/>
+    Fix some case of pattern parsing errors (Abhishek Arya),<br/>
+    preproc: fix the build (Stefan Kost),<br/>
+    Fix a memory leak with xsl:number (Daniel Veillard),<br/>
+    Fix a problem with ESXLT date:add() with January (money_seshu Dronamraju),<br/>
+    Fix a memory leak if compiled with Windows locale support (Daniel Veillard),<br/>
+    Fix generate-id() to not expose object addresses (Daniel Veillard),<br/>
+    Fix curlies support in literals for non-compiled AVTs (Nick Wellnhofer),<br/>
+    Allow whitespace in xsl:variable with select (Nick Wellnhofer),<br/>
+    Small fixes to locale code (Nick Wellnhofer),<br/>
+    Fix bug 602515 (Nick Wellnhofer),<br/>
+    Fix popping of vars in xsltCompilerNodePop (Nick Wellnhofer),<br/>
+    Fix direct pattern matching bug (Nick Wellnhofer)<br/>
+  </li>
+
+  <li> Improvements:<br/>
+    Add the saxon:systemId extension (Mike Hommey),<br/>
+    Add an append mode to document output (Daniel Veillard),<br/>
+    Add new tests to EXTRA_DIST (Nick Wellnhofer),<br/>
+    Test for bug #680920 (Nick Wellnhofer),<br/>
+    fix regresson in Various "make distcheck" and other fixes (Roumen Petrov),<br/>
+    Various "make distcheck" and other fixes (Daniel Richard G),<br/>
+    Fix portability to upcoming libxml2-2.9.0 (Daniel Veillard),<br/>
+    Adding --system flag support to autogen.sh (Daniel Veillard),<br/>
+    Allow per-context override of xsltMaxDepth, introduce xsltMaxVars (Jérôme Carretero),<br/>
+    autogen.sh: Honor NOCONFIGURE environment variable (Colin Walters),<br/>
+    configure: support silent automake rules if possible (Stefan Kost),<br/>
+    Precompile patterns in xsl:number (Nick Wellnhofer),<br/>
+    Fix some warnings in the refactored code (Nick Wellnhofer),<br/>
+    Adding new generated files (Daniel Veillard),<br/>
+    profiling: add callgraph report (Stefan Kost)<br/>
+  </li>
+
+  <li> Cleanups:<br/>
+    Big space and tabs cleanup (Daniel Veillard),<br/>
+    Fix authors list (Daniel Veillard),<br/>
+    Cleanups some of the test makefiles (Daniel Richard),<br/>
+    Remove .cvsignore files which are not needed anymore (Daniel Veillard),<br/>
+    Cleanup some misplaced spaces and tabs (Daniel Veillard),<br/>
+    Augment list of ignored files (Daniel Veillard),<br/>
+    configure: remove checks for isinf and isnan as those are not used anyway (Stefan Kost),<br/>
+    Point to GIT for source code and a bit of cleanup (Daniel Veillard),<br/>
+    Get rid of specific build setup and STATIC_BINARIES (Daniel Veillard)<br/>
+  </li>
+</ul>
 <h3>1.1.26: Sep 24 2009</h3>
 <ul>
   <li> Improvement:
@@ -1239,7 +1353,7 @@ Usage: xsltproc [options] stylesheet file [file ...]
       --timing: display the time used
       --repeat: run the transformation 20 times
       --debug: dump the tree of the result instead
-      --novalid: skip the Dtd loading phase
+      --novalid: skip the DTD loading phase
       --noout: do not dump the result
       --maxdepth val : increase the maximum depth
       --html: the input document is(are) an HTML file(s)
@@ -1604,6 +1718,7 @@ processor to generate DOM trees compliant with the XPath data model.</p>
   <li><a href="internals.html#Extension">Extension support</a></li>
   <li><a href="internals.html#Futher">Further reading</a></li>
   <li><a href="internals.html#TODOs">TODOs</a></li>
+  <li><a href="internals.html#Thanks">Thanks</a></li>
 </ul>
 
 <h3><a name="Introducti2">Introduction</a></h3>
@@ -1723,13 +1838,18 @@ level:</p>
 
 <p>A few things should be noted here:</p>
 <ul>
-  <li>the steps 1/ 3/ and 5/ are optional</li>
+  <li>the steps 1/ 3/ and 5/ are optional:  the DOM representing the
+    stylesheet and input can be created by other means, not just by parsing
+    serialized XML documents, and similarly the result tree DOM can be
+    made available to other processeswithout being serialized.
   <li>the stylesheet obtained at 2/ can be reused by multiple processing 4/
     (and this should also work in threaded programs)</li>
   <li>the tree provided in 2/ should never be freed using xmlFreeDoc, but by
     freeing the stylesheet.</li>
-  <li>the input tree 4/ is not modified except the _private field which may
-    be used for labelling keys if used by the stylesheet</li>
+  <li>the input tree created in step 3/ is not modified except the
+    _private field which may be used for labelling keys if used by the
+    stylesheet. It's not modified at all in step 4/ to allow parallel
+    processing using a shared precompiled stylesheet.</li>
 </ul>
 
 <h3><a name="XSLT1">The XSLT stylesheet compilation</a></h3>
@@ -1788,15 +1908,10 @@ compiled in this stylesheet are indexed by the value of the the target
 element (or attribute, pi ...) name, so when a element or an attribute "foo"
 needs to be processed the lookup is done using the name as a key.</p>
 
-<p>Each of the patterns is compiled into an xsltCompMatch structure. It holds
+<p>Each of the patterns is compiled into an xsltCompMatch
+(i.e. an ''XSLT compiled match') structure. It holds
 the set of rules based on the tokenization of the pattern stored in reverse
-order (matching is easier this way). It also holds some information about the
-previous matches used to speed up the process when one iterates over a set of
-siblings. (This optimization may be defeated by trashing when running
-threaded computation, it's unclear that this is a big deal in practice.)
-Predicate expressions are not compiled at this stage, they may be at run-time
-if needed, but in this case they are compiled as full XPath expressions (the
-use of some fixed predicate can probably be optimized, they are not yet).</p>
+order (matching is easier this way). </p>
 
 <p>The xsltCompMatch are then stored in the hash table, the clash list is
 itself sorted by priority of the template to implement "naturally" the XSLT
@@ -1818,15 +1933,16 @@ linked lists of xsltCompMatch.</p>
 <p>The processing is defined by the XSLT specification (the basis of the
 algorithm is explained in <a
 href="http://www.w3.org/TR/xslt#section-Introduction">the Introduction</a>
-section). Basically it works by taking the root of the input document and
-applying the following algorithm:</p>
+section). Basically it works by taking the root of the input document
+as the cureent node and applying the following algorithm:</p>
 <ol>
-  <li>Finding the template applying to it. This is a lookup in the template
-    hash table, walking the hash list until the node satisfies all the steps
-    of the pattern, then checking the appropriate(s) global templates to see
-    if there isn't a higher priority rule to apply</li>
+  <li>Finding the template applying to current node.
+    This is a lookup in the template hash table, walking the hash list until
+    the node satisfies all the steps of the pattern, then checking the
+    appropriate global template(s) (i.e.  templates applying to a node type)
+    to see if there isn't a higher priority rule to apply</li>
   <li>If there is no template, apply the default rule (recurse on the
-    children)</li>
+    children as the current node)</li>
   <li>else walk the content list of the selected templates, for each of them:
     <ul>
       <li>if the node is in the XSLT namespace then the node has a _private
@@ -1837,14 +1953,16 @@ applying the following algorithm:</p>
       <li>otherwise copy the node.</li>
     </ul>
     <p>The closure is usually done through the XSLT
-    <strong>apply-templates</strong> construct recursing by applying the
-    adequate template on the input node children or on the result of an
-    associated XPath selection lookup.</p>
+    <strong>apply-templates</strong>construct, which invokes this process
+      recursively starting at step 1, to find the appropriate template
+      for the nodes selected by the 'select' attribute of the apply-templates
+      instruction (default: the children of the node currently being
+      processed)</p>
   </li>
 </ol>
 
 <p>Note that large parts of the input tree may not be processed by a given
-stylesheet and that on the opposite some may be processed multiple times.
+stylesheet and that conversely some may be processed multiple times.
 (This often is the case when a Table of Contents is built).</p>
 
 <p>The module <code>transform.c</code> is the one implementing most of this
@@ -1866,7 +1984,7 @@ allocates an xsltTransformContext containing the following:</p>
 <p>Then a new document gets allocated (HTML or XML depending on the type of
 output), the user parameters and global variables and parameters are
 evaluated. Then <strong>xsltProcessOneNode()</strong> which implements the
-1-2-3 algorithm is called on the root element of the input. Step 1/ is
+1-2-3 algorithm is called on the docuemnt node of the input. Step 1/ is
 implemented by calling <strong>xsltGetTemplate()</strong>, step 2/ is
 implemented by <strong>xsltDefaultProcessOneNode()</strong> and step 3/ is
 implemented by <strong>xsltApplyOneTemplate()</strong>.</p>
@@ -1916,7 +2034,7 @@ sounds likely to be more efficient.</p>
 which is the front-end to <strong>xmlXPathCompOpEval()</strong> the function
 implementing the evaluation of the expression tree. This evaluation follows
 the KISS approach again. It's recursive and calls
-<strong>xmlXPathNodeCollectAndTest()</strong> to collect nodes set when
+<strong>xmlXPathNodeCollectAndTest()</strong> to collect a set of nodes when
 evaluating a <code>COLLECT</code> node.</p>
 
 <p>An evaluation is done within the framework of an XPath context stored in
@@ -1926,7 +2044,8 @@ follows the requirements from the XPath specification:</p>
 <ul>
   <li>the current document</li>
   <li>the current node</li>
-  <li>a hash table of defined variables (but not used by XSLT)</li>
+  <li>a hash table of defined variables (but not used by XSLT,
+      which uses its own stack frame for variables, described below)</li>
   <li>a hash table of defined functions</li>
   <li>the proximity position (the place of the node in the current node
   list)</li>
@@ -1938,8 +2057,8 @@ follows the requirements from the XPath specification:</p>
 <p>For the purpose of XSLT an <strong>extra</strong> pointer has been added
 allowing to retrieve the XSLT transformation context. When an XPath
 evaluation is about to be performed, an XPath parser context is allocated
-containing and XPath object stack (this is actually an XPath evaluation
-context, this is a remain of the time where there was no separate parsing and
+containing an XPath object stack (this is actually an XPath evaluation
+context, this is a relic of the time where there was no separate parsing and
 evaluation phase in the XPath implementation). Here is an overview of the set
 of contexts associated to an XPath evaluation within an XSLT
 transformation:</p>
@@ -2008,7 +2127,7 @@ variables and parameters as they are defined through the recursive calls of
 call-template, apply-templates and default templates. This is used to define
 the scope of variables being called.</p>
 
-<p>This part seems to be the most urgent attention right now, first it is
+<p>This part seems to be one needing most work , first it is
 done in a very inefficient way since the location of the variables and
 parameters within the stylesheet tree is still done at run time (it really
 should be done statically at compile time), and I am still unsure that my
@@ -2029,7 +2148,7 @@ extension support works</a>.</p>
 <p>Michael Kay wrote <a
 href="http://www-106.ibm.com/developerworks/library/x-xslt2/?dwzone=x?open&amp;l=132%2ct=gr%2c+p=saxon">a
 really interesting article on Saxon internals</a> and the work he did on
-performance issues. I wishes I had read it before starting libxslt design (I
+performance issues. I wish I had read it before starting libxslt design (I
 would probably have avoided a few mistakes and progressed faster). A lot of
 the ideas in his papers should be implemented or at least tried in
 libxslt.</p>
@@ -2072,6 +2191,10 @@ elements/attributes in different namespaces).</p>
 <p>Double check all the places where the stylesheet compiled form might be
 modified at run time (extra removal of blanks nodes, hint on the
 xsltCompMatch).</p>
+
+<h3><a name="Thanks">Thanks:</a></h3>
+<p>Thanks to <a href="http://cmsmcq.com/">Michael Sperberg-McQueen</a> for
+   various fixes and clarifications on this document!</p>
 
 <p></p>
 

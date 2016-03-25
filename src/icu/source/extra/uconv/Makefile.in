@@ -1,6 +1,6 @@
 ## ******************************************************************************
 ## *
-## *   Copyright (C) 1999-2009, International Business Machines
+## *   Copyright (C) 1999-2014, International Business Machines
 ## *   Corporation and others.  All Rights Reserved.
 ## *
 ## *******************************************************************************
@@ -42,7 +42,8 @@ CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+CPPFLAGS += -DUNISTR_FROM_CHAR_EXPLICIT=explicit -DUNISTR_FROM_STRING_EXPLICIT=explicit
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 ifeq ($(PKGDATA_OPTS),)
@@ -52,12 +53,12 @@ endif
 ## generic settings for data - common.
 PKGMODE=common
 INSTALLTO=$(DESTDIR)$(ICUDATA_DIR)
-UCONVMSG_LIB=dummy
+UCONVMSG_LIB=package-resfiles
 
 ## Static mode
 ifeq ($(UCONVMSG_MODE),static)
 DEFS += -DUCONVMSG_LINK=$(MSGNAME)
-UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(MSGNAME).$(A)
+UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
 LIBS += $(UCONVMSG_LIB)
 PKGMODE=static
 INSTALLTO=$(libdir)
@@ -77,7 +78,8 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local \
-distclean resclean distclean-local dist dist-local check check-local resfiles package-resfiles install-resfiles install-man
+distclean resclean distclean-local dist dist-local \
+check check-local build-dir package-resfiles install-resfiles install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -91,7 +93,7 @@ distclean : distclean-local
 dist: dist-local
 check: check-local
 
-all-local: $(TARGET) resfiles $(ALL_MAN_FILES)
+all-local: build-dir $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-target install-resfiles install-man
 
@@ -128,6 +130,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 pkgdata.inc: pkgdataMakefile
 	$(MAKE) -f pkgdataMakefile
 
+build-dir:
+	@$(MKINSTALLDIRS) $(RESDIR)
+
 pkgdataMakefile:
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
@@ -140,18 +145,16 @@ $(TARGET) : $(OBJECTS)  $(UCONVMSG_LIB)
 	$(LINK.cc) $(OUTOPT)$@ $(OBJECTS) $(LIBS)
 	$(POST_BUILD_STEP)
 
-resfiles: $(RESFILES) package-resfiles
-
-ifeq ($(UCONVMSG_STATIC),YES)
-$(UCONVMSG_LIB): resfiles
+# The | is an order-only prerequisite. This helps when the -j option is used,
+# and we don't want the files to be built before the directories are built.
+ifneq ($(filter order-only,$(.FEATURES)),)
+$(RESFILES) $(RESDIR)/$(RESDIR).lst: | build-dir
 endif
 
-
-package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
+$(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
 	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
-	@$(MKINSTALLDIRS) $(RESDIR)
 	@-$(RMV) $@
 	@for file in $(RESFILES:$(RESDIR)/%.res=%.res); do \
 	  echo $$file >> $@; \
@@ -159,18 +162,14 @@ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 
 # no install for static mode
 ifneq ($(UCONVMSG_MODE),static)
-install-resfiles: $(RESFILES)
+install-resfiles: $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc 
 	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)
 	$(INVOKE) $(TOOLBINDIR)/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(INSTALLTO) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 else
 install-resfiles:
 endif
 
-##
-$(UCONVMSG_LIB): resfiles
-
 $(MSGNAME)/%.res: $(srcdir)/$(RESOURCESDIR)/%.txt
-	$(MKINSTALLDIRS) $(@D)
 	$(INVOKE) $(TOOLBINDIR)/genrb -e UTF-8 -s $(^D) -d $(@D) $(^F)
 
 install-man: $(ALL_MAN_FILES)

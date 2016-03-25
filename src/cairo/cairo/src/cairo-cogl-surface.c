@@ -143,7 +143,7 @@ typedef struct _cairo_cogl_path_fill_meta {
      * and translations but not for different scales.
      *
      * one idea is to track the diagonal lenghts of a unit rectangle
-     * transformed through the original ctm use to tesselate the geometry
+     * transformed through the original ctm use to tessellate the geometry
      * so we can check what the lengths are for any new ctm to know if
      * this geometry is compatible.
      */
@@ -167,7 +167,7 @@ typedef struct _cairo_cogl_path_stroke_meta {
      * and translations but not for different scales.
      *
      * one idea is to track the diagonal lenghts of a unit rectangle
-     * transformed through the original ctm use to tesselate the geometry
+     * transformed through the original ctm use to tessellate the geometry
      * so we can check what the lengths are for any new ctm to know if
      * this geometry is compatible.
      */
@@ -805,7 +805,7 @@ _cairo_cogl_journal_flush (cairo_cogl_surface_t *surface)
 		_cairo_path_fixed_approximate_clip_extents (&path->path, &extents);
 
 		/* TODO - maintain a fifo of the last 10 used clips with cached
-		 * primitives to see if we can avoid tesselating the path and
+		 * primitives to see if we can avoid tessellating the path and
 		 * uploading the vertices...
 		 */
 #if 0
@@ -2544,7 +2544,8 @@ _cairo_cogl_surface_create_full (cairo_cogl_device_t *dev,
     _cairo_surface_init (&surface->base,
                          &_cairo_cogl_surface_backend,
                          &dev->base,
-                         CAIRO_CONTENT_COLOR_ALPHA);
+                         CAIRO_CONTENT_COLOR_ALPHA,
+			 FALSE); /* is_vector */
 
     return &surface->base;
 }
@@ -2789,7 +2790,7 @@ cairo_cogl_device_create (CoglContext *cogl_context)
 
 ERROR:
     g_free (dev);
-    return NULL;
+    return _cairo_device_create_in_error (CAIRO_STATUS_DEVICE_ERROR);
 }
 slim_hidden_def (cairo_cogl_device_create);
 

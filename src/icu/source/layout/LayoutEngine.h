@@ -1,8 +1,5 @@
-
 /*
- *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
- *
+ * (C) Copyright IBM Corp. and others 1998-2014 - All Rights Reserved
  */
 
 #ifndef __LAYOUTENGINE_H
@@ -12,7 +9,7 @@
 
 /**
  * \file 
- * \brief C++ API: Virtual base class for complex text layout.
+ * \brief C++ API: DEPRECATED: Virtual base class for complex text layout.
  */
 
 U_NAMESPACE_BEGIN
@@ -22,6 +19,10 @@ class LEGlyphFilter;
 class LEGlyphStorage;
 
 /**
+ * NOTE: This class is deprecated, please instead use HarfBuzz.
+ * See: http://www.freedesktop.org/wiki/Software/HarfBuzz/ 
+ * and http://userguide.icu-project.org/layoutengine
+ *
  * This is a virtual base class used to do complex text layout. The text must all
  * be in a single font, script, and language. An instance of a LayoutEngine can be
  * created by calling the layoutEngineFactory method. Fonts are identified by
@@ -62,9 +63,20 @@ class LEGlyphStorage;
  * @see LEFontInstance
  * @see ScriptAndLanguageTags.h
  *
- * @stable ICU 2.8
+ * @deprecated ICU 54. See {@link icu::LayoutEngine}
+ *  Instead, please use HarfBuzz.
+ *         see http://www.freedesktop.org/wiki/Software/HarfBuzz/ 
+ *         and http://userguide.icu-project.org/layoutengine
  */
 class U_LAYOUT_API LayoutEngine : public UObject {
+public:
+#ifndef U_HIDE_INTERNAL_API
+    /** @internal Flag to request kerning. Use LE_Kerning_FEATURE_FLAG instead. */
+    static const le_int32 kTypoFlagKern;
+    /** @internal Flag to request ligatures. Use LE_Ligatures_FEATURE_FLAG instead. */
+    static const le_int32 kTypoFlagLiga;	
+#endif  /* U_HIDE_INTERNAL_API */
+
 protected:
     /**
      * The object which holds the glyph storage
@@ -115,6 +127,7 @@ protected:
      */
     le_bool fFilterZeroWidth;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * This constructs an instance for a given font, script and language. Subclass constructors
      * must call this constructor.
@@ -122,8 +135,8 @@ protected:
      * @param fontInstance - the font for the text
      * @param scriptCode - the script for the text
      * @param languageCode - the language for the text
-     * @param typoFlags - the typographic control flags for the text.  Set bit 1 if kerning
-     * is desired, set bit 2 if ligature formation is desired.  Others are reserved.
+     * @param typoFlags - the typographic control flags for the text (a bitfield).  Use kTypoFlagKern
+     * if kerning is desired, kTypoFlagLiga if ligature formation is desired.  Others are reserved.
      * @param success - set to an error code if the operation fails
      *
      * @see LEFontInstance
@@ -131,12 +144,15 @@ protected:
      *
      * @internal
      */
-    LayoutEngine(const LEFontInstance *fontInstance, 
-                 le_int32 scriptCode, 
-                 le_int32 languageCode, 
+    LayoutEngine(const LEFontInstance *fontInstance,
+                 le_int32 scriptCode,
+                 le_int32 languageCode,
                  le_int32 typoFlags,
                  LEErrorCode &success);
+#endif  /* U_HIDE_INTERNAL_API */
 
+    // Do not enclose the protected default constructor with #ifndef U_HIDE_INTERNAL_API
+    // or else the compiler will create a public default constructor.
     /**
      * This overrides the default no argument constructor to make it
      * difficult for clients to call it. Clients are expected to call
@@ -243,12 +259,18 @@ protected:
      * some other way must override this method.
      * 
      * @param tableTag - the four byte table tag.
+     * @param length - length to use
      *
      * @return the address of the table.
      *
      * @internal
      */
-    virtual const void *getFontTable(LETag tableTag) const;
+    virtual const void *getFontTable(LETag tableTag, size_t &length) const;
+
+    /**
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
+     */
+    virtual const void *getFontTable(LETag tableTag) const { size_t ignored; return getFontTable(tableTag, ignored); }
 
     /**
      * This method does character to glyph mapping. The default implementation
@@ -277,6 +299,7 @@ protected:
      */
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * This is a convenience method that forces the advance width of mark
      * glyphs to be zero, which is required for proper selection and highlighting.
@@ -311,7 +334,7 @@ protected:
      * @internal
      */
     static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 charCount, le_bool reverse, LEGlyphStorage &glyphStorage, LEGlyphFilter *markFilter, LEErrorCode &success);
-
+#endif  /* U_HIDE_INTERNAL_API */
 
 public:
     /**
@@ -320,7 +343,7 @@ public:
      * method. It is declared virtual so that it will be invoked by the
      * subclass destructors.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual ~LayoutEngine();
 
@@ -347,7 +370,7 @@ public:
      * method first to free the glyph, character index and position arrays
      * allocated by the previous call.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
 
@@ -358,7 +381,7 @@ public:
      *
      * @return the number of glyphs in the glyph array
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     le_int32 getGlyphCount() const;
 
@@ -370,7 +393,7 @@ public:
      * @param glyphs - the destiniation glyph array
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const;
 
@@ -384,7 +407,7 @@ public:
      * @param extraBits - this value will be ORed with each glyph index
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
@@ -396,7 +419,7 @@ public:
      * @param charIndices - the destiniation character index array
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const;
 
@@ -409,7 +432,7 @@ public:
      * @param indexBase - an offset which will be added to each index
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const;
 
@@ -422,7 +445,7 @@ public:
      * @param positions - the destiniation position array
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getGlyphPositions(float positions[], LEErrorCode &success) const;
 
@@ -438,7 +461,7 @@ public:
      * @param y - the glyph's Y position
      * @param success - set to an error code if the operation fails
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const;
 
@@ -447,7 +470,7 @@ public:
      * so that the LayoutEngine can be reused to layout a different
      * characer array. (This method is also called by the destructor)
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual void reset();
 
@@ -465,27 +488,27 @@ public:
      *
      * @see LEFontInstance
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success);
 
     /**
      * Override of existing call that provides flags to control typography.
-     * @stable ICU 3.4
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typo_flags, LEErrorCode &success);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @stable ICU 2.8
+     * @deprecated ICU 54. See {@link icu::LayoutEngine}
      */
     static UClassID getStaticClassID();
 
@@ -493,4 +516,3 @@ public:
 
 U_NAMESPACE_END
 #endif
-

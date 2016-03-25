@@ -9,10 +9,12 @@ cairo-surface
 
 </para>
 
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -21,6 +23,27 @@ cairo-surface
 
 
 <!-- ##### MACRO CAIRO_HAS_MIME_SURFACE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO CAIRO_MIME_TYPE_JBIG2 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO CAIRO_MIME_TYPE_JBIG2_GLOBAL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO CAIRO_MIME_TYPE_JBIG2_GLOBAL_ID ##### -->
 <para>
 
 </para>
@@ -221,6 +244,26 @@ cairo-surface
 @surface: 
 @x_offset: 
 @y_offset: 
+
+
+<!-- ##### FUNCTION cairo_surface_get_device_scale ##### -->
+<para>
+
+</para>
+
+@surface: 
+@x_scale: 
+@y_scale: 
+
+
+<!-- ##### FUNCTION cairo_surface_set_device_scale ##### -->
+<para>
+
+</para>
+
+@surface: 
+@x_scale: 
+@y_scale: 
 
 
 <!-- ##### FUNCTION cairo_surface_set_fallback_resolution ##### -->

@@ -1,5 +1,5 @@
 #!/usr/bin/qsh
-#   Copyright (C) 2000-2007, International Business Machines
+#   Copyright (C) 2000-2011, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # Authors:
@@ -12,14 +12,25 @@
 # Shell script to unpax ICU and convert the files to an EBCDIC codepage.
 # After extracting to EBCDIC, binary files are re-extracted without the
 # EBCDIC conversion, thus restoring them to original codepage.
-#
+
+if [ -z "$QSH_VERSION" ];
+then
+	QSH=0
+    echo "QSH not detected (QSH_VERSION not set) - just testing."
+else
+	QSH=1
+	#echo "QSH version $QSH_VERSION"
+fi
+export QSH
+
 # Set the following variable to the list of binary file suffixes (extensions)
+
 
 #****************************************************************************
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
 #****************************************************************************
-binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML'
+binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML nrm NRM'
 data_files='icu/source/data/brkitr/* icu/source/data/locales/* icu/source/data/coll/* icu/source/data/rbnf/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
 
 #****************************************************************************
@@ -53,17 +64,8 @@ if [ ! -r $tar_file ]; then
   exit
 fi
 
-#****************************************************************************
-# Determine which directories in the data_files list
-# are included in the provided archive
-#****************************************************************************
-for data_dir in $data_files
-do
-   if (pax -f $tar_file $data_dir >/dev/null 2>&1)
-   then
-       ebcdic_data="$ebcdic_data `echo $data_dir`";
-   fi
-done
+# treat all data files as ebcdic
+ebcdic_data=$data_files
 
 #****************************************************************************
 # Extract files.  We do this in two passes.  One pass for 819 files and a
@@ -89,11 +91,16 @@ pax -C 37 -rvf $tar_file $ebcdic_data
 # be processed to restore files as 819.
 #****************************************************************************
 echo ""
-echo "Determining binary files ..."
+echo "Determining binary files by BOM ..."
 echo ""
-
+bin_count=0
 # Process BOMs
-for file in `find ./icu \( -name \*.txt -print \)`; do
+if [ -f icu/as_is/bomlist.txt ];
+then
+    echo "Using icu/as_is/bomlist.txt"
+    pax -C 819 -rvf $tar_file `cat icu/as_is/bomlist.txt`
+else 
+   for file in `find ./icu \( -name \*.txt -print \)`; do
     bom8=`head -n 1 $file|\
           od -t x1|\
           head -n 1|\
@@ -107,59 +114,33 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
 
         if [ `echo $binary_files | wc -w` -lt 200 ]
         then
+            bin_count=`expr $bin_count + 1`
             binary_files="$binary_files $file";
         else
-            echo "Restoring binary files ..."
+            echo "Restoring binary files by BOM ($bin_count)..."
             rm $binary_files;
             pax -C 819 -rvf $tar_file $binary_files;
-            echo "Determining binary files ..."
+            echo "Determining binary files by BOM ($bin_count)..."
             binary_files="$file";
+            bin_count=`expr $bin_count + 1`
         fi
     fi
-done
-
-# Process special paths
-for i in $(pax -f $tar_file 2>/dev/null)
-do
-  case $i in
-    */)
-#    then this entry is a directory
-     ;;
-    *.*)
-#    then this entry has a dot in the filename
-     for j in $binary_suffixes
-     do
-       suf=${i#*.*}
-       if [ "$suf" = "$j" ]
-       then
-
-         if [ `echo $binary_files | wc -w` -lt 200 ]
-         then
-            binary_files="$binary_files $i";
-         else
-            echo "Restoring binary files ..."
-            rm $binary_files;
-            pax -C 819 -rvf $tar_file $binary_files;
-            echo "Determining binary files ..."
-            binary_files="$i";
-         fi
-         break
-       fi
-     done
-     ;;
-    *)
-#    then this entry does not have a dot in it
-     ;;
-  esac
-done
-
-# now see if a re-extract of binary files is necessary
-if [ `echo $binary_files | wc -w` -gt 0 ]
-then
-  echo "Restoring binary files ..."
-  rm $binary_files
-  pax -C 819 -rvf $tar_file $binary_files
+  done
+  # now see if a re-extract of binary files is necessary
+  if [ `echo $binary_files | wc -w` -gt 0 ]
+  then
+      echo "Restoring binary files ($bin_count) ..."
+      rm $binary_files
+      pax -C 819 -rvf $tar_file $binary_files
+  fi
 fi
+
+echo "# Processing special paths."
+# Process special paths
+more_bin_files=$(find icu -type f \( -name '*.zzz' `echo $binary_suffixes | sed -e 's%[a-zA-Z]*%-o -name \*.&%g'` \)  -print)
+echo "Restoring binary files by special paths ($bin_count) ..."
+rm $more_bin_files
+pax -C 819 -rvf $tar_file $more_bin_files
 
 #****************************************************************************
 # Generate and run the configure script
@@ -175,5 +156,5 @@ mv icu/source/configureTemp icu/source/configure
 chmod 755 icu/source/configure
 
 echo ""
-echo "$0 has completed extracting ICU from $tar_file."
+echo "$0 has completed extracting ICU from $tar_file - $bin_count binary files extracted."
 

@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -19,6 +19,10 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
+/* <DESC>
+ * multi socket API usage together with with glib2
+ * </DESC>
+ */
 /* Example application source code using the multi socket interface to
  * download many files at once.
  *
@@ -104,7 +108,6 @@ static void mcode_or_die(const char *where, CURLMcode code) {
   if ( CURLM_OK != code ) {
     const char *s;
     switch (code) {
-      case     CURLM_CALL_MULTI_PERFORM: s="CURLM_CALL_MULTI_PERFORM"; break;
       case     CURLM_BAD_HANDLE:         s="CURLM_BAD_HANDLE";         break;
       case     CURLM_BAD_EASY_HANDLE:    s="CURLM_BAD_EASY_HANDLE";    break;
       case     CURLM_OUT_OF_MEMORY:      s="CURLM_OUT_OF_MEMORY";      break;

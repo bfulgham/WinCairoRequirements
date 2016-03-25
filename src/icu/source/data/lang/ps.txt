@@ -1,29 +1,31 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ps.xml
+// * Copyright (C) 2015 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ps.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/ps.xml
- */
 ps{
     Languages{
+        am{"امهاري"}
         ar{"عربي"}
+        as{"آسامي"}
         bal{"بلوڅي"}
+        be{"بېلاروسي"}
+        bg{"بلغاري"}
+        bs{"بوسني"}
         de{"الماني"}
         el{"یوناني"}
         en{"انګلیسي"}
         et{"حبشي"}
+        eu{"باسکي"}
         fa{"فارسي"}
         fi{"فینلنډي"}
         fr{"فرانسوي"}
         he{"عبري"}
         hi{"هندي"}
         hy{"ارمني"}
-        ine{"هند و اروپایي"}
         it{"ایټالوي"}
         ja{"جاپانی"}
         ku{"کردي"}
@@ -32,11 +34,13 @@ ps{
         mk{"مقدوني"}
         mn{"مغولي"}
         ms{"ملایا"}
+        nl{"هالېنډي"}
         pl{"پولنډي"}
         ps{"پښتو"}
         pt{"پورتګالي"}
         ru{"روسي"}
         sa{"سنسکریټ"}
+        sq{"الباني"}
         sv{"سویډنی"}
         tg{"تاجک"}
         tk{"ترکمني"}
@@ -47,5 +51,5 @@ ps{
     Scripts{
         Arab{"عربي"}
     }
-    Version{"2.0.50.30"}
+    Version{"2.1.19.14"}
 }

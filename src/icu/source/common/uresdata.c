@@ -1,9 +1,7 @@
 /*
 *******************************************************************************
-*                                                                             *
-* Copyright (C) 1999-2010, International Business Machines Corporation        *
-*               and others. All Rights Reserved.                              *
-*                                                                             *
+* Copyright (C) 1999-2015, International Business Machines Corporation
+*               and others. All Rights Reserved.
 *******************************************************************************
 *   file name:  uresdata.c
 *   encoding:   US-ASCII
@@ -22,6 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uarrsort.h"
@@ -30,8 +29,7 @@
 #include "uinvchar.h"
 #include "uresdata.h"
 #include "uresimp.h"
-
-#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#include "uassert.h"
 
 /*
  * Resource access helpers
@@ -52,7 +50,12 @@
 
 /* empty resources, returned when the resource offset is 0 */
 static const uint16_t gEmpty16=0;
-static const int32_t gEmpty32=0;
+
+static const struct {
+    int32_t length;
+    int32_t res;
+} gEmpty32={ 0, 0 };
+
 static const struct {
     int32_t length;
     UChar nul;
@@ -142,7 +145,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        (pInfo->formatVersion[0]==1 || pInfo->formatVersion[0]==2));
+        (1<=pInfo->formatVersion[0] && pInfo->formatVersion[0]<=3));
 }
 
 /* semi-public functions ---------------------------------------------------- */
@@ -166,7 +169,7 @@ res_init(ResourceData *pResData,
     }
 
     /* currently, we accept only resources that have a Table as their roots */
-    rootType=RES_GET_TYPE(pResData->rootRes);
+    rootType=(UResType)RES_GET_TYPE(pResData->rootRes);
     if(!URES_IS_TABLE(rootType)) {
         *errorCode=U_INVALID_FORMAT_ERROR;
         res_unload(pResData);
@@ -195,11 +198,20 @@ res_init(ResourceData *pResData,
         if(indexes[URES_INDEX_KEYS_TOP]>(1+indexLength)) {
             pResData->localKeyLimit=indexes[URES_INDEX_KEYS_TOP]<<2;
         }
+        if(formatVersion[0]>=3) {
+            // In formatVersion 1, the indexLength took up this whole int.
+            // In version 2, bits 31..8 were reserved and always 0.
+            // In version 3, they contain bits 23..0 of the poolStringIndexLimit.
+            // Bits 27..24 are in indexes[URES_INDEX_ATTRIBUTES] bits 15..12.
+            pResData->poolStringIndexLimit=(int32_t)((uint32_t)indexes[URES_INDEX_LENGTH]>>8);
+        }
         if(indexLength>URES_INDEX_ATTRIBUTES) {
             int32_t att=indexes[URES_INDEX_ATTRIBUTES];
             pResData->noFallback=(UBool)(att&URES_ATT_NO_FALLBACK);
             pResData->isPoolBundle=(UBool)((att&URES_ATT_IS_POOL_BUNDLE)!=0);
             pResData->usesPoolBundle=(UBool)((att&URES_ATT_USES_POOL_BUNDLE)!=0);
+            pResData->poolStringIndexLimit|=(att&0xf000)<<12;  // bits 15..12 -> 27..24
+            pResData->poolStringIndex16Limit=(int32_t)((uint32_t)att>>16);
         }
         if((pResData->isPoolBundle || pResData->usesPoolBundle) && indexLength<=URES_INDEX_POOL_CHECKSUM) {
             *errorCode=U_INVALID_FORMAT_ERROR;
@@ -298,7 +310,11 @@ res_getString(const ResourceData *pResData, Resource res, int32_t *pLength) {
     int32_t length;
     if(RES_GET_TYPE(res)==URES_STRING_V2) {
         int32_t first;
-        p=(const UChar *)(pResData->p16BitUnits+offset);
+        if(offset<pResData->poolStringIndexLimit) {
+            p=(const UChar *)pResData->poolBundleStrings+offset;
+        } else {
+            p=(const UChar *)pResData->p16BitUnits+(offset-pResData->poolStringIndexLimit);
+        }
         first=*p;
         if(!U16_IS_TRAIL(first)) {
             length=u_strlen(p);
@@ -351,7 +367,7 @@ res_getBinary(const ResourceData *pResData, Resource res, int32_t *pLength) {
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_BINARY) {
-        const int32_t *p32= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
+        const int32_t *p32= offset==0 ? (const int32_t*)&gEmpty32 : pResData->pRoot+offset;
         length=*p32++;
         p=(const uint8_t *)p32;
     } else {
@@ -371,7 +387,7 @@ res_getIntVector(const ResourceData *pResData, Resource res, int32_t *pLength) {
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_INT_VECTOR) {
-        p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
+        p= offset==0 ? (const int32_t *)&gEmpty32 : pResData->pRoot+offset;
         length=*p++;
     } else {
         p=NULL;
@@ -407,6 +423,18 @@ res_countArrayItems(const ResourceData *pResData, Resource res) {
     }
 }
 
+static Resource
+makeResourceFrom16(const ResourceData *pResData, int32_t res16) {
+    if(res16<pResData->poolStringIndex16Limit) {
+        // Pool string, nothing to do.
+    } else {
+        // Local string, adjust the 16-bit offset to a regular one,
+        // with a larger pool string index limit.
+        res16=res16-pResData->poolStringIndex16Limit+pResData->poolStringIndexLimit;
+    }
+    return URES_MAKE_RESOURCE(URES_STRING_V2, res16);
+}
+
 U_CAPI Resource U_EXPORT2
 res_getTableItemByKey(const ResourceData *pResData, Resource table,
                       int32_t *indexR, const char **key) {
@@ -418,12 +446,14 @@ res_getTableItemByKey(const ResourceData *pResData, Resource table,
     }
     switch(RES_GET_TYPE(table)) {
     case URES_TABLE: {
-        const uint16_t *p= offset==0 ? &gEmpty16 : (const uint16_t *)(pResData->pRoot+offset);
-        length=*p++;
-        *indexR=idx=_res_findTableItem(pResData, p, length, *key, key);
-        if(idx>=0) {
-            const Resource *p32=(const Resource *)(p+length+(~length&1));
-            return p32[idx];
+        if (offset!=0) { /* empty if offset==0 */
+            const uint16_t *p= (const uint16_t *)(pResData->pRoot+offset);
+            length=*p++;
+            *indexR=idx=_res_findTableItem(pResData, p, length, *key, key);
+            if(idx>=0) {
+                const Resource *p32=(const Resource *)(p+length+(~length&1));
+                return p32[idx];
+            }
         }
         break;
     }
@@ -432,16 +462,18 @@ res_getTableItemByKey(const ResourceData *pResData, Resource table,
         length=*p++;
         *indexR=idx=_res_findTableItem(pResData, p, length, *key, key);
         if(idx>=0) {
-            return URES_MAKE_RESOURCE(URES_STRING_V2, p[length+idx]);
+            return makeResourceFrom16(pResData, p[length+idx]);
         }
         break;
     }
     case URES_TABLE32: {
-        const int32_t *p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
-        length=*p++;
-        *indexR=idx=_res_findTable32Item(pResData, p, length, *key, key);
-        if(idx>=0) {
-            return (Resource)p[length+idx];
+        if (offset!=0) { /* empty if offset==0 */
+            const int32_t *p= pResData->pRoot+offset;
+            length=*p++;
+            *indexR=idx=_res_findTable32Item(pResData, p, length, *key, key);
+            if(idx>=0) {
+                return (Resource)p[length+idx];
+            }
         }
         break;
     }
@@ -456,16 +488,19 @@ res_getTableItemByIndex(const ResourceData *pResData, Resource table,
                         int32_t indexR, const char **key) {
     uint32_t offset=RES_GET_OFFSET(table);
     int32_t length;
+    U_ASSERT(indexR>=0); /* to ensure the index is not negative */
     switch(RES_GET_TYPE(table)) {
     case URES_TABLE: {
-        const uint16_t *p= offset==0 ? &gEmpty16 : (const uint16_t *)(pResData->pRoot+offset);
-        length=*p++;
-        if(indexR<length) {
-            const Resource *p32=(const Resource *)(p+length+(~length&1));
-            if(key!=NULL) {
-                *key=RES_GET_KEY16(pResData, p[indexR]);
+        if (offset != 0) { /* empty if offset==0 */
+            const uint16_t *p= (const uint16_t *)(pResData->pRoot+offset);
+            length=*p++;
+            if(indexR<length) {
+                const Resource *p32=(const Resource *)(p+length+(~length&1));
+                if(key!=NULL) {
+                    *key=RES_GET_KEY16(pResData, p[indexR]);
+                }
+                return p32[indexR];
             }
-            return p32[indexR];
         }
         break;
     }
@@ -476,18 +511,20 @@ res_getTableItemByIndex(const ResourceData *pResData, Resource table,
             if(key!=NULL) {
                 *key=RES_GET_KEY16(pResData, p[indexR]);
             }
-            return URES_MAKE_RESOURCE(URES_STRING_V2, p[length+indexR]);
+            return makeResourceFrom16(pResData, p[length+indexR]);
         }
         break;
     }
     case URES_TABLE32: {
-        const int32_t *p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
-        length=*p++;
-        if(indexR<length) {
-            if(key!=NULL) {
-                *key=RES_GET_KEY32(pResData, p[indexR]);
+        if (offset != 0) { /* empty if offset==0 */
+            const int32_t *p= pResData->pRoot+offset;
+            length=*p++;
+            if(indexR<length) {
+                if(key!=NULL) {
+                    *key=RES_GET_KEY32(pResData, p[indexR]);
+                }
+                return (Resource)p[length+indexR];
             }
-            return (Resource)p[length+indexR];
         }
         break;
     }
@@ -507,18 +544,21 @@ res_getResource(const ResourceData *pResData, const char *key) {
 U_CAPI Resource U_EXPORT2
 res_getArrayItem(const ResourceData *pResData, Resource array, int32_t indexR) {
     uint32_t offset=RES_GET_OFFSET(array);
+    U_ASSERT(indexR>=0); /* to ensure the index is not negative */
     switch(RES_GET_TYPE(array)) {
     case URES_ARRAY: {
-        const int32_t *p= offset==0 ? &gEmpty32 : pResData->pRoot+offset;
-        if(indexR<*p) {
-            return (Resource)p[1+indexR];
+        if (offset!=0) { /* empty if offset==0 */
+            const int32_t *p= pResData->pRoot+offset;
+            if(indexR<*p) {
+                return (Resource)p[1+indexR];
+            }
         }
         break;
     }
     case URES_ARRAY16: {
         const uint16_t *p=pResData->p16BitUnits+offset;
         if(indexR<*p) {
-            return URES_MAKE_RESOURCE(URES_STRING_V2, p[1+indexR]);
+            return makeResourceFrom16(pResData, p[1+indexR]);
         }
         break;
     }
@@ -540,7 +580,7 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
   Resource t1 = r;
   Resource t2;
   int32_t indexR = 0;
-  UResType type = RES_GET_TYPE(t1);
+  UResType type = (UResType)RES_GET_TYPE(t1);
 
   /* if you come in with an empty path, you'll be getting back the same resource */
   if(!uprv_strlen(pathP)) {
@@ -592,7 +632,7 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
       t2 = RES_BOGUS;
     }
     t1 = t2;
-    type = RES_GET_TYPE(t1);
+    type = (UResType)RES_GET_TYPE(t1);
     /* position pathP to next resource key/index */
     pathP = *path;
   }
@@ -732,11 +772,11 @@ ures_swapResource(const UDataSwapper *ds,
             (key!=gUnknownKey ?
                 /* its table key string is "%%CollationBin" */
                 0==ds->compareInvChars(ds, key, -1,
-                                       gCollationBinKey, LENGTHOF(gCollationBinKey)-1) :
+                                       gCollationBinKey, UPRV_LENGTHOF(gCollationBinKey)-1) :
                 /* its table key string is unknown but it looks like a collation binary */
                 ucol_looksLikeCollationBinary(ds, p+1, count))
         ) {
-            ucol_swapBinary(ds, p+1, count, q+1, pErrorCode);
+            ucol_swap(ds, p+1, count, q+1, pErrorCode);
         }
 #endif
         break;
@@ -975,8 +1015,9 @@ ures_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        ((pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]>=1) ||  /* formatVersion 1.1+ or 2.x */
-         pInfo->formatVersion[0]==2)
+        /* formatVersion 1.1+ or 2.x or 3.x */
+        ((pInfo->formatVersion[0]==1 && pInfo->formatVersion[1]>=1) ||
+            pInfo->formatVersion[0]==2 || pInfo->formatVersion[0]==3)
     )) {
         udata_printError(ds, "ures_swap(): data format %02x.%02x.%02x.%02x (format version %02x.%02x) is not a resource bundle\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],

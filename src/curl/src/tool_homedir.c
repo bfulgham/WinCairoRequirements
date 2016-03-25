@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -19,16 +19,10 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
-#include "setup.h"
+#include "tool_setup.h"
 
 #ifdef HAVE_PWD_H
 #  include <pwd.h>
-#endif
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif
-#ifdef __VMS
-#  include <unixlib.h>
 #endif
 
 #include "tool_homedir.h"
@@ -50,24 +44,17 @@ static char *GetEnv(const char *variable, char do_expand)
     env = buf1;
     variable = buf1;
   }
-  if(do_expand && strchr(variable,'%')) {
+  if(do_expand && strchr(variable, '%')) {
     /* buf2 == variable if not expanded */
     rc = ExpandEnvironmentStrings (variable, buf2, sizeof(buf2));
     if(rc > 0 && rc < sizeof(buf2) &&
-       !strchr(buf2,'%'))    /* no vars still unexpanded */
+       !strchr(buf2, '%'))    /* no vars still unexpanded */
       env = buf2;
   }
 #else
   (void)do_expand;
-#ifdef __VMS
-  env = getenv(variable);
-  if(env && strcmp("HOME",variable) == 0) {
-    env = decc_translate_vms(env);
-  }
-#else
   /* no length control */
   env = getenv(variable);
-#endif
 #endif
   return (env && env[0]) ? strdup(env) : NULL;
 }
@@ -90,11 +77,7 @@ char *homedir(void)
    struct passwd *pw = getpwuid(geteuid());
 
    if(pw) {
-#ifdef __VMS
-     home = decc_translate_vms(pw->pw_dir);
-#else
      home = pw->pw_dir;
-#endif
      if(home && home[0])
        home = strdup(home);
      else

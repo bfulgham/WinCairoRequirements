@@ -21,8 +21,8 @@
  * OF THIS SOFTWARE.
  */
 
-#include <stdlib.h>
 #include "cairo-test.h"
+#include <stdlib.h>
 
 static cairo_test_status_t
 draw (cairo_t *cr, int width, int height)

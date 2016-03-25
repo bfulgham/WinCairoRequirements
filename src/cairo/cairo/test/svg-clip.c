@@ -23,15 +23,17 @@
  * Author: Kristian Høgsberg <krh@redhat.com>
  */
 
+#include "cairo-test.h"
+
 #include <stdio.h>
 
 #include <cairo-svg.h>
-#include "cairo-test.h"
 
 /* Test SVG clipping */
 
 #define WIDTH_IN_POINTS 600
 #define HEIGHT_IN_POINTS 600
+#define BASENAME "svg-clip.out"
 
 static void
 test_clip (cairo_t *cr, double width, double height)
@@ -107,8 +109,9 @@ static cairo_test_status_t
 preamble (cairo_test_context_t *ctx)
 {
     cairo_t *cr;
-    const char *filename = "svg-clip.out.svg";
     cairo_surface_t *surface;
+    char *filename;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
     if (! cairo_test_is_target_enabled (ctx, "svg11") &&
 	! cairo_test_is_target_enabled (ctx, "svg12"))
@@ -116,12 +119,14 @@ preamble (cairo_test_context_t *ctx)
 	return CAIRO_TEST_UNTESTED;
     }
 
+    xasprintf (&filename, "%s/%s.svg", path, BASENAME);
     surface = cairo_svg_surface_create (filename,
 					WIDTH_IN_POINTS, HEIGHT_IN_POINTS);
     if (cairo_surface_status (surface)) {
 	cairo_test_log (ctx,
 			"Failed to create svg surface for file %s: %s\n",
 			filename, cairo_status_to_string (cairo_surface_status (surface)));
+	free (filename);
 	return CAIRO_TEST_FAILURE;
     }
 
@@ -135,6 +140,7 @@ preamble (cairo_test_context_t *ctx)
 
     printf ("svg-clip: Please check %s to make sure it looks happy.\n",
 	    filename);
+    free (filename);
     return CAIRO_TEST_SUCCESS;
 }
 

@@ -2,52 +2,52 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="bidi">
-      <UniqueIdentifier>{cecbf142-6bdf-4dbf-b3b9-85fe52bb65d2}</UniqueIdentifier>
+      <UniqueIdentifier>{662b90c0-25af-4e69-99cf-183de5e98005}</UniqueIdentifier>
     </Filter>
     <Filter Include="break iteration">
-      <UniqueIdentifier>{25692163-1935-4615-8071-9a268c11cacc}</UniqueIdentifier>
+      <UniqueIdentifier>{f8faa7c2-67cc-4db0-b09e-622e766bb046}</UniqueIdentifier>
     </Filter>
     <Filter Include="collation">
-      <UniqueIdentifier>{46537d5e-cd28-4f9e-a180-7700f4709709}</UniqueIdentifier>
+      <UniqueIdentifier>{d1e11600-cbf4-4b95-837d-2debb1013248}</UniqueIdentifier>
     </Filter>
     <Filter Include="collections">
-      <UniqueIdentifier>{e3af00fb-ca81-4f8e-a863-e443de99a8d1}</UniqueIdentifier>
+      <UniqueIdentifier>{606d2f84-443e-4e4c-b3f4-35119d7873f4}</UniqueIdentifier>
     </Filter>
     <Filter Include="conversion">
-      <UniqueIdentifier>{415eca92-0e71-4b8e-9cde-f6d6d161c55b}</UniqueIdentifier>
+      <UniqueIdentifier>{05580807-1162-44c8-b00b-5e4403efaa25}</UniqueIdentifier>
     </Filter>
     <Filter Include="data &amp; memory">
-      <UniqueIdentifier>{dcd4ca57-a95b-4757-b1a8-a26900465cd4}</UniqueIdentifier>
+      <UniqueIdentifier>{44ac294d-a8a9-42e0-b21c-181bb99e0783}</UniqueIdentifier>
     </Filter>
     <Filter Include="formatting">
-      <UniqueIdentifier>{33d12c70-b8af-47c9-bff5-0da75d918adf}</UniqueIdentifier>
+      <UniqueIdentifier>{138aec4c-bae9-4ef0-943f-7464b1f6c66f}</UniqueIdentifier>
     </Filter>
     <Filter Include="locales &amp; resources">
-      <UniqueIdentifier>{775f54c1-8cce-4bfd-a258-b8b8e88e9714}</UniqueIdentifier>
+      <UniqueIdentifier>{35321b30-cc61-407a-92e5-04d69ea730d7}</UniqueIdentifier>
     </Filter>
     <Filter Include="misc">
-      <UniqueIdentifier>{0ac19b62-1e08-451f-a423-68671dc5bb0c}</UniqueIdentifier>
+      <UniqueIdentifier>{bcb6bbd8-56cc-408d-bde7-611c089f9cf2}</UniqueIdentifier>
     </Filter>
     <Filter Include="normalization">
-      <UniqueIdentifier>{ee6f2fa6-ddf0-4e8b-9102-96f8936582be}</UniqueIdentifier>
+      <UniqueIdentifier>{b401b495-6238-4b91-8ad3-6d8172a7ab4c}</UniqueIdentifier>
     </Filter>
     <Filter Include="properties &amp; sets">
-      <UniqueIdentifier>{86a507c7-f43b-4fc1-9a5d-a081c7f46f68}</UniqueIdentifier>
+      <UniqueIdentifier>{35be321f-fa23-4f6f-b1f0-622a88be3454}</UniqueIdentifier>
     </Filter>
     <Filter Include="strings">
-      <UniqueIdentifier>{9fd1ee39-6c03-458f-88a0-2354a4fa9e39}</UniqueIdentifier>
+      <UniqueIdentifier>{539c308a-0211-497b-b1b9-5fd5759d024e}</UniqueIdentifier>
     </Filter>
     <Filter Include="transforms">
-      <UniqueIdentifier>{6ca913a0-e3cd-47c8-b19d-414c05d57b6b}</UniqueIdentifier>
+      <UniqueIdentifier>{ecaea3db-cc84-4bd9-9794-008676f741c5}</UniqueIdentifier>
     </Filter>
     <Filter Include="regex">
-      <UniqueIdentifier>{46e2ea93-d6cb-4702-b02c-5463e6db3d34}</UniqueIdentifier>
+      <UniqueIdentifier>{2d3e6869-304c-49bf-b792-4b75b59b5fd7}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprep &amp; idna">
-      <UniqueIdentifier>{91b33aa9-ee8c-4ce7-ae3c-227a52ad8c34}</UniqueIdentifier>
+      <UniqueIdentifier>{319cfaf0-a808-4ef3-ad0c-9d2b713a25f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="spoof">
-      <UniqueIdentifier>{8b59637b-c237-4432-ba19-434cb6c6d2e1}</UniqueIdentifier>
+      <UniqueIdentifier>{356fb435-8d2f-4f8f-8cad-f87352d6beac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +97,6 @@
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="cmsccoll.c">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="colutil.c">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="cturtst.c">
@@ -171,6 +168,9 @@
     <ClCompile Include="ccaltst.c">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="cdateintervalformattest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="cdattst.c">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -183,6 +183,9 @@
     <ClCompile Include="cformtst.c">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="cgendtst.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="cmsgtst.c">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -192,6 +195,9 @@
     <ClCompile Include="cnumtst.c">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="cpluralrulestest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="currtest.c">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -199,6 +205,12 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="utmstest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="uregiontest.c">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="ulistfmttest.c">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="cldrtest.c">

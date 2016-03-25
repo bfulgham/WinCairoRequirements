@@ -134,9 +134,6 @@ XSLTPUBFUN int XSLTCALL
 		xsltUnregisterExtModuleFunction
 					(const xmlChar *name,
 					 const xmlChar *URI);
-XSLTPUBFUN void XSLTCALL
-      xsltUnregisterAllExtModules
-               (void);
 
 /*
  * extension elements

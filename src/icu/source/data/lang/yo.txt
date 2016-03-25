@@ -1,14 +1,11 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/yo.xml
+// * Copyright (C) 2015 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/yo.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/yo.xml
- */
 yo{
     Languages{
         af{"Èdè Afrikani"}
@@ -19,7 +16,6 @@ yo{
         az{"Èdè Azerbaijani"}
         be{"Èdè Belarusi"}
         bg{"Èdè Bugaria"}
-        bh{"Èdè Bihari"}
         bn{"Èdè Bengali"}
         br{"Èdè Bretoni"}
         bs{"Èdè Bosnia"}
@@ -111,5 +107,5 @@ yo{
         zh{"Èdè Mandari"}
         zu{"Èdè Ṣulu"}
     }
-    Version{"2.0.49.29"}
+    Version{"2.1.19.80"}
 }

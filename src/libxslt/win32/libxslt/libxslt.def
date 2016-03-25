@@ -33,7 +33,6 @@ EXPORTS
   	xsltRegisterExtElement
   	xsltFreeCtxtExts
   	xsltFreeExts
-	xsltUnregisterAllExtModules
 	xsltGetExtData
 	xsltShutdownCtxtExts
 	xsltXPathGetTransformContext
@@ -134,6 +133,7 @@ EXPORTS
 	xsltSaveResultToFd
 
 	xsltMaxDepth
+	xsltMaxVars
 	xsltSetXIncludeDefault
 	xsltLibxmlVersion
 	xsltLibxsltVersion

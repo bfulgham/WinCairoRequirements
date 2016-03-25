@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -20,13 +20,10 @@
  *
  ***************************************************************************/
 
-#include "setup.h"
+#include "curl_setup.h"
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
-#endif
-#ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
 #endif
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
@@ -36,9 +33,6 @@
 #endif
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
-#endif
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>     /* for the close() proto */
 #endif
 #ifdef __VMS
 #include <in.h>
@@ -74,15 +68,15 @@
 #include "connect.h"
 #include "select.h"
 #include "progress.h"
-
-#define _MPRINTF_REPLACE /* use our functions only */
-#include <curl/mprintf.h>
+#include "curl_printf.h"
 
 #  if defined(CURL_STATICLIB) && !defined(CARES_STATICLIB) && \
      (defined(WIN32) || defined(_WIN32) || defined(__SYMBIAN32__))
 #    define CARES_STATICLIB
 #  endif
 #  include <ares.h>
+#  include <ares_version.h> /* really old c-ares didn't include this by
+                               itself */
 
 #if ARES_VERSION >= 0x010500
 /* c-ares 1.5.0 or later, the callback proto is modified */
@@ -170,7 +164,7 @@ void Curl_resolver_cleanup(void *resolver)
 int Curl_resolver_duphandle(void **to, void *from)
 {
   /* Clone the ares channel for the new handle */
-  if(ARES_SUCCESS != ares_dup((ares_channel*)to,(ares_channel)from))
+  if(ARES_SUCCESS != ares_dup((ares_channel*)to, (ares_channel)from))
     return CURLE_FAILED_INIT;
   return CURLE_OK;
 }
@@ -182,7 +176,7 @@ static void destroy_async_data (struct Curl_async *async);
  */
 void Curl_resolver_cancel(struct connectdata *conn)
 {
-  if(conn && conn->data && conn->data->state.resolver)
+  if(conn->data && conn->data->state.resolver)
     ares_cancel((ares_channel)conn->data->state.resolver);
   destroy_async_data(&conn->async);
 }
@@ -192,8 +186,7 @@ void Curl_resolver_cancel(struct connectdata *conn)
  */
 static void destroy_async_data (struct Curl_async *async)
 {
-  if(async->hostname)
-    free(async->hostname);
+  free(async->hostname);
 
   if(async->os_specific) {
     struct ResolverResults *res = (struct ResolverResults *)async->os_specific;
@@ -211,12 +204,12 @@ static void destroy_async_data (struct Curl_async *async)
 }
 
 /*
- * Curl_resolver_fdset() is called when someone from the outside world (using
- * curl_multi_fdset()) wants to get our fd_set setup and we're talking with
- * ares. The caller must make sure that this function is only called when we
- * have a working ares channel.
+ * Curl_resolver_getsock() is called when someone from the outside world
+ * (using curl_multi_fdset()) wants to get our fd_set setup and we're talking
+ * with ares. The caller must make sure that this function is only called when
+ * we have a working ares channel.
  *
- * Returns: CURLE_OK always!
+ * Returns: sockets-in-use-bitmap
  */
 
 int Curl_resolver_getsock(struct connectdata *conn,
@@ -227,18 +220,19 @@ int Curl_resolver_getsock(struct connectdata *conn,
   struct timeval maxtime;
   struct timeval timebuf;
   struct timeval *timeout;
+  long milli;
   int max = ares_getsock((ares_channel)conn->data->state.resolver,
                          (ares_socket_t *)socks, numsocks);
-
 
   maxtime.tv_sec = CURL_TIMEOUT_RESOLVE;
   maxtime.tv_usec = 0;
 
   timeout = ares_timeout((ares_channel)conn->data->state.resolver, &maxtime,
                          &timebuf);
-
-  Curl_expire(conn->data,
-              (timeout->tv_sec * 1000) + (timeout->tv_usec/1000));
+  milli = (timeout->tv_sec * 1000) + (timeout->tv_usec/1000);
+  if(milli == 0)
+    milli += 10;
+  Curl_expire_latest(conn->data, milli);
 
   return max;
 }
@@ -318,6 +312,7 @@ CURLcode Curl_resolver_is_resolved(struct connectdata *conn,
   struct SessionHandle *data = conn->data;
   struct ResolverResults *res = (struct ResolverResults *)
     conn->async.os_specific;
+  CURLcode result = CURLE_OK;
 
   *dns = NULL;
 
@@ -328,16 +323,19 @@ CURLcode Curl_resolver_is_resolved(struct connectdata *conn,
     /* temp_ai ownership is moved to the connection, so we need not free-up
        them */
     res->temp_ai = NULL;
-    destroy_async_data(&conn->async);
     if(!conn->async.dns) {
-      failf(data, "Could not resolve host: %s (%s)", conn->host.dispname,
-            ares_strerror(conn->async.status));
-      return CURLE_COULDNT_RESOLVE_HOST;
+      failf(data, "Could not resolve: %s (%s)",
+            conn->async.hostname, ares_strerror(conn->async.status));
+      result = conn->bits.proxy?CURLE_COULDNT_RESOLVE_PROXY:
+        CURLE_COULDNT_RESOLVE_HOST;
     }
-    *dns = conn->async.dns;
+    else
+      *dns = conn->async.dns;
+
+    destroy_async_data(&conn->async);
   }
 
-  return CURLE_OK;
+  return result;
 }
 
 /*
@@ -354,7 +352,7 @@ CURLcode Curl_resolver_is_resolved(struct connectdata *conn,
 CURLcode Curl_resolver_wait_resolv(struct connectdata *conn,
                                    struct Curl_dns_entry **entry)
 {
-  CURLcode rc=CURLE_OK;
+  CURLcode result = CURLE_OK;
   struct SessionHandle *data = conn->data;
   long timeout;
   struct timeval now = Curl_tvnow();
@@ -387,13 +385,13 @@ CURLcode Curl_resolver_wait_resolv(struct connectdata *conn,
       timeout_ms = 1000;
 
     waitperform(conn, timeout_ms);
-    Curl_resolver_is_resolved(conn,&temp_entry);
+    Curl_resolver_is_resolved(conn, &temp_entry);
 
     if(conn->async.done)
       break;
 
     if(Curl_pgrsUpdate(conn)) {
-      rc = CURLE_ABORTED_BY_CALLBACK;
+      result = CURLE_ABORTED_BY_CALLBACK;
       timeout = -1; /* trigger the cancel below */
     }
     else {
@@ -402,6 +400,7 @@ CURLcode Curl_resolver_wait_resolv(struct connectdata *conn,
       timeout -= timediff?timediff:1; /* always deduct at least 1 */
       now = now2; /* for next loop */
     }
+
     if(timeout < 0) {
       /* our timeout, so we cancel the ares operation */
       ares_cancel((ares_channel)data->state.resolver);
@@ -411,43 +410,17 @@ CURLcode Curl_resolver_wait_resolv(struct connectdata *conn,
 
   /* Operation complete, if the lookup was successful we now have the entry
      in the cache. */
-
   if(entry)
     *entry = conn->async.dns;
 
-  if(!conn->async.dns) {
-    /* a name was not resolved */
-    if((timeout < 0) || (conn->async.status == ARES_ETIMEOUT)) {
-      if(conn->bits.httpproxy) {
-        failf(data, "Resolving proxy timed out: %s", conn->proxy.dispname);
-        rc = CURLE_COULDNT_RESOLVE_PROXY;
-      }
-      else {
-        failf(data, "Resolving host timed out: %s", conn->host.dispname);
-        rc = CURLE_COULDNT_RESOLVE_HOST;
-      }
-    }
-    else if(conn->async.done) {
-      if(conn->bits.httpproxy) {
-        failf(data, "Could not resolve proxy: %s (%s)", conn->proxy.dispname,
-              ares_strerror(conn->async.status));
-        rc = CURLE_COULDNT_RESOLVE_PROXY;
-      }
-      else {
-        failf(data, "Could not resolve host: %s (%s)", conn->host.dispname,
-              ares_strerror(conn->async.status));
-        rc = CURLE_COULDNT_RESOLVE_HOST;
-      }
-    }
-    else
-      rc = CURLE_OPERATION_TIMEDOUT;
-
+  if(result)
     /* close the connection, since we can't return failure here without
-       cleaning up this connection properly */
-    conn->bits.close = TRUE;
-  }
+       cleaning up this connection properly.
+       TODO: remove this action from here, it is not a name resolver decision.
+    */
+    connclose(conn, "c-ares resolve failed");
 
-  return rc;
+  return result;
 }
 
 /* Connects results to the list */
@@ -560,15 +533,15 @@ Curl_addrinfo *Curl_resolver_getaddrinfo(struct connectdata *conn,
   bufp = strdup(hostname);
   if(bufp) {
     struct ResolverResults *res = NULL;
-    Curl_safefree(conn->async.hostname);
+    free(conn->async.hostname);
     conn->async.hostname = bufp;
     conn->async.port = port;
     conn->async.done = FALSE;   /* not done */
     conn->async.status = 0;     /* clear */
     conn->async.dns = NULL;     /* clear */
-    res = calloc(sizeof(struct ResolverResults),1);
+    res = calloc(sizeof(struct ResolverResults), 1);
     if(!res) {
-      Curl_safefree(conn->async.hostname);
+      free(conn->async.hostname);
       conn->async.hostname = NULL;
       return NULL;
     }
@@ -578,13 +551,22 @@ Curl_addrinfo *Curl_resolver_getaddrinfo(struct connectdata *conn,
     res->last_status = ARES_ENOTFOUND;
 #ifdef ENABLE_IPV6 /* CURLRES_IPV6 */
     if(family == PF_UNSPEC) {
-      res->num_pending = 2;
+      if(Curl_ipv6works()) {
+        res->num_pending = 2;
 
-      /* areschannel is already setup in the Curl_open() function */
-      ares_gethostbyname((ares_channel)data->state.resolver, hostname,
-                         PF_INET, query_completed_cb, conn);
-      ares_gethostbyname((ares_channel)data->state.resolver, hostname,
-                         PF_INET6, query_completed_cb, conn);
+        /* areschannel is already setup in the Curl_open() function */
+        ares_gethostbyname((ares_channel)data->state.resolver, hostname,
+                            PF_INET, query_completed_cb, conn);
+        ares_gethostbyname((ares_channel)data->state.resolver, hostname,
+                            PF_INET6, query_completed_cb, conn);
+      }
+      else {
+        res->num_pending = 1;
+
+        /* areschannel is already setup in the Curl_open() function */
+        ares_gethostbyname((ares_channel)data->state.resolver, hostname,
+                            PF_INET, query_completed_cb, conn);
+      }
     }
     else
 #endif /* CURLRES_IPV6 */
@@ -599,5 +581,111 @@ Curl_addrinfo *Curl_resolver_getaddrinfo(struct connectdata *conn,
     *waitp = 1; /* expect asynchronous response */
   }
   return NULL; /* no struct yet */
+}
+
+CURLcode Curl_set_dns_servers(struct SessionHandle *data,
+                              char *servers)
+{
+  CURLcode result = CURLE_NOT_BUILT_IN;
+  int ares_result;
+
+  /* If server is NULL or empty, this would purge all DNS servers
+   * from ares library, which will cause any and all queries to fail.
+   * So, just return OK if none are configured and don't actually make
+   * any changes to c-ares.  This lets c-ares use it's defaults, which
+   * it gets from the OS (for instance from /etc/resolv.conf on Linux).
+   */
+  if(!(servers && servers[0]))
+    return CURLE_OK;
+
+#if (ARES_VERSION >= 0x010704)
+  ares_result = ares_set_servers_csv(data->state.resolver, servers);
+  switch(ares_result) {
+  case ARES_SUCCESS:
+    result = CURLE_OK;
+    break;
+  case ARES_ENOMEM:
+    result = CURLE_OUT_OF_MEMORY;
+    break;
+  case ARES_ENOTINITIALIZED:
+  case ARES_ENODATA:
+  case ARES_EBADSTR:
+  default:
+    result = CURLE_BAD_FUNCTION_ARGUMENT;
+    break;
+  }
+#else /* too old c-ares version! */
+  (void)data;
+  (void)(ares_result);
+#endif
+  return result;
+}
+
+CURLcode Curl_set_dns_interface(struct SessionHandle *data,
+                                const char *interf)
+{
+#if (ARES_VERSION >= 0x010704)
+  if(!interf)
+    interf = "";
+
+  ares_set_local_dev((ares_channel)data->state.resolver, interf);
+
+  return CURLE_OK;
+#else /* c-ares version too old! */
+  (void)data;
+  (void)interf;
+  return CURLE_NOT_BUILT_IN;
+#endif
+}
+
+CURLcode Curl_set_dns_local_ip4(struct SessionHandle *data,
+                                const char *local_ip4)
+{
+#if (ARES_VERSION >= 0x010704)
+  struct in_addr a4;
+
+  if((!local_ip4) || (local_ip4[0] == 0)) {
+    a4.s_addr = 0; /* disabled: do not bind to a specific address */
+  }
+  else {
+    if(Curl_inet_pton(AF_INET, local_ip4, &a4) != 1) {
+      return CURLE_BAD_FUNCTION_ARGUMENT;
+    }
+  }
+
+  ares_set_local_ip4((ares_channel)data->state.resolver, ntohl(a4.s_addr));
+
+  return CURLE_OK;
+#else /* c-ares version too old! */
+  (void)data;
+  (void)local_ip4;
+  return CURLE_NOT_BUILT_IN;
+#endif
+}
+
+CURLcode Curl_set_dns_local_ip6(struct SessionHandle *data,
+                                const char *local_ip6)
+{
+#if (ARES_VERSION >= 0x010704) && defined(ENABLE_IPV6)
+  unsigned char a6[INET6_ADDRSTRLEN];
+
+  if((!local_ip6) || (local_ip6[0] == 0)) {
+    /* disabled: do not bind to a specific address */
+    memset(a6, 0, sizeof(a6));
+  }
+  else {
+    if(Curl_inet_pton(AF_INET6, local_ip6, a6) != 1) {
+      return CURLE_BAD_FUNCTION_ARGUMENT;
+    }
+  }
+
+  ares_set_local_ip6((ares_channel)data->state.resolver, a6);
+
+  return CURLE_OK;
+#else /* c-ares version too old! */
+  (void)data;
+  (void)local_ip6;
+  return CURLE_NOT_BUILT_IN;
+#endif
 }
 #endif /* CURLRES_ARES */

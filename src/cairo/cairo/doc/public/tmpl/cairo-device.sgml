@@ -9,10 +9,12 @@ cairo-device
 
 </para>
 
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -138,5 +140,70 @@ cairo-device
 </para>
 
 @device: 
+
+
+<!-- ##### FUNCTION cairo_device_observer_elapsed ##### -->
+<para>
+
+</para>
+
+@device: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_device_observer_fill_elapsed ##### -->
+<para>
+
+</para>
+
+@device: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_device_observer_glyphs_elapsed ##### -->
+<para>
+
+</para>
+
+@device: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_device_observer_mask_elapsed ##### -->
+<para>
+
+</para>
+
+@device: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_device_observer_paint_elapsed ##### -->
+<para>
+
+</para>
+
+@device: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_device_observer_print ##### -->
+<para>
+
+</para>
+
+@device: 
+@write_func: 
+@closure: 
+@Returns: 
+
+
+<!-- ##### FUNCTION cairo_device_observer_stroke_elapsed ##### -->
+<para>
+
+</para>
+
+@device: 
+@Returns: 
 
 

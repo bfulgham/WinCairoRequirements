@@ -385,7 +385,8 @@ _cairo_surface_create_observer_internal (cairo_device_t *device,
 
     _cairo_surface_init (&surface->base,
 			 &_cairo_surface_observer_backend, device,
-			 target->content);
+			 target->content,
+			 target->is_vector);
 
     status = log_init (&surface->log,
 		       ((cairo_device_observer_t *)device)->log.record != NULL);
@@ -653,7 +654,7 @@ add_record (cairo_observation_t *log,
 }
 
 static void
-sync (cairo_surface_t *target, int x, int y)
+_cairo_surface_sync (cairo_surface_t *target, int x, int y)
 {
     cairo_rectangle_int_t extents;
 
@@ -751,7 +752,7 @@ _cairo_surface_observer_paint (void *abstract_surface,
     if (unlikely (status))
 	return status;
 
-    sync (surface->target, x, y);
+    _cairo_surface_sync (surface->target, x, y);
     t = _cairo_time_get_delta (t);
 
     add_record_paint (&surface->log, surface->target, op, source, clip, t);
@@ -837,7 +838,7 @@ _cairo_surface_observer_mask (void *abstract_surface,
     if (unlikely (status))
 	return status;
 
-    sync (surface->target, x, y);
+    _cairo_surface_sync (surface->target, x, y);
     t = _cairo_time_get_delta (t);
 
     add_record_mask (&surface->log,
@@ -944,7 +945,7 @@ _cairo_surface_observer_fill (void			*abstract_surface,
     if (unlikely (status))
 	return status;
 
-    sync (surface->target, x, y);
+    _cairo_surface_sync (surface->target, x, y);
     t = _cairo_time_get_delta (t);
 
     add_record_fill (&surface->log,
@@ -1063,7 +1064,7 @@ _cairo_surface_observer_stroke (void				*abstract_surface,
     if (unlikely (status))
 	return status;
 
-    sync (surface->target, x, y);
+    _cairo_surface_sync (surface->target, x, y);
     t = _cairo_time_get_delta (t);
 
     add_record_stroke (&surface->log,
@@ -1183,7 +1184,7 @@ _cairo_surface_observer_glyphs (void			*abstract_surface,
     if (unlikely (status))
 	return status;
 
-    sync (surface->target, x, y);
+    _cairo_surface_sync (surface->target, x, y);
     t = _cairo_time_get_delta (t);
 
     add_record_glyphs (&surface->log,
@@ -1368,10 +1369,15 @@ static const cairo_surface_backend_t _cairo_surface_observer_backend = {
 /**
  * cairo_surface_create_observer:
  * @target: an existing surface for which the observer will watch
+ * @mode: sets the mode of operation (normal vs. record)
  *
  * Create a new surface that exists solely to watch another is doing. In
  * the process it will log operations and times, which are fast, which are
  * slow, which are frequent, etc.
+ *
+ * The @mode parameter can be set to either CAIRO_SURFACE_OBSERVER_NORMAL
+ * or CAIRO_SURFACE_OBSERVER_RECORD_OPERATIONS, to control whether or not
+ * the internal observer should record operations.
  *
  * Return value: a pointer to the newly allocated surface. The caller
  * owns the surface and should call cairo_surface_destroy() when done

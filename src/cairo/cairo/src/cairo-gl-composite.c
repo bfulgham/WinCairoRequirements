@@ -134,7 +134,7 @@ static void
 _cairo_gl_composite_bind_to_shader (cairo_gl_context_t   *ctx,
 				    cairo_gl_composite_t *setup)
 {
-    _cairo_gl_shader_bind_matrix4f(ctx, "ModelViewProjectionMatrix",
+    _cairo_gl_shader_bind_matrix4f(ctx, ctx->current_shader->mvp_location,
 				   ctx->modelviewprojection_matrix);
     _cairo_gl_operand_bind_to_shader (ctx, &setup->src,  CAIRO_GL_TEX_SOURCE);
     _cairo_gl_operand_bind_to_shader (ctx, &setup->mask, CAIRO_GL_TEX_MASK);
@@ -209,15 +209,15 @@ static void
 _cairo_gl_context_setup_operand (cairo_gl_context_t *ctx,
                                  cairo_gl_tex_t      tex_unit,
                                  cairo_gl_operand_t *operand,
-                                 unsigned int        vertex_size,
-                                 unsigned int        vertex_offset)
+                                 unsigned int        vertex_offset,
+                                 cairo_bool_t        vertex_size_changed)
 {
     cairo_gl_dispatch_t *dispatch = &ctx->dispatch;
     cairo_bool_t needs_setup;
 
     /* XXX: we need to do setup when switching from shaders
      * to no shaders (or back) */
-    needs_setup = ctx->vertex_size != vertex_size;
+    needs_setup = vertex_size_changed;
     needs_setup |= _cairo_gl_operand_needs_setup (&ctx->operands[tex_unit],
                                                  operand,
                                                  vertex_offset);
@@ -252,7 +252,7 @@ _cairo_gl_context_setup_operand (cairo_gl_context_t *ctx,
 
 	if (! operand->texture.texgen) {
 	    dispatch->VertexAttribPointer (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit, 2,
-					   GL_FLOAT, GL_FALSE, vertex_size,
+					   GL_FLOAT, GL_FALSE, ctx->vertex_size,
 					   ctx->vb + vertex_offset);
 	    dispatch->EnableVertexAttribArray (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit);
 	}
@@ -268,7 +268,7 @@ _cairo_gl_context_setup_operand (cairo_gl_context_t *ctx,
 
 	if (! operand->gradient.texgen) {
 	    dispatch->VertexAttribPointer (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit, 2,
-					   GL_FLOAT, GL_FALSE, vertex_size,
+					   GL_FLOAT, GL_FALSE, ctx->vertex_size,
 					   ctx->vb + vertex_offset);
 	    dispatch->EnableVertexAttribArray (CAIRO_GL_TEXCOORD0_ATTRIB_INDEX + tex_unit);
 	}
@@ -523,12 +523,15 @@ _scissor_to_box (cairo_gl_surface_t	*surface,
     _scissor_to_doubles (surface, x1, y1, x2, y2);
 }
 
-static void
+static cairo_bool_t
 _cairo_gl_composite_setup_vbo (cairo_gl_context_t *ctx,
 			       unsigned int size_per_vertex)
 {
-    if (ctx->vertex_size != size_per_vertex)
-        _cairo_gl_composite_flush (ctx);
+    cairo_bool_t vertex_size_changed = ctx->vertex_size != size_per_vertex;
+    if (vertex_size_changed) {
+	ctx->vertex_size = size_per_vertex;
+	_cairo_gl_composite_flush (ctx);
+    }
 
     if (_cairo_gl_context_is_flushed (ctx)) {
 	ctx->dispatch.VertexAttribPointer (CAIRO_GL_VERTEX_ATTRIB_INDEX, 2,
@@ -536,7 +539,8 @@ _cairo_gl_composite_setup_vbo (cairo_gl_context_t *ctx,
 					   ctx->vb);
 	ctx->dispatch.EnableVertexAttribArray (CAIRO_GL_VERTEX_ATTRIB_INDEX);
     }
-    ctx->vertex_size = size_per_vertex;
+
+    return vertex_size_changed;
 }
 
 static void
@@ -566,10 +570,14 @@ _cairo_gl_composite_setup_painted_clipping (cairo_gl_composite_t *setup,
 	goto disable_stencil_buffer_and_return;
     }
 
+    /* We only want to clear the part of the stencil buffer
+     * that we are about to use. It also does not hurt to
+     * scissor around the painted clip. */
+    _cairo_gl_scissor_to_rectangle (dst, _cairo_clip_get_extents (clip));
+
     /* The clip is not rectangular, so use the stencil buffer. */
     glDepthMask (GL_TRUE);
     glEnable (GL_STENCIL_TEST);
-    glDisable (GL_SCISSOR_TEST);
 
     /* Texture surfaces have private depth/stencil buffers, so we can
      * rely on any previous clip being cached there. */
@@ -578,16 +586,15 @@ _cairo_gl_composite_setup_painted_clipping (cairo_gl_composite_t *setup,
 	if (_cairo_clip_equal (old_clip, setup->clip))
 	    goto activate_stencil_buffer_and_return;
 
-      /* Clear the stencil buffer, but only the areas that we are
-       * going to be drawing to. */
-	if (old_clip)
-	    _cairo_gl_scissor_to_rectangle (dst, _cairo_clip_get_extents (old_clip));
+	if (old_clip) {
+	    _cairo_clip_destroy (setup->dst->clip_on_stencil_buffer);
+	}
+
 	setup->dst->clip_on_stencil_buffer = _cairo_clip_copy (setup->clip);
     }
 
     glClearStencil (0);
     glClear (GL_STENCIL_BUFFER_BIT);
-    glDisable (GL_SCISSOR_TEST);
 
     glStencilOp (GL_REPLACE, GL_REPLACE, GL_REPLACE);
     glStencilFunc (GL_EQUAL, 1, 0xffffffff);
@@ -669,6 +676,7 @@ _cairo_gl_set_operands_and_operator (cairo_gl_composite_t *setup,
     cairo_status_t status;
     cairo_gl_shader_t *shader;
     cairo_bool_t component_alpha;
+    cairo_bool_t vertex_size_changed;
 
     component_alpha =
 	setup->mask.type == CAIRO_GL_OPERAND_TEXTURE &&
@@ -711,10 +719,10 @@ _cairo_gl_set_operands_and_operator (cairo_gl_composite_t *setup,
     if (setup->spans)
 	vertex_size += sizeof (GLfloat);
 
-    _cairo_gl_composite_setup_vbo (ctx, vertex_size);
+    vertex_size_changed = _cairo_gl_composite_setup_vbo (ctx, vertex_size);
 
-    _cairo_gl_context_setup_operand (ctx, CAIRO_GL_TEX_SOURCE, &setup->src, vertex_size, dst_size);
-    _cairo_gl_context_setup_operand (ctx, CAIRO_GL_TEX_MASK, &setup->mask, vertex_size, dst_size + src_size);
+    _cairo_gl_context_setup_operand (ctx, CAIRO_GL_TEX_SOURCE, &setup->src, dst_size, vertex_size_changed);
+    _cairo_gl_context_setup_operand (ctx, CAIRO_GL_TEX_MASK, &setup->mask, dst_size + src_size, vertex_size_changed);
 
     _cairo_gl_context_setup_spans (ctx, setup->spans, vertex_size,
 				   dst_size + src_size + mask_size);
@@ -748,7 +756,10 @@ _cairo_gl_composite_begin (cairo_gl_composite_t *setup,
 
     _cairo_gl_context_set_destination (ctx, setup->dst, setup->multisample);
     glEnable (GL_BLEND);
-    _cairo_gl_set_operands_and_operator (setup, ctx);
+
+    status = _cairo_gl_set_operands_and_operator (setup, ctx);
+    if (unlikely (status))
+	goto FAIL;
 
     status = _cairo_gl_composite_setup_clipping (setup, ctx, ctx->vertex_size);
     if (unlikely (status))
@@ -850,7 +861,7 @@ _cairo_gl_composite_flush (cairo_gl_context_t *ctx)
 	_cairo_gl_composite_draw_triangles_with_clip_region (ctx, count);
     }
 
-    for (i = 0; i < ARRAY_LENGTH (&ctx->glyph_cache); i++)
+    for (i = 0; i < ARRAY_LENGTH (ctx->glyph_cache); i++)
 	_cairo_gl_glyph_cache_unlock (&ctx->glyph_cache[i]);
 }
 
@@ -864,7 +875,8 @@ _cairo_gl_composite_prepare_buffer (cairo_gl_context_t *ctx,
 	ctx->primitive_type = primitive_type;
     }
 
-    if (ctx->vb_offset + n_vertices * ctx->vertex_size > CAIRO_GL_VBO_SIZE)
+    assert(ctx->vbo_size > 0);
+    if (ctx->vb_offset + n_vertices * ctx->vertex_size > ctx->vbo_size)
 	_cairo_gl_composite_flush (ctx);
 }
 

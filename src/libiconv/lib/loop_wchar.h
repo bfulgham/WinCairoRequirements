@@ -40,7 +40,9 @@
 # endif
 #else
 # ifndef mbstate_t
+# if !defined(_MSC_VER) || _MSC_VER < 1900
    typedef int mbstate_t;
+#endif
 # endif
 #endif
 

@@ -26,6 +26,7 @@ test_sources = \
 	bilevel-image.c					\
 	bug-40410.c					\
 	bug-51910.c					\
+	bug-84115.c					\
 	bug-bo-rectangular.c				\
 	bug-bo-collins.c				\
 	bug-bo-ricotz.c					\
@@ -42,8 +43,9 @@ test_sources = \
 	clear.c						\
 	clear-source.c					\
 	clip-all.c					\
-	clip-contexts.c					\
+	clip-complex-bug61592.c				\
 	clip-complex-shape.c				\
+	clip-contexts.c					\
 	clip-disjoint.c					\
 	clip-disjoint-hatching.c			\
 	clip-disjoint-quad.c				\
@@ -238,15 +240,18 @@ test_sources = \
 	paint-repeat.c					\
 	paint-source-alpha.c				\
 	paint-with-alpha.c				\
+	paint-with-alpha-group-clip.c			\
 	partial-clip-text.c				\
 	partial-coverage.c				\
 	pass-through.c					\
 	path-append.c					\
+	path-currentpoint.c				\
 	path-stroke-twice.c				\
 	path-precision.c				\
 	pattern-get-type.c				\
 	pattern-getters.c				\
 	pdf-isolated-group.c				\
+	pixman-downscale.c				\
 	pixman-rotate.c					\
 	png.c						\
 	push-group.c					\
@@ -265,6 +270,7 @@ test_sources = \
 	record1414x.c					\
 	record2x.c					\
 	record90.c					\
+	recordflip.c					\
 	record-extend.c					\
 	record-mesh.c					\
 	recording-surface-pattern.c			\
@@ -280,6 +286,7 @@ test_sources = \
 	rel-path.c					\
 	rgb24-ignore-alpha.c				\
 	rotate-image-surface-paint.c			\
+	rotate-stroke-box.c                             \
 	rotated-clip.c					\
 	rounded-rectangle-fill.c			\
 	rounded-rectangle-stroke.c			\
@@ -304,6 +311,7 @@ test_sources = \
 	show-text-current-point.c			\
 	shape-general-convex.c				\
 	shape-sierpinski.c				\
+	simple.c					\
 	skew-extreme.c					\
 	smask.c						\
 	smask-fill.c					\
@@ -344,6 +352,7 @@ test_sources = \
 	text-rotate.c					\
 	text-transform.c				\
 	text-zero-len.c					\
+	thin-lines.c                                    \
 	tighten-bounds.c				\
 	tiger.c						\
 	toy-font-face.c					\
@@ -392,7 +401,12 @@ ft_font_test_sources = \
 
 gl_surface_test_sources = \
 	gl-device-release.c \
+	gl-oversized-surface.c \
 	gl-surface-source.c
+
+egl_surface_test_sources = \
+       egl-oversized-surface.c \
+       egl-surface-source.c
 
 quartz_surface_test_sources = quartz-surface-source.c
 

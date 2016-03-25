@@ -52,10 +52,16 @@ _cairo_boilerplate_drm_create_surface (const char		 *name,
 	return NULL; /* skip tests if no supported h/w found */
 
     switch (content) {
-    case CAIRO_CONTENT_ALPHA: format = CAIRO_FORMAT_A8; break;
-    case CAIRO_CONTENT_COLOR: format = CAIRO_FORMAT_RGB24; break;
+    case CAIRO_CONTENT_ALPHA:
+        format = CAIRO_FORMAT_A8;
+        break;
+    case CAIRO_CONTENT_COLOR:
+        format = CAIRO_FORMAT_RGB24;
+        break;
+    case CAIRO_CONTENT_COLOR_ALPHA:
     default:
-    case CAIRO_CONTENT_COLOR_ALPHA: format = CAIRO_FORMAT_ARGB32; break;
+        format = CAIRO_FORMAT_ARGB32;
+        break;
     }
 
     return *closure = cairo_drm_surface_create (device, format, width, height);

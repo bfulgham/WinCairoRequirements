@@ -2,12 +2,17 @@
 # test cases are run by runtests.pl. Just add the plain test case numbers, one
 # per line.
 # Lines starting with '#' letters are treated as comments.
-811
-591
-592
-593
 594
-1206
-1207
-1208
 1209
+1211
+1316
+1512
+836
+882
+938
+# test 1801 causes problems on Mac OS X and github
+# https://github.com/bagder/curl/issues/380
+1801
+# test 1510 casues problems on the CI on github
+# example: https://travis-ci.org/bagder/curl/builds/81633600
+1510

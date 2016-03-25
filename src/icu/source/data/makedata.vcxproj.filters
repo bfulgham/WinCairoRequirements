@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{ddc1b71c-570c-484f-a66c-ab38d71dede0}</UniqueIdentifier>
+      <UniqueIdentifier>{da1a8cc8-a3ac-4b11-ade0-73faca2e17da}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
     <Filter Include="Make Files">
-      <UniqueIdentifier>{33d0bb63-0fa9-4406-8775-cc7a094192f1}</UniqueIdentifier>
+      <UniqueIdentifier>{12c0c174-84f5-4043-bda0-f9f87baf361d}</UniqueIdentifier>
       <Extensions>mak;mk</Extensions>
     </Filter>
   </ItemGroup>

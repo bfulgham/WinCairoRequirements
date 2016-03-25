@@ -24,16 +24,17 @@ AC_DEFUN([AX_C_FLOAT_WORDS_BIGENDIAN],
 # is found, the user is instructed to specify the ordering.
 
 ax_cv_c_float_words_bigendian=unknown
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+AC_LINK_IFELSE([AC_LANG_SOURCE([[
 
-double d = 90904234967036810337470478905505011476211692735615632014797120844053488865816695273723469097858056257517020191247487429516932130503560650002327564517570778480236724525140520121371739201496540132640109977779420565776568942592.0;
+double d __attribute__((used)) = 90904234967036810337470478905505011476211692735615632014797120844053488865816695273723469097858056257517020191247487429516932130503560650002327564517570778480236724525140520121371739201496540132640109977779420565776568942592.0;
+int main() { return 0; }
 
 ]])], [
 
-if strings - conftest.$ac_objext | grep noonsees >/dev/null ; then
+if strings - conftest$ac_exeext | grep noonsees >/dev/null ; then
   ax_cv_c_float_words_bigendian=yes
 fi
-if strings - conftest.$ac_objext | grep seesnoon >/dev/null ; then
+if strings - conftest$ac_exeext | grep seesnoon >/dev/null ; then
   if test "$ax_cv_c_float_words_bigendian" = unknown; then
     ax_cv_c_float_words_bigendian=no
   else

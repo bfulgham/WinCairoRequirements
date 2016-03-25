@@ -25,8 +25,10 @@
  * Authors: Carl Worth <cworth@cworth.org>
  */
 
-#include "cairo-missing.h"
+#define _GETDELIM 1/* for getline() on AIX */
+
 #include "cairo-perf.h"
+#include "cairo-missing.h"
 #include "cairo-stats.h"
 
 /* We use _GNU_SOURCE for getline and strndup if available. */
@@ -186,7 +188,7 @@ test_report_parse (test_report_t *report,
 	    skip_space ();
 	} while (*s && *s != '\n');
 	report->stats.iterations = 0;
-	skip_char ('\n');
+	if (*s) skip_char ('\n');
     } else {
 	parse_double (report->stats.min_ticks);
 	skip_space ();

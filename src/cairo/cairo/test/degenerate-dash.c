@@ -1,5 +1,5 @@
 /*
- * Copyright © 2008 Chris Wilson
+ * Copyright Â© 2008 Chris Wilson
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without
@@ -77,6 +77,11 @@ draw (cairo_t *cr, int width, int height)
     return CAIRO_TEST_SUCCESS;
 }
 
+/*
+ * XFAIL: needs path editing in PS to convert degenerate
+ * end-caps into the shapes as expected by cairo (Or maybe PS is the correct
+ * behaviour?)
+ */
 CAIRO_TEST (degenerate_dash,
 	    "Tests the behaviour of dashed segments that end on a off-on transition",
 	    "dash, degenerate", /* keywords */

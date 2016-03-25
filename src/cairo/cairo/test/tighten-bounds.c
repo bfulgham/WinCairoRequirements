@@ -72,7 +72,7 @@ static void (* const path_funcs[])(cairo_t *cr, int size) = {
 static void
 draw_idx (cairo_t *cr, int i, int j, int type)
 {
-    cairo_bool_t little_path = type & (1 << 0);
+    cairo_bool_t little_path;
     cairo_bool_t empty_clip;
     cairo_bool_t little_clip;
 

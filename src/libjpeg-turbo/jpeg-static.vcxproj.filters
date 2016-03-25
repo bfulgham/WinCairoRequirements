@@ -156,148 +156,150 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jccolmmx.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jccolor-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jccolor-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcgray-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcgray-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcsample-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcsample-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdcolor-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdcolor-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdmerge-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdmerge-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdsample-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdsample-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfdctflt-3dn.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfdctflt-sse.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfdctfst-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfdctfst-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfdctint-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfdctint-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctflt-3dn.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctflt-sse.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctflt-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctfst-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctfst-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctint-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctint-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctred-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jidctred-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jquant-3dn.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jquantf-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jquanti-sse2.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jquant-mmx.obj">
+      <Filter>32-bit Object Files</Filter>
+    </Object>
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jquant-sse.obj">
       <Filter>32-bit Object Files</Filter>
     </Object>
     <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jsimdcpu.obj">
       <Filter>32-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jccolss2.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcgrammx.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcgrass2.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqnt3dn.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqntmmx.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqnts2f.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqnts2i.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcqntsse.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcsammmx.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jcsamss2.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdcolmmx.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdcolss2.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdmermmx.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdmerss2.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdsammmx.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jdsamss2.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jf3dnflt.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfmmxfst.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfmmxint.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfss2fst.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfss2int.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jfsseflt.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\ji3dnflt.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jimmxfst.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jimmxint.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jimmxred.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2flt.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2fst.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2int.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jiss2red.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\jisseflt.obj">
-      <Filter>32-bit Object Files</Filter>
-    </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jccolss2-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jccolor-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcgrass2-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcgray-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcqnts2f-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcsample-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcqnts2i-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdcolor-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jcsamss2-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdmerge-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdcolss2-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdsample-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdmerss2-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfdctflt-sse-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jdsamss2-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfdctfst-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfss2fst-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfdctint-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfss2int-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jidctflt-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jfsseflt-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jidctfst-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2flt-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jidctint-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2fst-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jidctred-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2int-64.obj">
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jquantf-sse2-64.obj">
       <Filter>64-bit Object Files</Filter>
     </Object>
-    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jiss2red-64.obj" />
+    <Object Include="$(SolutionDir)\Build\$(Configuration)\simd\x64\jquanti-sse2-64.obj">
+      <Filter>64-bit Object Files</Filter>
+    </Object>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

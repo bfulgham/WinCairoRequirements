@@ -44,7 +44,7 @@ struct dirent {
 };
 
 typedef struct DIR {
-        long                    handle;
+        uintptr_t               handle;
         struct _finddata_t      info;
         struct dirent           result;
         char*                   name;

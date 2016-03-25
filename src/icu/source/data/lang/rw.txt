@@ -1,14 +1,11 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/rw.xml
+// * Copyright (C) 2015 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/rw.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/main/rw.xml
- */
 rw{
     Languages{
         af{"Ikinyafurikaneri"}
@@ -18,7 +15,6 @@ rw{
         az{"Inyazeribayijani"}
         be{"Ikibelarusiya"}
         bg{"Urunyabuligariya"}
-        bh{"Inyebihari"}
         bn{"Ikibengali"}
         br{"Inyebiritoni"}
         bs{"Inyebosiniya"}
@@ -40,7 +36,7 @@ rw{
         fr{"Igifaransa"}
         fy{"Igifiriziyani"}
         ga{"Ikirilandi"}
-        gd{"Ikigaluwa cy'Igisweduwa"}
+        gd{"Ikigaluwa cy’Igisweduwa"}
         gl{"Ikigalisiya"}
         gn{"Inyaguwarani"}
         gu{"Inyegujarati"}
@@ -118,5 +114,5 @@ rw{
         yi{"Inyeyidishi"}
         zu{"Inyezulu"}
     }
-    Version{"2.0.48.64"}
+    Version{"2.1.19.14"}
 }

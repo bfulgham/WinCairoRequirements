@@ -113,7 +113,8 @@ const cairo_surface_t name = {					\
     FALSE,				/* finished */		\
     TRUE,				/* is_clear */		\
     FALSE,				/* has_font_options */	\
-    FALSE,				/* owns_device */	\
+    FALSE,				/* owns_device */ \
+    FALSE,                              /* is_vector */ \
     { 0, 0, 0, NULL, },			/* user_data */		\
     { 0, 0, 0, NULL, },			/* mime_data */         \
     { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 },   /* device_transform */	\
@@ -400,7 +401,8 @@ void
 _cairo_surface_init (cairo_surface_t			*surface,
 		     const cairo_surface_backend_t	*backend,
 		     cairo_device_t			*device,
-		     cairo_content_t			 content)
+		     cairo_content_t			 content,
+		     cairo_bool_t                        is_vector)
 {
     CAIRO_MUTEX_INITIALIZE ();
 
@@ -408,6 +410,7 @@ _cairo_surface_init (cairo_surface_t			*surface,
     surface->device = cairo_device_reference (device);
     surface->content = content;
     surface->type = backend->type;
+    surface->is_vector = is_vector;
 
     CAIRO_REFERENCE_COUNT_INIT (&surface->ref_count, 1);
     surface->status = CAIRO_STATUS_SUCCESS;
@@ -454,33 +457,6 @@ _cairo_surface_copy_similar_properties (cairo_surface_t *surface,
 					   other->y_fallback_resolution);
 }
 
-cairo_surface_t *
-_cairo_surface_create_similar_scratch (cairo_surface_t *other,
-				       cairo_content_t	content,
-				       int		width,
-				       int		height)
-{
-    cairo_surface_t *surface;
-
-    if (unlikely (other->status))
-	return _cairo_surface_create_in_error (other->status);
-
-    surface = NULL;
-    if (other->backend->create_similar)
-	surface = other->backend->create_similar (other, content, width, height);
-    if (surface == NULL)
-	surface = cairo_surface_create_similar_image (other,
-						      _cairo_format_from_content (content),
-						      width, height);
-
-    if (unlikely (surface->status))
-	return surface;
-
-    _cairo_surface_copy_similar_properties (surface, other);
-
-    return surface;
-}
-
 /**
  * cairo_surface_create_similar:
  * @other: an existing surface used to select the backend of the new surface
@@ -518,6 +494,8 @@ cairo_surface_create_similar (cairo_surface_t  *other,
 			      int		height)
 {
     cairo_surface_t *surface;
+    cairo_status_t status;
+    cairo_solid_pattern_t pattern;
 
     if (unlikely (other->status))
 	return _cairo_surface_create_in_error (other->status);
@@ -529,9 +507,41 @@ cairo_surface_create_similar (cairo_surface_t  *other,
     if (unlikely (! CAIRO_CONTENT_VALID (content)))
 	return _cairo_surface_create_in_error (CAIRO_STATUS_INVALID_CONTENT);
 
-    surface = _cairo_surface_create_similar_solid (other,
-						   content, width, height,
-						   CAIRO_COLOR_TRANSPARENT);
+        if (unlikely (other->status))
+	return _cairo_surface_create_in_error (other->status);
+
+    /* We inherit the device scale, so create a larger surface */
+    width = width * other->device_transform.xx;
+    height = height * other->device_transform.yy;
+
+    surface = NULL;
+    if (other->backend->create_similar)
+	surface = other->backend->create_similar (other, content, width, height);
+    if (surface == NULL)
+	surface = cairo_surface_create_similar_image (other,
+						      _cairo_format_from_content (content),
+						      width, height);
+
+    if (unlikely (surface->status))
+	return surface;
+
+    _cairo_surface_copy_similar_properties (surface, other);
+    cairo_surface_set_device_scale (surface,
+				    other->device_transform.xx,
+				    other->device_transform.yy);
+
+    if (unlikely (surface->status))
+	return surface;
+
+    _cairo_pattern_init_solid (&pattern, CAIRO_COLOR_TRANSPARENT);
+    status = _cairo_surface_paint (surface,
+				   CAIRO_OPERATOR_CLEAR,
+				   &pattern.base, NULL);
+    if (unlikely (status)) {
+	cairo_surface_destroy (surface);
+	surface = _cairo_surface_create_in_error (status);
+    }
+
     assert (surface->is_clear);
 
     return surface;
@@ -852,29 +862,45 @@ error:
 }
 
 cairo_surface_t *
-_cairo_surface_create_similar_solid (cairo_surface_t	 *other,
-				     cairo_content_t	  content,
-				     int		  width,
-				     int		  height,
-				     const cairo_color_t *color)
+_cairo_surface_create_scratch (cairo_surface_t	 *other,
+			       cairo_content_t	  content,
+			       int		  width,
+			       int		  height,
+			       const cairo_color_t *color)
 {
-    cairo_status_t status;
     cairo_surface_t *surface;
+    cairo_status_t status;
     cairo_solid_pattern_t pattern;
 
-    surface = _cairo_surface_create_similar_scratch (other, content,
-						     width, height);
+    if (unlikely (other->status))
+	return _cairo_surface_create_in_error (other->status);
+
+    surface = NULL;
+    if (other->backend->create_similar)
+	surface = other->backend->create_similar (other, content, width, height);
+    if (surface == NULL)
+	surface = cairo_surface_create_similar_image (other,
+						      _cairo_format_from_content (content),
+						      width, height);
+
     if (unlikely (surface->status))
 	return surface;
 
-    _cairo_pattern_init_solid (&pattern, color);
-    status = _cairo_surface_paint (surface,
-				   color == CAIRO_COLOR_TRANSPARENT ?
-				   CAIRO_OPERATOR_CLEAR : CAIRO_OPERATOR_SOURCE,
-				   &pattern.base, NULL);
-    if (unlikely (status)) {
-	cairo_surface_destroy (surface);
-	surface = _cairo_surface_create_in_error (status);
+    _cairo_surface_copy_similar_properties (surface, other);
+
+    if (unlikely (surface->status))
+	return surface;
+
+    if (color) {
+	_cairo_pattern_init_solid (&pattern, color);
+	status = _cairo_surface_paint (surface,
+				       color == CAIRO_COLOR_TRANSPARENT ?
+				       CAIRO_OPERATOR_CLEAR : CAIRO_OPERATOR_SOURCE,
+				       &pattern.base, NULL);
+	if (unlikely (status)) {
+	    cairo_surface_destroy (surface);
+	    surface = _cairo_surface_create_in_error (status);
+	}
     }
 
     return surface;
@@ -1200,6 +1226,31 @@ _cairo_mime_data_destroy (void *ptr)
 }
 
 /**
+ * CAIRO_MIME_TYPE_JBIG2:
+ *
+ * Joint Bi-level Image Experts Group image coding standard (ISO/IEC 11544).
+ *
+ * Since: 1.14
+ **/
+
+/**
+ * CAIRO_MIME_TYPE_JBIG2_GLOBAL:
+ *
+ * Joint Bi-level Image Experts Group image coding standard (ISO/IEC 11544) global segment.
+ *
+ * Since: 1.14
+ **/
+
+/**
+ * CAIRO_MIME_TYPE_JBIG2_GLOBAL_ID:
+ *
+ * An unique identifier shared by a JBIG2 global segment and all JBIG2 images
+ * that depend on the global segment.
+ *
+ * Since: 1.14
+ **/
+
+/**
  * CAIRO_MIME_TYPE_JP2:
  *
  * The Joint Photographic Experts Group (JPEG) 2000 image coding standard (ISO/IEC 15444-1).
@@ -1234,7 +1285,8 @@ _cairo_mime_data_destroy (void *ptr)
 /**
  * CAIRO_MIME_TYPE_UNIQUE_ID:
  *
- * Unique identifier for a surface (cairo specific MIME type).
+ * Unique identifier for a surface (cairo specific MIME type). All surfaces with
+ * the same unique identifier will only be embedded once.
  *
  * Since: 1.12
  **/
@@ -1262,12 +1314,23 @@ _cairo_mime_data_destroy (void *ptr)
  *
  * The recognized MIME types are the following: %CAIRO_MIME_TYPE_JPEG,
  * %CAIRO_MIME_TYPE_PNG, %CAIRO_MIME_TYPE_JP2, %CAIRO_MIME_TYPE_URI,
- * %CAIRO_MIME_TYPE_UNIQUE_ID.
+ * %CAIRO_MIME_TYPE_UNIQUE_ID, %CAIRO_MIME_TYPE_JBIG2,
+ * %CAIRO_MIME_TYPE_JBIG2_GLOBAL, %CAIRO_MIME_TYPE_JBIG2_GLOBAL_ID.
  *
  * See corresponding backend surface docs for details about which MIME
  * types it can handle. Caution: the associated MIME data will be
  * discarded if you draw on the surface afterwards. Use this function
  * with care.
+ *
+ * Even if a backend supports a MIME type, that does not mean cairo
+ * will always be able to use the attached MIME data. For example, if
+ * the backend does not natively support the compositing operation used
+ * to apply the MIME data to the backend. In that case, the MIME data
+ * will be ignored. Therefore, to apply an image in all cases, it is best
+ * to create an image surface which contains the decoded image data and
+ * then attach the MIME data to that. This ensures the image will always
+ * be used while still allowing the MIME data to be used whenever
+ * possible.
  *
  * Return value: %CAIRO_STATUS_SUCCESS or %CAIRO_STATUS_NO_MEMORY if a
  * slot could not be allocated for the user data.
@@ -1345,6 +1408,13 @@ cairo_surface_supports_mime_type (cairo_surface_t		*surface,
 				  const char			*mime_type)
 {
     const char **types;
+
+    if (unlikely (surface->status))
+	return FALSE;
+    if (unlikely (surface->finished)) {
+	_cairo_surface_set_error (surface, _cairo_error (CAIRO_STATUS_SURFACE_FINISHED));
+	return FALSE;
+    }
 
     if (surface->backend->get_supported_mime_types) {
 	types = surface->backend->get_supported_mime_types (surface);
@@ -1487,12 +1557,12 @@ _cairo_surface_flush (cairo_surface_t *surface, unsigned flags)
  * cairo_surface_flush:
  * @surface: a #cairo_surface_t
  *
- * Do any pending drawing for the surface and also restore any
- * temporary modifications cairo has made to the surface's
- * state. This function must be called before switching from
- * drawing on the surface with cairo to drawing on it directly
- * with native APIs. If the surface doesn't support direct access,
- * then this function does nothing.
+ * Do any pending drawing for the surface and also restore any temporary
+ * modifications cairo has made to the surface's state. This function
+ * must be called before switching from drawing on the surface with
+ * cairo to drawing on it directly with native APIs, or accessing its
+ * memory outside of Cairo. If the surface doesn't support direct
+ * access, then this function does nothing.
  *
  * Since: 1.0
  **/
@@ -1617,26 +1687,28 @@ cairo_surface_mark_dirty_rectangle (cairo_surface_t *surface,
 slim_hidden_def (cairo_surface_mark_dirty_rectangle);
 
 /**
- * _cairo_surface_set_device_scale:
+ * cairo_surface_set_device_scale:
  * @surface: a #cairo_surface_t
- * @sx: a scale factor in the X direction
- * @sy: a scale factor in the Y direction
+ * @x_scale: a scale factor in the X direction
+ * @y_scale: a scale factor in the Y direction
  *
- * Private function for setting an extra scale factor to affect all
- * drawing to a surface. This is used, for example, when replaying a
- * recording surface to an image fallback intended for an eventual
- * vector-oriented backend. Since the recording surface will record
- * coordinates in one backend space, but the image fallback uses a
- * different backend space, (differing by the fallback resolution
- * scale factors), we need a scale factor correction.
+ * Sets a scale that is multiplied to the device coordinates determined
+ * by the CTM when drawing to @surface. One common use for this is to
+ * render to very high resolution display devices at a scale factor, so
+ * that code that assumes 1 pixel will be a certain size will still work.
+ * Setting a transformation via cairo_translate() isn't
+ * sufficient to do this, since functions like
+ * cairo_device_to_user() will expose the hidden scale.
  *
- * Caution: Not all places we use device transform correctly handle
- * both a translate and a scale.  An audit would be nice.
+ * Note that the scale affects drawing to the surface as well as
+ * using the surface in a source pattern.
+ *
+ * Since: 1.14
  **/
 void
-_cairo_surface_set_device_scale (cairo_surface_t *surface,
-				 double		  sx,
-				 double		  sy)
+cairo_surface_set_device_scale (cairo_surface_t *surface,
+				double		 x_scale,
+				double		 y_scale)
 {
     cairo_status_t status;
 
@@ -1656,8 +1728,8 @@ _cairo_surface_set_device_scale (cairo_surface_t *surface,
 	return;
     }
 
-    surface->device_transform.xx = sx;
-    surface->device_transform.yy = sy;
+    surface->device_transform.xx = x_scale;
+    surface->device_transform.yy = y_scale;
     surface->device_transform.xy = 0.0;
     surface->device_transform.yx = 0.0;
 
@@ -1668,6 +1740,30 @@ _cairo_surface_set_device_scale (cairo_surface_t *surface,
 
     _cairo_observers_notify (&surface->device_transform_observers, surface);
 }
+slim_hidden_def (cairo_surface_set_device_scale);
+
+/**
+ * cairo_surface_get_device_scale:
+ * @surface: a #cairo_surface_t
+ * @x_scale: the scale in the X direction, in device units
+ * @y_scale: the scale in the Y direction, in device units
+ *
+ * This function returns the previous device offset set by
+ * cairo_surface_set_device_scale().
+ *
+ * Since: 1.14
+ **/
+void
+cairo_surface_get_device_scale (cairo_surface_t *surface,
+				double          *x_scale,
+				double          *y_scale)
+{
+    if (x_scale)
+	*x_scale = surface->device_transform.xx;
+    if (y_scale)
+	*y_scale = surface->device_transform.yy;
+}
+slim_hidden_def (cairo_surface_get_device_scale);
 
 /**
  * cairo_surface_set_device_offset:
@@ -2004,6 +2100,8 @@ _cairo_surface_paint (cairo_surface_t		*surface,
     TRACE ((stderr, "%s\n", __FUNCTION__));
     if (unlikely (surface->status))
 	return surface->status;
+    if (unlikely (surface->finished))
+	return _cairo_surface_set_error (surface, _cairo_error (CAIRO_STATUS_SURFACE_FINISHED));
 
     if (_cairo_clip_is_all_clipped (clip))
 	return CAIRO_STATUS_SUCCESS;
@@ -2040,6 +2138,8 @@ _cairo_surface_mask (cairo_surface_t		*surface,
     TRACE ((stderr, "%s\n", __FUNCTION__));
     if (unlikely (surface->status))
 	return surface->status;
+    if (unlikely (surface->finished))
+	return _cairo_surface_set_error (surface, _cairo_error (CAIRO_STATUS_SURFACE_FINISHED));
 
     if (_cairo_clip_is_all_clipped (clip))
 	return CAIRO_STATUS_SUCCESS;
@@ -2097,6 +2197,8 @@ _cairo_surface_fill_stroke (cairo_surface_t	    *surface,
     TRACE ((stderr, "%s\n", __FUNCTION__));
     if (unlikely (surface->status))
 	return surface->status;
+    if (unlikely (surface->finished))
+	return _cairo_surface_set_error (surface, _cairo_error (CAIRO_STATUS_SURFACE_FINISHED));
 
     if (_cairo_clip_is_all_clipped (clip))
 	return CAIRO_STATUS_SUCCESS;
@@ -2177,6 +2279,8 @@ _cairo_surface_stroke (cairo_surface_t			*surface,
     TRACE ((stderr, "%s\n", __FUNCTION__));
     if (unlikely (surface->status))
 	return surface->status;
+    if (unlikely (surface->finished))
+	return _cairo_surface_set_error (surface, _cairo_error (CAIRO_STATUS_SURFACE_FINISHED));
 
     if (_cairo_clip_is_all_clipped (clip))
 	return CAIRO_STATUS_SUCCESS;
@@ -2220,6 +2324,8 @@ _cairo_surface_fill (cairo_surface_t		*surface,
     TRACE ((stderr, "%s\n", __FUNCTION__));
     if (unlikely (surface->status))
 	return surface->status;
+    if (unlikely (surface->finished))
+	return _cairo_surface_set_error (surface, _cairo_error (CAIRO_STATUS_SURFACE_FINISHED));
 
     if (_cairo_clip_is_all_clipped (clip))
 	return CAIRO_STATUS_SUCCESS;
@@ -2351,6 +2457,13 @@ _cairo_surface_get_extents (cairo_surface_t         *surface,
 {
     cairo_bool_t bounded;
 
+    if (unlikely (surface->status))
+	goto zero_extents;
+    if (unlikely (surface->finished)) {
+	_cairo_surface_set_error(surface, CAIRO_STATUS_SURFACE_FINISHED);
+	goto zero_extents;
+    }
+
     bounded = FALSE;
     if (surface->backend->get_extents != NULL)
 	bounded = surface->backend->get_extents (surface, extents);
@@ -2359,6 +2472,11 @@ _cairo_surface_get_extents (cairo_surface_t         *surface,
 	_cairo_unbounded_rectangle_init (extents);
 
     return bounded;
+
+zero_extents:
+    extents->x = extents->y = 0;
+    extents->width = extents->height = 0;
+    return TRUE;
 }
 
 /**
@@ -2430,11 +2548,12 @@ _cairo_surface_show_text_glyphs (cairo_surface_t	    *surface,
 				 const cairo_clip_t		*clip)
 {
     cairo_int_status_t status;
-    cairo_scaled_font_t *dev_scaled_font = scaled_font;
 
     TRACE ((stderr, "%s\n", __FUNCTION__));
     if (unlikely (surface->status))
 	return surface->status;
+    if (unlikely (surface->finished))
+	return _cairo_surface_set_error (surface, _cairo_error (CAIRO_STATUS_SURFACE_FINISHED));
 
     if (num_glyphs == 0 && utf8_len == 0)
 	return CAIRO_STATUS_SUCCESS;
@@ -2453,25 +2572,6 @@ _cairo_surface_show_text_glyphs (cairo_surface_t	    *surface,
     if (unlikely (status))
 	return status;
 
-    if (_cairo_surface_has_device_transform (surface) &&
-	! _cairo_matrix_is_integer_translation (&surface->device_transform, NULL, NULL))
-    {
-	cairo_font_options_t font_options;
-	cairo_matrix_t dev_ctm, font_matrix;
-
-	cairo_scaled_font_get_font_matrix (scaled_font, &font_matrix);
-	cairo_scaled_font_get_ctm (scaled_font, &dev_ctm);
-	cairo_matrix_multiply (&dev_ctm, &dev_ctm, &surface->device_transform);
-	cairo_scaled_font_get_font_options (scaled_font, &font_options);
-	dev_scaled_font = cairo_scaled_font_create (cairo_scaled_font_get_font_face (scaled_font),
-						    &font_matrix,
-						    &dev_ctm,
-						    &font_options);
-    }
-    status = cairo_scaled_font_status (dev_scaled_font);
-    if (unlikely (status))
-	return _cairo_surface_set_error (surface, status);
-
     status = CAIRO_INT_STATUS_UNSUPPORTED;
 
     /* The logic here is duplicated in _cairo_analysis_surface show_glyphs and
@@ -2485,7 +2585,7 @@ _cairo_surface_show_text_glyphs (cairo_surface_t	    *surface,
 							 utf8, utf8_len,
 							 glyphs, num_glyphs,
 							 clusters, num_clusters, cluster_flags,
-							 dev_scaled_font,
+							 scaled_font,
 							 clip);
 	}
 	if (status == CAIRO_INT_STATUS_UNSUPPORTED &&
@@ -2494,7 +2594,7 @@ _cairo_surface_show_text_glyphs (cairo_surface_t	    *surface,
 	    status = surface->backend->show_glyphs (surface, op,
 						    source,
 						    glyphs, num_glyphs,
-						    dev_scaled_font,
+						    scaled_font,
 						    clip);
 	}
     } else {
@@ -2503,7 +2603,7 @@ _cairo_surface_show_text_glyphs (cairo_surface_t	    *surface,
 	    status = surface->backend->show_glyphs (surface, op,
 						    source,
 						    glyphs, num_glyphs,
-						    dev_scaled_font,
+						    scaled_font,
 						    clip);
 	} else if (surface->backend->show_text_glyphs != NULL) {
 	    /* Intentionally only try show_text_glyphs method for show_glyphs
@@ -2519,13 +2619,10 @@ _cairo_surface_show_text_glyphs (cairo_surface_t	    *surface,
 							 utf8, utf8_len,
 							 glyphs, num_glyphs,
 							 clusters, num_clusters, cluster_flags,
-							 dev_scaled_font,
+							 scaled_font,
 							 clip);
 	}
     }
-
-    if (dev_scaled_font != scaled_font)
-	cairo_scaled_font_destroy (dev_scaled_font);
 
     if (status != CAIRO_INT_STATUS_NOTHING_TO_DO) {
 	surface->is_clear = FALSE;
@@ -2557,6 +2654,16 @@ _cairo_surface_set_resolution (cairo_surface_t *surface,
     surface->y_resolution = y_res;
 }
 
+/**
+ * _cairo_surface_create_in_error:
+ * @status: the error status
+ *
+ * Return an appropriate static error surface for the error status.
+ * On error, surface creation functions should always return a surface
+ * created with _cairo_surface_create_in_error() instead of a new surface
+ * in an error state. This simplifies internal code as no refcounting has
+ * to be done.
+ **/
 cairo_surface_t *
 _cairo_surface_create_in_error (cairo_status_t status)
 {
@@ -2617,6 +2724,7 @@ _cairo_surface_create_in_error (cairo_status_t status)
     case CAIRO_STATUS_USER_FONT_NOT_IMPLEMENTED:
     case CAIRO_STATUS_INVALID_MESH_CONSTRUCTION:
     case CAIRO_STATUS_DEVICE_FINISHED:
+    case CAIRO_STATUS_JBIG2_GLOBAL_MISSING:
     default:
 	_cairo_error_throw (CAIRO_STATUS_NO_MEMORY);
 	return (cairo_surface_t *) &_cairo_surface_nil;

@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2008, International Business Machines
+#   Copyright (C) 1999-2014, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -52,10 +52,15 @@ DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 CFLAGS += $(LIBCFLAGS)
 CXXFLAGS += $(LIBCXXFLAGS)
 
-ifneq ($(top_builddir),$(top_srcdir))
-CPPFLAGS += -I$(top_builddir)/common
+
+ifeq ($(USING_ICULEHB),no)
+# cppflags: load .. so that #include <layout/...> works
+ICULE_CFLAGS=-I$(srcdir)/..
+else
+ICULE_CFLAGS=$(ICULEHB_CFLAGS)
 endif
-CPPFLAGS += -I$(srcdir) -I$(srcdir)/unicode -I$(srcdir)/.. -I$(top_srcdir)/common $(LIBCPPFLAGS)
+
+CPPFLAGS += -I$(srcdir) -I$(srcdir)/unicode -I$(top_srcdir)/common $(ICULE_CFLAGS) $(LIBCPPFLAGS)
 DEFS += -DU_LAYOUTEX_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICULX)
 LIBS = $(LIBICUUC) $(LIBICULE) $(DEFAULT_LIBS)
@@ -78,7 +83,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
 distclean distclean-local install-library install-headers dist	\
-dist-local check check-local
+dist-local check check-local check-exhaustive
 
 ## Clear suffix list
 .SUFFIXES :
@@ -91,9 +96,15 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
+check-exhaustive: check
+
 all-local: $(ALL_TARGETS)
 
 install-local: install-headers install-library
+ifneq ($(ICULE_CFLAGS),)
+	@echo "Installing icu-lx.pc"
+	$(MAKE) ALL_PKGCONFIG_SUFFIX=lx -C .. install-pkgconfig
+endif
 
 install-library: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
@@ -150,6 +161,11 @@ endif
 ifneq ($(ENABLE_SHARED),)
 $(SHARED_OBJECT): $(OBJECTS) $(SO_VERSION_DATA)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
+ifeq ($(ENABLE_RPATH),YES)
+ifneq ($(wildcard $(libdir)/$(MIDDLE_SO_TARGET)),)
+	$(warning RPATH warning: --enable-rpath means test programs may use existing $(libdir)/$(MIDDLE_SO_TARGET))
+endif
+endif
 
 ifeq ($(OS390BATCH),1)
 $(BATCH_TARGET):$(OBJECTS)

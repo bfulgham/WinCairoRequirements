@@ -1,9 +1,11 @@
 /*
  * jdatasrc.c
  *
+ * This file was part of the Independent JPEG Group's software:
  * Copyright (C) 1994-1996, Thomas G. Lane.
- * Modified 2009-2010 by Guido Vollbeding.
- * This file is part of the Independent JPEG Group's software.
+ * Modified 2009-2011 by Guido Vollbeding.
+ * libjpeg-turbo Modifications:
+ * Copyright (C) 2013, D. R. Commander.
  * For conditions of distribution and use, see the accompanying README file.
  *
  * This file contains decompression data source routines for the case of
@@ -24,16 +26,16 @@
 /* Expanded data source object for stdio input */
 
 typedef struct {
-  struct jpeg_source_mgr pub;	/* public fields */
+  struct jpeg_source_mgr pub;   /* public fields */
 
-  FILE * infile;		/* source stream */
-  JOCTET * buffer;		/* start of buffer */
-  boolean start_of_file;	/* have we gotten any data yet? */
+  FILE * infile;                /* source stream */
+  JOCTET * buffer;              /* start of buffer */
+  boolean start_of_file;        /* have we gotten any data yet? */
 } my_source_mgr;
 
 typedef my_source_mgr * my_src_ptr;
 
-#define INPUT_BUF_SIZE  4096	/* choose an efficiently fread'able size */
+#define INPUT_BUF_SIZE  4096    /* choose an efficiently fread'able size */
 
 
 /*
@@ -53,7 +55,7 @@ init_source (j_decompress_ptr cinfo)
   src->start_of_file = TRUE;
 }
 
-#if JPEG_LIB_VERSION >= 80
+#if JPEG_LIB_VERSION >= 80 || defined(MEM_SRCDST_SUPPORTED)
 METHODDEF(void)
 init_mem_source (j_decompress_ptr cinfo)
 {
@@ -104,7 +106,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
   nbytes = JFREAD(src->infile, src->buffer, INPUT_BUF_SIZE);
 
   if (nbytes <= 0) {
-    if (src->start_of_file)	/* Treat empty input file as fatal error */
+    if (src->start_of_file)     /* Treat empty input file as fatal error */
       ERREXIT(cinfo, JERR_INPUT_EMPTY);
     WARNMS(cinfo, JWRN_JPEG_EOF);
     /* Insert a fake EOI marker */
@@ -120,20 +122,21 @@ fill_input_buffer (j_decompress_ptr cinfo)
   return TRUE;
 }
 
-#if JPEG_LIB_VERSION >= 80
+#if JPEG_LIB_VERSION >= 80 || defined(MEM_SRCDST_SUPPORTED)
 METHODDEF(boolean)
 fill_mem_input_buffer (j_decompress_ptr cinfo)
 {
-  static JOCTET mybuffer[4];
+  static const JOCTET mybuffer[4] = {
+    (JOCTET) 0xFF, (JOCTET) JPEG_EOI, 0, 0
+  };
 
   /* The whole JPEG data is expected to reside in the supplied memory
    * buffer, so any request for more data beyond the given buffer size
    * is treated as an error.
    */
   WARNMS(cinfo, JWRN_JPEG_EOF);
+
   /* Insert a fake EOI marker */
-  mybuffer[0] = (JOCTET) 0xFF;
-  mybuffer[1] = (JOCTET) JPEG_EOI;
 
   cinfo->src->next_input_byte = mybuffer;
   cinfo->src->bytes_in_buffer = 2;
@@ -221,14 +224,14 @@ jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
    * This makes it unsafe to use this manager and a different source
    * manager serially with the same JPEG object.  Caveat programmer.
    */
-  if (cinfo->src == NULL) {	/* first time for this JPEG object? */
+  if (cinfo->src == NULL) {     /* first time for this JPEG object? */
     cinfo->src = (struct jpeg_source_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  SIZEOF(my_source_mgr));
+                                  sizeof(my_source_mgr));
     src = (my_src_ptr) cinfo->src;
     src->buffer = (JOCTET *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  INPUT_BUF_SIZE * SIZEOF(JOCTET));
+                                  INPUT_BUF_SIZE * sizeof(JOCTET));
   }
 
   src = (my_src_ptr) cinfo->src;
@@ -243,7 +246,7 @@ jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
 }
 
 
-#if JPEG_LIB_VERSION >= 80
+#if JPEG_LIB_VERSION >= 80 || defined(MEM_SRCDST_SUPPORTED)
 /*
  * Prepare for input from a supplied memory buffer.
  * The buffer must contain the whole JPEG data.
@@ -251,21 +254,21 @@ jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
 
 GLOBAL(void)
 jpeg_mem_src (j_decompress_ptr cinfo,
-	      unsigned char * inbuffer, unsigned long insize)
+              unsigned char * inbuffer, unsigned long insize)
 {
   struct jpeg_source_mgr * src;
 
-  if (inbuffer == NULL || insize == 0)	/* Treat empty input as fatal error */
+  if (inbuffer == NULL || insize == 0)  /* Treat empty input as fatal error */
     ERREXIT(cinfo, JERR_INPUT_EMPTY);
 
   /* The source object is made permanent so that a series of JPEG images
    * can be read from the same buffer by calling jpeg_mem_src only before
    * the first one.
    */
-  if (cinfo->src == NULL) {	/* first time for this JPEG object? */
+  if (cinfo->src == NULL) {     /* first time for this JPEG object? */
     cinfo->src = (struct jpeg_source_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  SIZEOF(struct jpeg_source_mgr));
+                                  sizeof(struct jpeg_source_mgr));
   }
 
   src = cinfo->src;

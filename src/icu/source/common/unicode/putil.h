@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2009, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -29,12 +29,6 @@
   * \file
   * \brief C API: Platform Utilities
   */
-
-/** Define this to 1 if your platform supports IEEE 754 floating point,
-   to 0 if it does not. */
-#ifndef IEEE_754
-#   define IEEE_754 1
-#endif
 
 /*==========================================================================*/
 /* Platform utilities                                                       */
@@ -72,6 +66,7 @@
  */
 U_STABLE const char* U_EXPORT2 u_getDataDirectory(void);
 
+
 /** 
  * Set the ICU data directory. 
  * The data directory is where common format ICU data files (.dat files)
@@ -93,28 +88,28 @@ U_STABLE const char* U_EXPORT2 u_getDataDirectory(void);
  */
 U_STABLE void U_EXPORT2 u_setDataDirectory(const char *directory);
 
-#if !U_CHARSET_IS_UTF8
+#ifndef U_HIDE_INTERNAL_API
 /**
- * Please use ucnv_getDefaultName() instead.
- * Return the default codepage for this platform and locale.
- * This function can call setlocale() on Unix platforms. Please read the
- * platform documentation on setlocale() before calling this function.
- * @return the default codepage for this platform 
- * @internal
- */
-U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
-#endif
+  * Return the time zone files override directory, or an empty string if
+  * no directory was specified. Certain time zone resources will be preferrentially
+  * loaded from individual files in this directory.
+  *
+  * @return the time zone data override directory.
+  * @internal
+  */ 
+U_INTERNAL const char * U_EXPORT2 u_getTimeZoneFilesDirectory(UErrorCode *status);
 
 /**
- * Please use uloc_getDefault() instead.
- * Return the default locale ID string by querying ths system, or
- *     zero if one cannot be found. 
- * This function can call setlocale() on Unix platforms. Please read the
- * platform documentation on setlocale() before calling this function.
- * @return the default locale ID string
- * @internal
- */
-U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
+  * Set the time zone files override directory.
+  * This function is not thread safe; it must not be called concurrently with
+  *   u_getTimeZoneFilesDirectory() or any other use of ICU time zone functions.
+  * This function should only be called before using any ICU service that
+  *   will access the time zone data.
+  * @internal
+  */
+U_INTERNAL void U_EXPORT2 u_setTimeZoneFilesDirectory(const char *path, UErrorCode *status);
+#endif  /* U_HIDE_INTERNAL_API */
+
 
 /**
  * @{
@@ -122,14 +117,7 @@ U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  * Example: '/' and ':' on Unix, '\\' and ';' on Windows.
  * @stable ICU 2.0
  */
-#ifdef XP_MAC
-#   define U_FILE_SEP_CHAR ':'
-#   define U_FILE_ALT_SEP_CHAR ':'
-#   define U_PATH_SEP_CHAR ';'
-#   define U_FILE_SEP_STRING ":"
-#   define U_FILE_ALT_SEP_STRING ":"
-#   define U_PATH_SEP_STRING ";"
-#elif defined(U_WINDOWS)
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_FILE_SEP_CHAR '\\'
 #   define U_FILE_ALT_SEP_CHAR '/'
 #   define U_PATH_SEP_CHAR ';'

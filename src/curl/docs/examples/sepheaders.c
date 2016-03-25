@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2014, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -53,30 +53,35 @@ int main(void)
   /* send all data to this function  */
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_data);
 
-  /* open the files */
-  headerfile = fopen(headerfilename,"w");
-  if (headerfile == NULL) {
-    curl_easy_cleanup(curl_handle);
-    return -1;
-  }
-  bodyfile = fopen(bodyfilename,"w");
-  if (bodyfile == NULL) {
+  /* open the header file */
+  headerfile = fopen(headerfilename, "wb");
+  if(!headerfile) {
     curl_easy_cleanup(curl_handle);
     return -1;
   }
 
-  /* we want the headers to this file handle */
-  curl_easy_setopt(curl_handle,   CURLOPT_WRITEHEADER, headerfile);
+  /* open the body file */
+  bodyfile = fopen(bodyfilename, "wb");
+  if(!bodyfile) {
+    curl_easy_cleanup(curl_handle);
+    fclose(headerfile);
+    return -1;
+  }
 
-  /*
-   * Notice here that if you want the actual data sent anywhere else but
-   * stdout, you should consider using the CURLOPT_WRITEDATA option.  */
+  /* we want the headers be written to this file handle */
+  curl_easy_setopt(curl_handle, CURLOPT_HEADERDATA, headerfile);
+
+  /* we want the body be written to this file handle instead of stdout */
+  curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, bodyfile);
 
   /* get it! */
   curl_easy_perform(curl_handle);
 
   /* close the header file */
   fclose(headerfile);
+
+  /* close the body file */
+  fclose(bodyfile);
 
   /* cleanup curl stuff */
   curl_easy_cleanup(curl_handle);

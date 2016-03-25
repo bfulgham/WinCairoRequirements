@@ -23,11 +23,11 @@
  * Author: Carl D. Worth <cworth@cworth.org>
  */
 
+#include "cairo-test.h"
+
 #include <stdio.h>
 #include <cairo.h>
 #include <cairo-ps.h>
-
-#include "cairo-test.h"
 
 /* This test exists to test the various features of cairo-ps.h.
  *
@@ -42,6 +42,7 @@
 #define INCHES_TO_POINTS(in) ((in) * 72.0)
 #define MM_TO_POINTS(mm) ((mm) / 25.4 * 72.0)
 #define TEXT_SIZE 12
+#define BASENAME "ps-features.out"
 
 static struct {
     const char *page_size;
@@ -90,9 +91,10 @@ preamble (cairo_test_context_t *ctx)
     cairo_surface_t *surface;
     cairo_t *cr;
     cairo_status_t status;
-    const char *filename;
     size_t i;
     char dsc[255];
+    char *filename;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
     if (! (cairo_test_is_target_enabled (ctx, "ps2") ||
 	   cairo_test_is_target_enabled (ctx, "ps3")))
@@ -100,8 +102,7 @@ preamble (cairo_test_context_t *ctx)
 	return CAIRO_TEST_UNTESTED;
     }
 
-    filename = "ps-features.out.ps";
-
+    xasprintf (&filename, "%s/%s.ps", path, BASENAME);
     /* We demonstrate that the initial size doesn't matter (we're
      * passing 0,0), if we use cairo_ps_surface_set_size on the first
      * page. */
@@ -148,10 +149,12 @@ preamble (cairo_test_context_t *ctx)
     if (status) {
 	cairo_test_log (ctx, "Failed to create ps surface for file %s: %s\n",
 			filename, cairo_status_to_string (status));
+	free (filename);
 	return CAIRO_TEST_FAILURE;
     }
 
     printf ("ps-features: Please check %s to ensure it looks/prints correctly.\n", filename);
+    free (filename);
     return CAIRO_TEST_SUCCESS;
 }
 

@@ -14,7 +14,7 @@ var srcDirUtils = "..";
 var baseName = "libxml2";
 /* Configure file which contains the version and the output file where
    we can store our build configuration. */
-var configFile = srcDirXml + "\\configure.in";
+var configFile = srcDirXml + "\\configure.ac";
 var versionFile = ".\\config.msvc";
 /* Input and output files regarding the libxml features. */
 var optsFileIn = srcDirXml + "\\include\\libxml\\xmlversion.h.in";
@@ -305,6 +305,8 @@ function configureLibxml()
 			of.WriteLine(s.replace(/\@WITH_TRIO\@/, withTrio? "1" : "0"));
 		} else if (s.search(/\@WITH_THREADS\@/) != -1) {
 			of.WriteLine(s.replace(/\@WITH_THREADS\@/, withThreads == "no"? "0" : "1"));
+		} else if (s.search(/\@WITH_THREAD_ALLOC\@/) != -1) {
+			of.WriteLine(s.replace(/\@WITH_THREAD_ALLOC\@/, "0"));
 		} else if (s.search(/\@WITH_FTP\@/) != -1) {
 			of.WriteLine(s.replace(/\@WITH_FTP\@/, withFtp? "1" : "0"));
 		} else if (s.search(/\@WITH_HTTP\@/) != -1) {

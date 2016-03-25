@@ -241,7 +241,7 @@ CAIRO_FEATURE_HOOK_REGISTER(*,!no,!,dnl
 ])dnl
 dnl Collect list of all supported disabled public features
 CAIRO_ACCUMULATORS_REGISTER(NO_FEATURES,[ ])dnl
-CAIRO_FEATURE_HOOK_REGISTER(no,!no,!,
+CAIRO_FEATURE_HOOK_REGISTER(no,*,!,
 [dnl
 	CAIRO_ACCUMULATE(NO_FEATURES, cr_feature_tag)
 ])dnl

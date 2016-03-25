@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2010, International Business Machines
+* Copyright (c) 2002-2015, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -16,6 +16,32 @@
  */
 
 #if !UCONFIG_NO_FORMATTING
+
+/**
+ * Currency Usage used for Decimal Format
+ * @stable ICU 54
+ */
+enum UCurrencyUsage {
+    /**
+     * a setting to specify currency usage which determines currency digit
+     * and rounding for standard usage, for example: "50.00 NT$"
+     * used as DEFAULT value
+     * @stable ICU 54
+     */
+    UCURR_USAGE_STANDARD=0,
+    /**
+     * a setting to specify currency usage which determines currency digit
+     * and rounding for cash usage, for example: "50 NT$"
+     * @stable ICU 54
+     */
+    UCURR_USAGE_CASH=1,
+    /**
+     * One higher than the last enum UCurrencyUsage constant.
+     * @stable ICU 54
+     */
+    UCURR_USAGE_COUNT=2
+};
+typedef enum UCurrencyUsage UCurrencyUsage; 
 
 /**
  * The ucurr API encapsulates information about a currency, as defined by
@@ -165,6 +191,7 @@ ucurr_getPluralName(const UChar* currency,
 /**
  * Returns the number of the number of fraction digits that should
  * be displayed for the given currency.
+ * This is equivalent to ucurr_getDefaultFractionDigitsForUsage(currency,UCURR_USAGE_STANDARD,ec);
  * @param currency null-terminated 3-letter ISO 4217 code
  * @param ec input-output error code
  * @return a non-negative number of fraction digits to be
@@ -176,8 +203,24 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
                                UErrorCode* ec);
 
 /**
+ * Returns the number of the number of fraction digits that should
+ * be displayed for the given currency with usage.
+ * @param currency null-terminated 3-letter ISO 4217 code
+ * @param usage enum usage for the currency
+ * @param ec input-output error code
+ * @return a non-negative number of fraction digits to be
+ * displayed, or 0 if there is an error
+ * @stable ICU 54
+ */
+U_STABLE int32_t U_EXPORT2
+ucurr_getDefaultFractionDigitsForUsage(const UChar* currency, 
+                                       const UCurrencyUsage usage,
+                                       UErrorCode* ec);
+
+/**
  * Returns the rounding increment for the given currency, or 0.0 if no
  * rounding is done by the currency.
+ * This is equivalent to ucurr_getRoundingIncrementForUsage(currency,UCURR_USAGE_STANDARD,ec);
  * @param currency null-terminated 3-letter ISO 4217 code
  * @param ec input-output error code
  * @return the non-negative rounding increment, or 0.0 if none,
@@ -187,6 +230,21 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
 U_STABLE double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency,
                            UErrorCode* ec);
+
+/**
+ * Returns the rounding increment for the given currency, or 0.0 if no
+ * rounding is done by the currency given usage.
+ * @param currency null-terminated 3-letter ISO 4217 code
+ * @param usage enum usage for the currency
+ * @param ec input-output error code
+ * @return the non-negative rounding increment, or 0.0 if none,
+ * or 0.0 if there is an error
+ * @stable ICU 54
+ */
+U_STABLE double U_EXPORT2
+ucurr_getRoundingIncrementForUsage(const UChar* currency,
+                                   const UCurrencyUsage usage,
+                                   UErrorCode* ec);
 
 /**
  * Selector constants for ucurr_openCurrencies().
@@ -242,6 +300,38 @@ typedef enum UCurrCurrencyType {
  */
 U_STABLE UEnumeration * U_EXPORT2
 ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
+
+/**
+  * Queries if the given ISO 4217 3-letter code is available on the specified date range. 
+  * 
+  * Note: For checking availability of a currency on a specific date, specify the date on both 'from' and 'to' 
+  * 
+  * When 'from' is U_DATE_MIN and 'to' is U_DATE_MAX, this method checks if the specified currency is available any time. 
+  * If 'from' and 'to' are same UDate value, this method checks if the specified currency is available on that date.
+  * 
+  * @param isoCode 
+  *            The ISO 4217 3-letter code. 
+  * 
+  * @param from 
+  *            The lower bound of the date range, inclusive. When 'from' is U_DATE_MIN, check the availability 
+  *            of the currency any date before 'to' 
+  * 
+  * @param to 
+  *            The upper bound of the date range, inclusive. When 'to' is U_DATE_MAX, check the availability of 
+  *            the currency any date after 'from' 
+  * 
+  * @param errorCode 
+  *            ICU error code 
+   * 
+  * @return TRUE if the given ISO 4217 3-letter code is supported on the specified date range. 
+  * 
+  * @stable ICU 4.8 
+  */ 
+U_STABLE UBool U_EXPORT2
+ucurr_isAvailable(const UChar* isoCode, 
+             UDate from, 
+             UDate to, 
+             UErrorCode* errorCode);
 
 /** 
  * Finds the number of valid currency codes for the
@@ -310,6 +400,18 @@ ucurr_getKeywordValuesForLocale(const char* key,
                                 const char* locale,
                                 UBool commonlyUsed,
                                 UErrorCode* status);
+
+/**
+ * Returns the ISO 4217 numeric code for the currency.
+ * <p>Note: If the ISO 4217 numeric code is not assigned for the currency or
+ * the currency is unknown, this function returns 0.
+ *
+ * @param currency null-terminated 3-letter ISO 4217 code
+ * @return The ISO 4217 numeric code of the currency
+ * @stable ICU 49
+ */
+U_STABLE int32_t U_EXPORT2
+ucurr_getNumericCode(const UChar* currency);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

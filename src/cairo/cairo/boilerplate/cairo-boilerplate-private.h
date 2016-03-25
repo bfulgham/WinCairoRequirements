@@ -41,7 +41,7 @@ _cairo_boilerplate_register_backend (const cairo_boilerplate_target_t *targets,
 void _register_##name__ (void); \
 void _register_##name__ (void) { \
     _cairo_boilerplate_register_backend (targets__, \
-					 sizeof (targets__) / sizeof (targets__[0])); \
+					 ARRAY_LENGTH(targets__)); \
 }
 
 #define CAIRO_NO_BOILERPLATE(name__) \

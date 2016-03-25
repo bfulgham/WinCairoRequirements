@@ -7,7 +7,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2012, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -21,13 +21,16 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
-#include "setup.h"
+#include "tool_setup.h"
 
 /*
 ** callback for CURLOPT_WRITEFUNCTION
 */
 
 size_t tool_write_cb(void *buffer, size_t sz, size_t nmemb, void *userdata);
+
+/* create a local file for writing, return TRUE on success */
+bool tool_create_output_file(struct OutStruct *outs);
 
 #endif /* HEADER_CURL_TOOL_CB_WRT_H */
 

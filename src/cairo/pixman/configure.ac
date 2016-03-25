@@ -53,8 +53,8 @@ AC_PREREQ([2.57])
 #
 
 m4_define([pixman_major], 0)
-m4_define([pixman_minor], 28)
-m4_define([pixman_micro], 2)
+m4_define([pixman_minor], 32)
+m4_define([pixman_micro], 8)
 
 m4_define([pixman_version],[pixman_major.pixman_minor.pixman_micro])
 
@@ -64,7 +64,7 @@ AM_INIT_AUTOMAKE([foreign dist-bzip2])
 # Suppress verbose compile lines
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 
 AC_CANONICAL_HOST
 
@@ -183,6 +183,7 @@ AC_SUBST(LT_VERSION_INFO)
 # Check for dependencies
 
 PIXMAN_CHECK_CFLAG([-Wall])
+PIXMAN_CHECK_CFLAG([-Wdeclaration-after-statement])
 PIXMAN_CHECK_CFLAG([-fno-strict-aliasing])
 
 dnl =========================================================================
@@ -279,7 +280,7 @@ AC_MSG_CHECKING(whether to use Loongson MMI assembler)
 
 xserver_save_CFLAGS=$CFLAGS
 CFLAGS=" $LS_CFLAGS $CFLAGS -I$srcdir"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+AC_LINK_IFELSE([AC_LANG_SOURCE([[
 #ifndef __mips_loongson_vector_rev
 #error "Loongson Multimedia Instructions are only available on Loongson"
 #endif
@@ -353,6 +354,12 @@ int main () {
     asm ("pshufw %2, %1, %0\n\t"
         : "=y" (w)
         : "y" (v), "K" (5)
+    );
+
+    /* Some versions of clang will choke on this */
+    asm ("pmulhuw %1, %0\n\t"
+	: "+y" (w)
+	: "y" (v)
     );
 
     return _mm_cvtsi64_si32 (v);
@@ -437,6 +444,50 @@ fi
 AM_CONDITIONAL(USE_SSE2, test $have_sse2_intrinsics = yes)
 
 dnl ===========================================================================
+dnl Check for SSSE3
+
+if test "x$SSSE3_CFLAGS" = "x" ; then
+    SSSE3_CFLAGS="-mssse3 -Winline"
+fi
+
+have_ssse3_intrinsics=no
+AC_MSG_CHECKING(whether to use SSSE3 intrinsics)
+xserver_save_CFLAGS=$CFLAGS
+CFLAGS="$SSSE3_CFLAGS $CFLAGS"
+
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+#include <mmintrin.h>
+#include <xmmintrin.h>
+#include <emmintrin.h>
+#include <tmmintrin.h>
+int main () {
+    __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+    c = _mm_maddubs_epi16 (a, b);
+    return 0;
+}]])], have_ssse3_intrinsics=yes)
+CFLAGS=$xserver_save_CFLAGS
+
+AC_ARG_ENABLE(ssse3,
+   [AC_HELP_STRING([--disable-ssse3],
+                   [disable SSSE3 fast paths])],
+   [enable_ssse3=$enableval], [enable_ssse3=auto])
+
+if test $enable_ssse3 = no ; then
+   have_ssse3_intrinsics=disabled
+fi
+
+if test $have_ssse3_intrinsics = yes ; then
+   AC_DEFINE(USE_SSSE3, 1, [use SSSE3 compiler intrinsics])
+fi
+
+AC_MSG_RESULT($have_ssse3_intrinsics)
+if test $enable_ssse3 = yes && test $have_ssse3_intrinsics = no ; then
+   AC_MSG_ERROR([SSSE3 intrinsics not detected])
+fi
+
+AM_CONDITIONAL(USE_SSSE3, test $have_ssse3_intrinsics = yes)
+
+dnl ===========================================================================
 dnl Other special flags needed when building code using MMX or SSE instructions
 case $host_os in
    solaris*)
@@ -471,6 +522,7 @@ AC_SUBST(MMX_CFLAGS)
 AC_SUBST(MMX_LDFLAGS)
 AC_SUBST(SSE2_CFLAGS)
 AC_SUBST(SSE2_LDFLAGS)
+AC_SUBST(SSSE3_CFLAGS)
 
 dnl ===========================================================================
 dnl Check for VMX/Altivec
@@ -616,7 +668,7 @@ AC_ARG_ENABLE(arm-iwmmxt2,
 if test "x$IWMMXT_CFLAGS" = "x" ; then
    IWMMXT_CFLAGS="-flax-vector-conversions -Winline -march=iwmmxt"
    if test $enable_iwmmxt2 != no ; then
-      IWMMXT_CFLAGS+="2"
+      IWMMXT_CFLAGS="${IWMMXT_CFLAGS}2"
    fi
 fi
 
@@ -631,8 +683,8 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #ifndef __IWMMXT__
 #error "IWMMXT not enabled (with -march=iwmmxt)"
 #endif
-#if defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5))
-#error "Need GCC >= 4.5 for IWMMXT intrinsics"
+#if defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8))
+#error "Need GCC >= 4.8 for IWMMXT intrinsics"
 #endif
 #include <mmintrin.h>
 int main () {
@@ -778,7 +830,7 @@ PKG_PROG_PKG_CONFIG
 
 if test $enable_gtk = yes ; then
    AC_CHECK_LIB([pixman-1], [pixman_version_string])
-   PKG_CHECK_MODULES(GTK, [gtk+-2.0 pixman-1])
+   PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.16 pixman-1])
 fi
 
 if test $enable_gtk = auto ; then
@@ -786,7 +838,7 @@ if test $enable_gtk = auto ; then
 fi
 
 if test $enable_gtk = auto ; then
-   PKG_CHECK_MODULES(GTK, [gtk+-2.0 pixman-1], [enable_gtk=yes], [enable_gtk=no])
+   PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.16 pixman-1], [enable_gtk=yes], [enable_gtk=no])
 fi
 
 AM_CONDITIONAL(HAVE_GTK, [test "x$enable_gtk" = xyes])
@@ -843,6 +895,13 @@ AC_CHECK_HEADER(sys/time.h, have_sys_time_h=yes, have_sys_time_h=no)
 if test x$have_gettimeofday = xyes && test x$have_sys_time_h = xyes; then
    AC_DEFINE(HAVE_GETTIMEOFDAY, 1, [Whether we have gettimeofday()])
 fi
+
+dnl =====================================
+dnl Check for missing sqrtf() as, e.g., for Solaris 9
+
+AC_SEARCH_LIBS([sqrtf], [m], [],
+               [AC_DEFINE([sqrtf], [sqrt],
+                          [Define to sqrt if you do not have the `sqrtf' function.])])
 
 dnl =====================================
 dnl Thread local storage
@@ -909,37 +968,38 @@ main ()
 ]]))
 
 AC_DEFUN([PIXMAN_CHECK_PTHREAD],[dnl
-    if test "z$support_for_pthread_setspecific" != "zyes"; then
+    if test "z$support_for_pthreads" != "zyes"; then
 	PIXMAN_LINK_WITH_ENV(
 		[$1], [pthread_test_program],
 		[PTHREAD_CFLAGS="$CFLAGS"
 		 PTHREAD_LIBS="$LIBS"
 		 PTHREAD_LDFLAGS="$LDFLAGS"
-		 support_for_pthread_setspecific=yes])
+		 support_for_pthreads=yes])
     fi
 ])
 
-if test $ac_cv_tls = none ; then
-    support_for_pthread_setspecific=no
+support_for_pthreads=no
 
-    AC_MSG_CHECKING(for pthread_setspecific)
+AC_MSG_CHECKING(for pthreads)
 
-    PIXMAN_CHECK_PTHREAD([CFLAGS="-pthread"; LDFLAGS="-pthread"])
-    PIXMAN_CHECK_PTHREAD([CFLAGS="-D_REENTRANT"; LIBS="-lpthread"])
-    PIXMAN_CHECK_PTHREAD([CFLAGS="-D_REENTRANT"; LDFLAGS="-lroot"])
+PIXMAN_CHECK_PTHREAD([CFLAGS="-pthread"; LDFLAGS="-pthread"])
+PIXMAN_CHECK_PTHREAD([CFLAGS="-D_REENTRANT"; LIBS="-lpthread"])
+PIXMAN_CHECK_PTHREAD([CFLAGS="-D_REENTRANT"; LDFLAGS="-lroot"])
     
-    if test $support_for_pthread_setspecific = yes; then
-	CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
-	AC_DEFINE([HAVE_PTHREAD_SETSPECIFIC], [], [Whether pthread_setspecific() is supported])
+if test $support_for_pthreads = yes; then
+    AC_DEFINE([HAVE_PTHREADS], [], [Whether pthreads is supported])
+    if test $ac_cv_tls = none ; then
+        CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
     fi
-
-    AC_MSG_RESULT($support_for_pthread_setspecific);
 fi
 
+AC_MSG_RESULT($support_for_pthreads)
+
 AC_SUBST(TOOLCHAIN_SUPPORTS__THREAD)
-AC_SUBST(HAVE_PTHREAD_SETSPECIFIC)
+AC_SUBST(HAVE_PTHREADS)
 AC_SUBST(PTHREAD_LDFLAGS)
 AC_SUBST(PTHREAD_LIBS)
+AC_SUBST(PTHREAD_CFLAGS)
 
 dnl =====================================
 dnl __attribute__((constructor))
@@ -967,6 +1027,56 @@ fi
 
 AC_MSG_RESULT($support_for_attribute_constructor)
 AC_SUBST(TOOLCHAIN_SUPPORTS_ATTRIBUTE_CONSTRUCTOR)
+
+dnl =====================================
+dnl __float128
+
+support_for_float128=no
+
+AC_MSG_CHECKING(for __float128)
+AC_LINK_IFELSE([AC_LANG_SOURCE([[
+__float128 a = 1.0Q, b = 2.0Q; int main (void) { return a + b; }
+]])], support_for_float128=yes)
+
+if test x$support_for_float128 = xyes; then
+   AC_DEFINE([HAVE_FLOAT128], [], [Whether the tool chain supports __float128])
+fi
+
+AC_MSG_RESULT($support_for_float128)
+
+dnl =====================================
+dnl __builtin_clz
+
+support_for_builtin_clz=no
+
+AC_MSG_CHECKING(for __builtin_clz)
+AC_LINK_IFELSE([AC_LANG_SOURCE([[
+unsigned int x = 11; int main (void) { return __builtin_clz(x); }
+]])], support_for_builtin_clz=yes)
+
+if test x$support_for_builtin_clz = xyes; then
+   AC_DEFINE([HAVE_BUILTIN_CLZ], [], [Whether the compiler supports __builtin_clz])
+fi
+
+AC_MSG_RESULT($support_for_builtin_clz)
+
+dnl =====================================
+dnl GCC vector extensions
+
+support_for_gcc_vector_extensions=no
+
+AC_MSG_CHECKING(for GCC vector extensions)
+AC_LINK_IFELSE([AC_LANG_SOURCE([[
+unsigned int __attribute__ ((vector_size(16))) e, a, b;
+int main (void) { e = a - ((b << 27) + (b >> (32 - 27))) + 1; return e[0]; }
+]])], support_for_gcc_vector_extensions=yes)
+
+if test x$support_for_gcc_vector_extensions = xyes; then
+   AC_DEFINE([HAVE_GCC_VECTOR_EXTENSIONS], [],
+             [Whether the compiler supports GCC vector extensions])
+fi
+
+AC_MSG_RESULT($support_for_gcc_vector_extensions)
 
 dnl ==================
 dnl libpng

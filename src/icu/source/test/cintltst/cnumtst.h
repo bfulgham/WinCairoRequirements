@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -70,6 +70,15 @@ static void TestCurrencyRegression(void);
  **/
 static void TestParseZero(void);
 
+/**
+ * Test cloning formatter with RBNF
+ **/
+static void TestCloneWithRBNF(void);
+
+/**
+ * Test the Currency Usage Implementations
+ **/
+static void TestCurrencyUsage(void);
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

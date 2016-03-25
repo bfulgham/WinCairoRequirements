@@ -1,5 +1,5 @@
 /*
- * Copyright © 2008 Jeff Muizelaar
+ * Copyright Â© 2008 Jeff Muizelaar
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without
@@ -22,7 +22,7 @@
  *
  * Contributor(s):
  *	Jeff Muizelaar <jeff@infidigm.net>
- *	Kristian Høgsberg <krh@redhat.com>
+ *	Kristian HÃ¸gsberg <krh@redhat.com>
  *	Behdad Esfahbod <behdad@behdad.org>
  */
 

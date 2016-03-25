@@ -65,7 +65,13 @@ typedef struct
 
 PIXMAN_DEFINE_THREAD_LOCAL (cache_t, fast_path_cache);
 
-pixman_bool_t
+static void
+dummy_composite_rect (pixman_implementation_t *imp,
+		      pixman_composite_info_t *info)
+{
+}
+
+void
 _pixman_implementation_lookup_composite (pixman_implementation_t  *toplevel,
 					 pixman_op_t               op,
 					 pixman_format_code_t      src_format,
@@ -142,7 +148,18 @@ _pixman_implementation_lookup_composite (pixman_implementation_t  *toplevel,
 	    ++info;
 	}
     }
-    return FALSE;
+
+    /* We should never reach this point */
+    _pixman_log_error (
+        FUNC,
+        "No composite function found\n"
+        "\n"
+        "The most likely cause of this is that this system has issues with\n"
+        "thread local storage\n");
+
+    *out_imp = NULL;
+    *out_func = dummy_composite_rect;
+    return;
 
 update_cache:
     if (i)
@@ -160,8 +177,16 @@ update_cache:
 	cache->cache[0].fast_path.dest_flags = dest_flags;
 	cache->cache[0].fast_path.func = *out_func;
     }
+}
 
-    return TRUE;
+static void
+dummy_combine (pixman_implementation_t *imp,
+	       pixman_op_t              op,
+	       uint32_t *               pd,
+	       const uint32_t *         ps,
+	       const uint32_t *         pm,
+	       int                      w)
+{
 }
 
 pixman_combine_32_func_t
@@ -199,7 +224,9 @@ _pixman_implementation_lookup_combiner (pixman_implementation_t *imp,
 	imp = imp->fallback;
     }
 
-    return NULL;
+    /* We should never reach this point */
+    _pixman_log_error (FUNC, "No known combine function\n");
+    return dummy_combine;
 }
 
 pixman_bool_t
@@ -242,12 +269,12 @@ _pixman_implementation_fill (pixman_implementation_t *imp,
                              int                      y,
                              int                      width,
                              int                      height,
-                             uint32_t                 xor)
+                             uint32_t                 filler)
 {
     while (imp)
     {
 	if (imp->fill &&
-	    ((*imp->fill) (imp, bits, stride, bpp, x, y, width, height, xor)))
+	    ((*imp->fill) (imp, bits, stride, bpp, x, y, width, height, filler)))
 	{
 	    return TRUE;
 	}
@@ -258,50 +285,26 @@ _pixman_implementation_fill (pixman_implementation_t *imp,
     return FALSE;
 }
 
-pixman_bool_t
-_pixman_implementation_src_iter_init (pixman_implementation_t	*imp,
-				      pixman_iter_t             *iter,
-				      pixman_image_t		*image,
-				      int			 x,
-				      int			 y,
-				      int			 width,
-				      int			 height,
-				      uint8_t			*buffer,
-				      iter_flags_t		 iter_flags,
-				      uint32_t                   image_flags)
+static uint32_t *
+get_scanline_null (pixman_iter_t *iter, const uint32_t *mask)
 {
-    iter->image = image;
-    iter->buffer = (uint32_t *)buffer;
-    iter->x = x;
-    iter->y = y;
-    iter->width = width;
-    iter->height = height;
-    iter->iter_flags = iter_flags;
-    iter->image_flags = image_flags;
-
-    while (imp)
-    {
-	if (imp->src_iter_init && (*imp->src_iter_init) (imp, iter))
-	    return TRUE;
-
-	imp = imp->fallback;
-    }
-
-    return FALSE;
+    return NULL;
 }
 
-pixman_bool_t
-_pixman_implementation_dest_iter_init (pixman_implementation_t	*imp,
-				       pixman_iter_t            *iter,
-				       pixman_image_t		*image,
-				       int			 x,
-				       int			 y,
-				       int			 width,
-				       int			 height,
-				       uint8_t			*buffer,
-				       iter_flags_t		 iter_flags,
-				       uint32_t                  image_flags)
+void
+_pixman_implementation_iter_init (pixman_implementation_t *imp,
+                                  pixman_iter_t           *iter,
+                                  pixman_image_t          *image,
+                                  int                      x,
+                                  int                      y,
+                                  int                      width,
+                                  int                      height,
+                                  uint8_t                 *buffer,
+                                  iter_flags_t             iter_flags,
+                                  uint32_t                 image_flags)
 {
+    pixman_format_code_t format;
+
     iter->image = image;
     iter->buffer = (uint32_t *)buffer;
     iter->x = x;
@@ -310,16 +313,40 @@ _pixman_implementation_dest_iter_init (pixman_implementation_t	*imp,
     iter->height = height;
     iter->iter_flags = iter_flags;
     iter->image_flags = image_flags;
+    iter->fini = NULL;
+
+    if (!iter->image)
+    {
+	iter->get_scanline = get_scanline_null;
+	return;
+    }
+
+    format = iter->image->common.extended_format_code;
 
     while (imp)
     {
-	if (imp->dest_iter_init && (*imp->dest_iter_init) (imp, iter))
-	    return TRUE;
+        if (imp->iter_info)
+        {
+            const pixman_iter_info_t *info;
 
-	imp = imp->fallback;
+            for (info = imp->iter_info; info->format != PIXMAN_null; ++info)
+            {
+                if ((info->format == PIXMAN_any || info->format == format) &&
+                    (info->image_flags & image_flags) == info->image_flags &&
+                    (info->iter_flags & iter_flags) == info->iter_flags)
+                {
+                    iter->get_scanline = info->get_scanline;
+                    iter->write_back = info->write_back;
+
+                    if (info->initializer)
+                        info->initializer (iter, info);
+                    return;
+                }
+            }
+        }
+
+        imp = imp->fallback;
     }
-
-    return FALSE;
 }
 
 pixman_bool_t

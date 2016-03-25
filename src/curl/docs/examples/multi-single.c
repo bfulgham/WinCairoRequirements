@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -19,7 +19,10 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
-/* This is a very simple example using the multi interface. */
+/* <DESC>
+ * using the multi interface to do a single download
+ * </DESC>
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -31,6 +34,15 @@
 /* curl stuff */
 #include <curl/curl.h>
 
+#ifdef _WIN32
+#define WAITMS(x) Sleep(x)
+#else
+/* Portable sleep for platforms other than Windows. */
+#define WAITMS(x)                               \
+  struct timeval wait = { 0, (x) * 1000 };      \
+  (void)select(0, NULL, NULL, NULL, &wait);
+#endif
+
 /*
  * Simply download a HTTP file.
  */
@@ -40,6 +52,9 @@ int main(void)
   CURLM *multi_handle;
 
   int still_running; /* keep number of running handles */
+  int repeats = 0;
+
+  curl_global_init(CURL_GLOBAL_DEFAULT);
 
   http_handle = curl_easy_init();
 
@@ -55,62 +70,43 @@ int main(void)
   /* we start some action by calling perform right away */
   curl_multi_perform(multi_handle, &still_running);
 
-  while(still_running) {
-    struct timeval timeout;
-    int rc; /* select() return code */
+  do {
+    CURLMcode mc; /* curl_multi_wait() return code */
+    int numfds;
 
-    fd_set fdread;
-    fd_set fdwrite;
-    fd_set fdexcep;
-    int maxfd = -1;
+    /* wait for activity, timeout or "nothing" */
+    mc = curl_multi_wait(multi_handle, NULL, 0, 1000, &numfds);
 
-    long curl_timeo = -1;
-
-    FD_ZERO(&fdread);
-    FD_ZERO(&fdwrite);
-    FD_ZERO(&fdexcep);
-
-    /* set a suitable timeout to play around with */
-    timeout.tv_sec = 1;
-    timeout.tv_usec = 0;
-
-    curl_multi_timeout(multi_handle, &curl_timeo);
-    if(curl_timeo >= 0) {
-      timeout.tv_sec = curl_timeo / 1000;
-      if(timeout.tv_sec > 1)
-        timeout.tv_sec = 1;
-      else
-        timeout.tv_usec = (curl_timeo % 1000) * 1000;
-    }
-
-    /* get file descriptors from the transfers */
-    curl_multi_fdset(multi_handle, &fdread, &fdwrite, &fdexcep, &maxfd);
-
-    /* In a real-world program you OF COURSE check the return code of the
-       function calls.  On success, the value of maxfd is guaranteed to be
-       greater or equal than -1.  We call select(maxfd + 1, ...), specially in
-       case of (maxfd == -1), we call select(0, ...), which is basically equal
-       to sleep. */
-
-    rc = select(maxfd+1, &fdread, &fdwrite, &fdexcep, &timeout);
-
-    switch(rc) {
-    case -1:
-      /* select error */
-      still_running = 0;
-      printf("select() returns error, this is badness\n");
-      break;
-    case 0:
-    default:
-      /* timeout or readable/writable sockets */
-      curl_multi_perform(multi_handle, &still_running);
+    if(mc != CURLM_OK)
+    {
+      fprintf(stderr, "curl_multi_wait() failed, code %d.\n", mc);
       break;
     }
-  }
+
+    /* 'numfds' being zero means either a timeout or no file descriptors to
+       wait for. Try timeout on first occurrence, then assume no file
+       descriptors and no file descriptors to wait for means wait for 100
+       milliseconds. */
+
+    if(!numfds) {
+      repeats++; /* count number of repeated zero numfds */
+      if(repeats > 1) {
+        WAITMS(100); /* sleep 100 milliseconds */
+      }
+    }
+    else
+      repeats = 0;
+
+    curl_multi_perform(multi_handle, &still_running);
+  } while(still_running);
+
+  curl_multi_remove_handle(multi_handle, http_handle);
+
+  curl_easy_cleanup(http_handle);
 
   curl_multi_cleanup(multi_handle);
 
-  curl_easy_cleanup(http_handle);
+  curl_global_cleanup();
 
   return 0;
 }

@@ -120,7 +120,8 @@ source (cairo_xlib_surface_t *dst, Picture picture, Pixmap pixmap)
     _cairo_surface_init (&source->base,
 			 &cairo_xlib_source_backend,
 			 NULL, /* device */
-			 CAIRO_CONTENT_COLOR_ALPHA);
+			 CAIRO_CONTENT_COLOR_ALPHA,
+			 FALSE); /* is_vector */
 
     /* The source exists only within an operation */
     source->picture = picture;
@@ -288,13 +289,14 @@ render_pattern (cairo_xlib_surface_t *dst,
     cairo_rectangle_int_t map_extents;
 
     src = (cairo_xlib_surface_t *)
-	_cairo_surface_create_similar_scratch (&dst->base,
-					       is_mask ? CAIRO_CONTENT_ALPHA : CAIRO_CONTENT_COLOR_ALPHA,
-					       extents->width,
-					       extents->height);
+	_cairo_surface_create_scratch (&dst->base,
+				       is_mask ? CAIRO_CONTENT_ALPHA : CAIRO_CONTENT_COLOR_ALPHA,
+				       extents->width,
+				       extents->height,
+				       NULL);
     if (src->base.type != CAIRO_SURFACE_TYPE_XLIB) {
 	cairo_surface_destroy (&src->base);
-	return None;
+	return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_NO_MEMORY));
     }
 
     map_extents = *extents;
@@ -625,7 +627,8 @@ static cairo_xlib_source_t *init_source (cairo_xlib_surface_t *dst,
 	_cairo_surface_init (&source->base,
 			     &cairo_xlib_source_backend,
 			     NULL, /* device */
-			     CAIRO_CONTENT_COLOR_ALPHA);
+			     CAIRO_CONTENT_COLOR_ALPHA,
+			     FALSE); /* is_vector */
 
 	pa.subwindow_mode = IncludeInferiors;
 	source->picture = XRenderCreatePicture (dpy,
@@ -750,10 +753,11 @@ subsurface_source (cairo_xlib_surface_t *dst,
 	source = &src->embedded_source;
     } else {
 	src = (cairo_xlib_surface_t *)
-	    _cairo_surface_create_similar_scratch (&dst->base,
-						   sub->base.content,
-						   sub->extents.width,
-						   sub->extents.height);
+	    _cairo_surface_create_scratch (&dst->base,
+					   sub->base.content,
+					   sub->extents.width,
+					   sub->extents.height,
+					   NULL);
 	if (src->base.type != CAIRO_SURFACE_TYPE_XLIB) {
 	    cairo_surface_destroy (&src->base);
 	    return _cairo_surface_create_in_error (CAIRO_STATUS_NO_MEMORY);
@@ -867,11 +871,14 @@ recording_pattern_get_surface (const cairo_pattern_t *pattern)
     cairo_surface_t *surface;
 
     surface = ((const cairo_surface_pattern_t *) pattern)->surface;
+
     if (_cairo_surface_is_paginated (surface))
-	surface = _cairo_paginated_surface_get_recording (surface);
+	return cairo_surface_reference (_cairo_paginated_surface_get_recording (surface));
+
     if (_cairo_surface_is_snapshot (surface))
-	surface = _cairo_surface_snapshot_get_target (surface);
-    return surface;
+	return _cairo_surface_snapshot_get_target (surface);
+
+    return cairo_surface_reference (surface);
 }
 
 static cairo_surface_t *
@@ -883,6 +890,7 @@ record_source (cairo_xlib_surface_t *dst,
 	       int *src_x, int *src_y)
 {
     cairo_xlib_surface_t *src;
+    cairo_surface_t *recording;
     cairo_matrix_t matrix, m;
     cairo_status_t status;
     cairo_rectangle_int_t upload, limit;
@@ -898,19 +906,22 @@ record_source (cairo_xlib_surface_t *dst,
     }
 
     src = (cairo_xlib_surface_t *)
-	_cairo_surface_create_similar_scratch (&dst->base,
-					       pattern->surface->content,
-					       upload.width,
-					       upload.height);
+	_cairo_surface_create_scratch (&dst->base,
+				       pattern->surface->content,
+				       upload.width,
+				       upload.height,
+				       NULL);
     if (src->base.type != CAIRO_SURFACE_TYPE_XLIB) {
 	cairo_surface_destroy (&src->base);
 	return _cairo_surface_create_in_error (CAIRO_STATUS_NO_MEMORY);
     }
 
     cairo_matrix_init_translate (&matrix, upload.x, upload.y);
-    status = _cairo_recording_surface_replay_with_clip (recording_pattern_get_surface (&pattern->base),
+    recording = recording_pattern_get_surface (&pattern->base),
+    status = _cairo_recording_surface_replay_with_clip (recording,
 							&matrix, &src->base,
 							NULL);
+    cairo_surface_destroy (recording);
     if (unlikely (status)) {
 	cairo_surface_destroy (&src->base);
 	return _cairo_surface_create_in_error (status);
@@ -962,7 +973,8 @@ surface_source (cairo_xlib_surface_t *dst,
 	_cairo_surface_init (&proxy->source.base,
 			     &cairo_xlib_proxy_backend,
 			     dst->base.device,
-			     src->content);
+			     src->content,
+			     src->is_vector);
 
 	proxy->source.dpy = dst->display->display;
 	proxy->source.picture = XRenderCreatePicture (proxy->source.dpy,
@@ -986,6 +998,9 @@ surface_source (cairo_xlib_surface_t *dst,
 	if (pattern->base.extend == CAIRO_EXTEND_NONE) {
 	    if (! _cairo_rectangle_intersect (&upload, &limit))
 		return alpha_source (dst, 0);
+	} else if (pattern->base.extend == CAIRO_EXTEND_PAD) {
+	    if (! _cairo_rectangle_intersect (&upload, &limit))
+		upload = limit;
 	} else {
 	    if (upload.x < limit.x ||
 		upload.x + upload.width > limit.x + limit.width ||
@@ -998,14 +1013,15 @@ surface_source (cairo_xlib_surface_t *dst,
     }
 
     xsrc = (cairo_xlib_surface_t *)
-	    _cairo_surface_create_similar_scratch (&dst->base,
-						   src->content,
-						   upload.width,
-						   upload.height);
+	    _cairo_surface_create_scratch (&dst->base,
+					   src->content,
+					   upload.width,
+					   upload.height,
+					   NULL);
     if (xsrc->base.type != CAIRO_SURFACE_TYPE_XLIB) {
 	cairo_surface_destroy (src);
 	cairo_surface_destroy (&xsrc->base);
-	return None;
+	return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_NO_MEMORY));
     }
 
     if (_cairo_surface_is_image (src)) {
@@ -1086,17 +1102,22 @@ pattern_is_supported (cairo_xlib_display_t *display,
 	    return FALSE;
     }
 
-    if (! CAIRO_RENDER_HAS_PICTURE_TRANSFORM (display)) {
-	if (!_cairo_matrix_is_integer_translation (&pattern->matrix, NULL, NULL))
-	    return FALSE;
+    switch (pattern->filter) {
+    case CAIRO_FILTER_FAST:
+    case CAIRO_FILTER_NEAREST:
+	return CAIRO_RENDER_HAS_PICTURE_TRANSFORM (display) ||
+	    _cairo_matrix_is_integer_translation (&pattern->matrix, NULL, NULL);
+    case CAIRO_FILTER_GOOD:
+	return CAIRO_RENDER_HAS_FILTER_GOOD (display);
+    case CAIRO_FILTER_BEST:
+	return CAIRO_RENDER_HAS_FILTER_BEST (display);
+    case CAIRO_FILTER_BILINEAR:
+    case CAIRO_FILTER_GAUSSIAN:
+    default:
+	return CAIRO_RENDER_HAS_FILTERS (display);
     }
-
-    if (! CAIRO_RENDER_HAS_FILTERS (display)) {
-	    /* No filters implies no transforms, so we optimise away BILINEAR */
-    }
-
-    return TRUE;
 }
+
 cairo_surface_t *
 _cairo_xlib_source_create_for_pattern (cairo_surface_t *_dst,
 				       const cairo_pattern_t *pattern,

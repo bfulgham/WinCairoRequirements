@@ -133,9 +133,10 @@ draw (cairo_t *cr, int width, int height)
     return CAIRO_TEST_SUCCESS;
 }
 
+/* XFAIL: loss of precision converting a cairo matrix to */
 CAIRO_TEST (scale_offset_image,
 	    "Tests drawing surfaces under various scales and transforms",
-	    "surface scale-offset", /* keywords */
+	    "surface, scale-offset", /* keywords */
 	    NULL, /* requirements */
 	    320, 320,
 	    NULL, draw)

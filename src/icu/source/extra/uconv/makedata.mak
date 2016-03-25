@@ -4,7 +4,7 @@
 #**********************************************************************
 # nmake file for creating data files on win32
 # invoke with
-# nmake /f makedata.mak icup=<path_to_icu_instalation> distout=<path_to_binaries> [Debug|Release]
+# nmake /f makedata.mak icup=<path_to_icu_instalation> [Debug|Release]
 #
 #	12/10/1999	weiv	Created
 
@@ -41,28 +41,20 @@ RESDIR=resources
 RESFILES=resfiles.mk
 ICUDATA=$(ICUP)\data
 
-#  DISTOUT
-#    Our final output location.
-!if "$(DISTOUT)"==""
-!ERROR Can't find DISTOUT (should point to final output location)!
-!ENDIF
-!MESSAGE DISTOUT path is $(DISTOUT)
-
+DLL_OUTPUT=.\$(CFG)
 # set the following to 'static' or 'dll' depending
 PKGMODE=static
 
 ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
 
-ICUTOOLS=$(DISTOUT)bin32
-!if "$(PLATFORM)" == "x64"
-ICUTOOLS=$(DISTOUT)bin64
-PATH = $(DISTOUT)bin64;$(PATH)
+!IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
+ICUTOOLS=$(ICUP)\bin64
+PATH = $(ICUP)\bin64;$(PATH)
 !ELSE
-PATH = $(DISTOUT)bin32;$(PATH)
+ICUTOOLS=$(ICUP)\bin
+PATH = $(ICUP)\bin;$(PATH)
 !ENDIF
-
-!MESSAGE ICUTOOLS path is $(ICUTOOLS)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
@@ -81,21 +73,10 @@ RESOURCESDIR=
 
 # This target should build all the data files
 !IF "$(PKGMODE)" == "dll"
-DLL_OUTPUT=$(DISTOUT)bin32
-!if "$(PLATFORM)" == "x64"
-DLL_OUTPUT=$(DISTOUT)bin64
-!ENDIF
 OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).dll"
 !ELSE
-DLL_OUTPUT=$(DISTOUT)lib32
-!if "$(PLATFORM)" == "x64"
-DLL_OUTPUT=$(DISTOUT)lib64
-!ENDIF
 OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).lib"
 !ENDIF
-
-!MESSAGE DLL_OUTPUT path is $(DLL_OUTPUT)
-!MESSAGE OUTPUT path is $(OUTPUT)
 
 ALL : $(OUTPUT)
 	@echo All targets are up to date (mode $(PKGMODE))

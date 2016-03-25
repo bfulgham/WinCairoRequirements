@@ -13,7 +13,7 @@ MAKEFILE = Makefile.dj
 OBJ_DIR = djgpp
 
 #
-# Find out if using a UNIX-like shell or a DOS command interpreter
+# Find out if using a Unix-like shell or a DOS command interpreter
 #
 ifneq ($(findstring COMMAND.COM,$(SHELL)),COMMAND.COM)
   ifneq ($(findstring CMD.EXE,$(SHELL)),CMD.EXE)
@@ -92,7 +92,7 @@ ARES_ROOT    = $(TOPDIR)/ares
 CC   = gcc
 YACC = bison -y
 
-CFLAGS = -g -gcoff -O2 -I. -I$(TOPDIR)/include -I$(TOPDIR)/lib \
+CFLAGS = -g -O2 -I. -I$(TOPDIR)/include -I$(TOPDIR)/lib \
          -I$(WATT32_ROOT)/inc -Wall -DHAVE_CONFIG_H
 
 ifeq ($(USE_SSL),1)

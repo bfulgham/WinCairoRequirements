@@ -1,5 +1,5 @@
-#ifndef __LIBCONFIGTPF_H
-#define __LIBCONFIGTPF_H
+#ifndef HEADER_CURL_CONFIG_TPF_H
+#define HEADER_CURL_CONFIG_TPF_H
 /***************************************************************************
  *                                  _   _ ____  _
  *  Project                     ___| | | |  _ \| |
@@ -7,7 +7,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -23,7 +23,7 @@
  ***************************************************************************/
 
 /* ================================================================ */
-/*    lib/config-tpf.h - Hand crafted config file for TPF           */
+/*                 Hand crafted config file for TPF                 */
 /* ================================================================ */
 
 /* ---------------------------------------------------------------- */
@@ -31,9 +31,6 @@
 /* ---------------------------------------------------------------- */
 
 /* NOTE: Refer also to the .mak file for some of the flags below */
-
-/* when building libcurl itself */
-/* #undef BUILDING_LIBCURL */
 
 /* to disable cookies support */
 /* #undef CURL_DISABLE_COOKIES */
@@ -64,9 +61,6 @@
 
 /* to disable verbose strings */
 /* #undef CURL_DISABLE_VERBOSE_STRINGS */
-
-/* when not building a shared library */
-/* #undef CURL_STATICLIB */
 
 /* lber dynamic library file */
 /* #undef DL_LBER_FILE */
@@ -252,7 +246,8 @@
 /* Define to 1 if you have the IoctlSocket camel case function. */
 /* #undef HAVE_IOCTLSOCKET_CAMEL */
 
-/* Define to 1 if you have a working IoctlSocket camel case FIONBIO function. */
+/* Define to 1 if you have a working IoctlSocket camel case FIONBIO
+   function. */
 /* #undef HAVE_IOCTLSOCKET_CAMEL_FIONBIO */
 
 /* Define to 1 if you have the <io.h> header file. */
@@ -442,9 +437,6 @@
 /* Define to 1 if you have the `socket' function. */
 #define HAVE_SOCKET 1
 
-/* Define this if you have the SPNEGO library fbopenssl */
-/* #undef HAVE_SPNEGO */
-
 /* Define to 1 if you have the <ssl.h> header file. */
 /* #undef HAVE_SSL_H */
 #define HAVE_SSL_H 1
@@ -476,9 +468,6 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
-
-/* Define to 1 if you have the `strlcat' function. */
-/* #undef HAVE_STRLCAT */
 
 /* Define to 1 if you have the `strlcpy' function. */
 /* #undef HAVE_STRLCPY */
@@ -590,7 +579,8 @@
 #define PACKAGE "curl"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "a suitable curl mailing list => http://curl.haxx.se/mail/"
+#define PACKAGE_BUGREPORT \
+  "a suitable curl mailing list => http://curl.haxx.se/mail/"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "curl"
@@ -656,7 +646,7 @@
 /* #undef USE_OPENSSL */
 
 /* if SSL is enabled */
-/* #undef USE_SSLEAY */
+/* #undef USE_OPENSSL */
 
 /* to enable SSPI support */
 /* #undef USE_WINDOWS_SSPI */
@@ -779,4 +769,4 @@
 #endif
 
 
-#endif /* __LIBCONFIGTPF_H */
+#endif /* HEADER_CURL_CONFIG_TPF_H */

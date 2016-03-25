@@ -107,10 +107,6 @@ cairo_test_NaN (void)
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif
 
-#ifndef ARRAY_LENGTH
-#define ARRAY_LENGTH(__array) ((int) (sizeof (__array) / sizeof (__array[0])))
-#endif
-
 #define CAIRO_TEST_OUTPUT_DIR "output"
 
 #define CAIRO_TEST_LOG_SUFFIX ".log"
@@ -317,6 +313,9 @@ cairo_surface_t *
 cairo_test_get_reference_image (cairo_test_context_t *ctx,
 				const char *filename,
 				cairo_bool_t flatten);
+
+cairo_bool_t
+cairo_test_mkdir (const char *path);
 
 CAIRO_END_DECLS
 

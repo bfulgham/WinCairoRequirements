@@ -9,10 +9,12 @@ cairo-status
 
 </para>
 
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -63,6 +65,7 @@ cairo-status
 @CAIRO_STATUS_DEVICE_ERROR: 
 @CAIRO_STATUS_INVALID_MESH_CONSTRUCTION: 
 @CAIRO_STATUS_DEVICE_FINISHED: 
+@CAIRO_STATUS_JBIG2_GLOBAL_MISSING: 
 @CAIRO_STATUS_LAST_STATUS: 
 
 <!-- ##### FUNCTION cairo_status_to_string ##### -->

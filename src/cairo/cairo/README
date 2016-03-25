@@ -67,29 +67,31 @@ backends. Further, the supported backends can be divided into the
 "platform" backends which depend on some underlying platform-specific
 system, (such as the X Window System or some other window system).
 
-As an example, for a standard Linux build, (with image, png, pdf,
-PostScript, svg, and xlib surface backends, and the freetype font
-backend), the following sample commands will install necessary
-dependencies:
+As an example, for a standard Linux build similar to what's shipped by
+your distro, (with image, png, pdf, PostScript, svg, and xlib surface
+backends, and the freetype font backend), the following sample commands
+will install necessary dependencies:
 
     Debian (and similar):
 
-	apt-get install libpng12-dev libz-dev libxrender-dev libfontconfig1-dev
+	apt-get build-dep cairo
 
     Fedora (and similar):
 
 	yum install libpng-devel zlib-devel libXrender-devel fontconfig-devel
 
-(Those commands intentionally don't install pixman from a distribution
-package since if you're manually compiling cairo, then you likely want
-to grab pixman from the same place at the same time and compile it as
-well.)
+Technically you probably don't need pixman from the distribution since
+if you're manually compiling Cairo you probably want an updated pixman
+as well.  However, if you follow the default settings and install pixman
+to /usr/local, your Cairo build should properly use it in preference to
+the system pixman.
+
 
 Supported, "standard" surface backends
 ------------------------------------
 	image backend (required)
 	------------------------
-	pixman >= 0.20.2	http://cairographics.org/releases
+	pixman >= 0.30.0	http://cairographics.org/releases
 
 	png support (can be left out if desired, but many
 	-----------  applications expect it to be present)
@@ -119,7 +121,7 @@ Supported, "platform" surface backends
 
 	quartz backend
 	--------------
-	MacOS X >= 10.4 with Xcode >= 2.4
+	MacOS X >= 10.5 with Xcode >= 3.0
 
 	win32 backend
 	-------------
@@ -179,9 +181,17 @@ Experimental surface backends
 	packages and developer dependencies are available at Netlabs:
 				ftp://ftp.netlabs.org/pub/cairo
 
+	skia backend
+	------------
+	Requires the skia library as of June 2014.  Since skia is not
+	API stable, building against newer (or older) versions of skia
+	will probably fail.
+
+
 Compiling
 =========
 See the INSTALL document for build instructions.
+
 
 History
 =======

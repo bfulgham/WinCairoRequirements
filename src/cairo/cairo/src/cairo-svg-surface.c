@@ -56,6 +56,7 @@
 #include "cairo-paginated-private.h"
 #include "cairo-scaled-font-subsets-private.h"
 #include "cairo-surface-clipper-private.h"
+#include "cairo-surface-snapshot-inline.h"
 #include "cairo-svg-surface-private.h"
 
 /**
@@ -482,7 +483,8 @@ _cairo_svg_surface_create_for_document (cairo_svg_document_t	*document,
     _cairo_surface_init (&surface->base,
 			 &cairo_svg_surface_backend,
 			 NULL, /* device */
-			 content);
+			 content,
+			 TRUE); /* is_vector */
 
     surface->width = width;
     surface->height = height;
@@ -807,7 +809,7 @@ _cairo_svg_document_emit_bitmap_glyph_data (cairo_svg_document_t	*document,
     _cairo_output_stream_printf (document->xml_node_glyphs, "<g");
     _cairo_svg_surface_emit_transform (document->xml_node_glyphs, " transform",
 				       &image->base.device_transform_inverse, NULL);
-    _cairo_output_stream_printf (document->xml_node_glyphs, ">/n");
+    _cairo_output_stream_printf (document->xml_node_glyphs, ">\n");
 
     for (y = 0, row = image->data, rows = image->height; rows; row += image->stride, rows--, y++) {
 	for (x = 0, byte = row, cols = (image->width + 7) / 8; cols; byte++, cols--) {
@@ -1116,6 +1118,9 @@ _cairo_surface_base64_encode_jpeg (cairo_surface_t       *surface,
     status = _cairo_image_info_get_jpeg_info (&image_info, mime_data, mime_data_length);
     if (unlikely (status))
 	return status;
+
+    if (image_info.num_components == 4)
+	return CAIRO_INT_STATUS_UNSUPPORTED;
 
     _cairo_output_stream_printf (output, "data:image/jpeg;base64,");
 
@@ -1487,6 +1492,17 @@ _cairo_svg_surface_emit_recording_surface (cairo_svg_document_t      *document,
 					    document, NULL);
 }
 
+static cairo_recording_surface_t *
+to_recording_surface (const cairo_surface_pattern_t *pattern)
+{
+    cairo_surface_t *surface = pattern->surface;
+    if (_cairo_surface_is_paginated (surface))
+	surface = _cairo_paginated_surface_get_recording (surface);
+    if (_cairo_surface_is_snapshot (surface))
+	surface = _cairo_surface_snapshot_get_target (surface);
+    return (cairo_recording_surface_t *) surface;
+}
+
 static cairo_status_t
 _cairo_svg_surface_emit_composite_recording_pattern (cairo_output_stream_t	*output,
 						     cairo_svg_surface_t	*surface,
@@ -1506,7 +1522,7 @@ _cairo_svg_surface_emit_composite_recording_pattern (cairo_output_stream_t	*outp
     /* cairo_pattern_set_matrix ensures the matrix is invertible */
     assert (status == CAIRO_STATUS_SUCCESS);
 
-    recording_surface = (cairo_recording_surface_t *) pattern->surface;
+    recording_surface = to_recording_surface (pattern);
     status = _cairo_svg_surface_emit_recording_surface (document, recording_surface);
     if (unlikely (status))
 	return status;
@@ -1553,7 +1569,7 @@ _cairo_svg_surface_emit_composite_pattern (cairo_output_stream_t   *output,
 					   const char		   *extra_attributes)
 {
 
-    if (_cairo_surface_is_recording (pattern->surface)) {
+    if (pattern->surface->type == CAIRO_SURFACE_TYPE_RECORDING) {
 	return _cairo_svg_surface_emit_composite_recording_pattern (output, surface,
 								    op, pattern,
 								    pattern_id,

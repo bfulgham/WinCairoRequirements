@@ -24,6 +24,8 @@
   Implementation of the weak / associative references for non-GC mode.
 */
 
+// VS2015 build fix
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 
 #include "objc-private.h"
 #include <objc/message.h>

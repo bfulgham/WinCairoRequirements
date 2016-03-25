@@ -70,7 +70,9 @@
 
 #if CAIRO_CAN_TEST_SVG_SURFACE
 #include <librsvg/rsvg.h>
+#ifndef RSVG_CAIRO_H
 #include <librsvg/rsvg-cairo.h>
+#endif
 #endif
 
 #if CAIRO_HAS_SPECTRE
@@ -79,8 +81,11 @@
 
 #include <errno.h>
 
-#if HAVE_UNISTD_H && HAVE_FCNTL_H && HAVE_SIGNAL_H && HAVE_SYS_STAT_H && HAVE_SYS_SOCKET_H && HAVE_SYS_POLL_H && HAVE_SYS_UN_H
+#if HAVE_FCNTL_H
 #include <fcntl.h>
+#endif
+
+#if HAVE_UNISTD_H && HAVE_SIGNAL_H && HAVE_SYS_STAT_H && HAVE_SYS_SOCKET_H && HAVE_SYS_POLL_H && HAVE_SYS_UN_H
 #include <signal.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
@@ -90,10 +95,12 @@
 #define SOCKET_PATH "./.any2ppm"
 #define TIMEOUT 60000 /* 60 seconds */
 
+#if HAVE_FORK
 #define CAN_RUN_AS_DAEMON 1
 #endif
+#endif
 
-#define ARRAY_LENGTH(A) (sizeof (A) / sizeof (A[0]))
+#define ARRAY_LENGTH(__array) ((int) (sizeof (__array) / sizeof (__array[0])))
 
 static int
 _cairo_writen (int fd, char *buf, int len)
@@ -861,12 +868,17 @@ main (int argc, char **argv)
     const char *err;
 
 #if CAIRO_CAN_TEST_PDF_SURFACE || CAIRO_CAN_TEST_SVG_SURFACE
+#if GLIB_MAJOR_VERSION <= 2 && GLIB_MINOR_VERSION <= 34
     g_type_init ();
+#endif
 #endif
 
 #if CAIRO_CAN_TEST_SVG_SURFACE
-    rsvg_init ();
     rsvg_set_default_dpi (72.0);
+#endif
+
+#if defined(_WIN32) && !defined (__CYGWIN__)
+    _setmode (1, _O_BINARY);
 #endif
 
     if (argc == 1)

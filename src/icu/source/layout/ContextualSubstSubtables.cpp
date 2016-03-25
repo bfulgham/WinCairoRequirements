@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2015 - All Rights Reserved
  *
  */
 
@@ -192,7 +192,7 @@ le_uint32 ContextualSubstitutionFormat1Subtable::process(const LookupProcessor *
     }
 
     LEGlyphID glyph = glyphIterator->getCurrGlyphID();
-    le_int32 coverageIndex = getGlyphCoverage(glyph);
+    le_int32 coverageIndex = getGlyphCoverage(lookupProcessor->getReference(), glyph, success);
 
     if (coverageIndex >= 0) {
         le_uint16 srSetCount = SWAPW(subRuleSetCount);
@@ -241,7 +241,7 @@ le_uint32 ContextualSubstitutionFormat2Subtable::process(const LookupProcessor *
     }
 
     LEGlyphID glyph = glyphIterator->getCurrGlyphID();
-    le_int32 coverageIndex = getGlyphCoverage(glyph);
+    le_int32 coverageIndex = getGlyphCoverage(lookupProcessor->getReference(), glyph, success);
 
     if (coverageIndex >= 0) {
         const ClassDefinitionTable *classDefinitionTable =
@@ -369,7 +369,7 @@ le_uint32 ChainingContextualSubstitutionFormat1Subtable::process(const LookupPro
     }
 
     LEGlyphID glyph = glyphIterator->getCurrGlyphID();
-    le_int32 coverageIndex = getGlyphCoverage(glyph);
+    le_int32 coverageIndex = getGlyphCoverage(lookupProcessor->getReference(), glyph, success);
 
     if (coverageIndex >= 0) {
         le_uint16 srSetCount = SWAPW(chainSubRuleSetCount);
@@ -440,7 +440,7 @@ le_uint32 ChainingContextualSubstitutionFormat2Subtable::process(const LookupPro
     }
 
     LEGlyphID glyph = glyphIterator->getCurrGlyphID();
-    le_int32 coverageIndex = getGlyphCoverage(glyph);
+    le_int32 coverageIndex = getGlyphCoverage(lookupProcessor->getReference(), glyph, success);
 
     if (coverageIndex >= 0) {
         const ClassDefinitionTable *backtrackClassDefinitionTable =
@@ -466,6 +466,12 @@ le_uint32 ChainingContextualSubstitutionFormat2Subtable::process(const LookupPro
                 const ChainSubClassRuleTable *chainSubClassRuleTable =
                     (const ChainSubClassRuleTable *) ((char *) chainSubClassSetTable + chainSubClassRuleTableOffset);
                 le_uint16 backtrackGlyphCount = SWAPW(chainSubClassRuleTable->backtrackGlyphCount);
+
+                // TODO: Ticket #11557 - enable this check, originally from ticket #11525.
+                //       Depends on other, more extensive, changes.
+                // LEReferenceToArrayOf<le_uint16>   backtrackClassArray(base, success, chainSubClassRuleTable->backtrackClassArray, backtrackGlyphCount);
+                if( LE_FAILURE(success) ) { return 0; }
+
                 le_uint16 inputGlyphCount = SWAPW(chainSubClassRuleTable->backtrackClassArray[backtrackGlyphCount]) - 1;
                 const le_uint16 *inputClassArray = &chainSubClassRuleTable->backtrackClassArray[backtrackGlyphCount + 1];
                 le_uint16 lookaheadGlyphCount = SWAPW(inputClassArray[inputGlyphCount]);

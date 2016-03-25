@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2015, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -19,12 +19,16 @@
  * KIND, either express or implied.
  *
  ***************************************************************************/
+/* <DESC>
+ * multi socket API usage with libevent 2
+ * </DESC>
+ */
 /* Example application source code using the multi socket interface to
    download many files at once.
 
 Written by Jeff Pohlmeyer
 
-Requires libevent and a (POSIX?) system that has mkfifo().
+Requires libevent version 2 and a (POSIX?) system that has mkfifo().
 
 This is an adaptation of libcurl's "hipev.c" and libevent's "event-test.c"
 sample programs.
@@ -61,7 +65,7 @@ callback.
 #include <unistd.h>
 #include <sys/poll.h>
 #include <curl/curl.h>
-#include <event.h>
+#include <event2/event.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -71,9 +75,11 @@ callback.
 
 
 /* Global information, common to all connections */
-typedef struct _GlobalInfo {
-  struct event fifo_event;
-  struct event timer_event;
+typedef struct _GlobalInfo
+{
+  struct event_base *evbase;
+  struct event *fifo_event;
+  struct event *timer_event;
   CURLM *multi;
   int still_running;
   FILE* input;
@@ -81,7 +87,8 @@ typedef struct _GlobalInfo {
 
 
 /* Information associated with a specific easy handle */
-typedef struct _ConnInfo {
+typedef struct _ConnInfo
+{
   CURL *easy;
   char *url;
   GlobalInfo *global;
@@ -90,12 +97,13 @@ typedef struct _ConnInfo {
 
 
 /* Information associated with a specific socket */
-typedef struct _SockInfo {
+typedef struct _SockInfo
+{
   curl_socket_t sockfd;
   CURL *easy;
   int action;
   long timeout;
-  struct event ev;
+  struct event *ev;
   int evset;
   GlobalInfo *global;
 } SockInfo;
@@ -111,7 +119,7 @@ static int multi_timer_cb(CURLM *multi, long timeout_ms, GlobalInfo *g)
   timeout.tv_sec = timeout_ms/1000;
   timeout.tv_usec = (timeout_ms%1000)*1000;
   fprintf(MSG_OUT, "multi_timer_cb: Setting timeout to %ld ms\n", timeout_ms);
-  evtimer_add(&g->timer_event, &timeout);
+  evtimer_add(g->timer_event, &timeout);
   return 0;
 }
 
@@ -121,7 +129,6 @@ static void mcode_or_die(const char *where, CURLMcode code)
   if ( CURLM_OK != code ) {
     const char *s;
     switch (code) {
-      case     CURLM_CALL_MULTI_PERFORM: s="CURLM_CALL_MULTI_PERFORM"; break;
       case     CURLM_BAD_HANDLE:         s="CURLM_BAD_HANDLE";         break;
       case     CURLM_BAD_EASY_HANDLE:    s="CURLM_BAD_EASY_HANDLE";    break;
       case     CURLM_OUT_OF_MEMORY:      s="CURLM_OUT_OF_MEMORY";      break;
@@ -186,8 +193,8 @@ static void event_cb(int fd, short kind, void *userp)
   check_multi_info(g);
   if ( g->still_running <= 0 ) {
     fprintf(MSG_OUT, "last transfer done, kill timeout\n");
-    if (evtimer_pending(&g->timer_event, NULL)) {
-      evtimer_del(&g->timer_event);
+    if (evtimer_pending(g->timer_event, NULL)) {
+      evtimer_del(g->timer_event);
     }
   }
 }
@@ -215,7 +222,7 @@ static void remsock(SockInfo *f)
 {
   if (f) {
     if (f->evset)
-      event_del(&f->ev);
+      event_free(f->ev);
     free(f);
   }
 }
@@ -232,16 +239,17 @@ static void setsock(SockInfo*f, curl_socket_t s, CURL*e, int act, GlobalInfo*g)
   f->action = act;
   f->easy = e;
   if (f->evset)
-    event_del(&f->ev);
-  event_set(&f->ev, f->sockfd, kind, event_cb, g);
-  f->evset=1;
-  event_add(&f->ev, NULL);
+    event_free(f->ev);
+  f->ev = event_new(g->evbase, f->sockfd, kind, event_cb, g);
+  f->evset = 1;
+  event_add(f->ev, NULL);
 }
 
 
 
 /* Initialize a new SockInfo structure */
-static void addsock(curl_socket_t s, CURL *easy, int action, GlobalInfo *g) {
+static void addsock(curl_socket_t s, CURL *easy, int action, GlobalInfo *g)
+{
   SockInfo *fdp = calloc(sizeof(SockInfo), 1);
 
   fdp->global = g;
@@ -322,7 +330,7 @@ static void new_conn(char *url, GlobalInfo *g )
   conn->url = strdup(url);
   curl_easy_setopt(conn->easy, CURLOPT_URL, conn->url);
   curl_easy_setopt(conn->easy, CURLOPT_WRITEFUNCTION, write_cb);
-  curl_easy_setopt(conn->easy, CURLOPT_WRITEDATA, &conn);
+  curl_easy_setopt(conn->easy, CURLOPT_WRITEDATA, conn);
   curl_easy_setopt(conn->easy, CURLOPT_VERBOSE, 1L);
   curl_easy_setopt(conn->easy, CURLOPT_ERRORBUFFER, conn->error);
   curl_easy_setopt(conn->easy, CURLOPT_PRIVATE, conn);
@@ -359,10 +367,10 @@ static void fifo_cb(int fd, short event, void *arg)
 }
 
 /* Create a named pipe and tell libevent to monitor it */
+static const char *fifo = "hiper.fifo";
 static int init_fifo (GlobalInfo *g)
 {
   struct stat st;
-  static const char *fifo = "hiper.fifo";
   curl_socket_t sockfd;
 
   fprintf(MSG_OUT, "Creating named pipe \"%s\"\n", fifo);
@@ -386,9 +394,16 @@ static int init_fifo (GlobalInfo *g)
   g->input = fdopen(sockfd, "r");
 
   fprintf(MSG_OUT, "Now, pipe some URL's into > %s\n", fifo);
-  event_set(&g->fifo_event, sockfd, EV_READ | EV_PERSIST, fifo_cb, g);
-  event_add(&g->fifo_event, NULL);
+  g->fifo_event = event_new(g->evbase, sockfd, EV_READ|EV_PERSIST, fifo_cb, g);
+  event_add(g->fifo_event, NULL);
   return (0);
+}
+
+static void clean_fifo(GlobalInfo *g)
+{
+    event_free(g->fifo_event);
+    fclose(g->input);
+    unlink(fifo);
 }
 
 int main(int argc, char **argv)
@@ -398,10 +413,10 @@ int main(int argc, char **argv)
   (void)argv;
 
   memset(&g, 0, sizeof(GlobalInfo));
-  event_init();
+  g.evbase = event_base_new();
   init_fifo(&g);
   g.multi = curl_multi_init();
-  evtimer_set(&g.timer_event, timer_cb, &g);
+  g.timer_event = evtimer_new(g.evbase, timer_cb, &g);
 
   /* setup the generic multi interface options we want */
   curl_multi_setopt(g.multi, CURLMOPT_SOCKETFUNCTION, sock_cb);
@@ -412,7 +427,13 @@ int main(int argc, char **argv)
   /* we don't call any curl_multi_socket*() function yet as we have no handles
      added! */
 
-  event_dispatch();
+  event_base_dispatch(g.evbase);
+
+  /* this, of course, won't get called since only way to stop this program is
+     via ctrl-C, but it is here to show how cleanup /would/ be done. */
+  clean_fifo(&g);
+  event_free(g.timer_event);
+  event_base_free(g.evbase);
   curl_multi_cleanup(g.multi);
   return 0;
 }

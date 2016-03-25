@@ -1,5 +1,5 @@
 /*
- * Copyright © 2006 Mozilla Corporation
+ * Copyright Â© 2006 Mozilla Corporation
  *
  * Permission to use, copy, modify, distribute, and sell this software
  * and its documentation for any purpose is hereby granted without
@@ -22,8 +22,8 @@
  *
  * Author: Vladimir Vukicevic <vladimir@pobox.com>
  */
-#include <math.h>
 #include "cairo-test.h"
+#include <math.h>
 #include <stdio.h>
 
 #define SIZE 100

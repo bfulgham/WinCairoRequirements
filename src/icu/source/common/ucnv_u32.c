@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2009, International Business Machines
+*   Copyright (C) 2002-2015, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u32.c
@@ -16,9 +16,10 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_CONVERSION
+#if !UCONFIG_NO_CONVERSION && !UCONFIG_ONLY_HTML_CONVERSION
 
 #include "unicode/ucnv.h"
+#include "unicode/utf.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "cmemory.h"
@@ -246,7 +247,7 @@ T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
     while (mySource < sourceLimit && myTarget < targetLimit) {
         ch = *(mySource++);
 
-        if (UTF_IS_SURROGATE(ch)) {
+        if (U_IS_SURROGATE(ch)) {
             if (U_IS_LEAD(ch)) {
 lowsurogate:
                 if (mySource < sourceLimit) {
@@ -350,7 +351,7 @@ T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
     while (mySource < sourceLimit && myTarget < targetLimit) {
         ch = *(mySource++);
 
-        if (UTF_IS_SURROGATE(ch)) {
+        if (U_IS_SURROGATE(ch)) {
             if (U_IS_LEAD(ch)) {
 lowsurogate:
                 if (mySource < sourceLimit) {
@@ -494,11 +495,8 @@ static const UConverterStaticData _UTF32BEStaticData = {
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
-const UConverterSharedData _UTF32BEData = {
-    sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_UTF32BEStaticData, FALSE, &_UTF32BEImpl, 
-    0
-};
+const UConverterSharedData _UTF32BEData =
+        UCNV_IMMUTABLE_SHARED_DATA_INITIALIZER(&_UTF32BEStaticData, &_UTF32BEImpl);
 
 /* UTF-32LE ---------------------------------------------------------- */
 
@@ -726,14 +724,14 @@ T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
     {
         ch = *(mySource++);
 
-        if (UTF_IS_SURROGATE(ch)) {
-            if (U_IS_LEAD(ch))
+        if (U16_IS_SURROGATE(ch)) {
+            if (U16_IS_LEAD(ch))
             {
 lowsurogate:
                 if (mySource < sourceLimit)
                 {
                     ch2 = *mySource;
-                    if (U_IS_TRAIL(ch2)) {
+                    if (U16_IS_TRAIL(ch2)) {
                         ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
                         mySource++;
                     }
@@ -838,14 +836,14 @@ T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
     {
         ch = *(mySource++);
 
-        if (UTF_IS_SURROGATE(ch)) {
-            if (U_IS_LEAD(ch))
+        if (U16_IS_SURROGATE(ch)) {
+            if (U16_IS_LEAD(ch))
             {
 lowsurogate:
                 if (mySource < sourceLimit)
                 {
                     ch2 = *mySource;
-                    if (U_IS_TRAIL(ch2))
+                    if (U16_IS_TRAIL(ch2))
                     {
                         ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
                         mySource++;
@@ -990,11 +988,8 @@ static const UConverterStaticData _UTF32LEStaticData = {
 };
 
 
-const UConverterSharedData _UTF32LEData = {
-    sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_UTF32LEStaticData, FALSE, &_UTF32LEImpl, 
-    0
-};
+const UConverterSharedData _UTF32LEData =
+        UCNV_IMMUTABLE_SHARED_DATA_INITIALIZER(&_UTF32LEStaticData, &_UTF32LEImpl);
 
 /* UTF-32 (Detect BOM) ------------------------------------------------------ */
 
@@ -1239,10 +1234,7 @@ static const UConverterStaticData _UTF32StaticData = {
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
-const UConverterSharedData _UTF32Data = {
-    sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_UTF32StaticData, FALSE, &_UTF32Impl, 
-    0
-};
+const UConverterSharedData _UTF32Data = 
+        UCNV_IMMUTABLE_SHARED_DATA_INITIALIZER(&_UTF32StaticData, &_UTF32Impl);
 
 #endif

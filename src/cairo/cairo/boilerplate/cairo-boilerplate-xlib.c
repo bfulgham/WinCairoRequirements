@@ -248,10 +248,16 @@ _cairo_boilerplate_xlib_create_similar (cairo_surface_t		*other,
     similar->dpy = cairo_xlib_surface_get_display (other);
 
     switch (content) {
+    case CAIRO_CONTENT_COLOR:
+        format = PictStandardRGB24;
+        break;
+    case CAIRO_CONTENT_ALPHA:
+        format = PictStandardA8;
+        break;
+    case CAIRO_CONTENT_COLOR_ALPHA:
     default:
-    case CAIRO_CONTENT_COLOR_ALPHA: format = PictStandardARGB32; break;
-    case CAIRO_CONTENT_COLOR: format = PictStandardRGB24; break;
-    case CAIRO_CONTENT_ALPHA: format = PictStandardA8; break;
+        format = PictStandardARGB32;
+        break;
     }
 
     xrender_format = XRenderFindStandardFormat (similar->dpy, format);

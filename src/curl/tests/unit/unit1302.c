@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2014, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -31,7 +31,7 @@ static struct SessionHandle *data;
 static CURLcode unit_setup( void )
 {
   data = curl_easy_init();
-  if (!data)
+  if(!data)
     return CURLE_OUT_OF_MEMORY;
   return CURLE_OK;
 }
@@ -73,6 +73,24 @@ fail_unless(size == 8, "size should be 8");
 verify_memory( output, "aWlpaQ==", 8);
 Curl_safefree(output);
 
+rc = Curl_base64_encode(data, "\xff\x01\xfe\x02", 4, &output, &size);
+fail_unless(rc == CURLE_OK, "return code should be CURLE_OK");
+fail_unless(size == 8, "size should be 8");
+verify_memory( output, "/wH+Ag==", 8);
+Curl_safefree(output);
+
+rc = Curl_base64url_encode(data, "\xff\x01\xfe\x02", 4, &output, &size);
+fail_unless(rc == CURLE_OK, "return code should be CURLE_OK");
+fail_unless(size == 8, "size should be 8");
+verify_memory( output, "_wH-Ag==", 8);
+Curl_safefree(output);
+
+rc = Curl_base64url_encode(data, "iiii", 4, &output, &size);
+fail_unless(rc == CURLE_OK, "return code should be CURLE_OK");
+fail_unless(size == 8, "size should be 8");
+verify_memory( output, "aWlpaQ==", 8);
+Curl_safefree(output);
+
 /* 0 length makes it do strlen() */
 rc = Curl_base64_encode(data, "iiii", 0, &output, &size);
 fail_unless(rc == CURLE_OK, "return code should be CURLE_OK");
@@ -104,21 +122,36 @@ fail_unless(size == 1, "size should be 1");
 verify_memory(decoded, "i", 2);
 Curl_safefree(decoded);
 
-/* this is an illegal input */
+/* This is illegal input as the data is too short */
 size = 1; /* not zero */
 decoded = &anychar; /* not NULL */
 rc = Curl_base64_decode("aQ", &decoded, &size);
-/* return code indiferent, but output shall be as follows */
+fail_unless(rc == CURLE_BAD_CONTENT_ENCODING, "return code should be CURLE_BAD_CONTENT_ENCODING");
 fail_unless(size == 0, "size should be 0");
 fail_if(decoded, "returned pointer should be NULL");
 
-/* this is garbage input that libcurl decodes as far as possible */
-size = 0;
-decoded = NULL;
+/* This is illegal input as it contains three padding characters */
+size = 1; /* not zero */
+decoded = &anychar; /* not NULL */
+rc = Curl_base64_decode("a===", &decoded, &size);
+fail_unless(rc == CURLE_BAD_CONTENT_ENCODING, "return code should be CURLE_BAD_CONTENT_ENCODING");
+fail_unless(size == 0, "size should be 0");
+fail_if(decoded, "returned pointer should be NULL");
+
+/* This is illegal input as it contains a padding character mid input */
+size = 1; /* not zero */
+decoded = &anychar; /* not NULL */
+rc = Curl_base64_decode("a=Q=", &decoded, &size);
+fail_unless(rc == CURLE_BAD_CONTENT_ENCODING, "return code should be CURLE_BAD_CONTENT_ENCODING");
+fail_unless(size == 0, "size should be 0");
+fail_if(decoded, "returned pointer should be NULL");
+
+/* This is garbage input as it contains an illegal base64 character */
+size = 1; /* not zero */
+decoded = &anychar; /* not NULL */
 rc = Curl_base64_decode("a\x1f==", &decoded, &size);
-fail_unless(rc == CURLE_OK, "return code should be CURLE_OK");
-fail_unless(size == 1, "size should be 1");
-fail_if(!decoded, "returned pointer should not be NULL");
-Curl_safefree(decoded);
+fail_unless(rc == CURLE_BAD_CONTENT_ENCODING, "return code should be CURLE_BAD_CONTENT_ENCODING");
+fail_unless(size == 0, "size should be 0");
+fail_if(decoded, "returned pointer should be NULL");
 
 UNITTEST_STOP

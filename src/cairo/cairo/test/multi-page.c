@@ -23,6 +23,8 @@
  * Author: Carl D. Worth <cworth@cworth.org>
  */
 
+#include "cairo-test.h"
+
 #include <stdio.h>
 
 #include <cairo.h>
@@ -34,8 +36,6 @@
 #if CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
 #endif
-
-#include "cairo-test.h"
 
 /* The PostScript and PDF backends are now integrated into the main
  * test suite, so we are getting good verification of most things
@@ -51,6 +51,7 @@
 #define HEIGHT_IN_INCHES 3
 #define WIDTH_IN_POINTS  (WIDTH_IN_INCHES  * 72.0)
 #define HEIGHT_IN_POINTS (HEIGHT_IN_INCHES * 72.0)
+#define BASENAME         "multi-page.out"
 
 static void
 draw_smiley (cairo_t *cr, double width, double height, double smile_ratio)
@@ -132,8 +133,9 @@ preamble (cairo_test_context_t *ctx)
 {
     cairo_surface_t *surface;
     cairo_status_t status;
-    const char *filename;
+    char *filename;
     cairo_test_status_t result = CAIRO_TEST_UNTESTED;
+    const char *path = cairo_test_mkdir (CAIRO_TEST_OUTPUT_DIR) ? CAIRO_TEST_OUTPUT_DIR : ".";
 
 #if CAIRO_HAS_PS_SURFACE
     if (cairo_test_is_target_enabled (ctx, "ps2") ||
@@ -142,7 +144,7 @@ preamble (cairo_test_context_t *ctx)
 	if (result == CAIRO_TEST_UNTESTED)
 	    result = CAIRO_TEST_SUCCESS;
 
-	filename = "multi-page.out.ps";
+	xasprintf (&filename, "%s/%s", path, BASENAME ".ps");
 	surface = cairo_ps_surface_create (filename,
 					   WIDTH_IN_POINTS, HEIGHT_IN_POINTS);
 	status = cairo_surface_status (surface);
@@ -157,6 +159,7 @@ preamble (cairo_test_context_t *ctx)
 	cairo_surface_destroy (surface);
 
 	printf ("multi-page: Please check %s to ensure it looks happy.\n", filename);
+	free (filename);
     }
 #endif
 
@@ -165,7 +168,7 @@ preamble (cairo_test_context_t *ctx)
 	if (result == CAIRO_TEST_UNTESTED)
 	    result = CAIRO_TEST_SUCCESS;
 
-	filename = "multi-page.out.pdf";
+	xasprintf (&filename, "%s/%s", path, BASENAME ".pdf");
 	surface = cairo_pdf_surface_create (filename,
 					    WIDTH_IN_POINTS, HEIGHT_IN_POINTS);
 	status = cairo_surface_status (surface);
@@ -180,6 +183,7 @@ preamble (cairo_test_context_t *ctx)
 	cairo_surface_destroy (surface);
 
 	printf ("multi-page: Please check %s to ensure it looks happy.\n", filename);
+	free (filename);
     }
 #endif
 

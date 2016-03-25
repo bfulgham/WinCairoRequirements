@@ -23,8 +23,14 @@
 #if (defined (__CYGWIN__) || defined _MSC_VER) && !defined IN_LIBXSLT && !defined LIBXSLT_STATIC
 #define LIBXSLT_PUBLIC __declspec(dllimport)
 #else
-#define LIBXSLT_PUBLIC 
+#define LIBXSLT_PUBLIC
 #endif
+#endif
+
+#if defined(_MSC_VER) || defined(__MINGW32__)
+#include <io.h>
+#include <direct.h>
+#define mkdir(p,m) _mkdir(p)
 #endif
 
 #endif /* ! __XSLT_LIBXSLT_H__ */
